@@ -1,0 +1,6 @@
+__pycache__/fileUtils.cpython-38.pyc
+__pycache__/ResumeUtils.cpython-38.pyc
+*.pyc
+
+venv/
+pyvenv.cfg
