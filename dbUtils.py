@@ -1,4 +1,6 @@
 import psycopg2
+import psycopg2.extras
+
 from psycopg2 import pool
 __DBPOOL__ = None
 
@@ -10,7 +12,7 @@ def getConnFromPool():
                                               password = "rajaram1909",
                                               host = "127.0.0.1",
                                               port = "5432",
-                                              database = "wemoodle1")
+                                              database = "wemoodle")
             print("Connection pool created successfully using ThreadedConnectionPool")
 
 
@@ -27,3 +29,7 @@ def returnToPool(conn):
     if __DBPOOL__ != None:
         __DBPOOL__.putconn(conn, key=None, close=False)
         print ( "connection returned to pool successfully.")
+
+def getDictCursor(conn):
+    cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
+    return cursor

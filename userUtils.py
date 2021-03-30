@@ -91,38 +91,8 @@ def getUserConfig(userID, appcode,key):
         cursor.close()
         dbUtils.returnToPool(db_con)
 
-def getUserConfigList(userID, appcode):
-    config= []
-    try:
-        db_con = sqlite3.connect(constants.DB_NAME)
-        cursor = db_con.cursor()
-        
-        query = """SELECT user_id,app_id,key,value FROM "user-app-config" WHERE user_id = ? and app_id = ? """
-        data_tuple = (str(userID), str(appcode))
-        print (query)
-        
-        cursor.execute(query, data_tuple)
-        records = cursor.fetchall()
-        print("Total rows are:  ", len(records))
-        print("Printing each row")
-        for row in records:
-            print("User Id: ", row[0])
-            print("App Id: ", row[1])
-            print("Key: ", row[2])
-            print("Value: ", row[3])
-            print("\n")
 
-            config.append({row[2],row[3]})
-
-    except Exception as e:
-        print(e)
-
-    finally:
-        cursor.close()
-        db_con.close()
-        return config
-
-def signUp(username, email,appCode):
+def signUp(username, email,status=1):
 
     error = ''
     try:
@@ -134,20 +104,11 @@ def signUp(username, email,appCode):
             cursor = db_con.cursor()
 
             #insert into user table
-            insert_query = """INSERT INTO public.user (id, name,email) VALUES (%s,%s,%s)"""
+            insert_query = """INSERT INTO public.user (id, name,email,status) VALUES (%s,%s,%s,%s)"""
             
-            data_tuple = (email, username, email)
+            data_tuple = (email, username, email,status)
             cursor.execute(insert_query, data_tuple)
             
-            if (appCode != None):
-                #insert into user-app table now 
-                insert_query = """INSERT INTO "user-app"
-                    ("user-id", "app-id") 
-                    VALUES 
-                    (%s,%s)"""
-                data_tuple = ( str(email), str(appCode))
-                cursor.execute(insert_query, data_tuple)
-
             db_con.commit()
             return (0, "User signed up successfully.")
 
@@ -260,7 +221,7 @@ def getOTP(email):
         body = template.render(otp = str(otp),expiryMinutes = "5" )
 
         #send email 
-        emailUtils.sendMail(email,'Magic Inbox - OTP Confirmation' , body,'plain' )
+        emailUtils.sendMail(email,'Fulgorithm OTP Confirmation' , body,'plain' )
 
         print("Email sent successfully.")
         return (0, "OT successesfully sent to registered email ID.")
@@ -281,27 +242,7 @@ if __name__ == "__main__":
     #getUsersForApp(constants.APP_CODE_CAMI)
     #getSummaryReportForToday( 'rrkanade22@yahoo.com' )
     
-    (retCode, msg ) = signUp("rrkanade232323@yahoo.com", "rrkanade232323@yahoo.com", "CAMI")
+    (retCode, msg ) = signUp("Rajesh Kanade", "rrkanade@yahoo.com")
     print( retCode)
     print ( msg)
     
-
-    print( "***** Test login ******* ")
-    (retCode, msg) = userSignIn("rrkanade2323@yahoo.com","123")
-    print(retCode)
-    print(msg)
-
-    print( "****** get Users for App *******")
-    getUsersForApp(constants.APP_CODE_CAMI)
-
-    print('********** get Config value ********')
-    (configValue) = getUserConfig('rrkanade22@yahoo.com', constants.APP_CODE_CAMI,'email_server')
-    print (configValue)
-
-    print('********** get OTP ********')
-    (configValue) = getOTP('rrkanade22@yahoo.com')
-    print (configValue)
-
-    print('********** get config value ********')
-    val = getUserConfig("rrkanade22@yahoo.com", "CAMI", "email_server")
-    print(val)

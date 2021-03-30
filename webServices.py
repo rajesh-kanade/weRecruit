@@ -13,6 +13,9 @@ from werkzeug.utils import secure_filename
 import productUtils
 
 import os
+#import json
+import decimal
+
 
 ALLOWED_EXTENSIONS = {'pdf', 'docx'}
 
@@ -72,10 +75,8 @@ def userSignUp():
 		new_email = str(request.json['email'])
 		print ( new_email)
 
-		new_appcode = str(request.json['appcode'])
-		print ( new_appcode)			
 
-		(retCode,msg) = userUtils.signUp(new_email,new_username,new_appcode)			
+		(retCode,msg) = userUtils.signUp(new_username,new_email)			
 		return jsonify({'retcode': retCode},{'msg': msg})
 
 	except Exception as e:
@@ -85,8 +86,8 @@ def userSignUp():
 		return jsonify({'retcode': -101},{'msg': str(e)}) 
 
 
-@app.route('/v1/signIn', methods = ['POST'])
-def userSignIn():
+@app.route('/v1/authenticate', methods = ['POST'])
+def authenticate():
 	error = ''
 	try:
 		assert request.method == "POST", "Unsupported request method. Only POST supported."
@@ -154,27 +155,173 @@ def productAdd():
 		
 		assert request.method == "POST", "Unsupported request method. Only POST supported."
 
-		assert 'productID'  in request.form , "Product ID not found in request json."
-		assert 'unitPrice'  in request.form , "Unit Price not found in request json."
-		assert 'currency' in request.form , "Currency Price not found in request json."
+		assert 'productID'  in request.json , "Product ID not found in request json."
+		assert 'unitPrice'  in request.json , "Unit Price not found in request json."
+		assert 'currency' in request.json , "Currency Price not found in request json."
 		#assert 'billingFrequency' in request.form , "Billing Frequency not found in request json."
 
 		print('**** Processing POST request **********')
 		#print(request.json)			
 		
-		productID = str(request.form['productID'])
+		productID = str(request.json['productID'])
 		print ( productID)
 
-		unitPrice = str(request.form['unitPrice'])
+		unitPrice = str(request.json['unitPrice'])
 		print ( unitPrice)
 
-		currency = str(request.form['currency'])
+		currency = str(request.json['currency'])
 		print ( currency)			
 
-		(retCode,msg) = productUtils.product_add(productID, unitPrice,currency)
+		(retCode,msg) = productUtils.add_product(productID, unitPrice,currency)
 			
 		return jsonify({'retcode': retCode},{'msg': msg})
 
+	except Exception as e:
+		#flash(e)
+		print ("In the exception block.")
+		print(e)
+		return jsonify({'retcode': -101},{'msg': str(e)}) 
+
+@app.route('/v1/deactivateProduct', methods = ['GET'])
+def deactivateProduct():
+	error = ''
+	try:		
+		assert request.method == "GET", "Unsupported request method. Only GET supported."
+
+		#assert 'productID'  in request.query_string , "Product ID not found in request json."
+
+		print('**** Processing GET request **********')
+
+		productID = request.args.get('productID')
+		if (productID == None):
+			return jsonify({'retcode': -102}, {'msg': 'productID parameter not found in request. '})
+
+		print ( productID)
+
+		(retCode,msg) = productUtils.update_product(productID, {'status' : 0} )
+			
+		return jsonify({'retcode': retCode},{'msg': msg})
+
+	except Exception as e:
+		#flash(e)
+		print ("In the exception block.")
+		print(e)
+		return jsonify({'retcode': -101},{'msg': str(e)}) 
+
+@app.route('/v1/getProducts', methods = ['POST'])
+def getProducts():
+	error = ''
+	try:
+		
+		assert request.method == "POST", "Unsupported request method. Only POST supported."
+
+
+		print('**** Processing POST request **********')
+		#print(request.json)			
+		
+		(retCode,msg, result) = productUtils.list_products()
+
+		return jsonify({'retcode': retCode},{'msg': msg}, {'result': result})
+		#return jsonify(json.dumps(result, cls=CustomEncoder))
+
+	except Exception as e:
+		#flash(e)
+		print ("In the exception block.")
+		print(e)
+		return jsonify({'retcode': -101},{'msg': str(e)}) 
+
+@app.route('/v1/createCart', methods = ['POST'])
+def createCart():
+	error = ''
+	try:
+		
+		assert request.method == "POST", "Unsupported request method. Only POST supported."
+
+		assert 'cartID'  in request.json , "cart ID not found in request json."
+
+		print('**** Processing POST request **********')
+		#print(request.json)			
+		
+		cartID = str(request.json['cartID'])
+		(retCode,msg) = productUtils.create_cart(cartID)
+			
+		return jsonify({'retcode': retCode},{'msg': msg})
+
+	except Exception as e:
+		#flash(e)
+		print ("In the exception block.")
+		print(e)
+		return jsonify({'retcode': -101},{'msg': str(e)}) 
+
+@app.route('/v1/addProductToCart', methods = ['POST'])
+def addProductToCart():
+	error = ''
+	try:
+		
+		assert request.method == "POST", "Unsupported request method. Only POST supported."
+
+		assert 'cartID'  in request.json , "cartID not found in request json."
+		assert 'productID'  in request.json , "productID not found in request json."
+
+		print('**** Processing POST request **********')
+		#print(request.json)			
+		
+		cartID = str(request.json['cartID'])
+		productID = str(request.json['productID'])
+
+		(retCode,msg) = productUtils.add_product_to_cart(cartID,productID)
+			
+		return jsonify({'retcode': retCode},{'msg': msg})
+
+	except Exception as e:
+		#flash(e)
+		print ("In the exception block.")
+		print(e)
+		return jsonify({'retcode': -101},{'msg': str(e)}) 
+
+
+@app.route('/v1/removeProductFromCart', methods = ['POST'])
+def removeProductFromCart():
+	error = ''
+	try:
+		
+		assert request.method == "POST", "Unsupported request method. Only POST supported."
+
+		assert 'cartID'  in request.json , "cartID not found in request json."
+		assert 'productID'  in request.json , "productID not found in request json."
+
+		print('**** Processing POST request **********')
+		#print(request.json)			
+		
+		cartID = str(request.json['cartID'])
+		productID = str(request.json['productID'])
+
+		(retCode,msg) = productUtils.remove_product_from_cart(cartID,productID)
+			
+		return jsonify({'retcode': retCode},{'msg': msg})
+
+	except Exception as e:
+		#flash(e)
+		print ("In the exception block.")
+		print(e)
+		return jsonify({'retcode': -101},{'msg': str(e)}) 
+
+@app.route('/v1/getCartDetails', methods = ['POST'])
+def getCartDetails():
+	error = ''
+	try:
+		
+		assert request.method == "POST", "Unsupported request method. Only POST supported."
+
+		assert 'cartID'  in request.json , "cartID not found in request json."
+
+		print('**** Processing POST request **********')
+		
+		cartID = str(request.json['cartID'])
+
+		(retCode,msg,result) = productUtils.get_cart_details(cartID)
+		return jsonify({'retcode': retCode},{'msg': msg}, {'result': result})
+		
 	except Exception as e:
 		#flash(e)
 		print ("In the exception block.")
