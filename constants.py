@@ -1,6 +1,3 @@
-DB_NAME = "./conf/magic_inbox.db"
-
-APP_CODE_CAMI = 'CAMI'
 
 DATE_FORMAT = '%d/%m/%Y %H:%M:%S'
 

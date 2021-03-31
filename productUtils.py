@@ -4,14 +4,17 @@ from datetime import datetime
 from datetime import timezone 
 
 # importing enum for enumerations
-import enum
-  
-# creating enumerations using class
-class ProductStatus(enum.Enum):
-    inactive = 0
-    active = 1
 
-def add_product(id, unit_price,currency, billing_frequency = 1, status = 1):
+CART_STATUS_INACTIVE = 0
+CART_STATUS_SHOPPING = 1
+CART_STATUS_CHECKEDOUT = 2
+
+PRODUCT_STATUS_INACTIVE = 0
+PRODUCT_STATUS_ACTIVE = 1
+
+PRODUCT_BF_MONTHLY = 1
+
+def add_product(id, unit_price,currency, billing_frequency = PRODUCT_BF_MONTHLY, status = PRODUCT_STATUS_ACTIVE):
 
     error = ''
     try:
@@ -93,7 +96,7 @@ def update_product(id, updates):
         print ("In the exception block.")
         return ( -2, str(e))
         
-def list_products(status=1):
+def list_products(status=PRODUCT_STATUS_ACTIVE):
     error = ''
     try:
         try:
@@ -124,7 +127,7 @@ def list_products(status=1):
         print ("In the exception block.")
         return ( -2, str(e))
 
-def create_cart(cart_id, status = 1):
+def create_cart(cart_id, status = CART_STATUS_SHOPPING):
 
     error = ''
     try:
@@ -169,7 +172,8 @@ def add_product_to_cart(cart_id, product_id):
     try:
 
         try:
-
+            #TODO: ensure product_id is in active state                
+            
             db_con = dbUtils.getConnFromPool()
             cursor = db_con.cursor()
 
@@ -281,6 +285,42 @@ def get_cart_details(cart_id):
         print ("Exception occured while fetching product details from cart.")
         return ( -2, str(e), None)
 
+def checkout_cart(cart_id):
+
+    error = ''
+    try:
+
+        try:
+
+            db_con = dbUtils.getConnFromPool()
+            cursor = db_con.cursor()
+
+            dt = datetime.now(tz=timezone.utc) 
+            print(dt)
+            #utc_time = dt.replace(tzinfo = timezone.utc) 
+            #print(utc_time)
+            #insert into user table
+            sql = """UPDATE carts set status = %s, updated_on = %s where id = %s""" 
+            data_tuple = (CART_STATUS_CHECKEDOUT,dt,cart_id)
+            cursor.execute(sql, data_tuple)
+
+            db_con.commit()
+            return (0, "Cart checkedout successfully.")
+
+        except Exception as dbe:
+            print(dbe)
+            db_con.rollback()
+            return (-1, str(dbe))
+    
+        finally:
+            cursor.close()
+            dbUtils.returnToPool(db_con)
+
+    except Exception as e:
+        #flash(e)
+        print ("Exception occured in cart checkout process.")
+        return ( -2, str(e))
+
 ## main entry point
 if __name__ == "__main__":
 
@@ -312,10 +352,9 @@ if __name__ == "__main__":
     print(msg)
     """
 
-    (retCode, msg, result ) = product_list()
+    (retCode, msg) = checkout_cart("Cart1")
     print( retCode)
     print (msg)
-    print(result)
 
 
     """    (retCode,msg, results) = get_cart_details("NEWCART#3")

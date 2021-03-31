@@ -149,7 +149,7 @@ def userSignIn(email, otp):
             print ( "No of rows returned : " +str(number_of_rows))
 
             if (number_of_rows) == 1 :
-                return (0, "login successful.")
+                return (0, "Login successful.")
                 #return jsonify({'retcode': 0},{'msg': 'login Successful'})
             else:
                 return ( -1, "Login failed as no user found.")

@@ -45,10 +45,10 @@ def getOTP():
 		print(request.json)	
 
 		if request.method != "POST":
-			return jsonify({'retcode': -101}, {'msg': 'POST method not found.'})
+			return jsonify({'retcode': -101}, {'msg': 'POST method not found.'}),400
 		
 		if ('email' in request.json == False):
-			return jsonify({'retcode': -102}, {'msg': 'Email parameter not found in request. '})
+			return jsonify({'retcode': -102}, {'msg': 'Email parameter not found in request. '}),400
 
 		(retCode,msg) = userUtils.getOTP(str(request.json['email']))
 		
@@ -57,7 +57,7 @@ def getOTP():
 	except Exception as e:
 		print ("In the exception block.")
 		print(e)
-		return jsonify({'retcode': -110},{'msg':str(e)}) 
+		return jsonify({'retcode': -110},{'msg':str(e)}) ,400
 
 
 @app.route('/v1/signUp', methods = ['POST'])
@@ -65,6 +65,8 @@ def userSignUp():
 	error = ''
 	try:
 		assert request.method == "POST", "Unsupported request method. Only POST supported."
+		assert 'username'  in request.json , "User ID not found in request json."
+		assert 'email'  in request.json , "User ID not found in request json."
 
 		print('**** Processing POST request **********')
 		print(request.json)			
@@ -83,7 +85,7 @@ def userSignUp():
 		#flash(e)
 		print ("In the exception block.")
 		print(e)
-		return jsonify({'retcode': -101},{'msg': str(e)}) 
+		return jsonify({'retcode': -101},{'msg': str(e)}) , 400
 
 
 @app.route('/v1/authenticate', methods = ['POST'])
@@ -93,54 +95,26 @@ def authenticate():
 		assert request.method == "POST", "Unsupported request method. Only POST supported."
 
 		print('**** Processing POST request **********')
-		print(request.json)			
 		
-		assert 'userID'  in request.json , "User ID not found in request json."
+		assert 'Email'  in request.json , "Email not found in request json."
 		assert 'OTP' in request.json, "OTP not found in request json."
 
 		#if userID exists in request.json == false :
 		#	raise 
-		userID = request.json['userID']
-		print ( userID)
+		email = request.json['Email']
+		print ( email)
 
 		otp = request.json['OTP']
 		print ( otp)
 		
-		
-		try:
-			db_con = sqlite3.connect(constants.DB_NAME)
-			cursor = db_con.cursor()
-
-			#insert into user table
-			query = """SELECT COUNT(*) FROM user WHERE
-					ID = ? and OTP = ? """
-		
-			data_tuple = (str(userID), str(otp))
-
-			print (query)
-			cursor.execute(query, data_tuple)
-			(number_of_rows,)=cursor.fetchone()
-			print ( "No of rows returned : " +str(number_of_rows))
-
-			if (number_of_rows) == 1 :
-				return jsonify({'retcode': 0},{'msg': 'login Successful'})
-			else:
-				return jsonify({'retcode': -1},{'msg': 'login failed'})
-				
-
-		except Exception as dbe:
-			print(dbe)
-			#db_con.rollback()
-			raise
-		finally:
-			cursor.close()
-			db_con.close()	
+		(retCode,msg) = userUtils.userSignIn(email,otp)			
+		return jsonify({'retcode': retCode},{'msg': msg})
 
 	except Exception as e:
 		#flash(e)
 		print ("In the exception block.")
 		print(e)
-		return jsonify({'retcode': -101},{'msg': str(e)}) 
+		return jsonify({'retcode': -101},{'msg': str(e)}) , 400
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -182,31 +156,30 @@ def productAdd():
 		print(e)
 		return jsonify({'retcode': -101},{'msg': str(e)}) 
 
-@app.route('/v1/deactivateProduct', methods = ['GET'])
+@app.route('/v1/deactivateProduct', methods = ['POST'])
 def deactivateProduct():
 	error = ''
 	try:		
-		assert request.method == "GET", "Unsupported request method. Only GET supported."
+		assert request.method == "POST", "Unsupported request method. Only POST supported."
 
 		#assert 'productID'  in request.query_string , "Product ID not found in request json."
 
-		print('**** Processing GET request **********')
+		print('**** Processing POST request **********')
+		assert request.method == "POST", "Unsupported request method. Only POST supported."
+		assert 'productID'  in request.json , "Product ID not found in request json."
 
-		productID = request.args.get('productID')
-		if (productID == None):
-			return jsonify({'retcode': -102}, {'msg': 'productID parameter not found in request. '})
+		productID = request.json['productID']
 
-		print ( productID)
 
-		(retCode,msg) = productUtils.update_product(productID, {'status' : 0} )
+		(retCode,msg) = productUtils.update_product(productID, 
+				{'status' : productUtils.PRODUCT_STATUS_INACTIVE} )
 			
-		return jsonify({'retcode': retCode},{'msg': msg})
+		return jsonify({'retcode': retCode},{'msg': 'Product deactivated successfully.'})
 
 	except Exception as e:
-		#flash(e)
 		print ("In the exception block.")
 		print(e)
-		return jsonify({'retcode': -101},{'msg': str(e)}) 
+		return jsonify({'retcode': -101},{'msg': str(e)}) ,400
 
 @app.route('/v1/getProducts', methods = ['POST'])
 def getProducts():
@@ -228,7 +201,7 @@ def getProducts():
 		#flash(e)
 		print ("In the exception block.")
 		print(e)
-		return jsonify({'retcode': -101},{'msg': str(e)}) 
+		return jsonify({'retcode': -101},{'msg': str(e)}) ,400
 
 @app.route('/v1/createCart', methods = ['POST'])
 def createCart():
@@ -251,7 +224,7 @@ def createCart():
 		#flash(e)
 		print ("In the exception block.")
 		print(e)
-		return jsonify({'retcode': -101},{'msg': str(e)}) 
+		return jsonify({'retcode': -101},{'msg': str(e)}) ,400
 
 @app.route('/v1/addProductToCart', methods = ['POST'])
 def addProductToCart():
@@ -277,7 +250,7 @@ def addProductToCart():
 		#flash(e)
 		print ("In the exception block.")
 		print(e)
-		return jsonify({'retcode': -101},{'msg': str(e)}) 
+		return jsonify({'retcode': -101},{'msg': str(e)}) ,400
 
 
 @app.route('/v1/removeProductFromCart', methods = ['POST'])
@@ -304,7 +277,7 @@ def removeProductFromCart():
 		#flash(e)
 		print ("In the exception block.")
 		print(e)
-		return jsonify({'retcode': -101},{'msg': str(e)}) 
+		return jsonify({'retcode': -101},{'msg': str(e)}) ,400
 
 @app.route('/v1/getCartDetails', methods = ['POST'])
 def getCartDetails():
@@ -326,7 +299,32 @@ def getCartDetails():
 		#flash(e)
 		print ("In the exception block.")
 		print(e)
-		return jsonify({'retcode': -101},{'msg': str(e)}) 
+		return jsonify({'retcode': -101},{'msg': str(e)}) ,400
+
+@app.route('/v1/checkoutCart', methods = ['POST'])
+def checkoutCart():
+	error = ''
+	try:		
+		assert request.method == "POST", "Unsupported request method. Only POST supported."
+		assert 'cartID'  in request.json , "cartID not found in request json."
+
+		#assert 'productID'  in request.query_string , "Product ID not found in request json."
+
+		print('**** Processing POST request **********')
+
+		cartID = request.json['cartID']
+
+		print ( cartID)
+
+		(retCode,msg) = productUtils.checkout_cart(cartID ) 
+			
+		return jsonify({'retcode': retCode},{'msg': msg})
+
+	except Exception as e:
+		#flash(e)
+		print ("In the exception block.")
+		print(e)
+		return jsonify({'retcode': -101},{'msg': str(e)}) , 400
 
 # driver function 
 if __name__ == '__main__': 
