@@ -15,9 +15,14 @@ import productUtils
 import os
 #import json
 import decimal
+import stripe
+#stripe.api_key = 'sk_test_51I4vEHFm3r2eDjm1mUohUJApVQjJXZ4hJdpZ2PEqvnHcOjBnZp7zUELkofDAiMjtEJOBR5grVm9KeyUq6l6jBNwi00iXxKco9U'
+stripe.api_key = os.environ.get("STRIPE_API_KEY")
+
 
 
 ALLOWED_EXTENSIONS = {'pdf', 'docx'}
+YOUR_DOMAIN = 'http://localhost:4000'
 
 
 app = Flask(__name__) 
@@ -306,25 +311,96 @@ def checkoutCart():
 	error = ''
 	try:		
 		assert request.method == "POST", "Unsupported request method. Only POST supported."
-		assert 'cartID'  in request.json , "cartID not found in request json."
-
-		#assert 'productID'  in request.query_string , "Product ID not found in request json."
+		#assert 'cartID'  in request.json , "cartID not found in request json."
+		#request.args.get('cartID')
 
 		print('**** Processing POST request **********')
 
-		cartID = request.json['cartID']
-
+		#cartID = request.json['cartID']
+		cartID ='Small'
 		print ( cartID)
 
 		(retCode,msg) = productUtils.checkout_cart(cartID ) 
-			
-		return jsonify({'retcode': retCode},{'msg': msg})
+		checkout_session_id = create_checkout_session(cartID,"http://wwww.https://www.wemoodle.cloud/", "http://www.fulgorithm.com/")	
+		#jsonify({'id': checkout_session.id})
+		print("got session id")
+		#print(checkout_session_id)
+		#return( checkout_session_id)
+		#return jsonify({'retcode': retCode},{'msg': msg},{'sessionId': checkout_session_id})
+		return jsonify({'id': checkout_session_id})
 
 	except Exception as e:
 		#flash(e)
 		print ("In the exception block.")
 		print(e)
 		return jsonify({'retcode': -101},{'msg': str(e)}) , 400
+
+def create_checkout_session( cart_Id, success_url,cancel_url,
+	payment_method_type = 'card',mode ='payment'):
+
+	try:
+		getCartDetails(cart_Id)
+		
+		currency = 'INR'
+		unit_amt = 35000
+		qty = 2
+		product_desc = 'www.weMoodle.cloud Monthly Basic subscription'
+		payment_method_types = [payment_method_type]
+		line_items =[
+			{
+				'price_data' : {
+					'currency' : currency,
+					'unit_amount' : unit_amt,
+					'product_data' : {
+						'name' : product_desc,
+						'images' : ['https://i.imgur.com/EHyR2nP.png'],
+					}
+				},
+				'quantity' : qty,
+			},
+		]
+		print(line_items)
+
+		checkout_session = stripe.checkout.Session.create(
+            payment_method_types=payment_method_types,
+            line_items=line_items,
+            mode=mode,
+            success_url=success_url,
+            cancel_url=cancel_url,
+        )
+
+		print(checkout_session.id)
+		return checkout_session.id
+
+	except Exception as e:
+		raise e
+
+
+def create_checkout_session2(cartID, success_url,cancel_url, payment_method_type = 'card', payment_mode = 'payment' ):
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price_data': {
+                        'currency': 'usd',
+                        'unit_amount': 5,
+                        'product_data': {
+                            'name': 'www.weMoodle.cloud Monthly Basic subscription',
+                            'images': ['https://i.imgur.com/EHyR2nP.png'],
+                        },
+                    },
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url=YOUR_DOMAIN + '/success.html',
+            cancel_url=YOUR_DOMAIN + '/cancel.html',
+        )
+        return checkout_session.id #jsonify({'id': checkout_session.id})
+    except Exception as e:
+        return jsonify(error=str(e)), 403
+ 
 
 # driver function 
 if __name__ == '__main__': 

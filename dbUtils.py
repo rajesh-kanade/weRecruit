@@ -1,5 +1,6 @@
 import psycopg2
 import psycopg2.extras
+import os
 
 from psycopg2 import pool
 __DBPOOL__ = None
@@ -8,11 +9,11 @@ def getConnFromPool():
     try:
         global __DBPOOL__
         if __DBPOOL__ == None:
-            __DBPOOL__ = psycopg2.pool.ThreadedConnectionPool(5, 20,user = "postgres",
-                                              password = "rajaram1909",
-                                              host = "127.0.0.1",
-                                              port = "5432",
-                                              database = "wemoodle")
+            __DBPOOL__ = psycopg2.pool.ThreadedConnectionPool(5, 20,user = os.environ.get("DB_USER"),
+                                              password = os.environ.get("DB_PASSWORD"),
+                                              host = os.environ.get("DB_HOST"),
+                                              port = os.environ.get("DB_PORT"),
+                                              database = os.environ.get("DB_NAME"))
             print("Connection pool created successfully using ThreadedConnectionPool")
 
 
