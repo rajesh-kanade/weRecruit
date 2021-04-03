@@ -151,7 +151,10 @@ def productAdd():
 		currency = str(request.json['currency'])
 		print ( currency)			
 
-		(retCode,msg) = productUtils.add_product(productID, unitPrice,currency)
+		#(retCode,msg) = productUtils.add_product(productID, unitPrice,currency)
+		(retCode,msg) = productUtils.add_product(productUtils.Product(id = productID,
+			unit_price = unitPrice,desc=None,
+			currency=currency))
 			
 		return jsonify({'retcode': retCode},{'msg': msg})
 
@@ -238,8 +241,9 @@ def addProductToCart():
 		
 		assert request.method == "POST", "Unsupported request method. Only POST supported."
 
-		assert 'cartID'  in request.json , "cartID not found in request json."
-		assert 'productID'  in request.json , "productID not found in request json."
+		assert 'cartID'  in request.json , "parameter 'cartID' not found in request json."
+		assert 'productID'  in request.json , "parameter productID not found in request json."
+		assert 'qty'  in request.json , "parameter 'qty' not found in request json."
 
 		print('**** Processing POST request **********')
 		#print(request.json)			

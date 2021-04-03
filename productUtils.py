@@ -30,7 +30,7 @@ class Cart:
     productList : List[Product] #ProductList
 
 
-def add_product(id, unit_price,currency, billing_frequency = PRODUCT_BF_MONTHLY, status = PRODUCT_STATUS_ACTIVE):
+def add_product( product, billing_frequency = PRODUCT_BF_MONTHLY, status = PRODUCT_STATUS_ACTIVE):
 
     error = ''
     try:
@@ -48,7 +48,7 @@ def add_product(id, unit_price,currency, billing_frequency = PRODUCT_BF_MONTHLY,
                                 VALUES 
                                 (%s,%s,%s, %s,%s,%s)"""
             
-            data_tuple = (id, unit_price, currency, billing_frequency,status,dt)
+            data_tuple = (product.id, product.unit_price, product.currency, billing_frequency,status,dt)
             cursor.execute(insert_query, data_tuple)
 
             db_con.commit()
@@ -186,7 +186,7 @@ def create_cart(cart_id, status = CART_STATUS_SHOPPING):
         print ("Exception occured in cart creation.")
         return ( -2, str(e))
 
-def add_product_to_cart(cart_id, product_id):
+def add_product_to_cart(cart_id, product_id, qty):
 
     error = ''
     try:
@@ -350,12 +350,19 @@ if __name__ == "__main__":
     print ( msg)
     """
 
-    (retCode, msg, result ) = list_products()
+    (retCode, msg, productList ) = list_products()
     print( retCode)
     print (msg)
-    print(result)
-    
-    
+    print(productList)
 
+    print( "size of product list is ", len(productList) )
+
+    #for p in productList:
+    #    update_product( p.id, {'description' : 'Description of {}'.format(p.id) })
+    
+"""     (retCode, msg ) = add_product(Product(id = 'Starter1',unit_price =5,desc=None,currency='USD'))
+    print( retCode)
+    print ( msg) """
+    
 
 
