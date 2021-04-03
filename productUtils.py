@@ -2,6 +2,9 @@ import dbUtils
 import json
 from datetime import datetime
 from datetime import timezone 
+from dataclasses import dataclass
+from typing import List
+
 
 # importing enum for enumerations
 
@@ -13,6 +16,19 @@ PRODUCT_STATUS_INACTIVE = 0
 PRODUCT_STATUS_ACTIVE = 1
 
 PRODUCT_BF_MONTHLY = 1
+
+@dataclass(frozen=True)
+class Product:
+    id: str
+    unit_price: float
+    desc: str
+    currency : str
+
+@dataclass( frozen = True)
+class Cart:
+    id : str
+    productList : List[Product] #ProductList
+
 
 def add_product(id, unit_price,currency, billing_frequency = PRODUCT_BF_MONTHLY, status = PRODUCT_STATUS_ACTIVE):
 
@@ -102,16 +118,20 @@ def list_products(status=PRODUCT_STATUS_ACTIVE):
         try:
             db_con = dbUtils.getConnFromPool()
             #cursor = db_con.cursor()
-            cursor = dbUtils.getDictCursor(db_con)
+            cursor = dbUtils.getNamedTupleCursor(db_con)
 
             sql = "SELECT * FROM products where status = %s"
             data_tuple = (status,)
 
             cursor.execute(sql, data_tuple)
-            result = cursor.fetchall()
+            productList = cursor.fetchall()
 
+            for product in productList:
+                print("product = ", product.id, "\n")
+            
             db_con.commit()
-            return (0, "Product list executed successfully.",result)
+
+            return (0, "Product list executed successfully.",productList)
 
         except Exception as dbe:
             print(dbe)
@@ -324,45 +344,18 @@ def checkout_cart(cart_id):
 ## main entry point
 if __name__ == "__main__":
 
-    """    
-    (retCode, msg ) = product_add('Starter', 5,'USD')
+        
+    """(retCode, msg ) = add_product('Starter1', 5,'USD')
     print( retCode)
     print ( msg)
+    """
 
-    (retCode, msg ) = product_add('Mini', 10,'USD')
-    print( retCode)
-    print ( msg)
-    
-    (retCode, msg ) = product_update('Mini', {'status' : 0, 'unit_price' : 110})
-    print( retCode)
-    print ( msg)
-
-    (retCode, msg, result ) = product_list()
+    (retCode, msg, result ) = list_products()
     print( retCode)
     print (msg)
     print(result)
-    #print( json.dumps(result))
-
-    (retCode,msg) = cart_create("NEWCART#3")
-    print(retCode)
-    print(msg)
-
-    (retCode,msg) = add_product_to_cart("NEWCART#3","Starter")
-    print(retCode)
-    print(msg)
-    """
-
-    (retCode, msg) = checkout_cart("Cart1")
-    print( retCode)
-    print (msg)
+    
+    
 
 
-    """    (retCode,msg, results) = get_cart_details("NEWCART#3")
-    print(retCode)
-    print(msg)
-    print(results)
-    """
-    #(retCode,msg) = remove_product_from_cart("NEWCART#3","Mini")
-    #print(retCode)
-    #print(msg)
 

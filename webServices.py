@@ -186,8 +186,8 @@ def deactivateProduct():
 		print(e)
 		return jsonify({'retcode': -101},{'msg': str(e)}) ,400
 
-@app.route('/v1/getProducts', methods = ['POST'])
-def getProducts():
+@app.route('/v1/listProducts', methods = ['POST'])
+def listProducts():
 	error = ''
 	try:
 		
@@ -197,9 +197,9 @@ def getProducts():
 		print('**** Processing POST request **********')
 		#print(request.json)			
 		
-		(retCode,msg, result) = productUtils.list_products()
+		(retCode,msg, productList) = productUtils.list_products()
 
-		return jsonify({'retcode': retCode},{'msg': msg}, {'result': result})
+		return jsonify({'retcode': retCode},{'msg': msg}, {'result': productList})
 		#return jsonify(json.dumps(result, cls=CustomEncoder))
 
 	except Exception as e:
@@ -340,7 +340,7 @@ def create_checkout_session( cart_Id, success_url,cancel_url,
 
 	try:
 		getCartDetails(cart_Id)
-		
+
 		currency = 'INR'
 		unit_amt = 35000
 		qty = 2

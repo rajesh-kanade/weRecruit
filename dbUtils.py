@@ -34,3 +34,7 @@ def returnToPool(conn):
 def getDictCursor(conn):
     cursor = conn.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
     return cursor
+
+def getNamedTupleCursor(conn):
+    cursor = conn.cursor(cursor_factory = psycopg2.extras.NamedTupleCursor)
+    return cursor
