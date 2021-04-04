@@ -23,14 +23,15 @@ class Product:
     unit_price: float
     desc: str
     currency : str
-
+    billing_frequency : int = PRODUCT_BF_MONTHLY
+    status : int =  PRODUCT_STATUS_ACTIVE
 @dataclass( frozen = True)
 class Cart:
     id : str
     productList : List[Product] #ProductList
 
 
-def add_product( product, billing_frequency = PRODUCT_BF_MONTHLY, status = PRODUCT_STATUS_ACTIVE):
+def add_product( product ):
 
     error = ''
     try:
@@ -48,7 +49,8 @@ def add_product( product, billing_frequency = PRODUCT_BF_MONTHLY, status = PRODU
                                 VALUES 
                                 (%s,%s,%s, %s,%s,%s)"""
             
-            data_tuple = (product.id, product.unit_price, product.currency, billing_frequency,status,dt)
+            data_tuple = (product.id, product.unit_price, product.currency, 
+                    product.billing_frequency,product.status,dt)
             cursor.execute(insert_query, data_tuple)
 
             db_con.commit()
