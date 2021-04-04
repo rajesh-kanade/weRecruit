@@ -75,6 +75,7 @@ CREATE TABLE public.cart_products
 (
     cart_id text COLLATE pg_catalog."default" NOT NULL,
     product_id text COLLATE pg_catalog."default" NOT NULL,
+    qty smallint NOT NULL,
     created_on timestamp with time zone,
     created_by text COLLATE pg_catalog."default",
     updated_by text COLLATE pg_catalog."default",
