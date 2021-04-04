@@ -25,6 +25,7 @@ class Product:
     currency : str
     billing_frequency : int = PRODUCT_BF_MONTHLY
     status : int =  PRODUCT_STATUS_ACTIVE
+
 @dataclass( frozen = True)
 class Cart:
     id : str
@@ -201,14 +202,12 @@ def add_product_to_cart(cart_id, product_id, qty):
 
             dt = datetime.now(tz=timezone.utc) 
             print(dt)
-            #utc_time = dt.replace(tzinfo = timezone.utc) 
-            #print(utc_time)
-            #insert into user table
-            insert_query = """INSERT INTO cart_products (cart_id, product_id, created_on) 
+
+            insert_query = """INSERT INTO cart_products (cart_id, product_id, created_on,qty) 
                                 VALUES 
-                                (%s,%s,%s)"""
+                                (%s,%s,%s, %s)"""
             
-            data_tuple = (cart_id,product_id,dt)
+            data_tuple = (cart_id,product_id,dt,qty)
             cursor.execute(insert_query, data_tuple)
 
             db_con.commit()
@@ -271,20 +270,17 @@ def get_cart_details(cart_id):
         try:
 
             db_con = dbUtils.getConnFromPool()
-            cursor = dbUtils.getDictCursor(db_con)
+            cursor = dbUtils.getNamedTupleCursor(db_con)
             #cursor = db_con.cursor()
 
             #utc_time = dt.replace(tzinfo = timezone.utc) 
             #print(utc_time)
             #insert into user table
-            sql = """
-            select id,unit_price,billing_frequency,currency from products as p
-            where p.status = 1 and p.id in ( select product_id from cart_products where cart_id = %s)
-            """
+
+            sql = """select cp.cart_id, p.*,cp.qty from cart_products as cp, products as p 
+                where cp.cart_id = %s and p.status = %s and cp.product_id = p.id"""
+            data_tuple = (cart_id,PRODUCT_STATUS_ACTIVE)
             
-            data_tuple = (cart_id,)
-            
-            #print ( cursor.mogrify(sql, data_tuple))
             
             cursor.execute(sql, data_tuple)
 
@@ -358,6 +354,11 @@ if __name__ == "__main__":
     print(productList)
 
     print( "size of product list is ", len(productList) )
+
+    (retCode, msg, cartDetailsList ) = get_cart_details('CART10')
+
+    print("cart details size is ", len(cartDetailsList))
+    print( cartDetailsList)
 
     #for p in productList:
     #    update_product( p.id, {'description' : 'Description of {}'.format(p.id) })
