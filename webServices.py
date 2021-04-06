@@ -16,7 +16,6 @@ import os
 #import json
 import decimal
 import stripe
-#stripe.api_key = 'sk_test_51I4vEHFm3r2eDjm1mUohUJApVQjJXZ4hJdpZ2PEqvnHcOjBnZp7zUELkofDAiMjtEJOBR5grVm9KeyUq6l6jBNwi00iXxKco9U'
 stripe.api_key = os.environ.get("STRIPE_API_KEY")
 
 
@@ -310,23 +309,30 @@ def getCartDetails():
 		print(e)
 		return jsonify({'retcode': -101},{'msg': str(e)}) ,400
 
-@app.route('/v1/checkoutCart', methods = ['POST'])
-def checkoutCart():
+@app.route('/v1/checkoutCartUsingSwipe', methods = ['POST'])
+def checkoutCartUsingSwipe():
 	error = ''
 	try:		
 		assert request.method == "POST", "Unsupported request method. Only POST supported."
-		#assert 'cartID'  in request.json , "cartID not found in request json."
-		#request.args.get('cartID')
+		
+		assert 'cartID'  in request.json , "cartID not found in request json."
+		assert 'successURL' in request.json , " Success URL parameter not found in request json."
+		assert 'cancelURL' in request.json , " Cancel URL parameter not found in request json."
 
 		print('**** Processing POST request **********')
 
-		#cartID = request.json['cartID']
-		cartID ='Small'
-		print ( cartID)
+		cartID = str(request.json['cartID'])
+		successURL = str(request.json['successURL'])
+		cancelURL = str( request.json['cancelURL'])
+		(retCode,msg) = productUtils.checkout_cart(cartID)
 
-		(retCode,msg) = productUtils.checkout_cart(cartID ) 
-		checkout_session_id = create_checkout_session(cartID,"http://wwww.https://www.wemoodle.cloud/", "http://www.fulgorithm.com/")	
-		#jsonify({'id': checkout_session.id})
+		if retCode != 0: 
+			return jsonify({'retcode': 1},{'msg': 'Check out failed.'})	
+		
+		checkout_session_id = swipe_create_checkout_session(cartID,"http://wwww.https://www.wemoodle.cloud/", "http://www.fulgorithm.com/")	
+			#jsonify({'id': checkout_session.id})
+		#checkout_session_id = productUtils.create_checkout_session(cartID, success_url,cancel_url,)
+		
 		print("got session id")
 		#print(checkout_session_id)
 		#return( checkout_session_id)
@@ -337,18 +343,25 @@ def checkoutCart():
 		#flash(e)
 		print ("In the exception block.")
 		print(e)
-		return jsonify({'retcode': -101},{'msg': str(e)}) , 400
+		return jsonify({'retcode': 400},{'msg': str(e)}) , 400
 
-def create_checkout_session( cart_Id, success_url,cancel_url,
+def swipe_create_checkout_session( cart_Id, success_url,cancel_url,
 	payment_method_type = 'card',mode ='payment'):
 
 	try:
-		getCartDetails(cart_Id)
+		#getCartDetails(cart_Id)
+		(retCode,msg,records) = productUtils.get_cart_details(cart_Id)
+		for record in records:
+			currency = record.currency
+			qty = record.qty
+			product_desc = record.description
+			unit_amt = record.unit_price
+			break
 
-		currency = 'INR'
-		unit_amt = 35000
-		qty = 2
-		product_desc = 'www.weMoodle.cloud Monthly Basic subscription'
+		#currency = 'INR'
+		#unit_amt = 35000
+		#qty = 2
+		#product_desc = 'www.weMoodle.cloud Monthly Basic subscription'
 		payment_method_types = [payment_method_type]
 		line_items =[
 			{
