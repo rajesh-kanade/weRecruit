@@ -309,8 +309,8 @@ def getCartDetails():
 		print(e)
 		return jsonify({'retcode': -101},{'msg': str(e)}) ,400
 
-@app.route('/v1/checkoutCartUsingSwipe', methods = ['POST'])
-def checkoutCartUsingSwipe():
+@app.route('/v1/checkoutCartUsingStripe', methods = ['POST'])
+def checkoutCartUsingStripe():
 	error = ''
 	try:		
 		assert request.method == "POST", "Unsupported request method. Only POST supported."
@@ -329,14 +329,12 @@ def checkoutCartUsingSwipe():
 		if retCode != 0: 
 			return jsonify({'retcode': 1},{'msg': 'Check out failed.'})	
 		
-		checkout_session_id = swipe_create_checkout_session(cartID,"http://wwww.https://www.wemoodle.cloud/", "http://www.fulgorithm.com/")	
+		checkout_session_id = stripe_create_checkout_session(cartID,successURL, cancelURL)	
 			#jsonify({'id': checkout_session.id})
 		#checkout_session_id = productUtils.create_checkout_session(cartID, success_url,cancel_url,)
 		
 		print("got session id")
-		#print(checkout_session_id)
-		#return( checkout_session_id)
-		#return jsonify({'retcode': retCode},{'msg': msg},{'sessionId': checkout_session_id})
+
 		return jsonify({'id': checkout_session_id})
 
 	except Exception as e:
@@ -345,37 +343,40 @@ def checkoutCartUsingSwipe():
 		print(e)
 		return jsonify({'retcode': 400},{'msg': str(e)}) , 400
 
-def swipe_create_checkout_session( cart_Id, success_url,cancel_url,
+def stripe_create_checkout_session( cart_Id, success_url,cancel_url,
 	payment_method_type = 'card',mode ='payment'):
 
 	try:
-		#getCartDetails(cart_Id)
 		(retCode,msg,records) = productUtils.get_cart_details(cart_Id)
+		if (len( records ) <=0 ):
+			return (101, "Cart is empty so can not proceed with swipe check out checout session.")
+		line_items = []
 		for record in records:
 			currency = record.currency
 			qty = record.qty
 			product_desc = record.description
-			unit_amt = record.unit_price
-			break
+			if product_desc == None:
+				product_desc = 'Your Product Description'
+			unit_amt = record.unit_price * 100  #stripe takes unit value in lowest denomination
+			line_item = {
+				'price_data' : {
+					'currency' : currency,
+					'unit_amount' : unit_amt,
+					'product_data' : {
+						'name' : product_desc,
+					}
+				},
+				'quantity' : qty,
+			}
+			line_items.append(line_item)
+			#break
 
 		#currency = 'INR'
 		#unit_amt = 35000
 		#qty = 2
 		#product_desc = 'www.weMoodle.cloud Monthly Basic subscription'
 		payment_method_types = [payment_method_type]
-		line_items =[
-			{
-				'price_data' : {
-					'currency' : currency,
-					'unit_amount' : unit_amt,
-					'product_data' : {
-						'name' : product_desc,
-						'images' : ['https://i.imgur.com/EHyR2nP.png'],
-					}
-				},
-				'quantity' : qty,
-			},
-		]
+
 		print(line_items)
 
 		checkout_session = stripe.checkout.Session.create(
