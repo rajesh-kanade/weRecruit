@@ -87,6 +87,22 @@ CREATE TABLE public.cart_products
 );
 ALTER TABLE public."cart_products" OWNER TO postgres;
 
+CREATE TABLE public.invoices 
+(
+    invoice_id text COLLATE pg_catalog."default" NOT NULL,
+    cart_id text NOT NULL,
+    amt_due numeric NOT NULL,
+    amt_paid numeric NOT NULL,
+    created_on timestamp with time zone,
+    created_by text COLLATE pg_catalog."default",
+    updated_by text COLLATE pg_catalog."default",
+    updated_on timestamp with time zone,
+    custom_attrs public.hstore,
+	primary key (invoice_id) ,
+	FOREIGN KEY(cart_id) REFERENCES public.carts(id)
+);
+ALTER TABLE public."invoices" OWNER TO postgres;
+
 
 
 

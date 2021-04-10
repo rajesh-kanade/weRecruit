@@ -297,6 +297,19 @@ def get_cart_details(cart_id):
 		print ("Exception occured while fetching product details from cart.")
 		return ( -2, str(e), None)
 
+def get_cart_TotalAmount(cart_id):
+	
+	(retCode,msg, results ) = get_cart_details(cart_id)
+	if (retCode !=0):
+		return ( retCode, "Failed to get cart Details.", None)
+	
+	total_amt = 0
+	for record in results:
+		total_amt = total_amt + record.qty * record.unit_price	
+	
+	return ( retCode, msg, total_amt)
+
+
 def checkout_cart(cart_id):
 
 	error = ''
@@ -310,13 +323,30 @@ def checkout_cart(cart_id):
 			dt = datetime.now(tz=timezone.utc) 
 			print(dt)
 
-			#session_id = create_checkout_session(cart_Id,"http://www.wemoodle.com","http://www.google.com")
 
 			sql = """UPDATE carts set status = %s, updated_on = %s where id = %s""" 
 			data_tuple = (CART_STATUS_CHECKEDOUT,dt,cart_id)
-
 			cursor.execute(sql, data_tuple)
+			
+			#get total amount due for the cart 
+			(retCode,msg,total_amt) = get_cart_TotalAmount(cart_id)
+			if retCode !=0:
+				return ( 1, "Failed to calculate total amount")
+			
+			if total_amt == None :
+				return ( 2, "Failed to calculate total amount")
+
+			
+			#generate invoice
+			invoice_id = "invoice-" + cart_id
+
+			sql = """INSERT INTO invoices( invoice_id, cart_id, created_on, amt_due, amt_paid) 
+			VALUES ( %s, %s, %s, %s,%s) """ 
+			data_tuple = (invoice_id,cart_id, dt,total_amt,0)
+			cursor.execute(sql, data_tuple)
+			
 			db_con.commit()
+
 			return (0, "Cart checkedout successfully.")
 
 		except Exception as dbe:
@@ -354,6 +384,10 @@ if __name__ == "__main__":
 	(retCode, msg, cartDetailsList ) = get_cart_details('CART10')
 
 	print("cart details size is ", len(cartDetailsList))
+
+	(retCode,msg) = checkout_cart( 'CART10')
+
+
 	#print( cartDetailsList)
 
 	#for p in productList:
