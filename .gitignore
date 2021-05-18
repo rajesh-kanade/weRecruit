@@ -5,3 +5,6 @@ __pycache__/ResumeUtils.cpython-38.pyc
 venv/
 pyvenv.cfg
 .env
+build/
+dist/
+
