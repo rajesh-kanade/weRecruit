@@ -124,6 +124,13 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+@app.route('/v1/users/<string:id>', methods=['GET'])
+def users(id):
+	assert request.method == "GET", "Unsupported request method. Only POST supported."
+	if request.method == "GET":
+		get_user(id)		
+
+
 
 
 @app.route('/v1/productAdd', methods = ['POST'])
