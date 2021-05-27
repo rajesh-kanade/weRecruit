@@ -29,6 +29,78 @@ class User:
 	password: str
 	status : int =  0
 
+def update_user(userID,update_attrs):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = db_con.cursor()
+
+		if update_attrs is None or len(update_attrs) <= 0 :
+			 return(1,"update attributes dictionary is either None or empty.", None)
+
+		if len(update_attrs) ==1:
+			sql = "UPDATE fl_iam_users SET {} = %s WHERE id = %s"	
+			sql = sql.format(list(update_attrs.keys())[0])
+			params = (list(update_attrs.values())[0],userID)
+		else:
+			sql = "UPDATE fl_iam_users SET ({}) = %s WHERE id = '{}'"
+			sql = sql.format(', '.join(update_attrs.keys()), str(userID))
+			params = (tuple(update_attrs.values()),)
+
+		print ( cursor.mogrify(sql, params))
+		
+		cursor.execute(sql, params)
+		updated_rows = cursor.rowcount
+			
+		if updated_rows == 1:
+			db_con.commit()
+			return (0, "User update successed.", updated_rows)
+		else:
+			db_con.rollback()
+			return (2, "User update failed.", updated_rows)
+
+	except Exception as e:
+		print(e)
+		db_con.rollback()
+		return (-1, str(e),None)
+	
+	finally:
+		if cursor is not None:
+			 cursor.close()
+		dbUtils.returnToPool(db_con)
+
+
+
+def delete_user(userID):
+	try:
+		
+		db_con = dbUtils.getConnFromPool()		
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+
+		sql = """UPDATE fl_iam_users SET status = %s WHERE id = %s"""		
+		params = (-1,userID)
+		
+		print (sql)		
+		print ( cursor.mogrify(sql, params))
+
+		cursor.execute(sql, params)
+		updated_rows = cursor.rowcount
+
+		db_con.commit()
+		
+		if updated_rows != 1 :
+			return(1, "DELETE for User ID '{0}' failed.".format(userID), updated_rows)
+		else:
+			return(0, "DELETE for User ID '{0}' succeeded.".format(userID),None)
+	
+	except Exception as e:
+		print(e)
+		return(-1, str(e), None) 
+
+	finally:
+		if cursor is not None : 
+			cursor.close()
+
+		dbUtils.returnToPool(db_con)
 
 def get_user(userID):
 	
@@ -47,26 +119,25 @@ def get_user(userID):
 
 		userList =cursor.fetchall()
 
-		if userList == None or len(userList) == 0 :
-			return(0, "User ID '{0}' not found in database".format(userID))
-		
+		if userList == None or len(userList) <= 0 :
+			return(1, "User ID '{0}' not found in database".format(userID), None)
+
+		if userList == None or len(userList) > 1 :
+			return(2, "'{0}' records found for User ID '{1}'".format(len(userList),userID), len(userList))
+
 		for user in userList:
 			print(user)
-			
-		#db_con.commit()
 
-		#if userList == None :
-		#	return (1, "User {1} not found.".format(id))
+		return(0, "User ID '{0}' successfully fetched from db".format(userID), userList[0])
 	
 	except Exception as e:
 		print(e)
-		return(-1, str(e)) 
+		return(-1, str(e), None) 
 
 	finally:
 		cursor.close()
 		dbUtils.returnToPool(db_con)
 
-	return(0, "User ID '{0}' successfully fetched from db".format(userID))
 
 def checkUserExist(email):
 	try:
@@ -290,7 +361,14 @@ if __name__ == "__main__":
 	#getSummaryReportForToday( 'rrkanade22@yahoo.com' )
 	
 	#(retCode, msg ) = signUp("Rajesh Kanade", "rrkanade@yahoo.com")
-	(retCode, msg ) = get_user("rajesh")
+	#(retCode, msg, userRecord ) = get_user("rajesh")
+	#(retCode, msg, userRecord ) = delete_user("rajesh1")
+
+	#(retCode, msg, userRecord ) = update_user("rajesh",{'status':0,'name':'rajesh python'})
+	#(retCode, msg, userRecord ) = update_user("rajesh",{})
+	(retCode, msg, userRecord ) = update_user("rajesh",{'name':'vs code'})
+
 	print( retCode)
 	print ( msg)
+	print ( userRecord)
 	

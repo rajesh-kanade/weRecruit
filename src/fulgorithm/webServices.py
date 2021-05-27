@@ -124,13 +124,33 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/v1/users/<string:id>', methods=['GET'])
+@app.route('/v1/users/<string:id>', methods=['GET','DELETE','POST'])
 def users(id):
-	assert request.method == "GET", "Unsupported request method. Only POST supported."
+
 	if request.method == "GET":
-		get_user(id)		
+		results = userUtils.get_user(id)
 
+		if (results[0] ==0):
+			return jsonify(results[2])
+		else:
+			return jsonify({'retcode': results[0],'msg': results[1]}),400
 
+	if request.method == "DELETE":
+		results = userUtils.delete_user(id)
+
+		if (results[0] ==0):
+			return jsonify(results[2])
+		else:
+			return jsonify({'retcode': results[0],'msg': results[1]}),400
+
+	if request.method == "POST":
+		#request.json
+		results = userUtils.update_user(id,request.json)
+
+		if (results[0] ==0):
+			return jsonify({'retcode': results[0],'msg': results[2]})
+		else:
+			return jsonify({'retcode': results[0],'msg': results[1]}),400
 
 
 @app.route('/v1/productAdd', methods = ['POST'])
@@ -209,7 +229,6 @@ def listProducts():
 		(retCode,msg, productList) = productUtils.list_products()
 
 		return jsonify({'retcode': retCode},{'msg': msg}, {'result': productList})
-		#return jsonify(json.dumps(result, cls=CustomEncoder))
 
 	except Exception as e:
 		#flash(e)
