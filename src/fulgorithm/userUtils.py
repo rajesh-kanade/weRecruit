@@ -21,13 +21,18 @@ from werkzeug.utils import secure_filename
 from dataclasses import dataclass
 
 import os
+from enum import Enum
+
+class Status(Enum):
+    active = 0
+    deleted = -1
 
 @dataclass(frozen=True)
 class User:
 	id: str
 	name: str
 	password: str
-	status : int =  0
+	status : int =  Status.active.value
 
 def update_user(userID,update_attrs):
 	try:
@@ -77,7 +82,7 @@ def delete_user(userID):
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
 		sql = """UPDATE fl_iam_users SET status = %s WHERE id = %s"""		
-		params = (-1,userID)
+		params = (Status.deleted.value,userID)
 		
 		print (sql)		
 		print ( cursor.mogrify(sql, params))
@@ -110,7 +115,7 @@ def get_user(userID):
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
 		sql = """SELECT id,name FROM fl_iam_users WHERE id = %s and status = %s """		
-		params = (userID,0)
+		params = (userID,Status.active.value)
 		
 		print (sql)		
 		print ( cursor.mogrify(sql, params))
@@ -361,13 +366,14 @@ if __name__ == "__main__":
 	#getSummaryReportForToday( 'rrkanade22@yahoo.com' )
 	
 	#(retCode, msg ) = signUp("Rajesh Kanade", "rrkanade@yahoo.com")
-	#(retCode, msg, userRecord ) = get_user("rajesh")
-	#(retCode, msg, userRecord ) = delete_user("rajesh1")
-
-	#(retCode, msg, userRecord ) = update_user("rajesh",{'status':0,'name':'rajesh python'})
-	#(retCode, msg, userRecord ) = update_user("rajesh",{})
+	(retCode, msg, userRecord ) = get_user("rajesh")
+	#(retCode, msg, userRecord ) = delete_user("rajesh")
+	
+	(retCode, msg, userRecord ) = update_user("rajesh",{'status':Status.active.value,'name':'rajesh python'})
+	"""
+	(retCode, msg, userRecord ) = update_user("rajesh",{})
 	(retCode, msg, userRecord ) = update_user("rajesh",{'name':'vs code'})
-
+	"""
 	print( retCode)
 	print ( msg)
 	print ( userRecord)
