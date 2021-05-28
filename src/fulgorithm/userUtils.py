@@ -34,6 +34,69 @@ class User:
 	password: str
 	status : int =  Status.active.value
 
+def create_user(user_attrs):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = db_con.cursor()
+
+		if user_attrs is None or len(user_attrs) <= 0 :
+			 return(1,"user attributes dictionary is either None or empty.", None)
+		
+		if 'id' not in user_attrs.keys():
+			 return(2,"User Id not found.", None)
+		
+		if 'name' not in user_attrs.keys():
+			 return(3,"User name not found.", None)
+
+		if 'status' not in user_attrs.keys():
+			 return(4,"User status not found.", None)
+
+		if 'password' not in user_attrs.keys():
+			 return(5,"User password not found.", None)
+
+		userID = user_attrs['id'].strip()
+		name = user_attrs['name'].strip()
+		status = user_attrs['status']
+		password = user_attrs['password'].strip()
+
+		if not userID:
+			 return(21,"User Id empty.", None)
+
+		if not name:
+			 return(22,"Name empty.", None)
+
+		if not password:
+			 return(22,"password empty.", None)
+
+		#TODO check status value is as defined in enum
+		
+		#TODO hash the password
+
+		sql = """insert into fl_iam_users ( id, name, status, password) 
+				values (%s,%s, %s,%s)"""
+		params = (userID,name,status,password)
+		print ( cursor.mogrify(sql, params))
+		
+		cursor.execute(sql, params)
+		effected_rows = cursor.rowcount			
+		if effected_rows == 1:
+			db_con.commit()
+			return (0, "User insertion successed.", effected_rows)
+		else:
+			db_con.rollback()
+			return (50, "User insertion effected more then 1 rows.", effected_rows)
+
+	except Exception as e:
+		print(e)
+		db_con.rollback()
+		return (-1, str(e),None)
+	
+	finally:
+		if cursor is not None:
+			cursor.close()
+		dbUtils.returnToPool(db_con)
+
+
 def update_user(userID,update_attrs):
 	try:
 		db_con = dbUtils.getConnFromPool()
@@ -41,6 +104,7 @@ def update_user(userID,update_attrs):
 
 		if update_attrs is None or len(update_attrs) <= 0 :
 			 return(1,"update attributes dictionary is either None or empty.", None)
+		#TODO: Check column key is valid key representing a column
 
 		if len(update_attrs) ==1:
 			sql = "UPDATE fl_iam_users SET {} = %s WHERE id = %s"	
@@ -366,15 +430,23 @@ if __name__ == "__main__":
 	#getSummaryReportForToday( 'rrkanade22@yahoo.com' )
 	
 	#(retCode, msg ) = signUp("Rajesh Kanade", "rrkanade@yahoo.com")
-	(retCode, msg, userRecord ) = get_user("rajesh")
+	#(retCode, msg, userRecord ) = get_user("rajesh")
 	#(retCode, msg, userRecord ) = delete_user("rajesh")
 	
-	(retCode, msg, userRecord ) = update_user("rajesh",{'status':Status.active.value,'name':'rajesh python'})
 	"""
+	(retCode, msg, userRecord ) = update_user("rajesh",{'status':Status.active.value,'name':'rajesh python'})
+	
 	(retCode, msg, userRecord ) = update_user("rajesh",{})
 	(retCode, msg, userRecord ) = update_user("rajesh",{'name':'vs code'})
-	"""
+	
 	print( retCode)
 	print ( msg)
 	print ( userRecord)
 	
+	"""
+	(retCode, msg, userRecord ) = create_user({'id':'rk1','name':'R K 3','status':0,'password':'pwd'})
+	#(retCode, msg, userRecord ) = create_user({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
+
+	print( retCode)
+	print ( msg)
+	print ( userRecord)

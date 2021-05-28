@@ -18,8 +18,6 @@ import decimal
 import stripe
 stripe.api_key = os.environ.get("STRIPE_API_KEY")
 
-
-
 ALLOWED_EXTENSIONS = {'pdf', 'docx'}
 YOUR_DOMAIN = 'http://localhost:4000'
 
@@ -125,7 +123,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/v1/users/<string:id>', methods=['GET','DELETE','POST'])
-def users(id):
+def user_by_id(id):
 
 	if request.method == "GET":
 		results = userUtils.get_user(id)
@@ -151,6 +149,18 @@ def users(id):
 			return jsonify({'retcode': results[0],'msg': results[2]})
 		else:
 			return jsonify({'retcode': results[0],'msg': results[1]}),400
+
+@app.route('/v1/users', methods=['POST','GET'])
+def users():
+	if request.method == "POST":
+
+		results = userUtils.create_user(request.json)
+
+		if (results[0] ==0):
+			return jsonify({'retcode': results[0],'msg': results[1]})
+		else:
+			return jsonify({'retcode': results[0],'msg': results[1]}),400
+
 
 
 @app.route('/v1/productAdd', methods = ['POST'])
