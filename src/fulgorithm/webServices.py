@@ -122,7 +122,7 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-@app.route('/v1/users/<string:id>', methods=['GET','DELETE','POST'])
+@app.route('/v1/users/<string:id>', methods=['GET','DELETE','PUT'])
 def user_by_id(id):
 
 	if request.method == "GET":
