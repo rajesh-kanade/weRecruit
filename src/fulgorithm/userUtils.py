@@ -23,9 +23,13 @@ from dataclasses import dataclass
 import os
 from enum import Enum
 
+#TODO : IsDelete and status are different. Create fields for that in DB and change code accordingly.
+#TODO : Create table for audit log and Bipin will do triggers later to populate audit log.
 class Status(Enum):
-    active = 0
-    deleted = -1
+	active = 1
+	suspended = 0
+	pending_verification = 2
+
 
 @dataclass(frozen=True)
 class User:
@@ -33,6 +37,7 @@ class User:
 	name: str
 	password: str
 	status : int =  Status.active.value
+	is_deleted : bool = False
 
 def create_user(user_attrs):
 	try:
@@ -72,9 +77,9 @@ def create_user(user_attrs):
 		
 		#TODO hash the password
 
-		sql = """insert into fl_iam_users ( id, name, status, password) 
-				values (%s,%s, %s,%s)"""
-		params = (userID,name,status,password)
+		sql = """insert into fl_iam_users ( id, name, status, password,is_deleted) 
+				values (%s,%s, %s,%s,%s)"""
+		params = (userID,name,status,password,False)
 		print ( cursor.mogrify(sql, params))
 		
 		cursor.execute(sql, params)
@@ -145,8 +150,8 @@ def delete_user(userID):
 		db_con = dbUtils.getConnFromPool()		
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
-		sql = """UPDATE fl_iam_users SET status = %s WHERE id = %s"""		
-		params = (Status.deleted.value,userID)
+		sql = """UPDATE fl_iam_users SET is_deleted = %s WHERE id = %s"""		
+		params = (True,userID)
 		
 		print (sql)		
 		print ( cursor.mogrify(sql, params))
@@ -159,7 +164,7 @@ def delete_user(userID):
 		if updated_rows != 1 :
 			return(1, "DELETE for User ID '{0}' failed.".format(userID), updated_rows)
 		else:
-			return(0, "DELETE for User ID '{0}' succeeded.".format(userID),None)
+			return(0, "DELETE for User ID '{0}' succeeded.".format(userID),updated_rows)
 	
 	except Exception as e:
 		print(e)
@@ -178,8 +183,8 @@ def get_user(userID):
 		db_con = dbUtils.getConnFromPool()		
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
-		sql = """SELECT id,name FROM fl_iam_users WHERE id = %s and status = %s """		
-		params = (userID,Status.active.value)
+		sql = """SELECT * FROM fl_iam_users WHERE id = %s and is_deleted = %s """		
+		params = (userID,False)
 		
 		print (sql)		
 		print ( cursor.mogrify(sql, params))
@@ -198,6 +203,36 @@ def get_user(userID):
 			print(user)
 
 		return(0, "User ID '{0}' successfully fetched from db".format(userID), userList[0])
+	
+	except Exception as e:
+		print(e)
+		return(-1, str(e), None) 
+
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)
+
+def list_users():
+	
+	try:
+		
+		db_con = dbUtils.getConnFromPool()		
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+
+		sql = """SELECT * FROM fl_iam_users WHERE is_deleted = %s """		
+		params = (False,)
+		
+		print (sql)		
+		print ( cursor.mogrify(sql, params))
+
+		cursor.execute(sql, params)
+
+		userList =cursor.fetchall()
+
+		for user in userList:
+			print(user)
+
+		return(0, "User List successfully fetched from db", userList)
 	
 	except Exception as e:
 		print(e)
@@ -443,10 +478,30 @@ if __name__ == "__main__":
 	print ( msg)
 	print ( userRecord)
 	
-	"""
-	(retCode, msg, userRecord ) = create_user({'id':'rk1','name':'R K 3','status':0,'password':'pwd'})
+	
+
+	(retCode, msg, userRecord ) = delete_user('rk1')
 	#(retCode, msg, userRecord ) = create_user({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
 
 	print( retCode)
 	print ( msg)
 	print ( userRecord)
+
+	(retCode, msg, userRecord ) = create_user({'id':'rk1','name':'R K 3','status':Status.active.value,'password':'pwd'})
+	#(retCode, msg, userRecord ) = create_user({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
+
+	print( retCode)
+	print ( msg)
+	print ( userRecord)
+	"""
+	
+	(retCode, msg, userList ) = list_users()
+	print( retCode)
+	print ( msg)
+	for user in userList:
+		print ( user)
+	
+	(retCode, msg, userList ) = get_user('rk1')
+	print( retCode)
+	print ( msg)
+	
