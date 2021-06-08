@@ -1,11 +1,9 @@
-#import sqlite3
-import constants
+#import fulgorithm.constants
 import datetime
-#import pandas as pd
-#from pandas.io.json import json_normalize
+
 import json
 from jinja2 import Environment, FileSystemLoader
-import emailUtils
+#import emailUtils
 import psycopg2
 import dbUtils
 
@@ -23,12 +21,15 @@ from dataclasses import dataclass
 import os
 from enum import Enum
 
-#TODO : IsDelete and status are different. Create fields for that in DB and change code accordingly.
 #TODO : Create table for audit log and Bipin will do triggers later to populate audit log.
+
 class Status(Enum):
 	active = 1
 	suspended = 0
 	pending_verification = 2
+
+class RetCodes(Enum):
+	success = 'IAM_UC_S200'
 
 
 @dataclass(frozen=True)
@@ -86,7 +87,7 @@ def create_user(user_attrs):
 		effected_rows = cursor.rowcount			
 		if effected_rows == 1:
 			db_con.commit()
-			return (0, "User insertion successed.", effected_rows)
+			return (RetCodes.success.value, "User insertion successed.", effected_rows)
 		else:
 			db_con.rollback()
 			return (50, "User insertion effected more then 1 rows.", effected_rows)
@@ -127,7 +128,7 @@ def update_user(userID,update_attrs):
 			
 		if updated_rows == 1:
 			db_con.commit()
-			return (0, "User update successed.", updated_rows)
+			return (RetCodes.success.value, "User update successed.", updated_rows)
 		else:
 			db_con.rollback()
 			return (2, "User update failed.", updated_rows)
@@ -164,7 +165,7 @@ def delete_user(userID):
 		if updated_rows != 1 :
 			return(1, "DELETE for User ID '{0}' failed.".format(userID), updated_rows)
 		else:
-			return(0, "DELETE for User ID '{0}' succeeded.".format(userID),updated_rows)
+			return(RetCodes.success.value, "DELETE for User ID '{0}' succeeded.".format(userID),updated_rows)
 	
 	except Exception as e:
 		print(e)
@@ -202,7 +203,7 @@ def get_user(userID):
 		for user in userList:
 			print(user)
 
-		return(0, "User ID '{0}' successfully fetched from db".format(userID), userList[0])
+		return(RetCodes.success.value, "User ID '{0}' successfully fetched from db".format(userID), userList[0])
 	
 	except Exception as e:
 		print(e)
@@ -232,7 +233,7 @@ def list_users():
 		for user in userList:
 			print(user)
 
-		return(0, "User List successfully fetched from db", userList)
+		return(RetCodes.success.value, "User List successfully fetched from db", userList)
 	
 	except Exception as e:
 		print(e)
@@ -486,14 +487,15 @@ if __name__ == "__main__":
 	print( retCode)
 	print ( msg)
 	print ( userRecord)
+	"""
 
-	(retCode, msg, userRecord ) = create_user({'id':'rk1','name':'R K 3','status':Status.active.value,'password':'pwd'})
+	(retCode, msg, userRecord ) = create_user({'id':'rk2','name':'R K 2','status':Status.active.value,'password':'pwd'})
 	#(retCode, msg, userRecord ) = create_user({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
 
 	print( retCode)
 	print ( msg)
 	print ( userRecord)
-	"""
+	
 	
 	(retCode, msg, userList ) = list_users()
 	print( retCode)

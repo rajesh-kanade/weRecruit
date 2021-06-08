@@ -128,7 +128,7 @@ def user_by_id(id):
 	if request.method == "GET":
 		results = userUtils.get_user(id)
 
-		if (results[0] ==0):
+		if (results[0] == userUtils.RetCodes.success.value):
 			return jsonify(results[2])
 		else:
 			return jsonify({'retcode': results[0],'msg': results[1]}),400
@@ -136,31 +136,43 @@ def user_by_id(id):
 	if request.method == "DELETE":
 		results = userUtils.delete_user(id)
 
-		if (results[0] ==0):
+		if (results[0] == userUtils.RetCodes.success.value):
 			return jsonify(results[2])
 		else:
 			return jsonify({'retcode': results[0],'msg': results[1]}),400
 
-	if request.method == "POST":
+	if request.method == "PUT":
 		#request.json
 		results = userUtils.update_user(id,request.json)
 
-		if (results[0] ==0):
-			return jsonify({'retcode': results[0],'msg': results[2]})
+		if (results[0] == userUtils.RetCodes.success.value ):
+			return jsonify(results[2])
 		else:
 			return jsonify({'retcode': results[0],'msg': results[1]}),400
 
 @app.route('/v1/users', methods=['POST','GET'])
 def users():
+	
+	# Create a new user if it is post
 	if request.method == "POST":
 
 		results = userUtils.create_user(request.json)
 
-		if (results[0] ==0):
+		if (results[0] == userUtils.RetCodes.success.value):
 			return jsonify({'retcode': results[0],'msg': results[1]})
 		else:
 			return jsonify({'retcode': results[0],'msg': results[1]}),400
+	
+	# Return list of all active users if it is get
+	if request.method == "GET":
+		#TODO support filter criteria. How to do we specify filter criteria.
+		results = userUtils.list_users()
 
+		if (results[0] == userUtils.RetCodes.success.value):
+			return jsonify(results[2])
+		else:
+			return jsonify({'retcode': results[0],'msg': results[1]}),400
+		
 
 
 @app.route('/v1/productAdd', methods = ['POST'])
