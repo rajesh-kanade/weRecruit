@@ -39,6 +39,9 @@ app.config['UPLOAD_FOLDER'] = './temp'
 
 mail = Mail(app) 
 
+RET_CODE = 'OpsStatusCode'
+RET_MSG = 'OpsStatusMsg'
+PAY_LOAD = 'payLoad'
 
 @app.route('/v1/getOTP', methods = ['POST']) 	
 def getOTP():
@@ -129,26 +132,26 @@ def user_by_id(id):
 		results = userUtils.get_user(id)
 
 		if (results[0] == userUtils.RetCodes.success.value):
-			return jsonify(results[2])
+			return jsonify({RET_CODE: results[0], RET_MSG: results[1], PAY_LOAD: results[2]})
 		else:
-			return jsonify({'retcode': results[0],'msg': results[1]}),400
+			return jsonify({RET_CODE: results[0], RET_MSG: results[1]}), 400
 
 	if request.method == "DELETE":
 		results = userUtils.delete_user(id)
 
 		if (results[0] == userUtils.RetCodes.success.value):
-			return jsonify(results[2])
+			return jsonify({RET_CODE: results[0],RET_MSG: results[1]})
 		else:
-			return jsonify({'retcode': results[0],'msg': results[1]}),400
+			return jsonify({RET_CODE: results[0],RET_MSG: results[1]}),400
 
 	if request.method == "PUT":
 		#request.json
 		results = userUtils.update_user(id,request.json)
 
 		if (results[0] == userUtils.RetCodes.success.value ):
-			return jsonify(results[2])
+			return jsonify({RET_CODE: results[0],RET_MSG: results[1]})
 		else:
-			return jsonify({'retcode': results[0],'msg': results[1]}),400
+			return jsonify({RET_CODE: results[0],RET_MSG: results[1]}),400
 
 @app.route('/v1/users', methods=['POST','GET'])
 def users():
@@ -159,9 +162,9 @@ def users():
 		results = userUtils.create_user(request.json)
 
 		if (results[0] == userUtils.RetCodes.success.value):
-			return jsonify({'retcode': results[0],'msg': results[1]})
+			return jsonify({ RET_CODE: results[0],RET_MSG: results[1]})
 		else:
-			return jsonify({'retcode': results[0],'msg': results[1]}),400
+			return jsonify({RET_CODE: results[0],RET_MSG: results[1]}),400
 	
 	# Return list of all active users if it is get
 	if request.method == "GET":
@@ -169,9 +172,9 @@ def users():
 		results = userUtils.list_users()
 
 		if (results[0] == userUtils.RetCodes.success.value):
-			return jsonify(results[2])
+			return jsonify({RET_CODE: results[0],RET_MSG: results[1], PAY_LOAD:results[2]})
 		else:
-			return jsonify({'retcode': results[0],'msg': results[1]}),400
+			return jsonify({RET_CODE: results[0],RET_MSG: results[1]}),400
 		
 
 
