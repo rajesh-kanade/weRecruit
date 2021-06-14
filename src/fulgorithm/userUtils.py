@@ -21,16 +21,19 @@ from dataclasses import dataclass
 import os
 from enum import Enum
 
-#TODO : Create table for audit log and Bipin will do triggers later to populate audit log.
-
 class Status(Enum):
 	active = 1
 	suspended = 0
 	pending_verification = 2
 
 class RetCodes(Enum):
-	success = 'IAM_UC_S200'
-
+	success = 'IAM_CRUD_S200'
+	missing_ent_attrs_error = "IAM_CRUD_E400"
+	empty_ent_attrs_error = "IAM_CRUD_E401"
+	save_ent_error = "IAM_CRUD_E403"
+	del_ent_error = "IAM_CRUD_E404"
+	get_ent_error = "IAM_CRUD_E405"
+	server_error = "IAM_CRUD_E500"
 
 @dataclass(frozen=True)
 class User:
@@ -46,19 +49,19 @@ def create_user(user_attrs):
 		cursor = db_con.cursor()
 
 		if user_attrs is None or len(user_attrs) <= 0 :
-			 return(1,"user attributes dictionary is either None or empty.", None)
+			 return(RetCodes.missing_ent_attrs_error.value,"user attributes dictionary missing.", None)
 		
 		if 'id' not in user_attrs.keys():
-			 return(2,"User Id not found.", None)
+			 return(RetCodes.missing_ent_attrs_error.value,"User Id is missing.", None)
 		
 		if 'name' not in user_attrs.keys():
-			 return(3,"User name not found.", None)
+			 return(RetCodes.missing_ent_attrs_error.value,"User name is missing.", None)
 
 		if 'status' not in user_attrs.keys():
-			 return(4,"User status not found.", None)
+			 return(RetCodes.missing_ent_attrs_error.value,"User status is missing.", None)
 
 		if 'password' not in user_attrs.keys():
-			 return(5,"User password not found.", None)
+			 return(RetCodes.missing_ent_attrs_error.value,"User password is missing.", None)
 
 		userID = user_attrs['id'].strip()
 		name = user_attrs['name'].strip()
@@ -66,13 +69,13 @@ def create_user(user_attrs):
 		password = user_attrs['password'].strip()
 
 		if not userID:
-			 return(21,"User Id empty.", None)
+			 return(RetCodes.empty_ent_attrs_error.value,"User Id empty or null.", None)
 
 		if not name:
-			 return(22,"Name empty.", None)
+			 return(RetCodes.empty_ent_attrs_error.value,"Name empty or null.", None)
 
 		if not password:
-			 return(22,"password empty.", None)
+			 return(RetCodes.empty_ent_attrs_error.value,"password empty or null.", None)
 
 		#TODO check status value is as defined in enum
 		
@@ -90,12 +93,12 @@ def create_user(user_attrs):
 			return (RetCodes.success.value, "User insertion successed.", effected_rows)
 		else:
 			db_con.rollback()
-			return (50, "User insertion effected more then 1 rows.", effected_rows)
+			return (RetCodes.save_ent_error.value, "User insertion effected more then 1 rows.", effected_rows)
 
 	except Exception as e:
 		print(e)
 		db_con.rollback()
-		return (-1, str(e),None)
+		return (RetCodes.server_error.value, str(e),None)
 	
 	finally:
 		if cursor is not None:
@@ -109,7 +112,7 @@ def update_user(userID,update_attrs):
 		cursor = db_con.cursor()
 
 		if update_attrs is None or len(update_attrs) <= 0 :
-			 return(1,"update attributes dictionary is either None or empty.", None)
+			 return(RetCodes.missing_ent_attrs_error.value,"update attributes dictionary is missing.", None)
 		#TODO: Check column key is valid key representing a column
 
 		if len(update_attrs) ==1:
@@ -131,12 +134,12 @@ def update_user(userID,update_attrs):
 			return (RetCodes.success.value, "User update successed.", updated_rows)
 		else:
 			db_con.rollback()
-			return (2, "User update failed.", updated_rows)
+			return (RetCodes.save_ent_error.value, "User update failed as updated rows is <> 1", updated_rows)
 
 	except Exception as e:
 		print(e)
 		db_con.rollback()
-		return (-1, str(e),None)
+		return (RetCodes.server_error.value, str(e),None)
 	
 	finally:
 		if cursor is not None:
@@ -163,13 +166,13 @@ def delete_user(userID):
 		db_con.commit()
 		
 		if updated_rows != 1 :
-			return(1, "DELETE for User ID '{0}' failed.".format(userID), updated_rows)
+			return(RetCodes.del_ent_error.value, "DELETE for User ID '{0}' failed.".format(userID), updated_rows)
 		else:
 			return(RetCodes.success.value, "DELETE for User ID '{0}' succeeded.".format(userID),updated_rows)
 	
 	except Exception as e:
 		print(e)
-		return(-1, str(e), None) 
+		return(RetCodes.server_error.value, str(e), None) 
 
 	finally:
 		if cursor is not None : 
@@ -194,11 +197,11 @@ def get_user(userID):
 
 		userList =cursor.fetchall()
 
-		if userList == None or len(userList) <= 0 :
-			return(1, "User ID '{0}' not found in database".format(userID), None)
+		#if userList == None or len(userList) <= 0 :
+		#	return(RetCodes.get_ent_error1.value, "User ID '{0}' not found in database".format(userID), None)
 
-		if userList == None or len(userList) > 1 :
-			return(2, "'{0}' records found for User ID '{1}'".format(len(userList),userID), len(userList))
+		if userList == None or len(userList) != 1 :
+			return(RetCodes.get_ent_error.value, "Found '{0}' records for User ID '{1}' when 1 record was expected.".format(len(userList),userID), len(userList))
 
 		for user in userList:
 			print(user)
@@ -207,7 +210,7 @@ def get_user(userID):
 	
 	except Exception as e:
 		print(e)
-		return(-1, str(e), None) 
+		return(RetCodes.server_error.value, str(e), None) 
 
 	finally:
 		cursor.close()
@@ -237,7 +240,7 @@ def list_users():
 	
 	except Exception as e:
 		print(e)
-		return(-1, str(e), None) 
+		return(RetCodes.server_error.value, str(e), None) 
 
 	finally:
 		cursor.close()
@@ -489,7 +492,7 @@ if __name__ == "__main__":
 	print ( userRecord)
 	"""
 
-	(retCode, msg, userRecord ) = create_user({'id':'rk2','name':'R K 2','status':Status.active.value,'password':'pwd'})
+	(retCode, msg, userRecord ) = create_user({'id':'rk4','name':'RK4','status':Status.active.value,'password':'pwd'})
 	#(retCode, msg, userRecord ) = create_user({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
 
 	print( retCode)
