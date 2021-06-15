@@ -21,6 +21,8 @@ from dataclasses import dataclass
 import os
 from enum import Enum
 
+import hashlib
+
 class Status(Enum):
 	active = 1
 	suspended = 0
@@ -42,6 +44,17 @@ class User:
 	password: str
 	status : int =  Status.active.value
 	is_deleted : bool = False
+
+def hashit(plain_text):
+  
+	result = hashlib.sha256(plain_text.encode())
+  
+	# printing the equivalent hexadecimal value.
+	print("The hexadecimal equivalent of SHA256 is : ")
+	print(result.hexdigest())
+
+	return result.hexdigest()
+
 
 def create_user(user_attrs):
 	try:
@@ -79,7 +92,7 @@ def create_user(user_attrs):
 
 		#TODO check status value is as defined in enum
 		
-		#TODO hash the password
+		password = hashit(password)
 
 		sql = """insert into fl_iam_users ( id, name, status, password,is_deleted) 
 				values (%s,%s, %s,%s,%s)"""
@@ -115,7 +128,10 @@ def update_user(userID,update_attrs):
 			 return(RetCodes.missing_ent_attrs_error.value,"update attributes dictionary is missing.", None)
 		#TODO: Check column key is valid key representing a column
 
-		if len(update_attrs) ==1:
+		#hash the password 
+		update_attrs['password'] = hashit(str(update_attrs['password']))
+
+		if len(update_attrs) == 1:
 			sql = "UPDATE fl_iam_users SET {} = %s WHERE id = %s"	
 			sql = sql.format(list(update_attrs.keys())[0])
 			params = (list(update_attrs.values())[0],userID)
@@ -472,6 +488,11 @@ if __name__ == "__main__":
 	#(retCode, msg, userRecord ) = get_user("rajesh")
 	#(retCode, msg, userRecord ) = delete_user("rajesh")
 	
+	(retCode, msg, userRecord ) = update_user("rk4",{'status':Status.active.value,'name':'rajesh hash', 'password':'hashit'})
+	print( retCode)
+	print ( msg)
+	print ( userRecord)
+
 	"""
 	(retCode, msg, userRecord ) = update_user("rajesh",{'status':Status.active.value,'name':'rajesh python'})
 	
@@ -492,7 +513,7 @@ if __name__ == "__main__":
 	print ( userRecord)
 	"""
 
-	(retCode, msg, userRecord ) = create_user({'id':'rk4','name':'RK4','status':Status.active.value,'password':'pwd'})
+	(retCode, msg, userRecord ) = create_user({'id':'rk5','name':'RK5','status':Status.active.value,'password':'pwd'})
 	#(retCode, msg, userRecord ) = create_user({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
 
 	print( retCode)
