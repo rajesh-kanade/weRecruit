@@ -1,0 +1,16 @@
+install pip3 by following https://linuxize.com/post/how-to-install-pip-on-ubuntu-18.04/
+install venv on ubuntu : apt-get install python3-venv
+
+setup from local archive by https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
+
+if existing first do pip uninstall fulgorithm-api
+
+pip install fulgorithm-api-0.0.1.tar.gz
+
+
+
+from hashlib import sha256
+h = sha256()
+h.update(b'<STRING>')
+hash = h.hexdigest()
+print(hash)

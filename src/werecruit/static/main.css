@@ -1,0 +1,24 @@
+
+hr.gn-main {
+    background-color: #00d1b2;
+    border: none;
+    display: block;
+    height: 1px;
+    margin: 1.5rem 0;
+  }
+
+  hr.gn-section {
+    background-color: #00d1b2;
+    border: none;
+    display: block;
+    height: 1px;
+    margin: 1.5rem 0;
+  }
+
+  .is-wisdom{
+    color: #ffe08a !important;
+  }
+
+  is-fullheight {
+    min-height: 100vh;
+  }
