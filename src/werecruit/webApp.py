@@ -8,6 +8,7 @@ from flask import (
     session,
     url_for
 )
+from flask_session import Session
 
 import logging
 import userUtils
@@ -25,25 +26,17 @@ class User:
 
 users = []
 
-'''
-users.append(User(id=1, username='Anthony', password='password'))
-users.append(User(id=2, username='Becca', password='secret'))
-users.append(User(id=3, username='Carlos', password='somethingsimple'))
-'''
+
 
 app = Flask(__name__)
 app.secret_key = 'somesecretkeythatonlyishouldknow'
 
-logging.basicConfig(level=logging.DEBUG)
-'''
-@app.before_request
-def before_request():
-    g.user = None
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
-    if 'user_id' in session:
-        user = [x for x in users if x.id == session['user_id']][0]
-        g.user = user
-'''
+logging.basicConfig(level=logging.DEBUG)
+
 @app.route('/')
 def home():
     return render_template('index.html')        
@@ -73,6 +66,30 @@ def profile():
 
     return render_template('profile.html')
 '''
+
+@app.route('/user/showSigninPage')
+def show_signin_page():
+
+    return render_template('sign_in.html')
+
+@app.route('/user/doSignin', methods = ['POST'])
+def do_signin():
+
+    results = userUtils.do_SignIn( request.form['email'], request.form['password'])
+
+    if (results[0] == userUtils.RetCodes.success.value):        
+        flash (results[1])
+        session["user.id"] = request.form.get(request.form['email'])
+        return redirect('/index.html')
+    else:
+        #return jsonify({RET_CODE: results[0],RET_MSG: results[1]}),400
+        #error = results[1]
+        flash (results[1],"error")
+        return redirect('/user/showSigninPage')
+
+    #return render_template('sign_in.html')
+
+
 @app.route('/user/showSignupPage')
 def show_signup_page():
 
@@ -81,7 +98,6 @@ def show_signup_page():
 @app.route('/user/createUser',  methods = ['POST'])
 def create_user():
     
-    #request.form['id'] = email
     userAttrs = request.form.to_dict()
     
     userAttrs['id'] = request.form['email'] 
@@ -99,55 +115,11 @@ def create_user():
         return render_template('sign_up.html')
 
 
-    
-def render_Sign_in():
-
-    return render_template('Sign_in.html')
 
 def render_otp():
 
     return render_template('otp.html')        
 
-def sign_up():
-
-    app.logger.info("hello")
-
-    render_sign_up()
-
-    name = ''
-    
-    email = ''
-     
-
-    if request.method == 'POST':
-
-        name = request.form['name']
-        email = request.form['email']
-        
-        app.logger.info(name)
-        app.logger.info(type(name))
-        app.logger.info(email)
-        app.logger.info(type(email))
-        
-    
-    if(name!="" and email!=""):
-
-        (retCode,msg) = userUtils.signUp(name, email,None)
-        #users.append(User(name=name, surname=surname, email=email)
-        #flash("Sign up successful")  
-        #app.logger.info(users[-1].name)
-        #app.logger.info(users[-1].surname)
-        #app.logger.info(users[-1].email)
-         
-        return render_template('home.html')
-    
-    else:
-
-        name = ""
-        email = ""
-
-        flash("All fields are to be filled")    
-        return render_template('Sign_up.html')
 
     
 

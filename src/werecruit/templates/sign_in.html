@@ -1,0 +1,57 @@
+{%extends "header.html" %}
+{%block content%}
+
+<section class="hero is-fullheight">
+
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+          <div class="column is-half">
+            {% set messages = get_flashed_messages() %}
+            {% if messages %}    
+                <div class="notification is-danger">
+                
+                    {% if messages %}  
+                          {% for message in messages %}  
+                                <p> {{ message }}</p>  
+                          {% endfor %}  
+                    {% endif %}  
+              
+                </div>        
+            {% endif %}  
+          <form action = "/user/doSignin" method="POST">
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">Email</label>
+              <div class="control has-icons-left has-icons-right">
+                <input class="input" type="email" name="email" value="{{ request.form['email'] }}" placeholder="Enter Email">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">Password</label>
+              <div class="control has-icons-left has-icons-right">
+                <input class="input" type="password" name="password" value="{{ request.form['password'] }}" placeholder="Enter Password">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="field">
+              <p class="control">
+                <button type="submit" class="button is-success">
+                  Sign In
+                </button>
+              </p>      
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+

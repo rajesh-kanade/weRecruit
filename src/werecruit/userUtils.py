@@ -36,6 +36,7 @@ class RetCodes(Enum):
 	del_ent_error = "IAM_CRUD_E404"
 	get_ent_error = "IAM_CRUD_E405"
 	server_error = "IAM_CRUD_E500"
+	sign_in_failed = "IAM_CRUD_E411"
 
 @dataclass(frozen=True)
 class User:
@@ -103,7 +104,7 @@ def create_user(user_attrs):
 		effected_rows = cursor.rowcount			
 		if effected_rows == 1:
 			db_con.commit()
-			return (RetCodes.success.value, "User insertion successed.", effected_rows)
+			return (RetCodes.success.value, "User sign up successful.", effected_rows)
 		else:
 			db_con.rollback()
 			return (RetCodes.save_ent_error.value, "User insertion effected more then 1 rows.", effected_rows)
@@ -371,19 +372,19 @@ def signUp(username, email,status=1):
 		return ( -2, str(e))
 		#return jsonify({'retcode': -101},{'msg': str(e)}) 
 
-def userSignIn(email, otp):
-	error = ''
+def do_SignIn(id, password):
+	
 	try:
+		password = hashit(password)
 
 		try:
 			db_con = dbUtils.getConnFromPool()
 			cursor = db_con.cursor()
 
-			#insert into user table
-			query = """SELECT COUNT(*) FROM public.user WHERE
-					id = %s and otp = %s """
+			query = """SELECT COUNT(*) FROM public.fl_iam_users WHERE
+					id = %s and password = %s """
 		
-			data_tuple = (email, otp)
+			data_tuple = (id, password)
 
 			print (query)
 			cursor.execute(query, data_tuple)
@@ -391,16 +392,16 @@ def userSignIn(email, otp):
 			print ( "No of rows returned : " +str(number_of_rows))
 
 			if (number_of_rows) == 1 :
-				return (0, "Login successful.")
+				return (RetCodes.success.value, "Login successful.")
 				#return jsonify({'retcode': 0},{'msg': 'login Successful'})
 			else:
-				return ( -1, "Login failed as no user found.")
+				return (RetCodes.sign_in_failed, "Login failed as either no user exists or either wrong emaild ID or password has been provided.")
 				#return jsonify({'retcode': -1},{'msg': 'login failed'})
 				
 
 		except Exception as dbe:
 			print(dbe)
-			return ( -2, str(dbe))
+			return ( RetCodes.server_error, str(dbe))
 			#db_con.rollback()
 			#raise
 		
@@ -409,11 +410,9 @@ def userSignIn(email, otp):
 			dbUtils.returnToPool(db_con)	
 
 	except Exception as e:
-		#flash(e)
 		print ("In the exception block.")
 		print(e)
-		return ( -2, str(e))
-		#return jsonify({'retcode': -101},{'msg': str(e)}) 
+		return ( RetCodes.server_error, str(e))
 
 
 def getOTP(email):
