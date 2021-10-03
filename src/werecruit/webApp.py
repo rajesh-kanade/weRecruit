@@ -9,10 +9,10 @@ from flask import (
     url_for
 )
 from flask_session import Session
+from webForms import SignUpForm , SignInForm
 
 import logging
 import userUtils
-
 
 class User:
     
@@ -69,50 +69,55 @@ def profile():
 
 @app.route('/user/showSigninPage')
 def show_signin_page():
-
-    return render_template('sign_in.html')
+    form = SignInForm()
+    return render_template('sign_in.html', form = form)
 
 @app.route('/user/doSignin', methods = ['POST'])
 def do_signin():
 
-    results = userUtils.do_SignIn( request.form['email'], request.form['password'])
+    form = SignUpForm()
+
+    results = userUtils.do_SignIn( form.email.data, form.password.data)
 
     if (results[0] == userUtils.RetCodes.success.value):        
-        flash (results[1])
-        session["user.id"] = request.form.get(request.form['email'])
-        return redirect('/index.html')
+        flash (results[1],"is-info")
+        session["user_id"] = form.email.data
+        session["user_name"] = 'Mr. Customer'
+        return render_template('home.html')
     else:
-        #return jsonify({RET_CODE: results[0],RET_MSG: results[1]}),400
-        #error = results[1]
-        flash (results[1],"error")
+        flash (results[1],"is-danger")
         return redirect('/user/showSigninPage')
-
-    #return render_template('sign_in.html')
 
 
 @app.route('/user/showSignupPage')
 def show_signup_page():
-
-    return render_template('sign_up.html')
+    form=SignUpForm()
+    return render_template('sign_up.html', form = form)
 
 @app.route('/user/createUser',  methods = ['POST'])
 def create_user():
-    
-    userAttrs = request.form.to_dict()
-    
-    userAttrs['id'] = request.form['email'] 
+
+    form = SignUpForm()
+
+    userAttrs = {}
+
+    userAttrs['id'] = form.email.data
+    userAttrs['password'] = form.password.data
+    userAttrs['name'] = form.name.data
     userAttrs['status'] =userUtils.Status.active.value
 
     results = userUtils.create_user( userAttrs)
 
     if (results[0] == userUtils.RetCodes.success.value):        
-        flash (results[1])
-        return render_template('index.html')
+        flash ("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(form.name.data), "is-info")
+        #form.success = True
+        return render_template('sign_in.html', form = SignInForm())
     else:
         #return jsonify({RET_CODE: results[0],RET_MSG: results[1]}),400
         #error = results[1]
-        flash (results[1],"error")
-        return render_template('sign_up.html')
+        #form.success = False
+        flash (results[0] + ':' +results[1],"is-danger")
+        return render_template('sign_up.html', form=form)
 
 
 

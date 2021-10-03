@@ -353,7 +353,7 @@ def signUp(username, email,status=1):
 			cursor.execute(insert_query, data_tuple)
 			
 			db_con.commit()
-			return (0, "User signed up successfully.")
+			return (RetCodes.success.value, "User signed up successfully.")
 
 		except Exception as dbe:
 			print(dbe)
@@ -379,12 +379,13 @@ def do_SignIn(id, password):
 
 		try:
 			db_con = dbUtils.getConnFromPool()
-			cursor = db_con.cursor()
+			cursor = dbUtils.getNamedTupleCursor(db_con)
+			
 
-			query = """SELECT COUNT(*) FROM public.fl_iam_users WHERE
-					id = %s and password = %s """
+			query = """SELECT count(*) FROM public.fl_iam_users WHERE
+					id = %s and password = %s and is_deleted = %s"""
 		
-			data_tuple = (id, password)
+			data_tuple = (id, password, False)
 
 			print (query)
 			cursor.execute(query, data_tuple)

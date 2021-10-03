@@ -7,4 +7,5 @@ pyvenv.cfg
 .env
 build/
 dist/
+flask_session/
 

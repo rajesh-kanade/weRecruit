@@ -1,0 +1,11 @@
+{%extends "header.html" %}
+{%block content%}
+    {% set messages = get_flashed_messages(with_categories = true ) %}            
+
+    <div class = "hero is-fullheight">
+    <div class = "hero-body">
+        <div class="section is-size-1 has-text-grey-light">Hi, What do you want to do today? </div>
+        <p></p>
+    </div>
+    </div>
+{% endblock %}

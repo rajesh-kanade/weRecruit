@@ -8,8 +8,8 @@
       <div class="columns is-centered">
           <div class="column is-half">
             {% set messages = get_flashed_messages() %}
-            {% if messages %}    
-                <div class="notification is-danger">
+            {% if messages %}   
+                  <div class="notification is-danger">  
                 
                     {% if messages %}  
                           {% for message in messages %}  
@@ -20,40 +20,40 @@
                 </div>        
             {% endif %}  
           <form action = "/user/createUser" method="POST">
+            {{ form.hidden_tag() }}
             <div class="field">
-              <label class="label has-text-grey-light has-text-left">User Name</label>
+              <label class="label has-text-grey-light has-text-left">{{ form.name.label }}</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="text" name="name" value="{{ request.form['name'] }}" placeholder="Enter Username">
+                {{form.name(class='input', placeholder='Enter name')}}
                 <span class="icon is-small is-left">
                   <i class="fas fa-user"></i>
                 </span>
               </div>
             </div>
             <div class="field">
-              <label class="label has-text-grey-light has-text-left">Email</label>
+              <label class="label has-text-grey-light has-text-left">{{ form.email.label }}</label>
               <div class="control has-icons-left has-icons-right">
-                <input class="input" type="email" name="email" value="{{ request.form['email'] }}" placeholder="Enter Email">
-                <span class="icon is-small is-left">
-                  <i class="fas fa-user"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label has-text-grey-light has-text-left">Password</label>
-              <div class="control has-icons-left has-icons-right">
-                <input class="input" type="password" name="password" value="{{ request.form['password'] }}" placeholder="Enter Password">
+                {{ form.email(class='input', placeholder='Enter email') }}
                 <span class="icon is-small is-left">
                   <i class="fas fa-user"></i>
                 </span>
               </div>
             </div>
 
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{form.password.label}}</label>
+              <div class="control has-icons-left has-icons-right">
+                {{ form.password(class='input', placeholder='Enter password') }}
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+              </div>
+            </div>
+              
             <div class="field">
               <p class="control">
-                <button type="submit" class="button is-success">
-                  Create weRecruit account
-                </button>
+                {{ form.submit( class = 'button is-success') }}  
+
               </p>      
             </div>
           </form>

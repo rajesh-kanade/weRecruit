@@ -74,14 +74,24 @@
         <div class="block"> <h1 class="title is-size-1 has-background-dark has-text-white">WeRECRUIT</h1> </div>
         <div class="navbar-end">
           <div class="navbar-item">
-            <div class="buttons">
-              <a href="/user/showSignupPage" class="button is-primary">
-                <strong>Sign up</strong>
-              </a>
-              <a href="/user/showSigninPage" class="button is-primary">
-                Sign in
-              </a>
-            </div>
+            {% if session.user_id %}
+              <div class="buttons">
+                <a href="/user/showSignoutPage" class="button is-primary">
+                  Sign out
+                </a>
+              </div>
+
+            {% else %}
+              <div class="buttons">
+                <a href="/user/showSignupPage" class="button is-primary">
+                  <strong>Sign up</strong>
+                </a>
+                <a href="/user/showSigninPage" class="button is-primary">
+                  Sign in
+                </a>
+              </div>
+            {% endif %}
+
           </div>
         </div>
       </div>
