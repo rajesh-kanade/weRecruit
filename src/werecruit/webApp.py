@@ -72,6 +72,15 @@ def show_signin_page():
     form = SignInForm()
     return render_template('sign_in.html', form = form)
 
+@app.route('/user/doSignout', methods = ['GET'])
+def do_signout():
+
+    if 'user_id' in session :
+        session.pop('user_id', None)
+        return 'User signed out successfully.'
+        #flash ( "User signed out successfully. ","is-info")
+        #return redirect('/user/showSigninPage')    
+
 @app.route('/user/doSignin', methods = ['POST'])
 def do_signin():
 
