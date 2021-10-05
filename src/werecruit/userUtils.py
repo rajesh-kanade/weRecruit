@@ -46,6 +46,14 @@ class User:
 	status : int =  Status.active.value
 	is_deleted : bool = False
 
+class Tenant:
+	id: int
+	name:str
+	status : int =  Status.active.value
+	is_deleted : bool = False
+	admin_id : str
+
+
 def hashit(plain_text):
   
 	result = hashlib.sha256(plain_text.encode())
@@ -61,6 +69,7 @@ def create_user(user_attrs):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = db_con.cursor()
+		cursor1 = db_con.cursor()
 
 		if user_attrs is None or len(user_attrs) <= 0 :
 			 return(RetCodes.missing_ent_attrs_error.value,"user attributes dictionary missing.", None)
@@ -77,10 +86,16 @@ def create_user(user_attrs):
 		if 'password' not in user_attrs.keys():
 			 return(RetCodes.missing_ent_attrs_error.value,"User password is missing.", None)
 
+		if 'tname' not in user_attrs.keys():
+			 return(RetCodes.missing_ent_attrs_error.value,"Company is missing.", None)
+
+
 		userID = user_attrs['id'].strip()
 		name = user_attrs['name'].strip()
 		status = user_attrs['status']
 		password = user_attrs['password'].strip()
+
+		tname = user_attrs['tname'].strip()
 
 		if not userID:
 			 return(RetCodes.empty_ent_attrs_error.value,"User Id empty or null.", None)
@@ -90,6 +105,9 @@ def create_user(user_attrs):
 
 		if not password:
 			 return(RetCodes.empty_ent_attrs_error.value,"password empty or null.", None)
+
+		if not tname:
+			 return(RetCodes.empty_ent_attrs_error.value,"Company Name empty or null.", None)
 
 		#TODO check status value is as defined in enum
 		
@@ -101,8 +119,17 @@ def create_user(user_attrs):
 		print ( cursor.mogrify(sql, params))
 		
 		cursor.execute(sql, params)
+		
 		effected_rows = cursor.rowcount			
 		if effected_rows == 1:
+			print('insert tenant now !!!!!!!')
+			sql1 = """insert into fl_iam_tenants ( name, admin_id, status,is_deleted) 
+				values (%s,%s,%s, %s)"""
+			params = (tname,userID,0,False)
+			print ( cursor1.mogrify(sql1, params))
+		
+			cursor1.execute(sql1, params)
+
 			db_con.commit()
 			return (RetCodes.success.value, "User sign up successful.", effected_rows)
 		else:
@@ -335,14 +362,12 @@ def getUserConfig(userID, appcode,key):
 		dbUtils.returnToPool(db_con)
 
 
-def signUp(username, email,status=1):
+def signUp(username, email,tenantName, status=1):
 
 	error = ''
 	try:
 
 		try:
-			#db_con = sqlite3.connect(constants.DB_NAME)
-			#db_con = psycopg2.connect(host="localhost",database="recruitment-hub", user="postgres",password="rajaram1909")
 			db_con = dbUtils.getConnFromPool()
 			cursor = db_con.cursor()
 
@@ -351,7 +376,13 @@ def signUp(username, email,status=1):
 			
 			data_tuple = (email, username, email,status)
 			cursor.execute(insert_query, data_tuple)
+
+			insert_query = """INSERT INTO public.tenant (id, name,email,status) VALUES (%s,%s,%s,%s)"""
 			
+			data_tuple = (email, username, email,status)
+			cursor.execute(insert_query, data_tuple)
+
+
 			db_con.commit()
 			return (RetCodes.success.value, "User signed up successfully.")
 
@@ -416,64 +447,6 @@ def do_SignIn(id, password):
 		return ( RetCodes.server_error, str(e))
 
 
-def getOTP(email):
-	try:
-
-		# All validations passed now generate OTP and send email
-		otp = random.randint(1000,9999)
-
-		#update the user table 
-		try:
-			#db_con = sqlite3.connect(constants.DB_NAME)
-			db_con = dbUtils.getConnFromPool()
-
-			cursor = db_con.cursor()
-
-			#insert into user table
-			query = """UPDATE public.user SET otp = %s WHERE email = %s"""
-			print(query)
-
-			data_tuple = (str(otp), email)
-
-			cursor.execute(query, data_tuple)
-
-			#(number_of_rows,)=cursor.fetchone()
-			if (cursor.rowcount) != 1 :
-				db-con.rollback()
-				return (-1, "Failed to update OTP.")
-				#return jsonify({'retcode': -104},{'msg': 'Failed to update OTP'})
-
-			db_con.commit()
-			
-		except Exception as dbe:
-			print(dbe)
-			db_con.rollback()
-			return (-1, str(e))
-
-			#return -1
-			#raise
-		finally:
-			cursor.close()
-			dbUtils.returnToPool(db_con)
-
-		file_loader = FileSystemLoader('./conf')
-		env = Environment(loader=file_loader)
-		template = env.get_template('OTPEmail.template')
-		
-		body = template.render(otp = str(otp),expiryMinutes = "5" )
-
-		#send email 
-		emailUtils.sendMail(email,'Fulgorithm OTP Confirmation' , body,'plain' )
-
-		print("Email sent successfully.")
-		return (0, "OT successesfully sent to registered email ID.")
-		#return jsonify({'retcode': 0},{'msg':'OTP successfully sent to registered email ID.'})	
-
-	except Exception as e:
-		print ("In the exception block.")
-		print(e)
-		return (-2, str(e))
-		#return jsonify({'retcode': -110},{'msg':str(e)}) 
 
 
 ## main entry point
@@ -484,11 +457,12 @@ if __name__ == "__main__":
 	#getUsersForApp(constants.APP_CODE_CAMI)
 	#getSummaryReportForToday( 'rrkanade22@yahoo.com' )
 	
-	#(retCode, msg ) = signUp("Rajesh Kanade", "rrkanade@yahoo.com")
+	(retCode, msg ) = signUp("Rajesh Kanade", "rrkanade@yahoo.com")
 	#(retCode, msg, userRecord ) = get_user("rajesh")
 	#(retCode, msg, userRecord ) = delete_user("rajesh")
 	
-	(retCode, msg, userRecord ) = update_user("rk4",{'status':Status.active.value,'name':'rajesh hash', 'password':'hashit'})
+	#(retCode, msg, userRecord ) = update_user("rk4",{'status':Status.active.value,'name':'rajesh hash', 'password':'hashit'})
+	
 	print( retCode)
 	print ( msg)
 	print ( userRecord)

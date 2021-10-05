@@ -77,9 +77,9 @@ def do_signout():
 
     if 'user_id' in session :
         session.pop('user_id', None)
-        return 'User signed out successfully.'
+        #return 'User signed out successfully.'
         #flash ( "User signed out successfully. ","is-info")
-        #return redirect('/user/showSigninPage')    
+        return redirect('/user/showSigninPage')    
 
 @app.route('/user/doSignin', methods = ['POST'])
 def do_signin():
@@ -114,6 +114,8 @@ def create_user():
     userAttrs['password'] = form.password.data
     userAttrs['name'] = form.name.data
     userAttrs['status'] =userUtils.Status.active.value
+    userAttrs['tname'] = form.company_name.data
+
 
     results = userUtils.create_user( userAttrs)
 

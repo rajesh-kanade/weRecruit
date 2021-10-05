@@ -22,6 +22,16 @@
           <form action = "/user/createUser" method="POST">
             {{ form.hidden_tag() }}
             <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{ form.company_name.label }}</label>
+              <div class="control has-icons-left has-icons-right">
+                {{form.company_name(class='input', placeholder='Enter company name')}}
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="field">
               <label class="label has-text-grey-light has-text-left">{{ form.name.label }}</label>
               <div class="control has-icons-left has-icons-right">
                 {{form.name(class='input', placeholder='Enter name')}}
