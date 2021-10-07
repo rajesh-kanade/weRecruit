@@ -1,5 +1,5 @@
-drop table if exists public.cart_products;
-drop table if exists public.carts;
-drop table if exists public.products;
-drop table if exists public.user;
+
+drop table if exists public.tenant_users;
+drop table if exists public.tenants;
+drop table if exists public.users;
 

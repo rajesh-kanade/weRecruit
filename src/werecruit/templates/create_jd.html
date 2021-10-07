@@ -1,0 +1,77 @@
+{%extends "header.html" %}
+{%block content%}
+
+<section class="hero is-fullheight">
+
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+          <div class="column is-half">
+            {% set messages = get_flashed_messages() %}
+            {% if messages %}   
+                  <div class="notification is-danger">  
+                
+                    {% if messages %}  
+                          {% for message in messages %}  
+                                <p> {{ message }}</p>  
+                          {% endfor %}  
+                    {% endif %}  
+              
+                </div>        
+            {% endif %}  
+          <form action = "/user/createJD" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{ form.title.label }}</label>
+              <div class="control has-icons-left has-icons-right">
+                {{form.company_name(class='input', placeholder='Enter Title')}}
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{ form.name.label }}</label>
+              <div class="control has-icons-left has-icons-right">
+                {{form.name(class='input', placeholder='Enter name')}}
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{ form.email.label }}</label>
+              <div class="control has-icons-left has-icons-right">
+                {{ form.email(class='input', placeholder='Enter email') }}
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{form.password.label}}</label>
+              <div class="control has-icons-left has-icons-right">
+                {{ form.password(class='input', placeholder='Enter password') }}
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+              </div>
+            </div>
+              
+            <div class="field">
+              <p class="control">
+                {{ form.submit( class = 'button is-success') }}  
+
+              </p>      
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+

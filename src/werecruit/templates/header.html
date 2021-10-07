@@ -75,10 +75,17 @@
         <div class="navbar-end">
           <div class="navbar-item">
             {% if session.user_id %}
+              
               <div class="buttons">
+
+                <a href="/user/showUserProfilePage" class="button mr-3 is-primary">
+                  {{ session.user_name }}
+                </a>
+                
                 <a href="/user/doSignout" class="button is-primary">
                   Sign out
                 </a>
+
               </div>
 
             {% else %}

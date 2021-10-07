@@ -69,13 +69,12 @@ def create_user(user_attrs):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = db_con.cursor()
-		cursor1 = db_con.cursor()
 
 		if user_attrs is None or len(user_attrs) <= 0 :
 			 return(RetCodes.missing_ent_attrs_error.value,"user attributes dictionary missing.", None)
 		
-		if 'id' not in user_attrs.keys():
-			 return(RetCodes.missing_ent_attrs_error.value,"User Id is missing.", None)
+		if 'email' not in user_attrs.keys():
+			 return(RetCodes.missing_ent_attrs_error.value,"Email Id is missing.", None)
 		
 		if 'name' not in user_attrs.keys():
 			 return(RetCodes.missing_ent_attrs_error.value,"User name is missing.", None)
@@ -90,15 +89,15 @@ def create_user(user_attrs):
 			 return(RetCodes.missing_ent_attrs_error.value,"Company is missing.", None)
 
 
-		userID = user_attrs['id'].strip()
+		email = user_attrs['email'].strip()
 		name = user_attrs['name'].strip()
 		status = user_attrs['status']
 		password = user_attrs['password'].strip()
 
 		tname = user_attrs['tname'].strip()
 
-		if not userID:
-			 return(RetCodes.empty_ent_attrs_error.value,"User Id empty or null.", None)
+		if not email:
+			 return(RetCodes.empty_ent_attrs_error.value,"Email empty or null.", None)
 
 		if not name:
 			 return(RetCodes.empty_ent_attrs_error.value,"Name empty or null.", None)
@@ -113,9 +112,9 @@ def create_user(user_attrs):
 		
 		password = hashit(password)
 
-		sql = """insert into fl_iam_users ( id, name, status, password,is_deleted) 
+		sql = """insert into users ( email, name, status, password,is_deleted) 
 				values (%s,%s, %s,%s,%s)"""
-		params = (userID,name,status,password,False)
+		params = (email,name,status,password,False)
 		print ( cursor.mogrify(sql, params))
 		
 		cursor.execute(sql, params)
@@ -123,12 +122,12 @@ def create_user(user_attrs):
 		effected_rows = cursor.rowcount			
 		if effected_rows == 1:
 			print('insert tenant now !!!!!!!')
-			sql1 = """insert into fl_iam_tenants ( name, admin_id, status,is_deleted) 
-				values (%s,%s,%s, %s)"""
-			params = (tname,userID,0,False)
-			print ( cursor1.mogrify(sql1, params))
+			sql1 = """insert into tenants ( name,status,is_deleted) 
+				values (%s,%s, %s)"""
+			params = (tname,0,False)
+			print ( cursor.mogrify(sql1, params))
 		
-			cursor1.execute(sql1, params)
+			cursor.execute(sql1, params)
 
 			db_con.commit()
 			return (RetCodes.success.value, "User sign up successful.", effected_rows)
@@ -362,46 +361,6 @@ def getUserConfig(userID, appcode,key):
 		dbUtils.returnToPool(db_con)
 
 
-def signUp(username, email,tenantName, status=1):
-
-	error = ''
-	try:
-
-		try:
-			db_con = dbUtils.getConnFromPool()
-			cursor = db_con.cursor()
-
-			#insert into user table
-			insert_query = """INSERT INTO public.user (id, name,email,status) VALUES (%s,%s,%s,%s)"""
-			
-			data_tuple = (email, username, email,status)
-			cursor.execute(insert_query, data_tuple)
-
-			insert_query = """INSERT INTO public.tenant (id, name,email,status) VALUES (%s,%s,%s,%s)"""
-			
-			data_tuple = (email, username, email,status)
-			cursor.execute(insert_query, data_tuple)
-
-
-			db_con.commit()
-			return (RetCodes.success.value, "User signed up successfully.")
-
-		except Exception as dbe:
-			print(dbe)
-			db_con.rollback()
-			return (-1, str(dbe))
-	
-		finally:
-			cursor.close()
-			dbUtils.returnToPool(db_con)
-
-		#return jsonify({'retcode': 0},{'msg': 'User created successfully.'})
-
-	except Exception as e:
-		#flash(e)
-		print ("In the exception block.")
-		return ( -2, str(e))
-		#return jsonify({'retcode': -101},{'msg': str(e)}) 
 
 def do_SignIn(id, password):
 	
@@ -413,8 +372,8 @@ def do_SignIn(id, password):
 			cursor = dbUtils.getNamedTupleCursor(db_con)
 			
 
-			query = """SELECT count(*) FROM public.fl_iam_users WHERE
-					id = %s and password = %s and is_deleted = %s"""
+			query = """SELECT count(*) FROM users WHERE
+					email = %s and password = %s and is_deleted = %s"""
 		
 			data_tuple = (id, password, False)
 

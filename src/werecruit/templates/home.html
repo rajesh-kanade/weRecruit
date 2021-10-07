@@ -2,10 +2,26 @@
 {%block content%}
     {% set messages = get_flashed_messages(with_categories = true ) %}            
 
-    <div class = "hero is-fullheight">
+    <section class = "hero is-fullheight">
     <div class = "hero-body">
-        <div class="section is-size-1 has-text-grey-light">Hi {{ session.user_name }}, What do you want to do today? </div>
-        <p></p>
+        <div class="container">
+
+        <div class="columns is-centered" >
+            <div class="column is-half">
+                <div class="card has-text-centered has-text-grey-light has-background-dark">
+                    <header class="card-header is-size-5">
+                        <p class="card-header-title has-text-grey-light">
+                          ALL ABOUT JDs
+                        </p>
+                      </header>
+                    <div class="card-content is-size-5">
+                      <p>Work on current <span class="has-text-link">JDs</span></p>
+                      <p>open a <a class="has-text-link" href ="/jd/showCreatePage">new</a> JD.</p>
+                    </div>
+                </div>
+              </div>
+        </div>
+        </div>
     </div>
-    </div>
+    </section>
 {% endblock %}
