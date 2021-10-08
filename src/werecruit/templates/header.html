@@ -71,13 +71,12 @@
             </div>
           </div>
         </div>
-        <div class="block"> <h1 class="title is-size-1 has-background-dark has-text-white">WeRECRUIT</h1> </div>
+        <div class="block"> <h1 class="title is-size-1 has-background-dark has-text-white mt-3">
+          WeRECRUIT</h1> </div>
         <div class="navbar-end">
           <div class="navbar-item">
-            {% if session.user_id %}
-              
+            {% if session.user_id %}              
               <div class="buttons">
-
                 <a href="/user/showUserProfilePage" class="mr-3 has-text-white is-primary">
                   {{ session.user_name }}
                 </a>

@@ -13,20 +13,7 @@ from webForms import JDCreateForm, SignUpForm , SignInForm
 
 import logging
 import userUtils
-
-class User:
-    
-    def __init__(self, name, email):
-        self.name = name
-        self.email = email
-        
-
-    #def __repr__(self):
-    #    return f'<User: {self.username}>'
-
-users = []
-
-
+import functools
 
 app = Flask(__name__)
 app.secret_key = 'somesecretkeythatonlyishouldknow'
@@ -52,8 +39,7 @@ def do_signout():
 
     if 'user_id' in session :
         session.pop('user_id', None)
-        #return 'User signed out successfully.'
-        #flash ( "User signed out successfully. ","is-info")
+        flash('Successfully logged out.',"is-info")
         return redirect('/user/showSigninPage')    
 
 @app.route('/user/doSignin', methods = ['POST'])
@@ -105,10 +91,24 @@ def create_user():
         flash (results[0] + ':' +results[1],"is-danger")
         return render_template('sign_up.html', form=form)
 
+def login_required(func):
+    @functools.wraps(func)
+    def secure_function(*args, **kwargs):
+        if "user_id" not in session:
+            flash ( "You are not authenticated. Please login to access this page.","is-danger")
+            return redirect(url_for("show_signin_page"))
+
+        return func(*args, **kwargs)
+
+    return secure_function
+
 @app.route('/jd/showCreatePage')
+@login_required
 def show_jd_create_page():
+
     form=JDCreateForm()
     return render_template('create_jd.html', form = form)
+
 
 if __name__ == "__main__":
     app.run()
