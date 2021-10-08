@@ -108,32 +108,48 @@ def create_user(user_attrs):
 		if not tname:
 			 return(RetCodes.empty_ent_attrs_error.value,"Company Name empty or null.", None)
 
-		#TODO check status value is as defined in enum
 		
 		password = hashit(password)
 
+		##insert a record in user table
 		sql = """insert into users ( email, name, status, password,is_deleted) 
-				values (%s,%s, %s,%s,%s)"""
+				values (%s,%s, %s,%s,%s) returning id """
 		params = (email,name,status,password,False)
 		print ( cursor.mogrify(sql, params))
 		
 		cursor.execute(sql, params)
-		
-		effected_rows = cursor.rowcount			
-		if effected_rows == 1:
-			print('insert tenant now !!!!!!!')
-			sql1 = """insert into tenants ( name,status,is_deleted) 
-				values (%s,%s, %s)"""
-			params = (tname,0,False)
-			print ( cursor.mogrify(sql1, params))
-		
-			cursor.execute(sql1, params)
+		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
-			db_con.commit()
-			return (RetCodes.success.value, "User sign up successful.", effected_rows)
-		else:
-			db_con.rollback()
-			return (RetCodes.save_ent_error.value, "User insertion effected more then 1 rows.", effected_rows)
+		result = cursor.fetchone()
+		uid = result[0]
+		print ("user id created is",uid )
+
+		## insert a record into tenant 
+		sql = """insert into tenants ( name,status,is_deleted) 
+			values (%s,%s, %s) returning id """
+		params = (tname,0,False)
+		print ( cursor.mogrify(sql, params))
+	
+		cursor.execute(sql, params)
+		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+		result = cursor.fetchone()
+		tid = result[0]
+		print ("Tenant id created is",tid )
+
+		## insert a record into tenant users table with isadmin field set to true
+		sql = """insert into tenant_users ( tid,uid,is_admin) 
+			values (%s,%s, %s)  """
+		params = (tid,uid,True)
+		print ( cursor.mogrify(sql, params))
+	
+		cursor.execute(sql, params)
+		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+
+		db_con.commit()
+
+		return (RetCodes.success.value, "User sign up successful.", None)
+
 
 	except Exception as e:
 		print(e)

@@ -99,11 +99,8 @@ def create_user():
         #form.success = True
         return render_template('sign_in.html', form = SignInForm())
     else:
-        #return jsonify({RET_CODE: results[0],RET_MSG: results[1]}),400
-        #error = results[1]
-        #form.success = False
         flash (results[0] + ':' +results[1],"is-danger")
-        return render_template('create_jd.html', form=form)
+        return render_template('sign_up.html', form=form)
 
 @app.route('/jd/showCreatePage')
 def show_jd_create_page():

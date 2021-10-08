@@ -60,7 +60,7 @@ ALTER TABLE public.tenants
 
 CREATE TABLE public.users
 (
-    email text COLLATE pg_catalog."default" NOT NULL,
+    email text COLLATE pg_catalog."default" NOT NULL UNIQUE,
     name text COLLATE pg_catalog."default" NOT NULL,
     status smallint NOT NULL,
     is_deleted boolean NOT NULL,
