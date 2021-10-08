@@ -59,14 +59,17 @@ def do_signout():
 @app.route('/user/doSignin', methods = ['POST'])
 def do_signin():
 
-    form = SignUpForm()
+    form = SignInForm()
 
     results = userUtils.do_SignIn( form.email.data, form.password.data)
 
     if (results[0] == userUtils.RetCodes.success.value):        
         flash (results[1],"is-info")
-        session["user_id"] = form.email.data
-        session["user_name"] = 'Mr. Customer'
+        user = results[2] 
+
+        session["user_id"] = user.id  #form.email.data
+        session["user_name"] = user.name #'Mr. Customer'
+
         return render_template('home.html')
     else:
         flash (results[1],"is-danger")

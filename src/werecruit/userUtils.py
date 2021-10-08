@@ -38,29 +38,28 @@ class RetCodes(Enum):
 	server_error = "IAM_CRUD_E500"
 	sign_in_failed = "IAM_CRUD_E411"
 
-@dataclass(frozen=True)
+'''@dataclass(frozen=True)
 class User:
 	id: str
 	name: str
+	email : str
 	password: str
 	status : int =  Status.active.value
 	is_deleted : bool = False
-
+'''
+'''
+@dataclass(frozen=True)
 class Tenant:
 	id: int
 	name:str
+	admin_id : str
 	status : int =  Status.active.value
 	is_deleted : bool = False
-	admin_id : str
-
+'''
 
 def hashit(plain_text):
   
 	result = hashlib.sha256(plain_text.encode())
-  
-	# printing the equivalent hexadecimal value.
-	print("The hexadecimal equivalent of SHA256 is : ")
-	print(result.hexdigest())
 
 	return result.hexdigest()
 
@@ -376,8 +375,6 @@ def getUserConfig(userID, appcode,key):
 		cursor.close()
 		dbUtils.returnToPool(db_con)
 
-
-
 def do_SignIn(id, password):
 	
 	try:
@@ -387,24 +384,25 @@ def do_SignIn(id, password):
 			db_con = dbUtils.getConnFromPool()
 			cursor = dbUtils.getNamedTupleCursor(db_con)
 			
-
-			query = """SELECT count(*) FROM users WHERE
+			query = """SELECT * FROM users WHERE
 					email = %s and password = %s and is_deleted = %s"""
 		
 			data_tuple = (id, password, False)
 
-			print (query)
+			print ( cursor.mogrify(query, data_tuple))
 			cursor.execute(query, data_tuple)
-			(number_of_rows,)=cursor.fetchone()
-			print ( "No of rows returned : " +str(number_of_rows))
 
-			if (number_of_rows) == 1 :
-				return (RetCodes.success.value, "Login successful.")
-				#return jsonify({'retcode': 0},{'msg': 'login Successful'})
-			else:
+			userList =cursor.fetchall()
+			print ( "user length ",len(userList))
+
+			if (userList is None or len(userList) != 1) :
 				return (RetCodes.sign_in_failed, "Login failed as either no user exists or either wrong emaild ID or password has been provided.")
-				#return jsonify({'retcode': -1},{'msg': 'login failed'})
-				
+
+			for user in userList:
+				print(user)
+
+			return(RetCodes.success.value, "User List successfully fetched from db", userList[0])
+
 
 		except Exception as dbe:
 			print(dbe)
