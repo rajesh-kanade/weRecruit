@@ -86,10 +86,11 @@ def create_user():
     if (results[0] == userUtils.RetCodes.success.value):        
         flash ("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(form.name.data), "is-info")
         #form.success = True
-        return render_template('sign_in.html', form = SignInForm())
+        #return render_template('sign_in.html', form = SignInForm())
+        return redirect(url_for("show_signin_page"))
     else:
         flash (results[0] + ':' +results[1],"is-danger")
-        return render_template('sign_up.html', form=form)
+        return redirect(url_for("show_signup_page"))
 
 def login_required(func):
     @functools.wraps(func)
