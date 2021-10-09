@@ -1,6 +1,5 @@
-{%extends "header.html" %}
+{%extends "app_header.html" %}
 {%block content%}
-    {% set messages = get_flashed_messages(with_categories = true ) %}            
 
     <section class = "hero is-fullheight">
     <div class = "hero-body">
@@ -9,17 +8,32 @@
         <div class="columns is-centered" >
             <div class="column is-half">
                 <div class="card has-text-centered has-text-grey-light has-background-dark">
-                    <header class="card-header is-size-5">
-                        <p class="card-header-title has-text-grey-light">
-                          ALL ABOUT JDs
+                    <header class="card-header 	has-background-primary">
+                        <p class="card-header-title has-text-primary-light">
+                          My tasks
                         </p>
                       </header>
                     <div class="card-content is-size-5 ">
-                      <p>Work on current <span class="has-text-link">JDs</span></p>
+                      <p>Work on existing <span class="has-text-link">JDs</span></p>
                       <p>open a <a class="has-text-link" href ="/jd/showCreatePage">new</a> JD.</p>
                     </div>
                 </div>
               </div>
+              <div class="column is-half">
+                <div class="card has-text-centered has-text-grey-light has-background-dark">
+                    <header class="card-header is-size-5">
+                        <p class="card-header-title has-text-grey-light">
+                          Reports
+                        </p>
+                      </header>
+                    <div class="card-content is-size-5 ">
+                      <div class="buttons">
+                        <button class="button is-link">Summary Report</button>
+                        <button class="button is-link">Detailed Report</button>
+                      </div>
+                    </div>
+                </div>
+              </div>              
         </div>
         </div>
     </div>

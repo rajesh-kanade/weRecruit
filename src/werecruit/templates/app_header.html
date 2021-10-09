@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <meta charset="utf-8">
+    <title>We Recruit</title>
+    <meta name="description" content="Website of WeRecruit">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+  
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" href="icon.png">
+    <!-- Place favicon.ico in the root directory -->
+  
+    <link rel="stylesheet" href="/static/normalize.css">
+    <link rel="stylesheet" href="/static/main.css">
+    <link rel="stylesheet" href="/static/bulma.css">
+  
+    <meta name="theme-color" content="#fafafa">
+  </head>
+
+  <body class ="has-background-dark has-text-centered has-text-grey-light is-family-primary-dark">
+    {% set messages = get_flashed_messages(with_categories = true ) %}            
+    {% if session.user_id == False %} 
+        <div class ="is-danger"> You need to be an authenticated user to access this page. </div>
+    {% endif %}
+    <nav class="navbar has-background-dark has-text-grey-light" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+
+        <a class="navbar-item" href="#">
+          
+          <img src="{{url_for('static', filename='CareerInsights.png')}}" >
+        </a>
+        <!--
+        <a class="button is-link" href="#">
+          Career Insights
+        </a> -->
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+    
+      <div id="navbar" class="navbar-menu">
+        <div class="navbar-start">
+            <div class = "navbar-item">
+                <a class="button is-link m-1" href ="/">
+                    JDs
+                </a>
+                <a class="button is-link m-1" href ="/">
+                    Reports
+                </a>
+            </div> 
+
+        </div>
+
+        <div class="block"> <h1 class="title is-size-1 has-background-dark has-text-white mt-3">
+          WeRECRUIT</h1> </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            {% if session.user_id %}              
+              <div class="buttons">
+                <a href="/user/showUserProfilePage" class="mr-3 has-text-white">
+                  {{ session.user_name }}
+                </a>
+                
+                <a href="/user/doSignout" class="button is-danger">
+                  Sign out
+                </a>
+
+              </div>
+
+            {% else %}
+              <div class="buttons">
+                <a href="/user/showSignupPage" class="button is-primary">
+                  <strong>Sign up</strong>
+                </a>
+                <a href="/user/showSigninPage" class="button is-primary">
+                  Sign in
+                </a>
+              </div>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </nav>
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>
