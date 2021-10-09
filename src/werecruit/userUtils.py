@@ -136,9 +136,9 @@ def create_user(user_attrs):
 		print ("Tenant id created is",tid )
 
 		## insert a record into tenant users table with isadmin field set to true
-		sql = """insert into tenant_users ( tid,uid,is_admin) 
+		sql = """insert into tenant_user_roles ( tid,uid,rid) 
 			values (%s,%s, %s)  """
-		params = (tid,uid,True)
+		params = (tid,uid,1)
 		print ( cursor.mogrify(sql, params))
 	
 		cursor.execute(sql, params)
