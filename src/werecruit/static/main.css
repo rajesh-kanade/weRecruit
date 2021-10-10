@@ -19,6 +19,15 @@ hr.gn-main {
     color: #ffe08a !important;
   }
 
-  is-fullheight {
+  .is-fullheight {
     min-height: 100vh;
+  }
+
+  a.is-link{
+    border-color: transparent;
+    color: #fff;    
+  }
+  a.is-link:hover, .a.is-link.is-hovered {
+    border-color: transparent;
+    color: #fff;
   }

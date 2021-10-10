@@ -1,4 +1,4 @@
-{%extends "header.html" %}
+{%extends "app_header.html" %}
 {%block content%}
 
 <section class="hero is-fullheight">
@@ -24,41 +24,10 @@
             <div class="field">
               <label class="label has-text-grey-light has-text-left">{{ form.title.label }}</label>
               <div class="control has-icons-left has-icons-right">
-                {{form.company_name(class='input', placeholder='Enter Title')}}
-                <span class="icon is-small is-left">
-                  <i class="fas fa-user"></i>
-                </span>
+                {{form.title(class='input', placeholder='Enter Title')}}
               </div>
             </div>
 
-            <div class="field">
-              <label class="label has-text-grey-light has-text-left">{{ form.name.label }}</label>
-              <div class="control has-icons-left has-icons-right">
-                {{form.name(class='input', placeholder='Enter name')}}
-                <span class="icon is-small is-left">
-                  <i class="fas fa-user"></i>
-                </span>
-              </div>
-            </div>
-            <div class="field">
-              <label class="label has-text-grey-light has-text-left">{{ form.email.label }}</label>
-              <div class="control has-icons-left has-icons-right">
-                {{ form.email(class='input', placeholder='Enter email') }}
-                <span class="icon is-small is-left">
-                  <i class="fas fa-user"></i>
-                </span>
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="label has-text-grey-light has-text-left">{{form.password.label}}</label>
-              <div class="control has-icons-left has-icons-right">
-                {{ form.password(class='input', placeholder='Enter password') }}
-                <span class="icon is-small is-left">
-                  <i class="fas fa-user"></i>
-                </span>
-              </div>
-            </div>
               
             <div class="field">
               <p class="control">

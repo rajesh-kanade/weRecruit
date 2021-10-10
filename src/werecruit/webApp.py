@@ -10,6 +10,7 @@ from flask import (
 )
 from flask_session import Session
 from webForms import JDCreateForm, SignUpForm , SignInForm
+from turbo_flask import Turbo
 
 import logging
 import userUtils
@@ -20,6 +21,8 @@ app.secret_key = 'somesecretkeythatonlyishouldknow'
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+
+turbo = Turbo(app)
 Session(app)
 
 logging.basicConfig(level=logging.DEBUG)
@@ -33,14 +36,6 @@ def home():
 def show_signin_page():
     form = SignInForm()
     return render_template('sign_in.html', form = form)
-
-@app.route('/user/doSignout', methods = ['GET'])
-def do_signout():
-
-    if 'user_id' in session :
-        session.pop('user_id', None)
-        flash('Successfully logged out.',"is-info")
-        return redirect('/user/showSigninPage')    
 
 @app.route('/user/doSignin', methods = ['POST'])
 def do_signin():
@@ -56,7 +51,10 @@ def do_signin():
         session["user_id"] = user.id  #form.email.data
         session["user_name"] = user.name #'Mr. Customer'
 
-        return render_template('home.html')
+        #return render_template('home.html') 
+        return redirect(url_for('show_home_page'))
+
+
     else:
         flash (results[1],"is-danger")
         return redirect('/user/showSigninPage')
@@ -103,13 +101,39 @@ def login_required(func):
 
     return secure_function
 
-@app.route('/jd/showCreatePage')
+@app.route('/showHomePage')
+@login_required
+def show_home_page():
+
+    #form=JDCreateForm()
+    return render_template('home.html')
+    #return redirect('create_jd.html', form = form)
+    #redirect('/user/showSigninPage')
+
+@app.route('/user/doSignout', methods = ['GET'])
+@login_required
+def do_signout():
+
+    if 'user_id' in session :
+        session.pop('user_id', None)
+        session.pop('user.name', None)
+
+        flash('Successfully logged out.',"is-info")
+        return redirect('/user/showSigninPage')    
+    else:
+        return redirect(url_for('/'))
+
+@app.route('/jd/showCreatePage', methods = ['GET'])
 @login_required
 def show_jd_create_page():
+    #form=SignUpForm()
+    return render_template('create_jd.html', form=JDCreateForm())
 
-    form=JDCreateForm()
-    return render_template('create_jd.html', form = form)
-
+@app.route('/jd/showAllPage', methods = ['GET'])
+@login_required
+def show_jd_all_page():
+    #form=SignUpForm()
+    return render_template('jd_home.html')
 
 if __name__ == "__main__":
     app.run()

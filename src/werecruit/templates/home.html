@@ -1,41 +1,38 @@
 {%extends "app_header.html" %}
 {%block content%}
-
-    <section class = "hero is-fullheight">
-    <div class = "hero-body">
-        <div class="container">
-
-        <div class="columns is-centered" >
-            <div class="column is-half">
-                <div class="card has-text-centered has-text-grey-light has-background-dark">
-                    <header class="card-header 	has-background-primary">
-                        <p class="card-header-title has-text-primary-light">
-                          My tasks
-                        </p>
-                      </header>
-                    <div class="card-content is-size-5 ">
-                      <p>Work on existing <span class="has-text-link">JDs</span></p>
-                      <p>open a <a class="has-text-link" href ="/jd/showCreatePage">new</a> JD.</p>
-                    </div>
-                </div>
-              </div>
-              <div class="column is-half">
-                <div class="card has-text-centered has-text-grey-light has-background-dark">
-                    <header class="card-header is-size-5">
-                        <p class="card-header-title has-text-grey-light">
-                          Reports
-                        </p>
-                      </header>
-                    <div class="card-content is-size-5 ">
-                      <div class="buttons">
-                        <button class="button is-link">Summary Report</button>
-                        <button class="button is-link">Detailed Report</button>
-                      </div>
-                    </div>
-                </div>
-              </div>              
-        </div>
-        </div>
+<section class ="hero is-fullheight">
+<div class = "columns" >
+  <div class="column is-one-fifth ml-1">
+    <aside class="menu ">
+      <p class="menu-label is-size-6 has-text-primary has-text-weight-bold is-underlined">
+        Job descriptions
+      </p>
+      <ul class="menu-list">
+        <li><a href ="/jd/showCreatePage"><span class="has-text-link has-text-weight-bold">New</span></a></li>
+        <li><a><span class="has-text-link has-text-weight-bold">List All</span></a></li>
+      </ul>
+      <p class="menu-label is-size-6 has-text-primary has-text-weight-bold is-underlined">
+        Reports
+      </p>
+      <ul class="menu-list">
+        <li><a><span class="has-text-link has-text-weight-bold">Summary</span></a></li>
+        <li><a><span class="has-text-link has-text-weight-bold">Detailed</span></a></li>
+      </ul>
+    </aside>
+  </div>
+  <div class="column">
+    <div class ="block">
+      <turbo-frame id="jd_create">
+        <form action="/create" method="post">
+          Test form
+        </form>
+      </turbo-frame>
+      <turbo-frame id="jds" src="/user/showSignupPage">
+        <p>This message will be replaced by the response from /messages.</p>
+      </turbo-frame>
     </div>
-    </section>
+  </div>
+</div>
+</section>
+
 {% endblock %}
