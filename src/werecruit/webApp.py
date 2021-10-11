@@ -135,5 +135,33 @@ def show_jd_all_page():
     #form=SignUpForm()
     return render_template('jd_home.html')
 
+@app.route('/jd/createJD', methods = ['POST'])
+@login_required
+def create_JD():
+    print('inside create JD.')
+    form = JDCreateForm()
+
+    userAttrs = {}
+
+    userAttrs['email'] = form.email.data
+    userAttrs['password'] = form.password.data
+    userAttrs['name'] = form.name.data
+    userAttrs['status'] =userUtils.Status.active.value
+    userAttrs['tname'] = form.company_name.data
+
+
+    results = userUtils.create_user( userAttrs)
+
+    if (results[0] == userUtils.RetCodes.success.value):        
+        flash ("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(form.name.data), "is-info")
+        #form.success = True
+        #return render_template('sign_in.html', form = SignInForm())
+        return redirect(url_for("show_signin_page"))
+    else:
+        flash (results[0] + ':' +results[1],"is-danger")
+        return redirect(url_for("show_signup_page"))
+
+    #return redirect(url_for('show_jd_all_page'))
+
 if __name__ == "__main__":
     app.run()

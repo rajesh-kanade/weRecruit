@@ -19,7 +19,7 @@
               
                 </div>        
             {% endif %}  
-          <form action = "/user/createJD" method="POST">
+          <form action = "/jd/createJD" method="POST">
             {{ form.hidden_tag() }}
             <div class="field">
               <label class="label has-text-grey-light has-text-left">{{ form.title.label }}</label>
@@ -28,7 +28,33 @@
               </div>
             </div>
 
-              
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{ form.details.label }}</label>
+              <div class="control">
+                {{form.details(class='textarea', placeholder='Enter Title')}}
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{ form.client.label }}</label>
+              <div class="control has-icons-left has-icons-right">
+                {{form.client(class='input', placeholder='Enter Client Name')}}
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{ form.hiring_mgr_name.label }}</label>
+              <div class="control has-icons-left has-icons-right">
+                {{form.hiring_mgr_name(class='input', placeholder='Hiring Manager Name')}}
+              </div>
+            </div>            
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{ form.hiring_mgr_email.label }}</label>
+              <div class="control has-icons-left has-icons-right">
+                {{form.hiring_mgr_email(class='input', placeholder='Hiring Manager EMail')}}
+              </div>
+            </div> 
+
             <div class="field">
               <p class="control">
                 {{ form.submit( class = 'button is-success') }}  
