@@ -1,38 +1,12 @@
 {%extends "app_header.html" %}
 {%block content%}
 <section class ="hero is-fullheight">
-<div class = "columns" >
-  <div class="column is-one-fifth ml-1">
-    <aside class="menu ">
-      <p class="menu-label is-size-6 has-text-primary has-text-weight-bold is-underlined">
-        Job descriptions
-      </p>
-      <ul class="menu-list">
-        <li><a href ="/jd/showCreatePage"><span class="has-text-link has-text-weight-bold">New</span></a></li>
-        <li><a><span class="has-text-link has-text-weight-bold">List All</span></a></li>
-      </ul>
-      <p class="menu-label is-size-6 has-text-primary has-text-weight-bold is-underlined">
-        Reports
-      </p>
-      <ul class="menu-list">
-        <li><a><span class="has-text-link has-text-weight-bold">Summary</span></a></li>
-        <li><a><span class="has-text-link has-text-weight-bold">Detailed</span></a></li>
-      </ul>
-    </aside>
-  </div>
-  <div class="column">
-    <div class ="block">
-      <turbo-frame id="jd_create">
-        <form action="/create" method="post">
-          Test form
-        </form>
-      </turbo-frame>
-      <turbo-frame id="jds" src="/user/showSignupPage">
-        <p>This message will be replaced by the response from /messages.</p>
-      </turbo-frame>
-    </div>
-  </div>
-</div>
+  {% set messages = get_flashed_messages(with_categories = true ) %}            
+  {% if messages %}    
+    {% for category, message in messages %}  
+        <div class="notification {{ category }}">{{ message }}</div>
+      {% endfor %}                  
+  {% endif %}
 </section>
 
 {% endblock %}

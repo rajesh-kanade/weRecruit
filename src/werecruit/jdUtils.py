@@ -7,13 +7,12 @@ from datetime import timezone
 from enum import Enum
 class RetCodes(Enum):
 	success = 'JD_CRUD_S200'
-	missing_ent_attrs_error = "IAM_CRUD_E400"
-	empty_ent_attrs_error = "IAM_CRUD_E401"
-	save_ent_error = "IAM_CRUD_E403"
-	del_ent_error = "IAM_CRUD_E404"
-	get_ent_error = "IAM_CRUD_E405"
-	server_error = "IAM_CRUD_E500"
-	sign_in_failed = "IAM_CRUD_E411"
+	missing_ent_attrs_error = "JD_CRUD_E400"
+	empty_ent_attrs_error = "JD_CRUD_E401"
+	save_ent_error = "JD_CRUD_E403"
+	del_ent_error = "JD_CRUD_E404"
+	get_ent_error = "JD_CRUD_E405"
+	server_error = "JD_CRUD_E500"
 
 class JDStatusCodes(Enum):
 	open = 0
@@ -21,7 +20,7 @@ class JDStatusCodes(Enum):
 	close = 2
 
 
-def create_jd(title,details,client, hiring_mgr_name,hiring_mgr_email,recruiterID,positions):
+def create_jd(title,details,client, hiring_mgr_name,hiring_mgr_email,recruiterID,positions=1):
 	
 	db_con = dbUtils.getConnFromPool()
 	cursor = db_con.cursor()
@@ -68,8 +67,6 @@ def create_jd(title,details,client, hiring_mgr_name,hiring_mgr_email,recruiterID
 		jd_id = result[0]
 		print ("JD id created is",jd_id )
 	
-		cursor.execute(sql, params)
-		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
 		db_con.commit()
 		return (RetCodes.success.value, "JD creation successful.", jd_id)
@@ -94,16 +91,10 @@ def list_jds(recruiterID):
 				where recruiter_id = %s """
 	
 		params = (recruiterID,)
-		print("printing")
 		print ( cursor.mogrify(query, params))
-		print("post printing")
 		cursor.execute(query,params)
 
 		jdList =cursor.fetchall()
-		print ( "Total JDs array size ",len(jdList))
-
-		#for jd in jdList:
-		#	print(jd)
 
 		return(RetCodes.success.value, "JD List successfully fetched from db", jdList)
 
@@ -111,8 +102,6 @@ def list_jds(recruiterID):
 	except Exception as dbe:
 		print(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
-		#db_con.rollback()
-		#raise
 	
 	finally:
 		cursor.close()

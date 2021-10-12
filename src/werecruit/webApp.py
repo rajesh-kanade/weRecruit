@@ -14,6 +14,7 @@ from turbo_flask import Turbo
 
 import logging
 import userUtils
+import jdUtils
 import functools
 
 app = Flask(__name__)
@@ -45,7 +46,7 @@ def do_signin():
     results = userUtils.do_SignIn( form.email.data, form.password.data)
 
     if (results[0] == userUtils.RetCodes.success.value):        
-        flash (results[1],"is-info")
+        #flash (results[1],"is-info")
         user = results[2] 
 
         session["user_id"] = user.id  #form.email.data
@@ -132,34 +133,38 @@ def show_jd_create_page():
 @app.route('/jd/showAllPage', methods = ['GET'])
 @login_required
 def show_jd_all_page():
-    #form=SignUpForm()
-    return render_template('jd_home.html')
+    results = jdUtils.list_jds(1)
+    if (results[0] == jdUtils.RetCodes.success.value): 
+        print( 'success')
+        jdList = results[2]    
+        for jd in jdList:
+            print(jd.title)   
+        return render_template('jd_home.html', jdList = jdList )
+    else:
+        flash (results[0] + ':' +results[1],"is-danger")
+        return render_template('jd_home.html',jdList = None)
 
 @app.route('/jd/createJD', methods = ['POST'])
 @login_required
 def create_JD():
+
     print('inside create JD.')
+
     form = JDCreateForm()
 
-    userAttrs = {}
+    loggedInUserID = session.get('user_id')
 
-    userAttrs['email'] = form.email.data
-    userAttrs['password'] = form.password.data
-    userAttrs['name'] = form.name.data
-    userAttrs['status'] =userUtils.Status.active.value
-    userAttrs['tname'] = form.company_name.data
+    results = jdUtils.create_jd(str(form.title.data),str(form.details.data),
+                                str(form.client.data),str(form.hiring_mgr_name.data), 
+                                str(form.hiring_mgr_email.data),
+                                int(loggedInUserID),1)
 
-
-    results = userUtils.create_user( userAttrs)
-
-    if (results[0] == userUtils.RetCodes.success.value):        
-        flash ("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(form.name.data), "is-info")
-        #form.success = True
-        #return render_template('sign_in.html', form = SignInForm())
-        return redirect(url_for("show_signin_page"))
+    if (results[0] == jdUtils.RetCodes.success.value):        
+        flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
+        return redirect(url_for("show_home_page"))
     else:
         flash (results[0] + ':' +results[1],"is-danger")
-        return redirect(url_for("show_signup_page"))
+        return redirect(url_for("show_home_page"))
 
     #return redirect(url_for('show_jd_all_page'))
 

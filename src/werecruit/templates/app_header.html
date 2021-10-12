@@ -21,7 +21,6 @@
     <link rel="stylesheet" href="/static/bulma.css">
   
     <meta name="theme-color" content="#fafafa">
-    {{ turbo() }}
 
   </head>
 
@@ -46,15 +45,26 @@
         </a>
       </div>
     
-      <div id="navbar" class="navbar-menu">
+      <div id="navbar" class="navbar-menu ">
         <div class="navbar-start">
           <div class="navbar-item">
-            <a href ="/jd/showAllPage"><span class="has-text-primary has-text-weight-bold is-underlined">JDs</span></a>
+            <a href="/showHomePage">
+              <span class ="has-text-primary-dark has-text-weight-bold">HOME</span>
+            </a>             
           </div>
-          <div class="navbar-item">
-            <a><span class="has-text-primary has-text-weight-bold is-underlined">REPORTS</span></a>
-          </div>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              <span class ="has-text-primary-dark has-text-weight-bold">JOB DESCRIPTIONS</span>
+            </a>    
+            <div class="navbar-dropdown">
+              <a href ="/jd/showCreatePage" class="navbar-item"><span class ="has-text-primary-dark">NEW JD</span></a>
 
+              <a href ="/jd/showAllPage"class="navbar-item">
+                <span class ="has-text-primary-dark">EXISTING JDs</span>
+              </a>
+            </div>
+
+          </div>
         </div>
         <div class="block"> <h1 class="title is-size-1 has-background-dark has-text-white mt-3">
           WeRECRUIT</h1> </div>

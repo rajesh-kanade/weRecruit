@@ -1,16 +1,44 @@
 {%extends "app_header.html" %}
 {%block content%}
-<section class ="hero ml-1">
-    <div class = "subtitle is-4 is-info">
+<div class ="hero has-fullheight">
+  <div class="hero-body">
+    <div class = "subtitle is-6 has-text-primary-light">
         This section allows you to create new JDs along with working on existing JDs.
     </div>
-    <div class = "block">
-      <a href="/jd/showCreatePage" class="button is-link">New JD</a>
+    
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="table-container">
+          <table class="table is-bordered">
+            <!-- Your table content -->
+            <tbody>
+              <thead>
+                <tr class="has-background-info-dark">
+                  <th class="has-text-centered has-text-info-light">TITLE</th>
+                  <th class="has-text-centered has-text-info-light">OPEN DATE</th>
+                  <th class="has-text-centered has-text-info-light">CLIENT</th>
+                  <th class="has-text-centered has-text-info-light">HIRING MANAGER</th>
+                  <th class="has-text-centered has-text-info-light">STATUS</th>
+                  <th class="has-text-centered has-text-info-light">ACTIONS</th>
+                </tr>
+              </thead>
+            {% for jd in jdList %}
+            <tr class="has-background-info-light">
+              <td class="has-text-centered has-text-info-dark">{{ jd.title }}</td>
+              <td class="has-text-centered has-text-info-dark">{{ jd.open_date }}</td> 
+              <td class="has-text-centered has-text-info-dark">{{ jd.client }}</td>
+              <td class="has-text-centered has-text-info-dark">{{ jd.hiring_mgr_name }}</td>
+              <td class="has-text-centered has-text-info-dark">{{ jd.status }}</td>     
+              <td class="has-text-centered has-text-info-dark">Edit</td>     
+  
+            </tr>
+            {% endfor %}
+          </tbody>
+          </table>
+        </div>
+  
+      </div>
     </div>
-
-    <div class = "box has-text-centered">
-      Show all existing JDs
-    </div>
-
-</section>
+  </div>
+</div>
 {% endblock %}
