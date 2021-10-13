@@ -133,7 +133,7 @@ def show_jd_create_page():
 @app.route('/jd/showAllPage', methods = ['GET'])
 @login_required
 def show_jd_all_page():
-    results = jdUtils.list_jds(1)
+    results = jdUtils.list_jds(session.get('user_id'))
     if (results[0] == jdUtils.RetCodes.success.value): 
         print( 'success')
         jdList = results[2]    

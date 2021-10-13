@@ -1,42 +1,59 @@
 {%extends "app_header.html" %}
 {%block content%}
-<div class ="hero has-fullheight">
+<div class ="hero">
   <div class="hero-body">
-    <div class = "subtitle is-6 has-text-primary-light">
+    <div class = "block is-6 has-text-info-light">
         This section allows you to create new JDs along with working on existing JDs.
     </div>
     
     <div class="columns is-centered">
       <div class="column">
         <div class="table-container">
-          <table class="table is-bordered">
+          <table class="table is-bordered is-narrow">
             <!-- Your table content -->
             <tbody>
-              <thead>
-                <tr class="has-background-info-dark">
-                  <th class="has-text-centered has-text-info-light">TITLE</th>
-                  <th class="has-text-centered has-text-info-light">OPEN DATE</th>
-                  <th class="has-text-centered has-text-info-light">CLIENT</th>
-                  <th class="has-text-centered has-text-info-light">HIRING MANAGER</th>
-                  <th class="has-text-centered has-text-info-light">STATUS</th>
-                  <th class="has-text-centered has-text-info-light">ACTIONS</th>
-                </tr>
-              </thead>
             {% for jd in jdList %}
-            <tr class="has-background-info-light">
-              <td class="has-text-centered has-text-info-dark">{{ jd.title }}</td>
-              <td class="has-text-centered has-text-info-dark">{{ jd.open_date }}</td> 
-              <td class="has-text-centered has-text-info-dark">{{ jd.client }}</td>
-              <td class="has-text-centered has-text-info-dark">{{ jd.hiring_mgr_name }}</td>
-              <td class="has-text-centered has-text-info-dark">{{ jd.status }}</td>     
-              <td class="has-text-centered has-text-info-dark">Edit</td>     
-  
-            </tr>
+              {%if loop.first %}
+                <thead>
+                  <tr class="has-background-info-dark">
+                    <th class="has-text-centered has-text-info-light">ID</th>
+                    <th class="has-text-centered has-text-info-light">TITLE</th>
+                    <th class="has-text-centered has-text-info-light">OPEN DATE</th>
+                    <th class="has-text-centered has-text-info-light">CLIENT</th>
+                    <th class="has-text-centered has-text-info-light">HIRING MANAGER</th>
+                    <th class="has-text-centered has-text-info-light">STATUS</th>
+                    <th class="has-text-centered has-text-info-light">ACTIONS</th>
+                  </tr>
+                </thead>
+              {%else %}
+                <tr class="has-background-info-light">
+                  <td class="has-text-centered has-text-info-dark">{{ jd.id }}</td>
+                  <td class="has-text-centered has-text-info-dark">{{ jd.title }}</td>
+                  <td class="has-text-centered has-text-info-dark">{{ jd.open_date }}</td> 
+                  <td class="has-text-centered has-text-info-dark">{{ jd.client }}</td>
+                  <td class="has-text-centered has-text-info-dark">{{ jd.hiring_mgr_name }}</td>
+                  <td class="has-text-centered has-text-info-dark">{{ jd.status }}</td>     
+                  <td class="has-text-centered has-text-info-dark">Edit</td>     
+    
+                </tr>
+              {%endif %}
+            {% else %}
+              <div class="notification is-warning">
+                No JDs found !!!
+              </div>
+              <div class="block">
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+              </div>
             {% endfor %}
           </tbody>
           </table>
-        </div>
-  
+        </div>  
       </div>
     </div>
   </div>
