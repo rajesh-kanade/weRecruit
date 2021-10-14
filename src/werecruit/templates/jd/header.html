@@ -1,0 +1,49 @@
+<div class="card">
+
+    <div class="card-content has-background-dark">
+        <header class="card-header">
+            <p class="card-header-title has-text-light">
+              Basic Info
+            </p>
+        </header>  
+      <div class="content has-text-light">
+        <turbo-frame id="jd_saveHeader">
+            <form action = "/jd/saveHeader" method="POST">
+            {{ headerForm.hidden_tag() }}
+            {{headerForm.id()}}
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{ headerForm.title.label }}</label>
+              <div class="control has-icons-left has-icons-right">
+                {{headerForm.title(class='input', placeholder='Enter Title')}}
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{ headerForm.details.label }}</label>
+              <div class="control">
+                {{headerForm.details(class='textarea', placeholder='Enter Title')}}
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label has-text-grey-light has-text-left">{{ headerForm.client.label }}</label>
+              <div class="control has-icons-left has-icons-right">
+                {{headerForm.client(class='input', placeholder='Enter Client Name')}}
+              </div>
+            </div>
+            <div class="field">
+              <p class="control">
+                {{ headerForm.submit( class = 'button is-success is-rounded') }}  
+              </p>      
+            </div>
+          </form>
+          {% set messages = get_flashed_messages(with_categories = true ) %} 
+          {% if messages %}    
+          {% for category, message in messages %}  
+              <div class="notification {{ category }}">{{ message }}</div>
+            {% endfor %}                  
+        {% endif %}
+        </turbo-frame>  
+      </div>
+    </div>
+</div>

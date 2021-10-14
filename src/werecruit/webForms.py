@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField,TextAreaField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
+from wtforms.fields.core import IntegerField
 from wtforms.validators import DataRequired, Email
 
 class SignUpForm(FlaskForm):
@@ -30,3 +31,15 @@ class JDCreateForm(FlaskForm):
     total_positions = StringField('Total Positions', validators=[DataRequired('Enter number of positions')])
 
     submit = SubmitField('Save JD')
+
+class JDHeaderForm( FlaskForm):
+    id = HiddenField('ID' )
+    
+    title = StringField('Title', validators=[DataRequired(message='Enter Title')])
+    details = TextAreaField('Details', validators=[DataRequired('Enter  Details')])
+
+    client = StringField('Client Name', validators=[DataRequired('Enter Client Name')])
+    total_positions = IntegerField('Total Positions', validators=[DataRequired('Enter number of positions')])
+
+    submit = SubmitField('Save')
+

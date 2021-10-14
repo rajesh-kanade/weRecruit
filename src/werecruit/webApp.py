@@ -9,7 +9,7 @@ from flask import (
     url_for
 )
 from flask_session import Session
-from webForms import JDCreateForm, SignUpForm , SignInForm
+from webForms import JDCreateForm, JDHeaderForm, SignUpForm , SignInForm
 from turbo_flask import Turbo
 
 import logging
@@ -127,8 +127,7 @@ def do_signout():
 @app.route('/jd/showCreatePage', methods = ['GET'])
 @login_required
 def show_jd_create_page():
-    #form=SignUpForm()
-    return render_template('jd_create.html', form=JDCreateForm())
+    return render_template('jd/create.html', form=JDCreateForm())
 
 @app.route('/jd/showAllPage', methods = ['GET'])
 @login_required
@@ -139,10 +138,10 @@ def show_jd_all_page():
         jdList = results[2]    
         for jd in jdList:
             print(jd.title)   
-        return render_template('jd_home.html', jdList = jdList )
+        return render_template('jd/list.html', jdList = jdList )
     else:
         flash (results[0] + ':' +results[1],"is-danger")
-        return render_template('jd_home.html',jdList = None)
+        return render_template('jd/list.html',jdList = None)
 
 @app.route('/jd/create', methods = ['POST'])
 @login_required
@@ -165,6 +164,35 @@ def create_JD():
     else:
         flash (results[0] + ':' +results[1],"is-danger")
         return redirect(url_for("show_home_page"))
+
+@app.route('/jd/showEditPage/<int:id>', methods = ['GET'])
+@login_required
+def show_jd_edit_page(id):
+
+    print('inside edit JD page for Job ID : ' , id)
+
+    loggedInUserID = session.get('user_id')
+    
+    form = JDHeaderForm()
+    form.id.data = id
+
+    return render_template('jd/edit.html', headerForm = form)
+
+@app.route('/jd/saveHeader', methods = ['POST'])
+@login_required
+def jd_save_header():
+
+    print('inside save header')
+
+    form =  JDHeaderForm()
+    print( form.id.data)
+    print ( form.title.data)
+    print ( form.details.data)
+    print ( form.client.data)
+
+    flash ( "JD Basic info saved successfully.", "is-success")
+    #return "saved successful."
+    return render_template('jd/header.html', headerForm = form)
 
 
 if __name__ == "__main__":
