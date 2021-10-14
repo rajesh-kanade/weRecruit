@@ -6,7 +6,7 @@
         This section allows you to create new JDs along with working on existing JDs.
     </div>
     
-    <div class="columns is-centered">
+    <div class="columns has-text-centered">
       <div class="column">
         <div class="table-container">
           <table class="table is-bordered is-narrow">
@@ -25,18 +25,17 @@
                     <th class="has-text-centered has-text-info-light">ACTIONS</th>
                   </tr>
                 </thead>
-              {%else %}
-                <tr class="has-background-info-light">
-                  <td class="has-text-centered has-text-info-dark">{{ jd.id }}</td>
-                  <td class="has-text-centered has-text-info-dark">{{ jd.title }}</td>
-                  <td class="has-text-centered has-text-info-dark">{{ jd.open_date }}</td> 
-                  <td class="has-text-centered has-text-info-dark">{{ jd.client }}</td>
-                  <td class="has-text-centered has-text-info-dark">{{ jd.hiring_mgr_name }}</td>
-                  <td class="has-text-centered has-text-info-dark">{{ jd.status }}</td>     
-                  <td class="has-text-centered has-text-info-dark">Edit</td>     
-    
-                </tr>
               {%endif %}
+              <tr class="has-background-info-light">
+                <td class="has-text-centered has-text-info-dark">{{ jd.id }}</td>
+                <td class="has-text-centered has-text-info-dark">{{ jd.title }}</td>
+                <td class="has-text-centered has-text-info-dark">{{ jd.open_date }}</td> 
+                <td class="has-text-centered has-text-info-dark">{{ jd.client }}</td>
+                <td class="has-text-centered has-text-info-dark">{{ jd.hiring_mgr_name }}</td>
+                <td class="has-text-centered has-text-info-dark">{{ jd.status }}</td>     
+                <td class="has-text-centered has-text-info-dark">Edit</td>     
+  
+              </tr>
             {% else %}
               <div class="notification is-warning">
                 No JDs found !!!

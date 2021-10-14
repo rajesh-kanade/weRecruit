@@ -128,7 +128,7 @@ def do_signout():
 @login_required
 def show_jd_create_page():
     #form=SignUpForm()
-    return render_template('create_jd.html', form=JDCreateForm())
+    return render_template('jd_create.html', form=JDCreateForm())
 
 @app.route('/jd/showAllPage', methods = ['GET'])
 @login_required
@@ -144,7 +144,7 @@ def show_jd_all_page():
         flash (results[0] + ':' +results[1],"is-danger")
         return render_template('jd_home.html',jdList = None)
 
-@app.route('/jd/createJD', methods = ['POST'])
+@app.route('/jd/create', methods = ['POST'])
 @login_required
 def create_JD():
 
@@ -166,7 +166,6 @@ def create_JD():
         flash (results[0] + ':' +results[1],"is-danger")
         return redirect(url_for("show_home_page"))
 
-    #return redirect(url_for('show_jd_all_page'))
 
 if __name__ == "__main__":
     app.run()

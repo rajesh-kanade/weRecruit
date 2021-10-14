@@ -1,15 +1,29 @@
 {%extends "app_header.html" %}
 {%block content%}
-<section class ="hero is-fullheight">
+<section class ="hero">
   {% set messages = get_flashed_messages(with_categories = true ) %}            
   {% if messages %}    
     {% for category, message in messages %}  
         <div class="notification {{ category }}">{{ message }}</div>
       {% endfor %}                  
   {% endif %}
-  <div class="tile">
-    <!-- The magical tile element! -->
-  </div>
+    <div class ="columns is-centered">
+      <div class = "column is-half">
+        {% include 'interviews_card.html'%}
+      </div>
+      <div class = "column is-half">
+        {% include 'joining_card.html'%}
+      </div>
+    </div>
+    <div class ="columns is-centered">
+      <div class = "column is-half">
+        {% include 'trending_jds_card.html'%}
+      </div>
+      <div class = "column is-half">
+        {% include 'high_priority_jds_card.html'%}
+      </div>
+    </div>
+
 </section>
 
 {% endblock %}
