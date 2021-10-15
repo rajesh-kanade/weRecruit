@@ -1,12 +1,12 @@
 from flask import (
-    Flask,
-    flash,
-    g,
-    redirect,
-    render_template,
-    request,
-    session,
-    url_for
+	Flask,
+	flash,
+	g,
+	redirect,
+	render_template,
+	request,
+	session,
+	url_for
 )
 from flask_session import Session
 from webForms import JDForm, JDHeaderForm, SignUpForm , SignInForm
@@ -23,190 +23,194 @@ app.secret_key = 'somesecretkeythatonlyishouldknow'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
-turbo = Turbo(app)
+#turbo = Turbo(app)
 Session(app)
 
 logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/')
 def home():
-    return render_template('index.html')        
-        
+	return render_template('index.html')        
+		
 
 @app.route('/user/showSigninPage')
 def show_signin_page():
-    form = SignInForm()
-    return render_template('sign_in.html', form = form)
+	form = SignInForm()
+	return render_template('sign_in.html', form = form)
 
 @app.route('/user/doSignin', methods = ['POST'])
 def do_signin():
 
-    form = SignInForm()
+	form = SignInForm()
 
-    results = userUtils.do_SignIn( form.email.data, form.password.data)
+	results = userUtils.do_SignIn( form.email.data, form.password.data)
 
-    if (results[0] == userUtils.RetCodes.success.value):        
-        #flash (results[1],"is-info")
-        user = results[2] 
+	if (results[0] == userUtils.RetCodes.success.value):        
+		#flash (results[1],"is-info")
+		user = results[2] 
 
-        session["user_id"] = user.id  #form.email.data
-        session["user_name"] = user.name #'Mr. Customer'
+		session["user_id"] = user.id  #form.email.data
+		session["user_name"] = user.name #'Mr. Customer'
 
-        #return render_template('home.html') 
-        return redirect(url_for('show_home_page'))
+		#return render_template('home.html') 
+		return redirect(url_for('show_home_page'))
 
 
-    else:
-        flash (results[1],"is-danger")
-        return redirect('/user/showSigninPage')
+	else:
+		flash (results[1],"is-danger")
+		return redirect('/user/showSigninPage')
 
 
 @app.route('/user/showSignupPage')
 def show_signup_page():
-    form=SignUpForm()
-    return render_template('sign_up.html', form = form)
+	form=SignUpForm()
+	return render_template('sign_up.html', form = form)
 
 @app.route('/user/createUser',  methods = ['POST'])
 def create_user():
 
-    form = SignUpForm()
+	form = SignUpForm()
 
-    userAttrs = {}
+	userAttrs = {}
 
-    userAttrs['email'] = form.email.data
-    userAttrs['password'] = form.password.data
-    userAttrs['name'] = form.name.data
-    userAttrs['status'] =userUtils.Status.active.value
-    userAttrs['tname'] = form.company_name.data
+	userAttrs['email'] = form.email.data
+	userAttrs['password'] = form.password.data
+	userAttrs['name'] = form.name.data
+	userAttrs['status'] =userUtils.Status.active.value
+	userAttrs['tname'] = form.company_name.data
 
 
-    results = userUtils.create_user( userAttrs)
+	results = userUtils.create_user( userAttrs)
 
-    if (results[0] == userUtils.RetCodes.success.value):        
-        flash ("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(form.name.data), "is-info")
-        #form.success = True
-        #return render_template('sign_in.html', form = SignInForm())
-        return redirect(url_for("show_signin_page"))
-    else:
-        flash (results[0] + ':' +results[1],"is-danger")
-        return redirect(url_for("show_signup_page"))
+	if (results[0] == userUtils.RetCodes.success.value):        
+		flash ("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(form.name.data), "is-info")
+		#form.success = True
+		#return render_template('sign_in.html', form = SignInForm())
+		return redirect(url_for("show_signin_page"))
+	else:
+		flash (results[0] + ':' +results[1],"is-danger")
+		return redirect(url_for("show_signup_page"))
 
 def login_required(func):
-    @functools.wraps(func)
-    def secure_function(*args, **kwargs):
-        if "user_id" not in session:
-            flash ( "You are not authenticated. Please login to access this page.","is-danger")
-            return redirect(url_for("show_signin_page"))
+	@functools.wraps(func)
+	def secure_function(*args, **kwargs):
+		if "user_id" not in session:
+			flash ( "You are not authenticated. Please login to access this page.","is-danger")
+			return redirect(url_for("show_signin_page"))
 
-        return func(*args, **kwargs)
+		return func(*args, **kwargs)
 
-    return secure_function
+	return secure_function
 
 @app.route('/showHomePage')
 @login_required
 def show_home_page():
 
-    #form=JDCreateForm()
-    return render_template('home.html')
-    #return redirect('create_jd.html', form = form)
-    #redirect('/user/showSigninPage')
+	#form=JDCreateForm()
+	return render_template('home.html')
+	#return redirect('create_jd.html', form = form)
+	#redirect('/user/showSigninPage')
 
 @app.route('/user/doSignout', methods = ['GET'])
 @login_required
 def do_signout():
 
-    if 'user_id' in session :
-        session.pop('user_id', None)
-        session.pop('user.name', None)
-
-        flash('Successfully logged out.',"is-info")
-        return redirect('/user/showSigninPage')    
-    else:
-        return redirect(url_for('/'))
+	session.clear()
+	flash('Successfully logged out.',"is-info")
+	return redirect('/user/showSigninPage') 
+		
+	'''if 'user_id' in session :
+	#session.pop('user_id', None)
+	#session.pop('user.name', None)
+	session.clear()
+	flash('Successfully logged out.',"is-info")
+	return redirect('/user/showSigninPage')    
+	else:
+	return redirect(url_for('/'))'''
 
 @app.route('/jd/showCreatePage', methods = ['GET'])
 @login_required
 def show_jd_create_page():
-    return render_template('jd/create.html', form=JDForm())
+	return render_template('jd/create.html', form=JDForm())
 
 @app.route('/jd/showAllPage', methods = ['GET'])
 @login_required
 def show_jd_all_page():
-    results = jdUtils.list_jds(session.get('user_id'))
-    if (results[0] == jdUtils.RetCodes.success.value): 
-        print( 'success')
-        jdList = results[2]    
-        for jd in jdList:
-            print(jd.title)   
-        return render_template('jd/list.html', jdList = jdList )
-    else:
-        flash (results[0] + ':' +results[1],"is-danger")
-        return render_template('jd/list.html',jdList = None)
+	results = jdUtils.list_jds(session.get('user_id'))
+	if (results[0] == jdUtils.RetCodes.success.value): 
+		print( 'success')
+		jdList = results[2]    
+		for jd in jdList:
+			print(jd.title)   
+		return render_template('jd/list.html', jdList = jdList )
+	else:
+		flash (results[0] + ':' +results[1],"is-danger")
+		return render_template('jd/list.html',jdList = None)
 
 @app.route('/jd/create', methods = ['POST'])
 @login_required
 def create_JD():
 
-    print('inside create JD.')
+	print('inside create JD.')
 
-    form = JDForm()
+	form = JDForm()
 
-    loggedInUserID = session.get('user_id')
+	loggedInUserID = session.get('user_id')
 
-    results = jdUtils.save_jd(-1, str(form.title.data),str(form.details.data),
-                                str(form.client.data),str(form.hiring_mgr_name.data), 
-                                str(form.hiring_mgr_email.data),
-                                int(loggedInUserID),1)
+	results = jdUtils.save_jd(-1, str(form.title.data),str(form.details.data),
+								str(form.client.data),str(form.hiring_mgr_name.data), 
+								str(form.hiring_mgr_email.data),
+								int(loggedInUserID),1)
 
-    if (results[0] == jdUtils.RetCodes.success.value):        
-        flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
-        return redirect(url_for("show_home_page"))
-    else:
-        flash (results[0] + ':' +results[1],"is-danger")
-        return redirect(url_for("show_home_page"))
+	if (results[0] == jdUtils.RetCodes.success.value):        
+		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
+		return redirect(url_for("show_home_page"))
+	else:
+		flash (results[0] + ':' +results[1],"is-danger")
+		return redirect(url_for("show_home_page"))
 
 @app.route('/jd/showEditPage/<int:id>', methods = ['GET'])
 @login_required
 def show_jd_edit_page(id):
 
-    print('inside edit JD page for Job ID : ' , id)
+	print('inside edit JD page for Job ID : ' , id)
 
-    loggedInUserID = session.get('user_id')
-    
-    form = JDHeaderForm()
-    form.id.data = id
+	loggedInUserID = session.get('user_id')
+	
+	form = JDHeaderForm()
+	form.id.data = id
 
-    if 'show' in request.args:
-        print('inside show')
-        show = request.args.get('show')
-    else:
-        show="header"
+	if 'show' in request.args:
+		print('inside show')
+		show = request.args.get('show')
+	else:
+		show="header"
 
 
-    return render_template('jd/edit.html', show= show, headerForm = form)
+	return render_template('jd/edit.html', show= show, headerForm = form)
 
 @app.route('/jd/saveHeader', methods = ['POST'])
 @login_required
 def jd_save_header():
 
-    print('inside save header')
+	print('inside save header')
 
-    form =  JDHeaderForm()
-    print( form.id.data)
-    print ( form.title.data)
-    print ( form.details.data)
-    print ( form.client.data)
+	form =  JDHeaderForm()
+	print( form.id.data)
+	print ( form.title.data)
+	print ( form.details.data)
+	print ( form.client.data)
 
-    results = jdUtils.save_header(form.id.data,form.title.data,form.details.data,form.client.data)
-    if (results[0] == jdUtils.RetCodes.success.value):
-        flash (results[1], "is-success")
-    else:
-        flash (results[1], "is-danger")
-    
-    #return "saved successful."
-    return render_template('jd/header.html', headerForm = form)
-    #return redirect(url_for('show_jd_edit_page'), id = form.id.data)
+	results = jdUtils.save_header(form.id.data,form.title.data,form.details.data,form.client.data)
+	if (results[0] == jdUtils.RetCodes.success.value):
+		flash (results[1], "is-success")
+	else:
+		flash (results[1], "is-danger")
+	
+	#return "saved successful."
+	return render_template('jd/header.html', headerForm = form)
+	#return redirect(url_for('show_jd_edit_page'), id = form.id.data)
 
 
 if __name__ == "__main__":
-    app.run()
+	app.run()
