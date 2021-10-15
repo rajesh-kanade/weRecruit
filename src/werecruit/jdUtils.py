@@ -20,7 +20,7 @@ class JDStatusCodes(Enum):
 	close = 2
 
 
-def create_jd(title,details,client, hiring_mgr_name,hiring_mgr_email,recruiterID,positions=1):
+def save_jd(id,title,details,client, hiring_mgr_name,hiring_mgr_email,recruiterID,positions=1):
 	
 	db_con = dbUtils.getConnFromPool()
 	cursor = db_con.cursor()
@@ -49,27 +49,75 @@ def create_jd(title,details,client, hiring_mgr_name,hiring_mgr_email,recruiterID
 
 		dt = datetime.now(tz=timezone.utc)
 
+		if (id == -1):
+			##insert a record in user table
+			sql = """insert into public.wr_jds ( title, details, client, 
+					hiring_mgr_name, hiring_mgr_emailid, 
+					recruiter_id,positions,status,open_date) 
+					values (%s,%s, %s,%s,%s,%s,%s,%s,%s) returning id """
+			params = (title,details,client,
+					hiring_mgr_name, hiring_mgr_email,
+					recruiterID,positions,JDStatusCodes.open.value,dt)
+
+			print ( cursor.mogrify(sql, params))
+			
+			cursor.execute(sql, params)
+			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+			result = cursor.fetchone()
+			jd_id = result[0]
+			print ("JD id created is",jd_id )
+		
+
+			db_con.commit()
+			return (RetCodes.success.value, "JD creation successful.", jd_id)
+		else:
+			pass
+
+	except Exception as e:
+		print(e)
+		db_con.rollback()
+		return (RetCodes.server_error.value, str(e),None)
+	
+	finally:
+		if cursor is not None:
+			cursor.close()
+		dbUtils.returnToPool(db_con)
+
+def save_header(id, title,details,client):
+	
+	db_con = dbUtils.getConnFromPool()
+	cursor = db_con.cursor()
+	try:
+		
+		if not title.strip():
+			 return(RetCodes.empty_ent_attrs_error.value,"Title field empty or null.", None)
+
+		if not details.strip():
+			 return(RetCodes.empty_ent_attrs_error.value,"Details field empty or null.", None)
+
+		if not client.strip():
+			 return(RetCodes.empty_ent_attrs_error.value,"Client field is empty or null.", None)
+
+
+		dt = datetime.now(tz=timezone.utc)
+
 		##insert a record in user table
-		sql = """insert into public.wr_jds ( title, details, client, 
-				hiring_mgr_name, hiring_mgr_emailid, 
-				recruiter_id,positions,status,open_date) 
-				values (%s,%s, %s,%s,%s,%s,%s,%s,%s) returning id """
-		params = (title,details,client,
-				hiring_mgr_name, hiring_mgr_email,
-				recruiterID,positions,JDStatusCodes.open.value,dt)
+		sql = """update public.wr_jds set title = %s,  details = %s,  
+				client = %s where id = %s"""
+		params = (title,details,client, int(id))
+
 
 		print ( cursor.mogrify(sql, params))
 		
 		cursor.execute(sql, params)
-		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+		print(cursor.rowcount)
+		assert cursor.rowcount == 1, "assertion failed : {0} Rows returned which is not equal to 1.".format(cursor.rowcount)
 
-		result = cursor.fetchone()
-		jd_id = result[0]
-		print ("JD id created is",jd_id )
-	
+		#result = cursor.fetchone()
 
 		db_con.commit()
-		return (RetCodes.success.value, "JD creation successful.", jd_id)
+		return (RetCodes.success.value, "JD updated successful.", None)
 
 
 	except Exception as e:

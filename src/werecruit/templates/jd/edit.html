@@ -1,18 +1,30 @@
 {%extends "app_header.html" %}
 {%block content%}
 
-<section class ="hero">
+<section class ="section">
+  <div class ="columns">
+    <div class ="column is-left is-one-fifth">  
+    <aside class="menu">
+      <p class="menu-label">
+        About Job
+      </p>
+      <ul class="menu-list">
+        <li><a class="has-text-secondary {% if show =='header'%} {{'is-active'}} {% endif %}" href="/jd/showEditPage/{{headerForm.id.data}}?show=header">Title & Description</a></li>
+        <li><a class="{% if show =='team'%} {{'is-active'}} {% endif %}" href="/jd/showEditPage/{{headerForm.id.data}}?show=team">Team</a></li>       
+      </ul>
+    </aside>
+    </div>
+    
+    <div class = "column">
+      {% if show == 'header'%}
+        {% include 'jd/header.html'%}
+      {% endif %}
+      {% if show == 'team'%}
+        {% include 'jd/team.html'%}
+      {% endif %}
+    </div>
 
-    <div class ="columns is-centered">
-        <div class = "column is-half">
-          {% include 'jd/header.html'%}
-        </div>
-    </div>
-    <div class ="columns is-centered">
-        <div class = "column is-half">
-          {% include 'jd/interviews_card.html'%}
-        </div>
-    </div>
+  </div>
      
   </section>
   

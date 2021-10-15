@@ -9,7 +9,7 @@ from flask import (
     url_for
 )
 from flask_session import Session
-from webForms import JDCreateForm, JDHeaderForm, SignUpForm , SignInForm
+from webForms import JDForm, JDHeaderForm, SignUpForm , SignInForm
 from turbo_flask import Turbo
 
 import logging
@@ -127,7 +127,7 @@ def do_signout():
 @app.route('/jd/showCreatePage', methods = ['GET'])
 @login_required
 def show_jd_create_page():
-    return render_template('jd/create.html', form=JDCreateForm())
+    return render_template('jd/create.html', form=JDForm())
 
 @app.route('/jd/showAllPage', methods = ['GET'])
 @login_required
@@ -149,11 +149,11 @@ def create_JD():
 
     print('inside create JD.')
 
-    form = JDCreateForm()
+    form = JDForm()
 
     loggedInUserID = session.get('user_id')
 
-    results = jdUtils.create_jd(str(form.title.data),str(form.details.data),
+    results = jdUtils.save_jd(-1, str(form.title.data),str(form.details.data),
                                 str(form.client.data),str(form.hiring_mgr_name.data), 
                                 str(form.hiring_mgr_email.data),
                                 int(loggedInUserID),1)
@@ -176,7 +176,14 @@ def show_jd_edit_page(id):
     form = JDHeaderForm()
     form.id.data = id
 
-    return render_template('jd/edit.html', headerForm = form)
+    if 'show' in request.args:
+        print('inside show')
+        show = request.args.get('show')
+    else:
+        show="header"
+
+
+    return render_template('jd/edit.html', show= show, headerForm = form)
 
 @app.route('/jd/saveHeader', methods = ['POST'])
 @login_required
@@ -190,9 +197,15 @@ def jd_save_header():
     print ( form.details.data)
     print ( form.client.data)
 
-    flash ( "JD Basic info saved successfully.", "is-success")
+    results = jdUtils.save_header(form.id.data,form.title.data,form.details.data,form.client.data)
+    if (results[0] == jdUtils.RetCodes.success.value):
+        flash (results[1], "is-success")
+    else:
+        flash (results[1], "is-danger")
+    
     #return "saved successful."
     return render_template('jd/header.html', headerForm = form)
+    #return redirect(url_for('show_jd_edit_page'), id = form.id.data)
 
 
 if __name__ == "__main__":
