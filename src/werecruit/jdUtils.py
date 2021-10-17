@@ -19,8 +19,9 @@ class JDStatusCodes(Enum):
 	draft = 1
 	close = 2
 
+JD_DEF_POSITIONS = 1
 
-def save_jd(id,title,details,client, hiring_mgr_name,hiring_mgr_email,recruiterID,positions=1):
+def save_jd(id,title,details,client, recruiterID,positions=1, open_date=None):
 	
 	db_con = dbUtils.getConnFromPool()
 	cursor = db_con.cursor()
@@ -35,29 +36,22 @@ def save_jd(id,title,details,client, hiring_mgr_name,hiring_mgr_email,recruiterI
 		if not client.strip():
 			 return(RetCodes.empty_ent_attrs_error.value,"Client field is empty or null.", None)
 
-		if not hiring_mgr_name.strip():
-			 return(RetCodes.empty_ent_attrs_error.value,"Hiring manager field is empty or null.", None)
-
-		if not hiring_mgr_email.strip():
-			 return(RetCodes.empty_ent_attrs_error.value,"Hiring manager email field is empty or null.", None)
-
 		if not recruiterID:
 			 return(RetCodes.empty_ent_attrs_error.value,"Recruiter ID field is empty or null.", None)
 
 		if not positions:
 			 return(RetCodes.empty_ent_attrs_error.value,"Positions field is empty or null.", None)
 
-		dt = datetime.now(tz=timezone.utc)
+		if open_date is None:
+			open_date = datetime.now(tz=timezone.utc)
 
 		if (id == -1):
 			##insert a record in user table
 			sql = """insert into public.wr_jds ( title, details, client, 
-					hiring_mgr_name, hiring_mgr_emailid, 
 					recruiter_id,positions,status,open_date) 
-					values (%s,%s, %s,%s,%s,%s,%s,%s,%s) returning id """
+					values (%s,%s,%s,%s,%s,%s,%s) returning id """
 			params = (title,details,client,
-					hiring_mgr_name, hiring_mgr_email,
-					recruiterID,positions,JDStatusCodes.open.value,dt)
+					recruiterID,positions,JDStatusCodes.open.value,open_date)
 
 			print ( cursor.mogrify(sql, params))
 			

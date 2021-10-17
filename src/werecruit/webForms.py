@@ -30,9 +30,9 @@ class JDForm(FlaskForm):
 
     client = StringField('Client Name', validators=[DataRequired('Enter Client Name')])
 
-    hiring_mgr_name = StringField('Hiring Manager Name', validators=[DataRequired('Enter hiring manager Name')])
-    hiring_mgr_email = StringField('Hiring Manager Email', validators=[DataRequired('Enter hiring manager Email')])
-    hiring_mgr_phone = StringField('Hiring Manager Phone')
+    hr_name = StringField('HR Name')
+    hr_email = StringField('HR Email')
+    hr_phone = StringField('HR Phone')
 
     intv_panel_name_1 = StringField('Name')
     intv_panel_email_1 = StringField('Email')
@@ -42,6 +42,9 @@ class JDForm(FlaskForm):
     intv_panel_email_2 = StringField('Email')
     intv_panel_phone_2 = StringField('Phone')
 
+    hiring_mgr_name = StringField('Hiring Manager Name')
+    hiring_mgr_email = StringField('Hiring Manager Email')
+    hiring_mgr_phone = StringField('Hiring Manager Phone')
 
     submit = SubmitField('Save JD')
 

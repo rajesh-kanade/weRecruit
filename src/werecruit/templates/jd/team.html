@@ -1,15 +1,9 @@
 <div class="card">
 
-    <div class="card-content has-background-dark">
-        <header class="card-header">
-            <p class="card-header-title has-text-light has-text-centered">
-              Interview Panel
-            </p>
-        </header>  
-      <div class="content has-text-light">
+    <div class="card-content has-background-dark">  
         <div class="table-container">
             <table class="table is-bordered is-narrow">
-              <!-- Your table content -->
+              <caption class="has-text-light is-uppercase">Interview Panel</caption>
               <tbody>
                   <thead>
                     <tr class="has-background-dark">
@@ -37,25 +31,78 @@
                 <tr>
                     <td class="has-text-centered has-text-dark">2</td>
                     <td class="has-text-centered has-text-dark"><div class="control">
-                          {{form.intv_panel_name_1(class='input', placeholder='Enter Name')}}
+                          {{form.intv_panel_name_2(class='input', placeholder='Enter Name')}}
                           </div>
                     </td> 
                     <td class="has-text-centered has-text-dark"><div class="control">
-                      {{form.intv_panel_email_1(class='input', placeholder='Enter email')}}
+                      {{form.intv_panel_email_2(class='input', placeholder='Enter email')}}
                       </div>
                     </td>
                     <td class="has-text-centered has-text-dark"><div class="control">
-                      {{form.intv_panel_phone_1(class='input', placeholder='Enter phone')}}
+                      {{form.intv_panel_phone_2(class='input', placeholder='Enter phone')}}
                       </div>
                     </td> 
-
-
                 </tr>
 
             </tbody>
             </table>
+            <table class="table is-bordered is-narrow">
+              <caption class="has-text-light is-uppercase">Hiring Manager</caption>
+              <tbody>
+                  <thead>
+                    <tr class="has-background-dark">
+                      <th class="has-text-centered has-text-light">No.</th>
+                      <th class="has-text-centered has-text-light">Name</th>
+                      <th class="has-text-centered has-text-light">Email</th>
+                      <th class="has-text-centered has-text-light">Phone</th>
+                    </tr>
+                  </thead>
+                <tr class="has-background-light">
+                  <td class="has-text-centered has-text-dark">1</td>
+                  <td class="has-text-centered has-text-dark"><div class="control">
+                        {{form.hiring_mgr_name(class='input', placeholder='Enter Name')}}
+                        </div>
+                  </td> 
+                  <td class="has-text-centered has-text-dark"><div class="control">
+                    {{form.hiring_mgr_email(class='input', placeholder='Enter email')}}
+                    </div>
+                  </td>
+                  <td class="has-text-centered has-text-dark"><div class="control">
+                    {{form.hiring_mgr_phone(class='input', placeholder='Enter phone')}}
+                    </div>
+                  </td> 
+                </tr>
+            </tbody>
+            </table>
+            <table class="table is-bordered is-narrow">
+              <caption class="has-text-light is-uppercase">HR</caption>
+              <tbody>
+                  <thead>
+                    <tr class="has-background-dark">
+                      <th class="has-text-centered has-text-light">No.</th>
+                      <th class="has-text-centered has-text-light">Name</th>
+                      <th class="has-text-centered has-text-light">Email</th>
+                      <th class="has-text-centered has-text-light">Phone</th>
+                    </tr>
+                  </thead>
+                <tr class="has-background-light">
+                  <td class="has-text-centered has-text-dark">1</td>
+                  <td class="has-text-centered has-text-dark"><div class="control">
+                        {{form.hr_name(class='input', placeholder='Enter Name')}}
+                        </div>
+                  </td> 
+                  <td class="has-text-centered has-text-dark"><div class="control">
+                    {{form.hr_email(class='input', placeholder='Enter email')}}
+                    </div>
+                  </td>
+                  <td class="has-text-centered has-text-dark"><div class="control">
+                    {{form.hr_phone(class='input', placeholder='Enter phone')}}
+                    </div>
+                  </td> 
+                </tr>
+            </tbody>
+            </table>
           </div>  
   
-      </div>
     </div>
 </div>

@@ -15,6 +15,7 @@ from turbo_flask import Turbo
 import logging
 import userUtils
 import jdUtils
+import constants
 import functools
 
 app = Flask(__name__)
@@ -27,6 +28,13 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 logging.basicConfig(level=logging.DEBUG)
+
+"""def cleanup(sender, **extra):
+	print('inside Tearing down cleanup  function')
+	session.close()
+
+from flask import appcontext_tearing_down
+appcontext_tearing_down.connect(cleanup, app)"""
 
 @app.route('/')
 def home():
@@ -157,10 +165,8 @@ def create_JD():
 
 	loggedInUserID = session.get('user_id')
 
-	results = jdUtils.save_jd(-1, str(form.title.data),str(form.details.data),
-								str(form.client.data),str(form.hiring_mgr_name.data), 
-								str(form.hiring_mgr_email.data),
-								int(loggedInUserID),1)
+	results = jdUtils.save_jd(constants.NEW_ENTITY_ID, form.title.data,form.details.data,
+								form.client.data,int(loggedInUserID),jdUtils.JD_DEF_POSITIONS)
 
 	if (results[0] == jdUtils.RetCodes.success.value):        
 		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")

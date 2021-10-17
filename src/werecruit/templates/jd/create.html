@@ -24,7 +24,7 @@
             {{form.id()}}
             <div class="field">
               <label class="label has-text-light has-text-left">{{ form.title.label }}</label>
-              <div class="control has-icons-left has-icons-right">
+              <div class="control">
                 {{form.title(class='input', placeholder='Enter Title')}}
               </div>
             </div>
@@ -38,23 +38,11 @@
 
             <div class="field">
               <label class="label has-text-light has-text-left">{{ form.client.label }}</label>
-              <div class="control has-icons-left has-icons-right">
+              <div class="control">
                 {{form.client(class='input', placeholder='Enter Client Name')}}
               </div>
             </div>
 
-            <div class="field">
-              <label class="label has-text-light has-text-left">{{ form.hiring_mgr_name.label }}</label>
-              <div class="control has-icons-left has-icons-right">
-                {{form.hiring_mgr_name(class='input', placeholder='Hiring Manager Name')}}
-              </div>
-            </div>            
-            <div class="field">
-              <label class="label has-text-light has-text-left">{{ form.hiring_mgr_email.label }}</label>
-              <div class="control has-icons-left has-icons-right">
-                {{form.hiring_mgr_email(class='input', placeholder='Hiring Manager EMail')}}
-              </div>
-            </div> 
             {% include 'jd/team.html'%}
 
             <div class="field">

@@ -109,14 +109,30 @@ CREATE TABLE public.wr_jds
 (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
     title text COLLATE pg_catalog."default" NOT NULL,
-    details text COLLATE pg_catalog."default" NOT NULL,
-    positions smallint NOT NULL,
-    client text COLLATE pg_catalog."default" NOT NULL,
-    hiring_mgr_name text COLLATE pg_catalog."default" NOT NULL,
-    hiring_mgr_emailid text COLLATE pg_catalog."default" NOT NULL,
-    open_date timestamp with time zone NOT NULL,
+    details text COLLATE pg_catalog."default" ,
+    positions smallint ,
+    client text COLLATE pg_catalog."default" ,
+
+    hiring_mgr_name text COLLATE pg_catalog."default" ,
+    hiring_mgr_emailid text COLLATE pg_catalog."default",
+    hiring_mgr_phone text COLLATE pg_catalog."default",
+
+    open_date timestamp with time zone ,
     status smallint NOT NULL,
-    recruiter_id bigint,
+    recruiter_id bigint not null,
+
+    ip_name_1 text COLLATE pg_catalog."default",
+    ip_emailid_1 text COLLATE pg_catalog."default",
+    ip_phone_1 text COLLATE pg_catalog."default",
+
+    ip_name_2 text COLLATE pg_catalog."default",
+    ip_emailid_2 text COLLATE pg_catalog."default",
+    ip_phone_2 text COLLATE pg_catalog."default",
+
+    hr_name text COLLATE pg_catalog."default" ,
+    hr_emailid text COLLATE pg_catalog."default",
+    hr_phone text COLLATE pg_catalog."default",
+
     PRIMARY KEY (id),
     foreign key ( recruiter_id) references public.users(id)
 )
