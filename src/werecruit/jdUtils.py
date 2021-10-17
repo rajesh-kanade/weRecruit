@@ -1,5 +1,6 @@
 
 import dbUtils
+import constants
 
 from datetime import datetime
 from datetime import timezone 
@@ -21,8 +22,13 @@ class JDStatusCodes(Enum):
 
 JD_DEF_POSITIONS = 1
 
-def save_jd(id,title,details,client, recruiterID,positions=1, open_date=None):
+def save_jd(id,title,details,client, recruiterID,positions=1, open_date=None,
+			ip_name1=None, ip_email1=None,ip_phone1=None,
+			ip_name2=None, ip_email2=None,ip_phone2=None,
+			hiring_mgr_name= None, hiring_mgr_email=None,hiring_mgr_phone=None,
+			hr_name= None, hr_email=None,hr_phone=None ):
 	
+	print('inside save_jd function')
 	db_con = dbUtils.getConnFromPool()
 	cursor = db_con.cursor()
 	try:
@@ -45,13 +51,27 @@ def save_jd(id,title,details,client, recruiterID,positions=1, open_date=None):
 		if open_date is None:
 			open_date = datetime.now(tz=timezone.utc)
 
-		if (id == -1):
+		if (int(id) == constants.NEW_ENTITY_ID):
 			##insert a record in user table
 			sql = """insert into public.wr_jds ( title, details, client, 
-					recruiter_id,positions,status,open_date) 
-					values (%s,%s,%s,%s,%s,%s,%s) returning id """
+					recruiter_id,positions,status,open_date,
+					ip_name_1, ip_emailid_1,ip_phone_1,
+					ip_name_2, ip_emailid_2,ip_phone_2,
+					hiring_mgr_name, hiring_mgr_emailid,hiring_mgr_phone,
+					hr_name,hr_emailid,hr_phone) 
+					values (%s,%s,%s,
+					%s,%s,%s,%s,
+					%s,%s,%s,
+					%s,%s,%s,
+					%s,%s,%s,
+					%s,%s,%s ) returning id """
+			
 			params = (title,details,client,
-					recruiterID,positions,JDStatusCodes.open.value,open_date)
+					recruiterID,positions,JDStatusCodes.open.value,open_date,
+					ip_name1,ip_email1,ip_phone1,
+					ip_name2,ip_email2,ip_phone2,
+					hiring_mgr_name,hiring_mgr_email,hiring_mgr_phone,
+					hr_name,hr_email,hr_phone)
 
 			print ( cursor.mogrify(sql, params))
 			
@@ -66,7 +86,34 @@ def save_jd(id,title,details,client, recruiterID,positions=1, open_date=None):
 			db_con.commit()
 			return (RetCodes.success.value, "JD creation successful.", jd_id)
 		else:
-			pass
+			sql = """update public.wr_jds set  
+						title = %s,  details = %s,  client = %s,
+						recruiter_id = %s, positions = %s, status =%s, open_date= %s ,
+						ip_name_1 = %s, ip_emailid_1 = %s, ip_phone_1 = %s,
+						ip_name_2 = %s, ip_emailid_2 = %s, ip_phone_2 = %s,
+						hiring_mgr_name = %s, hiring_mgr_emailid = %s, hiring_mgr_phone = %s,
+						hr_name = %s, hr_emailid = %s, hr_phone = %s
+					where id = %s"""
+			params = (title,details,client, 
+						recruiterID, positions, JDStatusCodes.open.value, open_date,
+						ip_name1,ip_email1,ip_phone1,
+						ip_name2,ip_email2,ip_phone2,
+						hiring_mgr_name, hiring_mgr_email,hiring_mgr_phone,
+						hr_name, hr_email,hr_phone,
+						int(id))
+						
+			print ( cursor.mogrify(sql, params))
+			
+			cursor.execute(sql, params)
+			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+			#result = cursor.fetchone()
+			#jd_id = result[0]
+			print ("JD id {0} created successfully.".format(id) )
+		
+			db_con.commit()
+			return (RetCodes.success.value, "JD {0} updated successfully.".format(id),id)
+			
 
 	except Exception as e:
 		print(e)
@@ -139,6 +186,33 @@ def list_jds(recruiterID):
 		jdList =cursor.fetchall()
 
 		return(RetCodes.success.value, "JD List successfully fetched from db", jdList)
+
+
+	except Exception as dbe:
+		print(dbe)
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
+
+def get(id):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		query = """SELECT * FROM wr_jds 
+				where id = %s"""
+	
+		params = (id,)
+		print ( cursor.mogrify(query, params))
+		cursor.execute(query,params)
+
+		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+		jd = cursor.fetchone()
+
+		return(RetCodes.success.value, "JD  info for {0} successfully fetched from db".format(id), jd)
 
 
 	except Exception as dbe:

@@ -1,32 +1,62 @@
 {%extends "app_header.html" %}
 {%block content%}
 
-<section class ="section">
-  <div class ="columns">
-    <div class ="column is-left is-one-fifth">  
-    <aside class="menu">
-      <p class="menu-label">
-        About Job
-      </p>
-      <ul class="menu-list">
-        <li><a class="has-text-secondary {% if show =='header'%} {{'is-active'}} {% endif %}" href="/jd/showEditPage/{{headerForm.id.data}}?show=header">Title & Description</a></li>
-        <li><a class="{% if show =='team'%} {{'is-active'}} {% endif %}" href="/jd/showEditPage/{{headerForm.id.data}}?show=team">Team</a></li>       
-      </ul>
-    </aside>
-    </div>
-    
-    <div class = "column">
-      {% if show == 'header'%}
-        {% include 'jd/header.html'%}
-      {% endif %}
-      {% if show == 'team'%}
-        {% include 'jd/team.html'%}
-      {% endif %}
-    </div>
+<section class="hero is-fullheight">
 
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+          <div class="column is-half">
+            {% set messages = get_flashed_messages() %}
+            {% if messages %}   
+                  <div class="notification is-danger">  
+                
+                    {% if messages %}  
+                          {% for message in messages %}  
+                                <p> {{ message }}</p>  
+                          {% endfor %}  
+                    {% endif %}  
+              
+                </div>        
+            {% endif %}  
+          <form action = "/jd/save" method="POST">
+            {{ form.hidden_tag() }}
+            {{form.id()}}
+            <div class="field">
+              <label class="label has-text-light has-text-left">{{ form.title.label }}</label>
+              <div class="control">
+                {{form.title(class='input', placeholder='Enter Title')}}
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label has-text-light has-text-left">{{ form.details.label }}</label>
+              <div class="control">
+                {{form.details(class='textarea', placeholder='Enter Title')}}
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label has-text-light has-text-left">{{ form.client.label }}</label>
+              <div class="control">
+                {{form.client(class='input', placeholder='Enter Client Name')}}
+              </div>
+            </div>
+
+            {% include 'jd/team.html'%}
+
+            <div class="field">
+              <p class="control">
+                {{ form.submit( class = 'button is-success is-rounded') }}  
+
+              </p>      
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
-     
-  </section>
-  
+</section>
+
 {% endblock %}
 

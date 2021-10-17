@@ -29,6 +29,8 @@ class JDForm(FlaskForm):
     open_date = DateField('Open Date',validators=[DataRequired('Enter  Open Date')])
 
     client = StringField('Client Name', validators=[DataRequired('Enter Client Name')])
+    #TODO status drop box
+    #TODO positions text field required
 
     hr_name = StringField('HR Name')
     hr_email = StringField('HR Email')
@@ -46,6 +48,7 @@ class JDForm(FlaskForm):
     hiring_mgr_email = StringField('Hiring Manager Email')
     hiring_mgr_phone = StringField('Hiring Manager Phone')
 
+    
     submit = SubmitField('Save JD')
 
 class JDHeaderForm( FlaskForm):
