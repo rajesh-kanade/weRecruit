@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
+from wtforms import SelectField, StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
 from wtforms.fields.core import IntegerField,DateField
-from wtforms.validators import DataRequired, Email
+from wtforms.validators import DataRequired, Email,NumberRange
+
+import jdUtils
 
 class SignUpForm(FlaskForm):
 
@@ -25,12 +27,16 @@ class JDForm(FlaskForm):
 
     title = StringField('Title', validators=[DataRequired(message='Enter Title*')])
     details = TextAreaField('Details', validators=[DataRequired('Enter  Details')])
-    total_positions = IntegerField('Total Positions', validators=[DataRequired('Enter number of positions')])
+    total_positions = IntegerField('Total Positions', 
+                        validators=[DataRequired('Enter number of positions'),NumberRange(min=1, max=5)])
+                   
     open_date = DateField('Open Date',validators=[DataRequired('Enter  Open Date')])
 
     client = StringField('Client Name', validators=[DataRequired('Enter Client Name')])
-    #TODO status drop box
-    #TODO positions text field required
+    status = SelectField('Status', choices=[(jdUtils.JDStatusCodes.open.value, 'Open'), 
+                        (jdUtils.JDStatusCodes.draft.value, 'Draft'), 
+                        (jdUtils.JDStatusCodes.close.value, 'Close')])
+
 
     hr_name = StringField('HR Name')
     hr_email = StringField('HR Email')

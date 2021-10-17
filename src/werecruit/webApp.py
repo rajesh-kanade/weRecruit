@@ -140,7 +140,11 @@ def do_signout():
 @login_required
 def show_jd_create_page():
 	form = JDForm()
+	
 	form.id.data = constants.NEW_ENTITY_ID
+	form.total_positions.data = jdUtils.JD_DEF_POSITIONS	
+	form.status.data = jdUtils.JDStatusCodes.open.value
+
 	return render_template('jd/edit.html', form=form)
 
 @app.route('/jd/showAllPage', methods = ['GET'])
@@ -161,7 +165,7 @@ def show_jd_all_page():
 @login_required
 def save_JD():
 
-	print('inside create JD.')
+	print('inside save JD.')
 
 	form = JDForm()
 
@@ -169,11 +173,12 @@ def save_JD():
 	print('JD id is {0}'.format(form.id.data))
 	
 	results = jdUtils.save_jd(form.id.data, form.title.data,form.details.data,
-								form.client.data,int(loggedInUserID),jdUtils.JD_DEF_POSITIONS,form.open_date.data,
+								form.client.data,int(loggedInUserID),int(form.total_positions.data),form.open_date.data,
 								form.intv_panel_name_1.data,form.intv_panel_email_1.data,form.intv_panel_phone_1.data,
 								form.intv_panel_name_2.data,form.intv_panel_email_2.data,form.intv_panel_phone_2.data,
 								form.hiring_mgr_name.data,form.hiring_mgr_email.data,form.hiring_mgr_phone.data,
-								form.hr_name.data,form.hr_email.data,form.hr_phone.data)
+								form.hr_name.data,form.hr_email.data,form.hr_phone.data,
+								int(form.status.data))
 
 	if (results[0] == jdUtils.RetCodes.success.value):        
 		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
@@ -211,9 +216,7 @@ def show_jd_edit_page(id):
 
 		form.total_positions.data = jd.positions
 		form.open_date.data = jd.open_date
-		
-		# TODO status field required
-		# TODO positions field required
+		form.status.data = jd.status
 
 		form.intv_panel_name_1.data = jd.ip_name_1
 		form.intv_panel_email_1.data = jd.ip_emailid_1

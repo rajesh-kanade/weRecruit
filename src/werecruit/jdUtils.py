@@ -22,11 +22,12 @@ class JDStatusCodes(Enum):
 
 JD_DEF_POSITIONS = 1
 
-def save_jd(id,title,details,client, recruiterID,positions=1, open_date=None,
+def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, open_date=None,
 			ip_name1=None, ip_email1=None,ip_phone1=None,
 			ip_name2=None, ip_email2=None,ip_phone2=None,
 			hiring_mgr_name= None, hiring_mgr_email=None,hiring_mgr_phone=None,
-			hr_name= None, hr_email=None,hr_phone=None ):
+			hr_name= None, hr_email=None,hr_phone=None,
+			status=JDStatusCodes.open.value ):
 	
 	print('inside save_jd function')
 	db_con = dbUtils.getConnFromPool()
@@ -58,16 +59,16 @@ def save_jd(id,title,details,client, recruiterID,positions=1, open_date=None,
 					ip_name_1, ip_emailid_1,ip_phone_1,
 					ip_name_2, ip_emailid_2,ip_phone_2,
 					hiring_mgr_name, hiring_mgr_emailid,hiring_mgr_phone,
-					hr_name,hr_emailid,hr_phone) 
+					hr_name,hr_emailid,hr_phone ) 
 					values (%s,%s,%s,
 					%s,%s,%s,%s,
 					%s,%s,%s,
 					%s,%s,%s,
 					%s,%s,%s,
-					%s,%s,%s ) returning id """
+					%s,%s,%s) returning id """
 			
 			params = (title,details,client,
-					recruiterID,positions,JDStatusCodes.open.value,open_date,
+					recruiterID,int(positions),int(status),open_date,
 					ip_name1,ip_email1,ip_phone1,
 					ip_name2,ip_email2,ip_phone2,
 					hiring_mgr_name,hiring_mgr_email,hiring_mgr_phone,
@@ -95,7 +96,7 @@ def save_jd(id,title,details,client, recruiterID,positions=1, open_date=None,
 						hr_name = %s, hr_emailid = %s, hr_phone = %s
 					where id = %s"""
 			params = (title,details,client, 
-						recruiterID, positions, JDStatusCodes.open.value, open_date,
+						recruiterID, int(positions), int(status), open_date,
 						ip_name1,ip_email1,ip_phone1,
 						ip_name2,ip_email2,ip_phone2,
 						hiring_mgr_name, hiring_mgr_email,hiring_mgr_phone,
@@ -109,7 +110,7 @@ def save_jd(id,title,details,client, recruiterID,positions=1, open_date=None,
 
 			#result = cursor.fetchone()
 			#jd_id = result[0]
-			print ("JD id {0} created successfully.".format(id) )
+			print ("JD id {0} updated successfully.".format(id) )
 		
 			db_con.commit()
 			return (RetCodes.success.value, "JD {0} updated successfully.".format(id),id)

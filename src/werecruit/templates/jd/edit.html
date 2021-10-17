@@ -43,6 +43,21 @@
               </div>
             </div>
 
+            <div class="field">
+              <label class="label has-text-light has-text-left">{{ form.client.label }}</label>
+              <div class="select">
+                {{form.status(class='select', placeholder='Enter status')}}
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label has-text-light has-text-left">{{ form.total_positions.label }}</label>
+              <div class="control">
+                {{form.total_positions(class='input', placeholder='Enter total number of positions.')}}
+              </div>
+            </div>
+
+      
             {% include 'jd/team.html'%}
 
             <div class="field">
