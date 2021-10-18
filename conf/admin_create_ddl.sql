@@ -145,4 +145,39 @@ ALTER TABLE public.wr_jds
     OWNER to postgres;
 
 
+create table public.wr_resumes
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    name text COLLATE pg_catalog."default" not null,
+    email text COLLATE pg_catalog."default" not null,
+    phone text COLLATE pg_catalog."default" not null,
+    resume_filename text COLLATE pg_catalog."default",
+    PRIMARY KEY (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.wr_resumes
+    OWNER to postgres;
+
+create table public.wr_jd_resumes
+(
+    jd_id bigint NOT NULL ,
+    resume_id bigint not null,
+    application_date timestamp with time zone not null,
+    status bigint not null,
+    PRIMARY KEY (jd_id, resume_id),
+    foreign key (jd_id) references public.wr_jds(id),
+    foreign key(resume_id) references public.wr_resumes(id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.wr_jd_resumes
+    OWNER to postgres;
+
 insert into public.roles(id,name,is_deleted, status) values (1,'admin',false,0);

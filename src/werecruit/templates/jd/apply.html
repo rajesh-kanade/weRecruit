@@ -1,0 +1,109 @@
+{%extends "app_header.html" %}
+{%block content%}
+
+<section class="hero is-fullheight">
+
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+          <div class="column is-half">
+            {% set messages = get_flashed_messages() %}
+            {% if messages %}   
+                  <div class="notification is-danger">  
+                
+                    {% if messages %}  
+                          {% for message in messages %}  
+                                <p> {{ message }}</p>  
+                          {% endfor %}  
+                    {% endif %}  
+              
+                </div>        
+            {% endif %}  
+          <form action = "/jd/apply" method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="field">
+              <label class="label has-text-light has-text-left">{{ form.jd_id.label }}</label>
+              <div class="control">
+                {{form.jd_id(class='input is-static has-text-light')}}
+              </div>
+            </div>
+            <div class="field">
+              <label class="label has-text-light has-text-left">{{ form.jd_title.label }}</label>
+              <div class="control">
+                {{form.jd_title(class='input is-static has-text-light')}}
+              </div>
+            </div>            
+
+            <div class="field">
+              <div  id="resume-selector" class="file has-name">
+                <label class="file-label">
+                  <input type="file" name="candidate_resume" class="file-input">
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label">
+                      Upload resume…
+                    </span>
+                  </span>
+                  <span class="file-name">
+                    test.docx
+                  </span>
+                </label>
+              </div>
+              <script>
+                const fileInput = document.querySelector('#resume-selector input[type=file]');
+                fileInput.onchange = () => {
+                  if (fileInput.files.length > 0) {
+                    const fileName = document.querySelector('#resume-selector .file-name');
+                    fileName.textContent = fileInput.files[0].name;
+                  }
+                }
+              </script>
+                {% for error in form.candidate_resume.errors %}
+                    <small class="has-text-danger has-text-left">{{ error }}</small>  
+                {% endfor %}
+          </div>
+
+            <div class="field">
+              <label class="label has-text-light has-text-left">{{ form.candidate_name.label }}</label>
+              <div class="control">
+                {{form.candidate_name(class='input', placeholder="Enter candidate's name")}}
+                {% for error in form.candidate_name.errors %}
+                  <small class="has-text-danger">{{ error }}</small>  
+                {% endfor %}
+              </div>
+            </div>
+            <div class="field">
+              <label class="label has-text-light has-text-left">{{ form.candidate_email.label }}</label>
+              <div class="control">
+                {{form.candidate_email(class='input', placeholder="Enter candidate's email")}}
+                {% for error in form.candidate_email.errors %}
+                  <small class="has-text-danger">{{ error }}</small>  
+                {% endfor %}
+              </div>
+            </div>
+            <div class="field">
+              <label class="label has-text-light has-text-left">{{ form.candidate_phone.label }}</label>
+              <div class="control">
+                {{form.candidate_phone(class='input', placeholder="Enter candidate's phone")}}
+                {% for error in form.candidate_phone.errors %}
+                  <small class="has-text-danger">{{ error }}</small>  
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="field">
+              <p class="control">
+                {{ form.submit( class = 'button is-success is-rounded') }}
+              </p>      
+            </div>            
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+

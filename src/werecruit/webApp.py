@@ -9,7 +9,7 @@ from flask import (
 	url_for
 )
 from flask_session import Session
-from webForms import JDForm, JDHeaderForm, SignUpForm , SignInForm
+from webForms import JDApply, JDForm, JDHeaderForm, SignUpForm , SignInForm
 from turbo_flask import Turbo
 
 import logging
@@ -263,6 +263,55 @@ def jd_save_header():
 	return render_template('jd/header.html', headerForm = form)
 	#return redirect(url_for('show_jd_edit_page'), id = form.id.data)
 
+@app.route('/jd/showApplyPage/<int:id>', methods = ['GET'])
+@login_required
+def show_jd_apply_page(id):
+
+	print('inside apply JD page for Job ID : ' , id)
+	
+	form = JDApply()
+
+	form.jd_id.data = id
+	form.resume_id.data = constants.NEW_ENTITY_ID
+	form.jd_title.data = 'Test Title'
+
+	return render_template('jd/apply.html',form=form)
+
+@app.route('/jd/apply', methods = ['POST'])
+@login_required
+def apply_to_JD():
+
+	print('inside apply to JD.')
+
+	form = JDApply()
+
+	loggedInUserID = session.get('user_id')
+	print('JD id is {0}'.format(form.jd_id.data))
+	print('candidate name is {0}'.format(form.candidate_name.data))
+	print('candidate email is {0}'.format(form.candidate_email.data))
+	print('candidate phone is {0}'.format(form.candidate_phone.data))
+
+	'''results = jdUtils.appy_to_jd(form.id.data, form.title.data,form.details.data,
+								form.client.data,int(loggedInUserID),int(form.total_positions.data),form.open_date.data,
+								form.intv_panel_name_1.data,form.intv_panel_email_1.data,form.intv_panel_phone_1.data,
+								form.intv_panel_name_2.data,form.intv_panel_email_2.data,form.intv_panel_phone_2.data,
+								form.hiring_mgr_name.data,form.hiring_mgr_email.data,form.hiring_mgr_phone.data,
+								form.hr_name.data,form.hr_email.data,form.hr_phone.data,
+								int(form.status.data))
+	'''
+
+	if form.validate_on_submit():
+		return redirect(url_for("show_home_page"))
+	else:
+		return render_template('jd/apply.html', form= form)
+		
+	'''if (results[0] == jdUtils.RetCodes.success.value):        
+		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
+		return redirect(url_for("show_home_page"))
+	else:
+		flash (results[0] + ':' +results[1],"is-danger")
+		return redirect(url_for("show_home_page"))
+	'''
 
 if __name__ == "__main__":
 	app.run()

@@ -2,6 +2,8 @@ from flask_wtf import FlaskForm
 from wtforms import SelectField, StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
 from wtforms.fields.core import IntegerField,DateField
 from wtforms.validators import DataRequired, Email,NumberRange
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+
 
 import jdUtils
 
@@ -58,6 +60,7 @@ class JDForm(FlaskForm):
     submit = SubmitField('Save JD')
 
 class JDHeaderForm( FlaskForm):
+    
     id = HiddenField('ID' )
     
     title = StringField('Title', validators=[DataRequired(message='Enter Title')])
@@ -67,4 +70,19 @@ class JDHeaderForm( FlaskForm):
     total_positions = IntegerField('Total Positions', validators=[DataRequired('Enter number of positions')])
 
     submit = SubmitField('Save')
+
+class JDApply( FlaskForm):
+    
+    jd_id = IntegerField('Job Description ID',render_kw={'readonly': True} )
+    jd_title = StringField('Job Title',render_kw={'readonly': True})
+
+    resume_id = IntegerField('resume_ID',render_kw={'readonly': True})
+    
+    candidate_resume = FileField('Resume', validators=[FileRequired(), FileAllowed(['pdf', 'docx'], 'Word and PDF files only!')])
+    candidate_name = StringField('Candidate Name')
+    candidate_email = StringField('Candidate Email')
+    candidate_phone = StringField('Candidate Phone')
+
+    submit = SubmitField('Apply')
+
 
