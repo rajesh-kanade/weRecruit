@@ -85,4 +85,16 @@ class JDApply( FlaskForm):
 
     submit = SubmitField('Apply')
 
+class ResumeForm( FlaskForm):
+    
+    id = HiddenField('Resume ID') #IntegerField('resume_ID',render_kw={'readonly': True})
+    
+    candidate_resume = FileField('Resume', validators=[FileRequired(), FileAllowed(['pdf', 'docx'], 'Unsupported file type. Upload only Word or PDF files!')])
+    candidate_name = StringField('Candidate Name',validators=[DataRequired(message='Candidate Name can not be blank.')])
+    candidate_email = StringField('Candidate Email')
+    candidate_phone = StringField('Candidate Phone')
+
+    submit = SubmitField('Upload Resume')
+
+
 

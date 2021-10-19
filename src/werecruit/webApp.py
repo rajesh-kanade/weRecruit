@@ -9,20 +9,29 @@ from flask import (
 	url_for
 )
 from flask_session import Session
-from webForms import JDApply, JDForm, JDHeaderForm, SignUpForm , SignInForm
+from webForms import ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm , SignInForm
 from turbo_flask import Turbo
+from werkzeug.utils import secure_filename
 
 import logging
 import userUtils
 import jdUtils
 import constants
+import resumeUtils
 import functools
+import os
+
 
 app = Flask(__name__)
 app.secret_key = 'somesecretkeythatonlyishouldknow'
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+
+UPLOAD_FOLDER = './resumes'
+ALLOWED_EXTENSIONS = {'doc', 'pdf', 'docx'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #turbo = Turbo(app)
 Session(app)
@@ -290,6 +299,8 @@ def apply_to_JD():
 	print('candidate name is {0}'.format(form.candidate_name.data))
 	print('candidate email is {0}'.format(form.candidate_email.data))
 	print('candidate phone is {0}'.format(form.candidate_phone.data))
+	print('candidate resume file name is {0}'.format(form.candidate_resume.data))
+
 
 	'''results = jdUtils.appy_to_jd(form.id.data, form.title.data,form.details.data,
 								form.client.data,int(loggedInUserID),int(form.total_positions.data),form.open_date.data,
@@ -301,9 +312,63 @@ def apply_to_JD():
 	'''
 
 	if form.validate_on_submit():
+		f = form.candidate_resume.data
+		filename = secure_filename(f.filename)
+		f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+		resumeUtils.save_resume(constants.NEW_ENTITY_ID, filename,form.candidate_name.data,
+								form.candidate_email.data,form.candidate_phone,int(session.get('user_id')))
 		return redirect(url_for("show_home_page"))
 	else:
 		return render_template('jd/apply.html', form= form)
+		
+	'''if (results[0] == jdUtils.RetCodes.success.value):        
+		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
+		return redirect(url_for("show_home_page"))
+	else:
+		flash (results[0] + ':' +results[1],"is-danger")
+		return redirect(url_for("show_home_page"))
+	'''
+@app.route('/resume/showUploadPage', methods = ['GET'])
+@login_required
+def show_resume_upload_page():
+	form = ResumeForm()
+	
+	form.id.data = constants.NEW_ENTITY_ID
+	#form.status.data = jdUtils.JDStatusCodes.open.value
+
+	return render_template('resume/edit.html', form=form)
+
+@app.route('/resume/save', methods = ['POST'])
+@login_required
+def resume_save():
+
+	print('inside apply to JD.')
+
+	form = ResumeForm()
+
+	loggedInUserID = session.get('user_id')
+	print('Resume id is {0}'.format(form.id.data))
+	print('candidate name is {0}'.format(form.candidate_name.data))
+	print('candidate email is {0}'.format(form.candidate_email.data))
+	print('candidate phone is {0}'.format(form.candidate_phone.data))
+	print('candidate resume file name is {0}'.format(form.candidate_resume.data))
+
+	if form.validate_on_submit():
+		f = form.candidate_resume.data
+		filename = secure_filename(f.filename)
+		f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+		results = resumeUtils.save_resume(constants.NEW_ENTITY_ID, filename,form.candidate_name.data,
+								form.candidate_email.data,form.candidate_phone.data,int(session.get('user_id')))
+		if results[0] == resumeUtils.RetCodes.success.value:
+			return redirect(url_for("show_home_page"))
+		else:
+			flash (results[0] + ':' +results[1],"is-danger")
+			form.submit.errors.append(results[1])
+			return render_template('resume/edit.html', form= form)	
+	else:
+		return render_template('resume/edit.html', form= form)
 		
 	'''if (results[0] == jdUtils.RetCodes.success.value):        
 		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")

@@ -224,6 +224,106 @@ def get(id):
 		cursor.close()
 		dbUtils.returnToPool(db_con)	
 
+def save_resume_to_job(job_id, resume_id, resumeFileName, candidateName, candidateEmail, candidatePhone):
+	
+	print('inside save_jd function')
+	db_con = dbUtils.getConnFromPool()
+	cursor = db_con.cursor()
+	try:
+		
+		if not candidateName.strip():
+			 return(RetCodes.empty_ent_attrs_error.value,"Title field empty or null.", None)
+
+		if not candidateEmail.strip():
+			 return(RetCodes.empty_ent_attrs_error.value,"Details field empty or null.", None)
+
+		if not candidatePhone.strip():
+			 return(RetCodes.empty_ent_attrs_error.value,"Client field is empty or null.", None)
+
+		if not recruiterID:
+			 return(RetCodes.empty_ent_attrs_error.value,"Recruiter ID field is empty or null.", None)
+
+		if not positions:
+			 return(RetCodes.empty_ent_attrs_error.value,"Positions field is empty or null.", None)
+
+		if open_date is None:
+			open_date = datetime.now(tz=timezone.utc)
+
+		if (int(id) == constants.NEW_ENTITY_ID):
+			##insert a record in user table
+			sql = """insert into public.wr_jds ( title, details, client, 
+					recruiter_id,positions,status,open_date,
+					ip_name_1, ip_emailid_1,ip_phone_1,
+					ip_name_2, ip_emailid_2,ip_phone_2,
+					hiring_mgr_name, hiring_mgr_emailid,hiring_mgr_phone,
+					hr_name,hr_emailid,hr_phone ) 
+					values (%s,%s,%s,
+					%s,%s,%s,%s,
+					%s,%s,%s,
+					%s,%s,%s,
+					%s,%s,%s,
+					%s,%s,%s) returning id """
+			
+			params = (title,details,client,
+					recruiterID,int(positions),int(status),open_date,
+					ip_name1,ip_email1,ip_phone1,
+					ip_name2,ip_email2,ip_phone2,
+					hiring_mgr_name,hiring_mgr_email,hiring_mgr_phone,
+					hr_name,hr_email,hr_phone)
+
+			print ( cursor.mogrify(sql, params))
+			
+			cursor.execute(sql, params)
+			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+			result = cursor.fetchone()
+			jd_id = result[0]
+			print ("JD id created is",jd_id )
+		
+
+			db_con.commit()
+			return (RetCodes.success.value, "JD creation successful.", jd_id)
+		else:
+			sql = """update public.wr_jds set  
+						title = %s,  details = %s,  client = %s,
+						recruiter_id = %s, positions = %s, status =%s, open_date= %s ,
+						ip_name_1 = %s, ip_emailid_1 = %s, ip_phone_1 = %s,
+						ip_name_2 = %s, ip_emailid_2 = %s, ip_phone_2 = %s,
+						hiring_mgr_name = %s, hiring_mgr_emailid = %s, hiring_mgr_phone = %s,
+						hr_name = %s, hr_emailid = %s, hr_phone = %s
+					where id = %s"""
+			params = (title,details,client, 
+						recruiterID, int(positions), int(status), open_date,
+						ip_name1,ip_email1,ip_phone1,
+						ip_name2,ip_email2,ip_phone2,
+						hiring_mgr_name, hiring_mgr_email,hiring_mgr_phone,
+						hr_name, hr_email,hr_phone,
+						int(id))
+						
+			print ( cursor.mogrify(sql, params))
+			
+			cursor.execute(sql, params)
+			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+			#result = cursor.fetchone()
+			#jd_id = result[0]
+			print ("JD id {0} updated successfully.".format(id) )
+		
+			db_con.commit()
+			return (RetCodes.success.value, "JD {0} updated successfully.".format(id),id)
+			
+
+	except Exception as e:
+		print(e)
+		db_con.rollback()
+		return (RetCodes.server_error.value, str(e),None)
+	
+	finally:
+		if cursor is not None:
+			cursor.close()
+		dbUtils.returnToPool(db_con)
+
+
 
 ## main entry point
 if __name__ == "__main__":

@@ -151,8 +151,10 @@ create table public.wr_resumes
     name text COLLATE pg_catalog."default" not null,
     email text COLLATE pg_catalog."default" not null,
     phone text COLLATE pg_catalog."default" not null,
+    recruiter_id bigint not null,
     resume_filename text COLLATE pg_catalog."default",
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    foreign key ( recruiter_id) references public.users(id)
 )
 WITH (
     OIDS = FALSE

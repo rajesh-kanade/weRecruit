@@ -7,31 +7,14 @@
     <div class="container">
       <div class="columns is-centered">
           <div class="column is-half">
-            {% set messages = get_flashed_messages() %}
-            {% if messages %}   
-                  <div class="notification is-danger">                  
-                    {% if messages %}  
-                          {% for message in messages %}  
-                                <p> {{ message }}</p>  
-                          {% endfor %}  
-                    {% endif %}  
-              
-                </div>        
-            {% endif %}  
-          <form action = "/jd/apply" method="POST" enctype="multipart/form-data">
+         
+          <form action = "/resume/save" method="POST" enctype="multipart/form-data">
+            {% for error in form.submit.errors %}
+                <p><large class="has-text-danger">{{ error }}</large></p>  
+            {% endfor %}
+
             {{ form.hidden_tag() }}
-            <div class="field">
-              <label class="label has-text-light has-text-left">{{ form.jd_id.label }}</label>
-              <div class="control">
-                {{form.jd_id(class='input is-static has-text-light')}}
-              </div>
-            </div>
-            <div class="field">
-              <label class="label has-text-light has-text-left">{{ form.jd_title.label }}</label>
-              <div class="control">
-                {{form.jd_title(class='input is-static has-text-light')}}
-              </div>
-            </div>            
+            {{form.id()}}
 
             <div class="field">
               <div  id="resume-selector" class="file has-name">
@@ -42,7 +25,7 @@
                       <i class="fas fa-upload"></i>
                     </span>
                     <span class="file-label">
-                      Upload resume…
+                      Select resume ( word, pdf only)…
                     </span>
                   </span>
                   <span class="file-name">
@@ -96,6 +79,10 @@
               <p class="control">
                 {{ form.submit( class = 'button is-success is-rounded') }}
               </p>      
+              {% for error in form.submit.errors %}
+              <p><large class="has-text-danger">{{ error }}</large></p>  
+              {% endfor %}
+
             </div>            
           </form>
         </div>

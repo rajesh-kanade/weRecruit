@@ -8,4 +8,5 @@ pyvenv.cfg
 build/
 dist/
 flask_session/
+resumes/
 
