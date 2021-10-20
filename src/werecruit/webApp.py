@@ -12,6 +12,7 @@ from flask_session import Session
 from webForms import ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm , SignInForm
 from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
+from flask import send_file
 
 import logging
 import userUtils
@@ -28,7 +29,7 @@ app.secret_key = 'somesecretkeythatonlyishouldknow'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
-UPLOAD_FOLDER = './resumes'
+UPLOAD_FOLDER = '\\resume_uploads'  #TODO win specific for now. Take care of path sep on linux
 ALLOWED_EXTENSIONS = {'doc', 'pdf', 'docx'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -314,7 +315,10 @@ def apply_to_JD():
 	if form.validate_on_submit():
 		f = form.candidate_resume.data
 		filename = secure_filename(f.filename)
+		print( app.instance_path)
+		print(filename)
 		f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+		f.save(filename)
 
 		resumeUtils.save_resume(constants.NEW_ENTITY_ID, filename,form.candidate_name.data,
 								form.candidate_email.data,form.candidate_phone,int(session.get('user_id')))
@@ -343,7 +347,7 @@ def show_resume_upload_page():
 @login_required
 def resume_save():
 
-	print('inside apply to JD.')
+	print('inside resume save.')
 
 	form = ResumeForm()
 
@@ -357,7 +361,14 @@ def resume_save():
 	if form.validate_on_submit():
 		f = form.candidate_resume.data
 		filename = secure_filename(f.filename)
-		f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+		print('app root path is {0}'.format(app.root_path))
+		#resource_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
+		#print ( 'resource path is {0}'.format(resource_path))
+		#f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+		f.save(os.path.join(app.root_path + UPLOAD_FOLDER, filename))
+
+		#f.save(resource_path,filename)
+		f.close()
 
 		results = resumeUtils.save_resume(constants.NEW_ENTITY_ID, filename,form.candidate_name.data,
 								form.candidate_email.data,form.candidate_phone.data,int(session.get('user_id')))
@@ -377,6 +388,60 @@ def resume_save():
 		flash (results[0] + ':' +results[1],"is-danger")
 		return redirect(url_for("show_home_page"))
 	'''
+
+@app.route('/resume/showBrowser', methods = ['GET'])
+@login_required
+def show_resume_browser_page():
+	results = resumeUtils.list_resumes(session.get('user_id'))
+	if (results[0] == resumeUtils.RetCodes.success.value): 
+		print( 'success')
+		resumeList = results[2]    
+		for resume in resumeList:
+			print(resume.name)   
+		return render_template('resume/list.html', resumeList = resumeList )
+	else:
+		flash (results[0] + ':' +results[1],"is-danger")
+		return render_template('resume/list.html',resumeList = None)
+
+@app.route('/resume/showEditPage/<int:id>', methods = ['GET'])
+@login_required
+def show_resume_edit_page(id):
+
+	print('inside edit resume page for  ID {0} '.format(id))
+
+	#loggedInUserID = session.get('user_id')
+	
+	form = ResumeForm()
+	form.id.data = id
+
+	results = resumeUtils.get(id)
+
+
+	if (results[0] == resumeUtils.RetCodes.success.value):        
+		
+		#resume = results[2]
+
+		form.id.data = results[2].id
+		form.candidate_name.data = results[2].name
+		form.candidate_email.data = results[2].email
+		form.candidate_phone.data = results[2].phone
+		form.candidate_resume.data = results[2].resume_filename
+
+		return render_template('resume/edit.html', form=form)
+	else:
+		flash (results[0] + ':' +results[1],"is-danger")
+		return redirect(url_for("show_home_page"))
+
+@app.route('/resume/download', methods = ['GET'])
+@login_required
+def resume_download():
+	assert request.args['resume'], "Did not find resume key in request parameters."
+	
+	filename = request.args['resume']
+	path = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
+
+	return send_file(path, as_attachment=True)
+
 
 if __name__ == "__main__":
 	app.run()

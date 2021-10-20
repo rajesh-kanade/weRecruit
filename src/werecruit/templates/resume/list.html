@@ -1,0 +1,61 @@
+{%extends "app_header.html" %}
+{%block content%}
+<div class ="hero">
+  <div class="hero-body">
+    <div class = "block is-size-4 has-text-light">
+        Search and Browse through the resumes you uploaded.
+    </div>
+    
+    <div class="columns has-text-centered">
+      <div class="column is-centered">
+        <div class="table-container">
+          <table class="table is-hoverable">
+            <tbody>
+            {% for resume in resumeList %}
+              {%if loop.first %}
+                <thead>
+                  <tr class="has-background-dark">
+                    <th class="has-text-centered has-text-light">ID</th>
+                    <th class="has-text-centered has-text-light">NAME</th>
+                    <th class="has-text-centered has-text-light">EMAIL</th>
+                    <th class="has-text-centered has-text-light">PHONE</th>
+                    <th class="has-text-centered has-text-light">DOWNLOAD</th>
+                  </tr>
+                </thead>
+              {%endif %}
+              <tr class="has-background-dark">
+                <td class="has-text-centered has-text-light"><a href="/resume/showEditPage/{{resume.id}}">{{ resume.id }}</a></td>
+                <td class="has-text-centered has-text-light">{{ resume.name }}</td>
+                <td class="has-text-centered has-text-light">{{ resume.email }}</td> 
+                <td class="has-text-centered has-text-light">{{ resume.phone }}</td>
+                <td class="has-text-centered has-text-light"><a href="/resume/download?resume={{resume.resume_filename}}">{{ resume.resume_filename }}</a></td>       
+              </tr>
+            {% else %}
+              <div class="notification is-warning">
+                No Resumes found !!!
+              </div>
+              <div class="block">
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+              </div>
+            {% endfor %}
+          </tbody>
+          </table>
+        </div>  
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

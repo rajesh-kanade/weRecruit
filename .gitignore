@@ -8,5 +8,6 @@ pyvenv.cfg
 build/
 dist/
 flask_session/
-resumes/
+src/werecruit/resume_uploads/
+
 

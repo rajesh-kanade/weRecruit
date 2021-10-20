@@ -96,6 +96,58 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 			cursor.close()
 		dbUtils.returnToPool(db_con)
 
+def list_resumes(recruiterID):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		query = """SELECT * FROM wr_resumes 
+				where recruiter_id = %s order by id desc"""
+	
+		params = (recruiterID,)
+		print ( cursor.mogrify(query, params))
+		cursor.execute(query,params)
+
+		resumeList =cursor.fetchall()
+
+		return(RetCodes.success.value, "Resume List successfully fetched from db", resumeList)
+
+
+	except Exception as dbe:
+		print(dbe)
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
+
+def get(id):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		query = """SELECT * FROM wr_resumes 
+				where id = %s"""
+	
+		params = (id,)
+		print ( cursor.mogrify(query, params))
+		cursor.execute(query,params)
+
+		assert cursor.rowcount == 1, "assertion failed : Effected row count is not equal to 1."
+
+		resume = cursor.fetchone()
+
+		return(RetCodes.success.value, "Resume  for id {0} successfully fetched from db".format(id), resume)
+
+
+	except Exception as dbe:
+		print(dbe)
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
+
 ## main entry point
 if __name__ == "__main__":
 	save_resume(constants.NEW_ENTITY_ID,'ddd.pdf','rahul','rahul-email','rahul-phone',1)
