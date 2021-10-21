@@ -58,19 +58,11 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 			return (RetCodes.success.value, "Resume creation successful.", resume_id)
 		else:
 			sql = """update public.wr_jds set  
-						title = %s,  details = %s,  client = %s,
-						recruiter_id = %s, positions = %s, status =%s, open_date= %s ,
-						ip_name_1 = %s, ip_emailid_1 = %s, ip_phone_1 = %s,
-						ip_name_2 = %s, ip_emailid_2 = %s, ip_phone_2 = %s,
-						hiring_mgr_name = %s, hiring_mgr_emailid = %s, hiring_mgr_phone = %s,
-						hr_name = %s, hr_emailid = %s, hr_phone = %s
+						resume_filename = %s,  name = %s,  email = %s, phone = %s,
+						recruiter_id = %s
 					where id = %s"""
-			params = (title,details,client, 
-						recruiterID, int(positions), int(status), open_date,
-						ip_name1,ip_email1,ip_phone1,
-						ip_name2,ip_email2,ip_phone2,
-						hiring_mgr_name, hiring_mgr_email,hiring_mgr_phone,
-						hr_name, hr_email,hr_phone,
+			params = (fileName,candidateName,candidateEmail, candidatePhone,
+						recruiterID,
 						int(id))
 						
 			print ( cursor.mogrify(sql, params))
@@ -80,12 +72,11 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 
 			#result = cursor.fetchone()
 			#jd_id = result[0]
-			print ("JD id {0} updated successfully.".format(id) )
+			print ("Resume id {0} updated successfully.".format(id) )
 		
 			db_con.commit()
-			return (RetCodes.success.value, "JD {0} updated successfully.".format(id),id)
+			return (RetCodes.success.value, "Resume {0} updated successfully.".format(id),id)
 			
-
 	except Exception as e:
 		print(e)
 		db_con.rollback()
@@ -147,6 +138,47 @@ def get(id):
 	finally:
 		cursor.close()
 		dbUtils.returnToPool(db_con)	
+
+def shortlist(resume_id,jd_id, application_date,status,recruiterid):
+	print('inside shortlist function')
+	db_con = dbUtils.getConnFromPool()
+	cursor = db_con.cursor()
+	try:
+		assert not resume_id, "Resume ID is empty or null"
+		assert not jd_id,"Job Description ID is empty or null"
+		assert not jd_id,"Application date is empty or null"
+		assert not jd_id,"status is empty or null"
+		assert not jd_id,"Recruiter ID is empty or null"
+
+		sql = """insert into public.wr_resumes ( resume_id,jd_id, 
+				application_date, status ) 
+				values (%s,%s,
+				%s, %s)"""
+		
+		params = (resume_id,jd_id,application_date,int(status))
+
+		print ( cursor.mogrify(sql, params))
+		
+		cursor.execute(sql, params)
+		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+		result = cursor.fetchone()
+		resume_id = result[0]
+		print ("Resume id {} successfully shortlisted for JD id {1}.".format(resume_id,jd_id))
+	
+		db_con.commit()
+		return (RetCodes.success.value, "Resume creation successful.", resume_id)
+			
+	except Exception as e:
+		print(e)
+		db_con.rollback()
+		return (RetCodes.server_error.value, str(e),None)
+	
+	finally:
+		if cursor is not None:
+			cursor.close()
+		dbUtils.returnToPool(db_con)
+
 
 ## main entry point
 if __name__ == "__main__":

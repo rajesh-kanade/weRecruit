@@ -169,7 +169,7 @@ create table public.wr_jd_resumes
     jd_id bigint NOT NULL ,
     resume_id bigint not null,
     application_date timestamp with time zone not null,
-    status bigint not null,
+    status smallint not null,
     PRIMARY KEY (jd_id, resume_id),
     foreign key (jd_id) references public.wr_jds(id),
     foreign key(resume_id) references public.wr_resumes(id)

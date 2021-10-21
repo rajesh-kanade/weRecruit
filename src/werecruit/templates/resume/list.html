@@ -19,7 +19,7 @@
                     <th class="has-text-centered has-text-light">NAME</th>
                     <th class="has-text-centered has-text-light">EMAIL</th>
                     <th class="has-text-centered has-text-light">PHONE</th>
-                    <th class="has-text-centered has-text-light">DOWNLOAD</th>
+                    <th class="has-text-centered has-text-light">ACTIONS</th>
                   </tr>
                 </thead>
               {%endif %}
@@ -28,7 +28,10 @@
                 <td class="has-text-centered has-text-light">{{ resume.name }}</td>
                 <td class="has-text-centered has-text-light">{{ resume.email }}</td> 
                 <td class="has-text-centered has-text-light">{{ resume.phone }}</td>
-                <td class="has-text-centered has-text-light"><a href="/resume/download?resume={{resume.resume_filename}}">{{ resume.resume_filename }}</a></td>       
+                <td class="has-text-centered has-text-light">
+                  <p><a href="/resume/download?resume={{resume.resume_filename}}">Download Resume</a></p>
+                  <p><a href="/resume/shortlist?id={{resume.id}}&name={{resume.name}}">Shortlist</a></p>
+                </td>       
               </tr>
             {% else %}
               <div class="notification is-warning">

@@ -172,7 +172,7 @@ def save_header(id, title,details,client):
 			cursor.close()
 		dbUtils.returnToPool(db_con)
 
-def list_jds(recruiterID):
+def list_jds(recruiterID, statusFilter = None):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)

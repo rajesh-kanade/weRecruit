@@ -1,0 +1,45 @@
+{%extends "app_header.html" %}
+{%block content%}
+
+<section class="container is-fullheight">
+
+      <div class="block is-size-4"> This page allows you to shortlist a candidate with one or more existing JDs.</div>
+      <div class="columns is-centered">
+          <div class="column is-half">
+         
+          <form action = "/resume/shortlist" method="POST" enctype="multipart/form-data">
+            {% for error in form.submit.errors %}
+                <p><large class="has-text-danger">{{ error }}</large></p>  
+            {% endfor %}
+
+            {{ form.hidden_tag() }}
+            {{form.id()}}
+
+
+            <div class="field">
+              <label class="label has-text-light has-text-left">{{form.candidate_name.data }}</label>
+            </div>
+            <div class="field">
+                <label class="label has-text-light has-text-left">{{ form.jd_id.label }}</label>
+                <div class="select">
+                  {{form.jd_id(class='select', placeholder='Select JD')}}
+                </div>
+            </div>
+  
+            <div class="field">
+              <p class="control">
+                {{ form.submit( class = 'button is-success is-rounded') }}
+              </p>      
+              {% for error in form.submit.errors %}
+              <p><large class="has-text-danger">{{ error }}</large></p>  
+              {% endfor %}
+
+            </div>            
+          </form>
+        </div>
+      </div>
+
+</section>
+
+{% endblock %}
+
