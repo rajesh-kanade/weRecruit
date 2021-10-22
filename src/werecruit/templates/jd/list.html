@@ -1,13 +1,10 @@
 {%extends "app_header.html" %}
 {%block content%}
-<div class ="hero">
-  <div class="hero-body">
+<section class ="container is-fullheight">
     <div class = "block is-6 has-text-info-light">
         This section allows you to create new JDs along with working on existing JDs.
     </div>
     
-    <div class="columns has-text-centered">
-      <div class="column">
         <div class="table-container">
           <table class="table is-bordered is-narrow">
             <!-- Your table content -->
@@ -15,46 +12,42 @@
             {% for jd in jdList %}
               {%if loop.first %}
                 <thead>
-                  <tr class="has-background-info-dark">
-                    <th class="has-text-centered has-text-info-light">ID</th>
-                    <th class="has-text-centered has-text-info-light">TITLE</th>
-                    <th class="has-text-centered has-text-info-light">OPEN DATE</th>
-                    <th class="has-text-centered has-text-info-light">CLIENT</th>
-                    <th class="has-text-centered has-text-info-light">HIRING MANAGER</th>
-                    <th class="has-text-centered has-text-info-light">STATUS</th>
-                    <th class="has-text-centered has-text-info-light">ACTIONS</th>
+                  <tr class="has-background-dark">
+                    <th class="has-text-centered has-text-light">ID</th>
+                    <th class="has-text-centered has-text-light">CLIENT</th>
+                    <th class="has-text-centered has-text-light">STATUS</th>
+                    <th class="has-text-centered has-text-light">TITLE</th>
+                    <th class="has-text-centered has-text-light">OPEN DATE</th>
+                    <th class="has-text-centered has-text-light">HIRING MANAGER</th>
+                    <th class="has-text-centered has-text-light">ACTIONS</th>
                   </tr>
                 </thead>
               {%endif %}
-              <tr class="has-background-info-light">
-                <td class="has-text-centered has-text-info-dark"><a href="/jd/showEditPage/{{jd.id}}">{{ jd.id }}</a></td>
-                <td class="has-text-centered has-text-info-dark">{{ jd.title }}</td>
-                <td class="has-text-centered has-text-info-dark">{{ jd.open_date }}</td> 
-                <td class="has-text-centered has-text-info-dark">{{ jd.client }}</td>
-                <td class="has-text-centered has-text-info-dark">{{ jd.hiring_mgr_name }}</td>
-                <td class="has-text-centered has-text-info-dark">{{ jd.status }}</td>     
-                <td class="has-text-centered has-text-info-dark"><a href="/jd/showApplyPage/{{jd.id}}">Apply</a></td>
+              <tr class="has-background-dark">
+                <td class="has-text-centered has-text-light"><a href="/jd/showEditPage/{{jd.id}}">{{ jd.id }}</a></td>
+                <td class="has-text-centered has-text-light">{{ jd.client }}</td>
+                <td class="has-text-centered has-text-light">{{ jd.status }}</td>
+                <td class="has-text-centered has-text-light">{{ jd.title }}</td>
+                <td class="has-text-centered has-text-light">{{ jd.open_date.strftime("%Y-%b-%d") }}</td> 
+                <td class="has-text-centered has-text-light">{{ jd.hiring_mgr_name }}</td>
+                <td class="has-text-centered has-text-light">
+                  <div class ="field is-grouped">
+
+                    <p class="control"><a class="button is-link is-small" href="/jd/showEditPage/{{jd.id}}" >Edit</a></p>
+                    <p class="control"><a class="button is-link  is-small" href="/jd/showApplyPage/{{jd.id}}">Shortlist resumes</a></p>
+                    <p class="control"><a class="button is-link  is-small" href="">Work on it</a></p>
+
+                 </div>    
+                </td>       
   
               </tr>
             {% else %}
               <div class="notification is-warning">
                 No JDs found !!!
               </div>
-              <div class="block">
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-              </div>
             {% endfor %}
           </tbody>
           </table>
         </div>  
-      </div>
-    </div>
-  </div>
-</div>
+</section>
 {% endblock %}
