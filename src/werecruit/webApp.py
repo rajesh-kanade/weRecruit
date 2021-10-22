@@ -22,6 +22,8 @@ import resumeUtils
 import functools
 import os
 
+from datetime import datetime
+from datetime import timezone 
 
 app = Flask(__name__)
 app.secret_key = 'somesecretkeythatonlyishouldknow'
@@ -70,9 +72,7 @@ def do_signin():
 		session["user_id"] = user.id  #form.email.data
 		session["user_name"] = user.name #'Mr. Customer'
 
-		#return render_template('home.html') 
 		return redirect(url_for('show_home_page'))
-
 
 	else:
 		flash (results[1],"is-danger")
@@ -442,7 +442,7 @@ def resume_download():
 
 	return send_file(path, as_attachment=True)
 
-@app.route('/resume/shortlist', methods = ['GET'])
+@app.route('/resume/showshortlistpage', methods = ['GET'])
 @login_required
 def show_resume_shortlist_page():
 
@@ -461,20 +461,43 @@ def show_resume_shortlist_page():
 		jdList = results[2]    
 		for jd in jdList:
 			print(jd.title)
-		form.jd_id.choices = [(jd.id, jd.title+ " | " + str(jd.status)) for jd in jdList]
+		form.selected_jd_list.choices = [(jd.id, jd.title + " | " + str(jd.id)) for jd in jdList]
 		return render_template('resume/shortlist.html', form=form)		   
 	else:
 		flash (results[0] + ':' +results[1],"is-danger")
-		return render_template('resume/shortlist.html',jdList = None)
+		return render_template('resume/shortlist.html',form = form)
 
 
+@app.route('/resume/shortlist', methods = ['POST'])
+@login_required
+def resume_shortlist():
 
-	for jd in jdList:
-		#print ( jd.id)
-		print ( jd.title)
+	print('inside resume shortlist.')
 
+	form = ResumeShortlistForm()
 
-	
+	loggedInUserID = session.get('user_id')
+	print('Resume id is {0}'.format(form.id.data))
+	print('Selected JD List is {0}'.format(form.selected_jd_list.data))
+
+	#if form.validate_on_submit():
+	print('inside validate true')
+	results = resumeUtils.shortlist( form.id.data, form.selected_jd_list.data,
+				datetime.now(tz=timezone.utc),resumeUtils.ApplicationStatusCodes.shortlisted.value, 
+				loggedInUserID)
+
+	if results[0] == resumeUtils.RetCodes.success.value:
+		flash (results[0] + ':' +results[1],"is-success")
+		return redirect(url_for("show_resume_browser_page"))
+		#return render_template('resume/shortlist.html', form= form)	
+
+	else:
+		flash (results[0] + ':' +results[1],"is-danger")
+		#form.submit.errors.append(results[1])
+		return redirect(url_for("show_resume_browser_page"))
+	#else:
+	#	return render_template('resume/shortlist.html', form= form)
+
 
 
 if __name__ == "__main__":

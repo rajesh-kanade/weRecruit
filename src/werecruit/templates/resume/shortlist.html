@@ -3,7 +3,7 @@
 
 <section class="container is-fullheight">
 
-      <div class="block is-size-4"> This page allows you to shortlist a candidate with one or more existing JDs.</div>
+      <div class="box is-size-6 has-background-dark has-text-light"> This page allows you to associate a shortlist candidate for one or more existing JDs.</div>
       <div class="columns is-centered">
           <div class="column is-half">
          
@@ -15,17 +15,17 @@
             {{ form.hidden_tag() }}
             {{form.id()}}
 
+            <div class="field">
+              <label class="label has-text-light has-text-left">Candidate Name - {{form.candidate_name.data }}</label>
+            </div>
 
             <div class="field">
-              <label class="label has-text-light has-text-left">{{form.candidate_name.data }}</label>
-            </div>
-            <div class="field">
-                <label class="label has-text-light has-text-left">{{ form.jd_id.label }}</label>
-                <div class="select">
-                  {{form.jd_id(class='select', placeholder='Select JD')}}
+                <label class="label has-text-light has-text-left">Select JD from following list</label>
+                <div class="select is-mutiple is-fullwidth">
+                  {{form.selected_jd_list( size="5")}}
                 </div>
             </div>
-  
+            
             <div class="field">
               <p class="control">
                 {{ form.submit( class = 'button is-success is-rounded') }}

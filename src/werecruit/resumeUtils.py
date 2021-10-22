@@ -1,6 +1,9 @@
 import dbUtils
 import constants
 
+from datetime import datetime
+from datetime import timezone
+
 from enum import Enum
 class RetCodes(Enum):
 	success = 'RES_CRUD_S200'
@@ -14,6 +17,9 @@ class RetCodes(Enum):
 class ResumeStatusCodes(Enum):
 	active = 0
 	inactive = 1
+class ApplicationStatusCodes(Enum):
+	shortlisted = 0
+
 
 def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recruiterID):
 	print('inside save_resume function')
@@ -139,35 +145,34 @@ def get(id):
 		cursor.close()
 		dbUtils.returnToPool(db_con)	
 
-def shortlist(resume_id,jd_id, application_date,status,recruiterid):
+def shortlist(resume_id,jd_id_List, application_date,status,recruiterid):
 	print('inside shortlist function')
 	db_con = dbUtils.getConnFromPool()
 	cursor = db_con.cursor()
 	try:
-		assert not resume_id, "Resume ID is empty or null"
-		assert not jd_id,"Job Description ID is empty or null"
-		assert not jd_id,"Application date is empty or null"
-		assert not jd_id,"status is empty or null"
-		assert not jd_id,"Recruiter ID is empty or null"
-
-		sql = """insert into public.wr_resumes ( resume_id,jd_id, 
+		'''assert int(resume_id), "Resume ID is empty or null"
+		assert list(jd_id_List),"Job Description ID is empty or null"
+		assert application_date != None,"Application date is empty or null"
+		assert int(status),"status is empty or null"
+		assert int(recruiterid),"Recruiter ID is empty or null"
+		'''
+		for jd_id in jd_id_List:
+			sql = """insert into public.wr_jd_resumes ( resume_id,jd_id, 
 				application_date, status ) 
 				values (%s,%s,
 				%s, %s)"""
 		
-		params = (resume_id,jd_id,application_date,int(status))
+			params = (int(resume_id),int(jd_id),application_date,int(status))
 
-		print ( cursor.mogrify(sql, params))
+			print ( cursor.mogrify(sql, params))
 		
-		cursor.execute(sql, params)
-		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+			cursor.execute(sql, params)
+			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
-		result = cursor.fetchone()
-		resume_id = result[0]
-		print ("Resume id {} successfully shortlisted for JD id {1}.".format(resume_id,jd_id))
+			#result = cursor.fetchone()
 	
 		db_con.commit()
-		return (RetCodes.success.value, "Resume creation successful.", resume_id)
+		return (RetCodes.success.value, "Resume creation successful.", None)
 			
 	except Exception as e:
 		print(e)
@@ -182,5 +187,7 @@ def shortlist(resume_id,jd_id, application_date,status,recruiterid):
 
 ## main entry point
 if __name__ == "__main__":
-	save_resume(constants.NEW_ENTITY_ID,'ddd.pdf','rahul','rahul-email','rahul-phone',1)
+	#save_resume(constants.NEW_ENTITY_ID,'ddd.pdf','rahul','rahul-email','rahul-phone',1)
+	shortlist(25,[17], datetime.now(tz=timezone.utc),
+		ApplicationStatusCodes.shortlisted.value,1)
 

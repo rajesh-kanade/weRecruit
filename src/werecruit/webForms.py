@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
+from wtforms import SelectMultipleField,SelectField, StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
 from wtforms.fields.core import IntegerField,DateField
 from wtforms.validators import DataRequired, Email,NumberRange
 from flask_wtf.file import FileField, FileRequired, FileAllowed
@@ -99,7 +99,7 @@ class ResumeForm( FlaskForm):
 class ResumeShortlistForm ( FlaskForm):
     id = HiddenField('Resume ID') #IntegerField('resume_ID',render_kw={'readonly': True})
     candidate_name = StringField('Candidate Name',validators=[DataRequired(message='Candidate Name can not be blank.')])
-    jd_id = SelectField('Existing JDs')
+    selected_jd_list = SelectMultipleField('Existing JDs')
 
     submit = SubmitField('shortlist')
 
