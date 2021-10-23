@@ -17,8 +17,53 @@ class RetCodes(Enum):
 class ResumeStatusCodes(Enum):
 	active = 0
 	inactive = 1
+
 class ApplicationStatusCodes(Enum):
 	shortlisted = 0
+	round1_interview_scheduled = 10
+	round1_interview_cleared = 20
+	round1_interview_failed = 30
+	round1_interview_failed_noshow = 31
+	round2_interview_scheduled = 40
+	round2_interview_cleared = 50
+	round2_interview_failed = 60
+	round2_interview_failed_noshow = 61
+	hiring_mgr_interview_scheduled = 70
+	hiring_mgr_interview_cleared = 80
+	hiring_mgr_interview_failed = 90
+	hiring_mgr_interview_failed_noshow = 91
+	hr_interview_scheduled = 100
+	hr_interview_cleared = 110
+	hr_interview_failed = 120
+	hr_interview_failed_noshow = 121
+	offer_pending =130
+	offer_released = 140
+	offer_accepted = 150
+	candidate_joined = 160
+	candidate_noshow = 170
+
+ApplicationStatusNames = {
+	ApplicationStatusCodes.shortlisted.value : 'Shortlisted',
+	ApplicationStatusCodes.round1_interview_scheduled.value : 'Round 1 interview scheduled',
+	ApplicationStatusCodes.round1_interview_cleared.value : 'Round 1 interview cleared',
+	ApplicationStatusCodes.round1_interview_failed.value :  'Round 1 interview failed',
+	ApplicationStatusCodes.round1_interview_failed_noshow.value : 'Round 1 interview No-show',
+	ApplicationStatusCodes.round2_interview_scheduled.value : 'Round 2 interview scheduled',
+	ApplicationStatusCodes.round2_interview_cleared.value : 'Round 2 interview cleared',
+	ApplicationStatusCodes.round2_interview_failed.value : 'Round 2 interview failed',
+	ApplicationStatusCodes.round2_interview_failed_noshow.value : 'Round 2 interview No-show',
+	ApplicationStatusCodes.hiring_mgr_interview_scheduled.value : 'Hiring manager interview scheduled',
+	ApplicationStatusCodes.hiring_mgr_interview_cleared.value : 'Hiring manager interview cleared', 
+	ApplicationStatusCodes.hiring_mgr_interview_failed.value : 'Hiring manager interview failed',
+	ApplicationStatusCodes.hiring_mgr_interview_failed_noshow.value : 'Hiring manager interview No-show',
+	ApplicationStatusCodes.hr_interview_scheduled.value : 'HR interview scheduled',
+	ApplicationStatusCodes.hr_interview_cleared.value : 'HR interview cleared',
+	ApplicationStatusCodes.hr_interview_failed.value : 'HR interview failed',
+	ApplicationStatusCodes.hr_interview_failed_noshow.value : 'HR interview No-show',
+	ApplicationStatusCodes.offer_pending.value : 'Offer pending to candidate',
+	ApplicationStatusCodes.offer_released.value :'Offer released to candidate',
+	ApplicationStatusCodes.offer_accepted.value :  'Offer accepted by candidate'		
+	}
 
 
 def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recruiterID):

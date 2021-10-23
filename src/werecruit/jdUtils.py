@@ -178,7 +178,8 @@ def list_jds(recruiterID, statusFilter = None):
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 		
 		query = """SELECT * FROM wr_jds 
-				where recruiter_id = %s order by open_date DESC"""
+				where recruiter_id = %s 
+				order by open_date DESC"""
 	
 		params = (recruiterID,)
 		print ( cursor.mogrify(query, params))

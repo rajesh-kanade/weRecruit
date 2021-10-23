@@ -65,7 +65,19 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE public.roles
+CREATE TABLE public.application_status_codes
+(
+    id smallint not null,
+    description text COLLATE pg_catalog."default" NOT NULL,
+    is_deleted boolean not null,
+    primary key (id)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.application_status_codes
     OWNER to postgres;
 
 
@@ -183,3 +195,32 @@ ALTER TABLE public.wr_jd_resumes
     OWNER to postgres;
 
 insert into public.roles(id,name,is_deleted, status) values (1,'admin',false,0);
+
+insert into public.application_status_codes(id,description,is_deleted) values (0,'Shortlisted',false);
+
+insert into public.application_status_codes(id,description,is_deleted) values (10,'Round #1 Interview Scheduled',false);
+insert into public.application_status_codes(id,description,is_deleted) values (20,'Round #1 Interview Cleared',false);
+insert into public.application_status_codes(id,description,is_deleted) values (30,'Round #1 Interview Failed',false);
+insert into public.application_status_codes(id,description,is_deleted) values (31,'Round #1 Interview No-show',false);
+
+insert into public.application_status_codes(id,description,is_deleted) values (40,'Round #2 Interview Scheduled',false);
+insert into public.application_status_codes(id,description,is_deleted) values (50,'Round #2 Interview Cleared',false);
+insert into public.application_status_codes(id,description,is_deleted) values (60,'Round #2 Interview Failed',false);
+insert into public.application_status_codes(id,description,is_deleted) values (61,'Round #2 Interview No-show',false);
+
+insert into public.application_status_codes(id,description,is_deleted) values (70,'Hiring Manager Interview Scheduled',false);
+insert into public.application_status_codes(id,description,is_deleted) values (80,'Hiring Manager Interview Cleared',false);
+insert into public.application_status_codes(id,description,is_deleted) values (90,'Hiring Manager Interview Failed',false);
+insert into public.application_status_codes(id,description,is_deleted) values (91,'Hiring Manager Interview No-show',false);
+
+insert into public.application_status_codes(id,description,is_deleted) values (100,'HR Interview Scheduled',false);
+insert into public.application_status_codes(id,description,is_deleted) values (110,'HR Interview Cleared',false);
+insert into public.application_status_codes(id,description,is_deleted) values (120,'HR Interview Failed',false);
+insert into public.application_status_codes(id,description,is_deleted) values (121,'HR Interview No-show',false);
+
+insert into public.application_status_codes(id,description,is_deleted) values (130,'Offer pending to candidate',false);
+insert into public.application_status_codes(id,description,is_deleted) values (140,'Offer released to candidate',false);
+insert into public.application_status_codes(id,description,is_deleted) values (150,'Offer accepted by candidate',false);
+insert into public.application_status_codes(id,description,is_deleted) values (160,'candidate joined the client',false);
+insert into public.application_status_codes(id,description,is_deleted) values (170,'candidate was a no show',false);
+

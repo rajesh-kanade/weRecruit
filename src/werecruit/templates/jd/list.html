@@ -6,7 +6,7 @@
     </div>
     
         <div class="table-container">
-          <table class="table is-bordered is-narrow">
+          <table class="table is-narrow">
             <!-- Your table content -->
             <tbody>
             {% for jd in jdList %}
@@ -24,7 +24,7 @@
                 </thead>
               {%endif %}
               <tr class="has-background-dark">
-                <td class="has-text-centered has-text-light"><a href="/jd/showEditPage/{{jd.id}}">{{ jd.id }}</a></td>
+                <td class="has-text-centered has-text-light">{{ jd.id }}</td>
                 <td class="has-text-centered has-text-light">{{ jd.client }}</td>
                 <td class="has-text-centered has-text-light">{{ jd.status }}</td>
                 <td class="has-text-centered has-text-light">{{ jd.title }}</td>
@@ -32,7 +32,6 @@
                 <td class="has-text-centered has-text-light">{{ jd.hiring_mgr_name }}</td>
                 <td class="has-text-centered has-text-light">
                   <div class ="field is-grouped">
-
                     <p class="control"><a class="button is-link is-small" href="/jd/showEditPage/{{jd.id}}" >Edit</a></p>
                     <p class="control"><a class="button is-link  is-small" href="/jd/showApplyPage/{{jd.id}}">Shortlist resumes</a></p>
                     <p class="control"><a class="button is-link  is-small" href="">Work on it</a></p>
