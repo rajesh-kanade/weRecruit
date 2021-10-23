@@ -1,12 +1,14 @@
 {%extends "app_header.html" %}
 {%block content%}
 <section class ="container is-fullheight">
-    <div class = "block is-6 has-text-info-light">
-        This section allows you to create new JDs along with working on existing JDs.
-    </div>
+  <div class = "block">
+    <span class="title has-text-white">Job Browser</span><br>
+    <span class="is-size-7 has-text-white">This section allows you to create new JDs along with working on existing JDs.</span>
+  </div>
+
     
         <div class="table-container">
-          <table class="table is-narrow">
+          <table class="table">
             <!-- Your table content -->
             <tbody>
             {% for jd in jdList %}
@@ -34,7 +36,7 @@
                   <div class ="field is-grouped">
                     <p class="control"><a class="button is-link is-small" href="/jd/showEditPage/{{jd.id}}" >Edit</a></p>
                     <p class="control"><a class="button is-link  is-small" href="/jd/showApplyPage/{{jd.id}}">Shortlist resumes</a></p>
-                    <p class="control"><a class="button is-link  is-small" href="">Work on it</a></p>
+                    <p class="control"><a class="button is-link  is-small" href="/jd/showWorkPage/{{jd.id}}">Work on it</a></p>
 
                  </div>    
                 </td>       

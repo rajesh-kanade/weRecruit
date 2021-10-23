@@ -163,6 +163,31 @@ def list_resumes(recruiterID):
 		cursor.close()
 		dbUtils.returnToPool(db_con)	
 
+def list_application_status_codes():
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		query = """SELECT * FROM application_status_codes
+					order by id desc"""
+	
+		#params = (recruiterID,)
+		print ( cursor.mogrify(query, ))
+		cursor.execute(query,)
+
+		appStatusCodesList =cursor.fetchall()
+
+		return(RetCodes.success.value, "Application status code List successfully fetched from db", appStatusCodesList)
+
+
+	except Exception as dbe:
+		print(dbe)
+		return ( RetCodes.server_error.value, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
+
 def get(id):
 	try:
 		db_con = dbUtils.getConnFromPool()
@@ -184,7 +209,7 @@ def get(id):
 
 	except Exception as dbe:
 		print(dbe)
-		return ( RetCodes.server_error, str(dbe), None)
+		return ( RetCodes.server_error.value, str(dbe), None)
 	
 	finally:
 		cursor.close()
@@ -228,6 +253,7 @@ def shortlist(resume_id,jd_id_List, application_date,status,recruiterid):
 		if cursor is not None:
 			cursor.close()
 		dbUtils.returnToPool(db_con)
+
 
 
 ## main entry point

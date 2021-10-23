@@ -467,6 +467,35 @@ def show_resume_shortlist_page():
 		flash (results[0] + ':' +results[1],"is-danger")
 		return render_template('resume/shortlist.html',form = form)
 
+@app.route('/jd/showWorkPage/<int:id>', methods = ['GET'])
+@login_required
+def show_resume_work_page(id):
+
+	print('inside work on resumes page for JD ID {0} '.format(id))
+
+	#assert request.args.get('id'), "JD ID request parameter not found."
+	#assert request.args.get('title'), "JD Title request parameter not found."
+	(retCode, msg, jd) = jdUtils.get(id)
+	
+	print ( jd.title)
+	return render_template('jd/work.html',jd = jd)		   
+	'''
+	#form = ResumeShortlistForm()
+	#form.id.data = request.args.get('id')
+	#form.candidate_name.data = request.args.get('name')
+
+	#results = jdUtils.list_jds(session.get('user_id'))
+
+	if (results[0] == jdUtils.RetCodes.success.value): 
+		jdList = results[2]    
+		for jd in jdList:
+			print(jd.title)
+		form.selected_jd_list.choices = [(jd.id, jd.title + " | " + str(jd.id)) for jd in jdList]
+		return render_template('resume/shortlist.html', form=form)		   
+	else:
+		flash (results[0] + ':' +results[1],"is-danger")
+		return render_template('resume/shortlist.html',form = form)
+	'''
 
 @app.route('/resume/shortlist', methods = ['POST'])
 @login_required
