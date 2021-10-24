@@ -1,0 +1,43 @@
+    <div class="block">   
+        <div class="table-container has-text-centered">
+          <table class="table is-striped">
+            <tbody>
+            {% for resume in resumeList %}
+              {%if loop.first %}
+                <thead>
+                  <tr class="has-background-dark">
+                    <th class="has-text-centered has-text-light">ID</th>
+                    <th class="has-text-centered has-text-light">NAME</th>
+                    <th class="has-text-centered has-text-light">EMAIL</th>
+                    <th class="has-text-centered has-text-light">PHONE</th>
+                    <th class="has-text-centered has-text-light">STATUS</th>
+                    <th class="has-text-centered has-text-light">ACTIONS</th>
+                  </tr>
+                </thead>
+              {%endif %}
+              <tr class="has-background-dark">
+                <td class="has-text-centered has-text-light">{{ resume.id }}</td>
+                <td class="has-text-centered has-text-light">{{ resume.name }}</td>
+                <td class="has-text-centered has-text-light">{{ resume.email }}</td> 
+                <td class="has-text-centered has-text-light">{{ resume.phone }}</td>
+                <td class="has-text-centered has-text-light">{{ resume.status }}</td>
+                <td class="has-text-centered has-text-light">
+                  {%if actionTemplate == 'shortlist' %}
+                    {% include 'jd/shortlist_actions.html'%}
+                  {%endif %}
+                  {%if actionTemplate == 'work' %}
+                    {% include 'jd/work_actions.html'%}
+                  {%endif %}
+
+                </td>       
+              </tr>
+            {% else %}
+              <div class="notification is-warning">
+                No Resumes found !!!
+              </div>
+            {% endfor %}
+          </tbody>
+          </table>
+        </div>  
+    </div>
+

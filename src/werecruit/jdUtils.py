@@ -225,6 +225,34 @@ def get(id):
 		cursor.close()
 		dbUtils.returnToPool(db_con)	
 
+def get_resumes_associated_with_job(job_id):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		#query = """select * from wr_resumes 
+		#			where id in ( select resume_id from wr_jd_resumes where jd_id = %s)"""
+		query = """select wr_resumes.*,wr_jd_resumes.status from wr_resumes ,wr_jd_resumes
+					where wr_resumes.id = wr_jd_resumes.resume_id
+					and wr_jd_resumes.jd_id = %s """
+
+		params = (int(job_id),)
+		print ( cursor.mogrify(query, params))
+		cursor.execute(query,params)
+
+		resumeList = cursor.fetchall()
+
+		return(RetCodes.success.value, "Resumes associated with job JD {0}  fetched successfully.".format(job_id), resumeList)
+
+	except Exception as dbe:
+		print(dbe)
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
+
+
 def save_resume_to_job(job_id, resume_id, resumeFileName, candidateName, candidateEmail, candidatePhone):
 	
 	print('inside save_jd function')
@@ -329,15 +357,8 @@ def save_resume_to_job(job_id, resume_id, resumeFileName, candidateName, candida
 ## main entry point
 if __name__ == "__main__":
 
-	'''result = create_jd ("T2", "My JD", "NICE",
-	'Rajesh Kanade', 'rkanade@gmail.com',1,1)
+	(code,msg,resumeList) = get_resumes_associated_with_job(18)
+	print (code)
 
-	print ( result )'''
 
-	result = list_jds(1)
-	#print (result)
-	jdList = result[2]
-
-	for jd in jdList:
-		print (jd.title)
 

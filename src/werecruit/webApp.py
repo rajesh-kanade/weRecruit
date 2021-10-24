@@ -473,29 +473,60 @@ def show_resume_work_page(id):
 
 	print('inside work on resumes page for JD ID {0} '.format(id))
 
-	#assert request.args.get('id'), "JD ID request parameter not found."
-	#assert request.args.get('title'), "JD Title request parameter not found."
 	(retCode, msg, jd) = jdUtils.get(id)
+	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
+
+	(retCode, msg, resumeList) = jdUtils.get_resumes_associated_with_job(id)
+	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
+
+	return render_template('jd/work.html',jd = jd, resumeList =resumeList,actionTemplate="work")		   
+
+
+@app.route('/jd/showShortlistPage/<int:id>', methods = ['GET'])
+@login_required
+def show_shortlist_resumes_page(id):
+
+	print('inside show shortlist resumes for JD ID {0} '.format(id))
+
+	(retCode, msg, jd) = jdUtils.get(id) #show JD summary on the page
+	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
+
+	(retCode, msg, resumeList) = resumeUtils.list_resumes(session.get('user_id'))
+	assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
+
+	return render_template('/jd/shortlist.html',jd = jd, resumeList =resumeList,actionTemplate="shortlist")		   
+
+@app.route('/jd/shortlist/', methods = ['GET'])
+@login_required
+def jd_resume_shortlist():
 	
-	print ( jd.title)
-	return render_template('jd/work.html',jd = jd)		   
-	'''
-	#form = ResumeShortlistForm()
-	#form.id.data = request.args.get('id')
-	#form.candidate_name.data = request.args.get('name')
+	resume_id = request.args.get('resume_id')
+	jd_id = request.args.get('job_id')
 
-	#results = jdUtils.list_jds(session.get('user_id'))
+	(retCode,msg,data) = resumeUtils.shortlist( resume_id, [jd_id],
+				datetime.now(tz=timezone.utc),resumeUtils.ApplicationStatusCodes.shortlisted.value, 
+				session.get('user_id'))
 
-	if (results[0] == jdUtils.RetCodes.success.value): 
-		jdList = results[2]    
-		for jd in jdList:
-			print(jd.title)
-		form.selected_jd_list.choices = [(jd.id, jd.title + " | " + str(jd.id)) for jd in jdList]
-		return render_template('resume/shortlist.html', form=form)		   
+	if retCode == resumeUtils.RetCodes.success.value:
+		flash (retCode + ':' + msg,"is-success")
 	else:
-		flash (results[0] + ':' +results[1],"is-danger")
-		return render_template('resume/shortlist.html',form = form)
+		flash (retCode + ':' + msg,"is-danger")
+
+	# redirect and show all the resumes shortlisted for this job
+	return redirect(url_for('show_resume_work_page', id = jd_id))
+
+	''' continue showing shortlist page
+	(retCode, msg, jd) = jdUtils.get(jd_id) #show JD summary on the page
+	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(jd_id, retCode,msg)
+
+	(retCode, msg, resumeList) = resumeUtils.list_resumes(session.get('user_id'))
+	assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
+
+	#return render_template('/jd/shortlist.html',jd = jd, resumeList =resumeList,actionTemplate="shortlist")		   
 	'''
+
+	#return render_template('jd/show_modal_msg.html')
+
 
 @app.route('/resume/shortlist', methods = ['POST'])
 @login_required
@@ -509,19 +540,17 @@ def resume_shortlist():
 	print('Resume id is {0}'.format(form.id.data))
 	print('Selected JD List is {0}'.format(form.selected_jd_list.data))
 
-	#if form.validate_on_submit():
-	print('inside validate true')
-	results = resumeUtils.shortlist( form.id.data, form.selected_jd_list.data,
+	(retCode,msg,data) = resumeUtils.shortlist( form.id.data, form.selected_jd_list.data,
 				datetime.now(tz=timezone.utc),resumeUtils.ApplicationStatusCodes.shortlisted.value, 
 				loggedInUserID)
 
-	if results[0] == resumeUtils.RetCodes.success.value:
-		flash (results[0] + ':' +results[1],"is-success")
+	if retCode == resumeUtils.RetCodes.success.value:
+		flash (retCode + ':' + msg,"is-success")
 		return redirect(url_for("show_resume_browser_page"))
 		#return render_template('resume/shortlist.html', form= form)	
 
 	else:
-		flash (results[0] + ':' +results[1],"is-danger")
+		flash (retCode + ':' + msg,"is-danger")
 		#form.submit.errors.append(results[1])
 		return redirect(url_for("show_resume_browser_page"))
 	#else:
