@@ -2,8 +2,10 @@
 {%block content%}
 
 <section class="container is-fullheight">
-
-  <div class="box is-size-6 has-background-dark has-text-light"> This page allows you to create a new Job Req or edit an existing one.</div>
+  <div class = "block">
+    <span class="title has-text-white">Create/Edit Job Posting</span><br>
+    <span class="is-size-7 has-text-white">This section allows you to create or edit a job posting.</span>
+  </div>
 
       <div class="columns is-centered">
           <div class="column is-half">
@@ -25,14 +27,14 @@
             <div class="field">
               <label class="label has-text-light has-text-left">{{ form.title.label }}</label>
               <div class="control">
-                {{form.title(class='input', placeholder='Enter Title')}}
+                {{form.title(class='input', title ="Enter short & meaning title for this job posting" , placeholder='Enter Title')}}
               </div>
             </div>
 
             <div class="field">
               <label class="label has-text-light has-text-left">{{ form.details.label }}</label>
               <div class="control">
-                {{form.details(class='textarea', placeholder='Enter Title')}}
+                {{form.details(class='textarea', title ="Enter job details like primary skill, location, years of experience.",placeholder='Enter details')}}
               </div>
             </div>
 

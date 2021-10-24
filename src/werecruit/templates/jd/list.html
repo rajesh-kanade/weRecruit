@@ -1,9 +1,9 @@
 {%extends "app_header.html" %}
 {%block content%}
 <section class ="container is-fullheight">
-  <div class = "block">
-    <span class="title has-text-white">Job Browser</span><br>
-    <span class="is-size-7 has-text-white">This section allows you to create new JDs along with working on existing JDs.</span>
+  <div class = "block has-text-left">
+    <span class="title has-text-info">Job Browser</span><br>
+    <span class="is-size-7 has-text-white">Browse thru existing job postings & take various steps like shortlisting candidates or updating status of each job posting.</span>
   </div>
 
     
@@ -15,7 +15,7 @@
               {%if loop.first %}
                 <thead>
                   <tr class="has-background-dark">
-                    <th class="has-text-centered has-text-light">ID</th>
+                    <th class="has-text-centered has-text-light">JOB ID</th>
                     <th class="has-text-centered has-text-light">CLIENT</th>
                     <th class="has-text-centered has-text-light">STATUS</th>
                     <th class="has-text-centered has-text-light">TITLE</th>
@@ -34,11 +34,10 @@
                 <td class="has-text-centered has-text-light">{{ jd.hiring_mgr_name }}</td>
                 <td class="has-text-centered has-text-light">
                   <div class ="field is-grouped">
-                    <p class="control"><a class="button is-link is-small" href="/jd/showEditPage/{{jd.id}}" >Edit</a></p>
-                    <p class="control"><a class="button is-link  is-small" title ="Click to browse thru existing resumes & shortlist them" href="/jd/showShortlistPage/{{jd.id}}">Shortlist</a></p>
-                    <p class="control"><a class="button is-link  is-small" title ="Click to see all shortlisted candidates & take further action" href="/jd/showWorkPage/{{jd.id}}">Process</a></p>
-
-                 </div>    
+                    <p class="control"><a class="button is-link  is-small" title ="Click to browse thru existing resumes & shortlist them" href="/jd/showShortlistPage/{{jd.id}}">Shortlist candidates</a></p>
+                    <p class="control"><a class="button is-link  is-small" title ="Click to see all shortlisted candidates & take further action" href="/jd/showWorkPage/{{jd.id}}">Work with candidates</a></p>
+                    <p class="control"><a class="button is-link is-small" title ="Click to edit this job posting." href="/jd/showEditPage/{{jd.id}}" >Edit</a></p>                 
+                  </div>    
                 </td>       
   
               </tr>
