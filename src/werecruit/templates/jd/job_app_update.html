@@ -1,0 +1,60 @@
+{%extends "app_header.html" %}
+{%block content%}
+
+<section class="container is-fullheight">
+
+    {% include 'jd/header1.html'%}
+    <div class="tile is-ancestor">
+        <div class="tile">
+          <!-- Add content or other tiles -->
+          {% include 'resume/summary.html' %}
+        </div>
+        <div class="tile">
+          <div class = "block">
+            <span class="title is-size-4 has-text-info">Status Update</span>
+            
+            <form action = "/jd/applicationStatusUpdate" method="POST">
+                {{ form.hidden_tag() }}
+
+                {{form.job_id()}}
+                {{form.resume_id()}}
+    
+                <div class="field">
+                  <label class="label has-text-light">{{ form.new_status.label }}</label>
+                  <div class="select">
+                    {{form.new_status(class='select', placeholder='Select status')}}
+                  </div>
+                </div>
+
+                <div class="field">
+                    <label class="label has-text-light">{{ form.notes.label }}</label>
+                    <div class="control">
+                      {{form.notes(class='textarea', placeholder='Please enter your notes about status change.')}}
+                    </div>
+                  </div>
+
+                <div class="field">
+                  <p class="control">
+                    {{ form.submit( class = 'button is-success is-rounded') }}    
+                  </p>      
+                </div>
+              </form>
+    
+          </div>
+        </div>
+        <div class="tile">
+            <!-- Add content or other tiles -->
+            <div class = "block has-text-left">
+              <span class="title is-size-4 has-text-info">History</span><br>
+            </div>
+          </div>
+
+    </div>
+
+
+
+
+</section>
+
+{% endblock %}
+

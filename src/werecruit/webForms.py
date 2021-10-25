@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectMultipleField,SelectField, StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
+from wtforms import  SelectMultipleField,SelectField, StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
 from wtforms.fields.core import IntegerField,DateField
 from wtforms.validators import DataRequired, Email,NumberRange
 from flask_wtf.file import FileField, FileRequired, FileAllowed
@@ -103,5 +103,13 @@ class ResumeShortlistForm ( FlaskForm):
 
     submit = SubmitField('shortlist')
 
+class ApplicationStatusUpdate( FlaskForm):
+    job_id = HiddenField()
+    resume_id = HiddenField()
+    current_status_id = HiddenField()
+    current_status_desc = StringField('Current Status',render_kw={'readonly': True})
 
+    new_status = SelectField('Select New Status')
+    notes = TextAreaField('Notes')
 
+    submit = SubmitField('Update')

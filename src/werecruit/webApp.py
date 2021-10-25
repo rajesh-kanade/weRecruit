@@ -9,10 +9,11 @@ from flask import (
 	url_for
 )
 from flask_session import Session
-from webForms import ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm , SignInForm
+from webForms import ApplicationStatusUpdate,ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm , SignInForm
 from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
 from flask import send_file
+from flask_fontawesome import FontAwesome
 
 import logging
 import userUtils
@@ -38,6 +39,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #turbo = Turbo(app)
 Session(app)
+fa = FontAwesome(app)
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -482,17 +484,17 @@ def show_resume_work_page(id):
 	return render_template('jd/work.html',jd = jd, resumeList =resumeList,actionTemplate="work")		   
 
 
-@app.route('/jd/showShortlistPage/<int:id>', methods = ['GET'])
+@app.route('/jd/showShortlistPage/<int:job_id>', methods = ['GET'])
 @login_required
-def show_shortlist_resumes_page(id):
+def show_shortlist_resumes_page(job_id):
 
-	print('inside show shortlist resumes for JD ID {0} '.format(id))
+	print('inside show shortlist resumes for Job ID {0} '.format(job_id))
 
-	(retCode, msg, jd) = jdUtils.get(id) #show JD summary on the page
-	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
+	(retCode, msg, jd) = jdUtils.get(job_id) #show JD summary on the page
+	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
 
-	(retCode, msg, resumeList) = resumeUtils.list_resumes(session.get('user_id'))
-	assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
+	(retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(job_id)
+	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
 
 	return render_template('/jd/shortlist.html',jd = jd, resumeList =resumeList,actionTemplate="shortlist")		   
 
@@ -557,6 +559,37 @@ def resume_shortlist():
 	#	return render_template('resume/shortlist.html', form= form)
 
 
+@app.route('/jd/showJobAppUpdatePage', methods = ['GET'])
+@login_required
+def show_job_application_update_page():
+
+	resume_id = request.args.get('resume_id')
+	job_id = request.args.get('job_id')
+
+
+	print('inside show Job application update page for Job ID {0}, resume ID {1} '.format(job_id,resume_id))
+	form = ApplicationStatusUpdate()
+	form.resume_id.data = resume_id
+	form.job_id.data = job_id
+
+	(retCode, msg, jd) = jdUtils.get(job_id) #show JD summary on the page
+	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
+
+	(retCode, msg, resume) = resumeUtils.get(resume_id)
+	assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch resume associated with resume  id {0}. Error code is {1}. Error message is {2}".format(resume_id, retCode,msg)
+
+	(retCode,msg,appStatusList) = resumeUtils.list_application_status_codes()
+	assert retCode == resumeUtils.RetCodes.success.value, "Failed to get application status codes. Error code is {0} & error message is {1}".format(retCode,msg)
+
+	for app_status in appStatusList:
+		print(app_status.id)
+		print(app_status.description)
+
+	#form.selected_jd_list.choices = [(jd.id, jd.title + " | " + str(jd.id)) for jd in jdList]
+	form.new_status.choices = [(app_status.id, app_status.description) for app_status in appStatusList]
+
+	return render_template('/jd/job_app_update.html',jd = jd, resume=resume, 
+							statusList = appStatusList, form=form)		   
 
 if __name__ == "__main__":
 	app.run()

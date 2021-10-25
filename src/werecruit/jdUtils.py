@@ -253,6 +253,35 @@ def get_resumes_associated_with_job(job_id):
 		dbUtils.returnToPool(db_con)	
 
 
+# This function returns all the resume records that are not currently 
+# associated with a particular job id
+def get_resumes_not_associated_with_job(job_id):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		query = """select *
+					from wr_resumes where id not in 
+					( select resume_id from wr_jd_resumes where jd_id = %s)"""
+
+		params = (int(job_id),)
+		print ( cursor.mogrify(query, params))
+		cursor.execute(query,params)
+
+		resumeList = cursor.fetchall()
+
+		return(RetCodes.success.value, "Resumes not associated with job JD {0}  fetched successfully.".format(job_id), resumeList)
+
+	except Exception as dbe:
+		print(dbe)
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
+
+
+
 def save_resume_to_job(job_id, resume_id, resumeFileName, candidateName, candidateEmail, candidatePhone):
 	
 	print('inside save_jd function')
@@ -357,7 +386,7 @@ def save_resume_to_job(job_id, resume_id, resumeFileName, candidateName, candida
 ## main entry point
 if __name__ == "__main__":
 
-	(code,msg,resumeList) = get_resumes_associated_with_job(18)
+	(code,msg,resumeList) = get_resumes_not_associated_with_job(18)
 	print (code)
 
 
