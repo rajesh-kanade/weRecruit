@@ -5,11 +5,11 @@
 
     {% include 'jd/header1.html'%}
     <div class="tile is-ancestor">
-        <div class="tile">
+        <div class="tile is-child  box has-background-dark">
           <!-- Add content or other tiles -->
           {% include 'resume/summary.html' %}
         </div>
-        <div class="tile">
+        <div class="tile is-child box has-background-dark">
           <div class = "block">
             <span class="title is-size-4 has-text-info">Status Update</span>
             
@@ -19,7 +19,7 @@
                 {{form.job_id()}}
                 {{form.resume_id()}}
     
-                <div class="field">
+                <div class="field ">
                   <label class="label has-text-light">{{ form.new_status.label }}</label>
                   <div class="select">
                     {{form.new_status(class='select', placeholder='Select status')}}
@@ -42,13 +42,14 @@
     
           </div>
         </div>
-        <div class="tile">
-            <!-- Add content or other tiles -->
-            <div class = "block has-text-left">
-              <span class="title is-size-4 has-text-info">History</span><br>
-            </div>
-          </div>
-
+        <div class="tile is-child box has-background-dark">
+          <div class="tabs">
+            <ul>
+              <li class="is-active"><a>Status History</a></li>
+              <li><a>Notes History</a></li>
+            </ul>
+          </div>        
+        </div>
     </div>
 
 

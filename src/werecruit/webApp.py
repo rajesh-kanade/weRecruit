@@ -493,11 +493,18 @@ def show_shortlist_resumes_page(job_id):
 	(retCode, msg, jd) = jdUtils.get(job_id) #show JD summary on the page
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
 
+	#get all candidates not associated with a job
 	(retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(job_id)
+	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes not associated with job  id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
+
+	#get all candidates who are currently associated with the job
+	(retCode, msg, shortlistedList) = jdUtils.get_resumes_associated_with_job(job_id)
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
 
-	return render_template('/jd/shortlist.html',jd = jd, resumeList =resumeList,actionTemplate="shortlist")		   
+	return render_template('/jd/shortlist.html',jd = jd, resumeList =resumeList,shortlistedList =shortlistedList, actionTemplate="shortlist")		   
 
+# Shortlists a resume for a Job. 
+# Expects query parameter jd_id, resume_id to be supplied.
 @app.route('/jd/shortlist/', methods = ['GET'])
 @login_required
 def jd_resume_shortlist():
@@ -510,12 +517,15 @@ def jd_resume_shortlist():
 				session.get('user_id'))
 
 	if retCode == resumeUtils.RetCodes.success.value:
-		flash (retCode + ':' + msg,"is-success")
+		flash ('Candidate successfully shortlisted. Happy recruiting !!!',"is-success")
 	else:
 		flash (retCode + ':' + msg,"is-danger")
 
 	# redirect and show all the resumes shortlisted for this job
-	return redirect(url_for('show_resume_work_page', id = jd_id))
+	#return redirect(url_for('show_resume_work_page', id = jd_id))
+
+	#/jd/showShortlistPage/<int:job_id>
+	return redirect(url_for('show_shortlist_resumes_page', job_id = jd_id))
 
 	''' continue showing shortlist page
 	(retCode, msg, jd) = jdUtils.get(jd_id) #show JD summary on the page
@@ -529,7 +539,7 @@ def jd_resume_shortlist():
 
 	#return render_template('jd/show_modal_msg.html')
 
-
+#May need to delete this function
 @app.route('/resume/shortlist', methods = ['POST'])
 @login_required
 def resume_shortlist():
@@ -563,11 +573,14 @@ def resume_shortlist():
 @login_required
 def show_job_application_update_page():
 
+	assert 'resume_id' in request.args, "Query parameter {0} not found in request".format('resume_id')
 	resume_id = request.args.get('resume_id')
+
+	assert 'job_id' in request.args, "Query parameter {0} not found in request".format('job_id')
 	job_id = request.args.get('job_id')
 
-
 	print('inside show Job application update page for Job ID {0}, resume ID {1} '.format(job_id,resume_id))
+	
 	form = ApplicationStatusUpdate()
 	form.resume_id.data = resume_id
 	form.job_id.data = job_id
@@ -581,11 +594,6 @@ def show_job_application_update_page():
 	(retCode,msg,appStatusList) = resumeUtils.list_application_status_codes()
 	assert retCode == resumeUtils.RetCodes.success.value, "Failed to get application status codes. Error code is {0} & error message is {1}".format(retCode,msg)
 
-	for app_status in appStatusList:
-		print(app_status.id)
-		print(app_status.description)
-
-	#form.selected_jd_list.choices = [(jd.id, jd.title + " | " + str(jd.id)) for jd in jdList]
 	form.new_status.choices = [(app_status.id, app_status.description) for app_status in appStatusList]
 
 	return render_template('/jd/job_app_update.html',jd = jd, resume=resume, 

@@ -169,7 +169,7 @@ def list_application_status_codes():
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 		
 		query = """SELECT * FROM application_status_codes
-					order by id desc"""
+					order by id asc"""
 	
 		#params = (recruiterID,)
 		print ( cursor.mogrify(query, ))

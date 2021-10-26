@@ -3,13 +3,46 @@
 
 <section class="container is-fullheight">
 
+    {% include 'utils/show_modal_msg.html'%}
     {% include 'jd/header1.html'%}
     <div class = "block has-text-left">
         <span class="title is-size-4 has-text-info">Shortlist Resumes</span><br>
         <span class="is-size-7 has-text-info">Search existing resumes and shortlist them for a job.</span>
-
     </div>
-    {% include '/resume/browser.html'%}
+    
+    <div class="tile is-ancestor">
+        <div class="tile is-child box has-background-dark">
+            {% include '/resume/browser.html'%}
+        </div>
+        <div class="tile is-child box has-background-dark">
+            <div class="block">   
+                <div class="table-container has-text-centered">
+                  <table class="table is-striped">
+                    <tbody>
+                    {% for resume in shortlistedList %}
+                      {%if loop.first %}
+
+                        <thead>
+                          <tr class="has-background-dark">
+                            <th class="has-text-centered has-text-light">CURRENTLY SHORTLISTED </th>
+                          </tr>
+                        </thead>
+                      {%endif %}
+                      <tr class="has-background-dark">
+                        <td class="has-text-centered has-text-light">{{ resume.name }}</td>
+                      </tr>
+                    {% else %}
+                      <div class="notification is-warning">
+                        No shorlisted candidates found !!!
+                      </div>
+                    {% endfor %}
+                  </tbody>
+                  </table>
+                </div>  
+            </div>
+
+        </div>
+    </div>
 
 </section>
 
