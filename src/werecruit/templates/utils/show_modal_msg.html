@@ -1,5 +1,6 @@
 {% set messages = get_flashed_messages(with_categories = true ) %}            
 {% if messages %} 
+    <!--
     <div id= "modal-window" class="modal is-active">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -16,5 +17,15 @@
             <button class="button" onclick="document.getElementById('modal-window').style.display = 'none';">Close</button>
         </footer>
         </div>
-    </div>               
+    </div>   -->
+    <div id= "modal-window" onclick="document.getElementById('modal-window').style.display = 'none';" class="modal is-active">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            {% for category, message in messages %}  
+                <div class="notification {{ category }}">{{ message }}</div>
+            {% endfor %}  
+        </div>
+        <button onclick="document.getElementById('modal-window').style.display = 'none';" class="modal-close is-large" aria-label="close"></button>
+    </div>
+
 {% endif %}
