@@ -471,7 +471,7 @@ def show_resume_shortlist_page():
 
 @app.route('/jd/showWorkPage/<int:id>', methods = ['GET'])
 @login_required
-def show_resume_work_page(id):
+def show_shortlisted_candidates_page(id):
 
 	print('inside work on resumes page for JD ID {0} '.format(id))
 
@@ -481,7 +481,7 @@ def show_resume_work_page(id):
 	(retCode, msg, resumeList) = jdUtils.get_resumes_associated_with_job(id)
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
 
-	return render_template('jd/work.html',jd = jd, resumeList =resumeList,actionTemplate="work")		   
+	return render_template('jd/shortlisted_candidates_list.html',jd = jd, resumeList =resumeList,actionTemplate="work")		   
 
 
 @app.route('/jd/showShortlistPage/<int:job_id>', methods = ['GET'])
@@ -619,8 +619,7 @@ def update_job_application_status():
 	else:
 		flash ("Status update failed. Failure detail as follow - " + retCode + ':' + msg,"is-danger")
 
-	return redirect(url_for('show_job_application_update_page',job_id = form.job_id.data,
-							resume_id = form.resume_id.data) )
+	return redirect(url_for('show_shortlisted_candidates_page',id = form.job_id.data) )
 
 
 if __name__ == "__main__":
