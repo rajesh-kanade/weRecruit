@@ -483,7 +483,7 @@ def show_shortlisted_candidates_page(id):
 
 	return render_template('jd/shortlisted_candidates_list.html',jd = jd, resumeList =resumeList,actionTemplate="work")		   
 
-
+#This shows all the resumes / candidates not associated with a job id
 @app.route('/jd/showShortlistPage/<int:job_id>', methods = ['GET'])
 @login_required
 def show_shortlist_resumes_page(job_id):
