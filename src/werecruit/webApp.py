@@ -24,7 +24,7 @@ import functools
 import os
 
 from datetime import datetime
-from datetime import timezone 
+from datetime import timezone
 
 app = Flask(__name__)
 app.secret_key = 'somesecretkeythatonlyishouldknow'
@@ -598,6 +598,30 @@ def show_job_application_update_page():
 
 	return render_template('/jd/job_app_update.html',jd = jd, resume=resume, 
 							statusList = appStatusList, form=form)		   
+
+
+@app.route('/jd/updateJobApplicationStatus', methods = ['POST'])
+@login_required
+def update_job_application_status():
+
+	form = ApplicationStatusUpdate()
+
+	#resume_id = form.resume_id.data #request.args.get('resume_id')
+	#job_id = form.job_id.data #request.args.get('job_id')
+	#new_status_code = form.new_status.data
+
+	(retCode,msg,retData) = jdUtils.insert_job_application_status(form.job_id.data,form.resume_id.data,
+						datetime.now(tz=timezone.utc),session.get('user_id'),
+						form.new_status.data,form.notes.data)
+
+	if retCode == jdUtils.RetCodes.success.value :
+		flash ("Status updated successfully.","is-success")
+	else:
+		flash ("Status update failed. Failure detail as follow - " + retCode + ':' + msg,"is-danger")
+
+	return redirect(url_for('show_job_application_update_page',job_id = form.job_id.data,
+							resume_id = form.resume_id.data) )
+
 
 if __name__ == "__main__":
 	app.run()

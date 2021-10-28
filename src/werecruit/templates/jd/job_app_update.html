@@ -2,6 +2,7 @@
 {%block content%}
 
 <section class="container is-fullheight">
+    {% include 'utils/show_modal_msg.html'%}
 
     {% include 'jd/header1.html'%}
     <div class="tile is-ancestor">
@@ -13,7 +14,7 @@
           <div class = "block">
             <span class="title is-size-4 has-text-info">Status Update</span>
             
-            <form action = "/jd/applicationStatusUpdate" method="POST">
+            <form action = "/jd/updateJobApplicationStatus" method="POST">
                 {{ form.hidden_tag() }}
 
                 {{form.job_id()}}

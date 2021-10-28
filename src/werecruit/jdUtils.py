@@ -280,7 +280,42 @@ def get_resumes_not_associated_with_job(job_id):
 		cursor.close()
 		dbUtils.returnToPool(db_con)	
 
+# This inserts status and notes for a given job application ( job ID + resume ID)
+def insert_job_application_status(job_id, resume_id,change_date,changed_by,status, notes):
+	
+	try:
 
+		db_con = dbUtils.getConnFromPool()
+		cursor = db_con.cursor()
+
+		sql = """insert into public.wr_jd_resume_status_audit_log ( jd_id,resume_id,
+			change_date, changed_by,status,notes ) 
+			values (%s,%s,
+			%s, %s, %s,%s)"""
+	
+		params = (int(job_id), int(resume_id),
+				change_date,int(changed_by),int(status),notes)
+
+		print (cursor.mogrify(sql, params))
+	
+		cursor.execute(sql, params)
+		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+		#result = cursor.fetchone()
+	
+		db_con.commit()
+		
+		return (RetCodes.success.value, "Application status updated successful.", None)
+			
+	except Exception as e:
+		print(e)
+		db_con.rollback()
+		return (RetCodes.server_error.value, str(e),None)
+	
+	finally:
+		if cursor is not None:
+			cursor.close()
+		dbUtils.returnToPool(db_con)
 
 def save_resume_to_job(job_id, resume_id, resumeFileName, candidateName, candidateEmail, candidatePhone):
 	
@@ -386,8 +421,12 @@ def save_resume_to_job(job_id, resume_id, resumeFileName, candidateName, candida
 ## main entry point
 if __name__ == "__main__":
 
-	(code,msg,resumeList) = get_resumes_not_associated_with_job(18)
-	print (code)
+	#(code,msg,resumeList) = get_resumes_not_associated_with_job(18)
+	#print (code)
+	dt = datetime.now(tz=timezone.utc)
+	(code,msg,result) = insert_job_application_status( 1,1,dt,1,10,"Testing status update")
+	print(code)
+	print(msg)
 
 
 

@@ -194,6 +194,30 @@ TABLESPACE pg_default;
 ALTER TABLE public.wr_jd_resumes
     OWNER to postgres;
 
+
+create table public.wr_jd_resume_status_audit_log
+(
+    jd_id bigint NOT NULL ,
+    resume_id bigint not null,
+    change_date timestamp with time zone not null,
+    changed_by bigint NOT NULL,
+    status smallint NOT NULL,
+    notes text COLLATE pg_catalog."default",
+    foreign key (jd_id) references public.wr_jds(id),
+    foreign key(resume_id) references public.wr_resumes(id),
+    foreign key (status) references public.application_status_codes(id),
+    foreign key(changed_by) references public.users(id)
+
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.wr_jd_resume_status_audit_log
+    OWNER to postgres;
+
+
 insert into public.roles(id,name,is_deleted, status) values (1,'admin',false,0);
 
 insert into public.application_status_codes(id,description,is_deleted) values (0,'Shortlisted',false);
