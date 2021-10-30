@@ -215,44 +215,6 @@ def get(id):
 		cursor.close()
 		dbUtils.returnToPool(db_con)	
 
-def shortlist(resume_id,jd_id_List, application_date,status,recruiterid):
-	print('inside shortlist function')
-	db_con = dbUtils.getConnFromPool()
-	cursor = db_con.cursor()
-	try:
-		'''assert int(resume_id), "Resume ID is empty or null"
-		assert list(jd_id_List),"Job Description ID is empty or null"
-		assert application_date != None,"Application date is empty or null"
-		assert int(status),"status is empty or null"
-		assert int(recruiterid),"Recruiter ID is empty or null"
-		'''
-		for jd_id in jd_id_List:
-			sql = """insert into public.wr_jd_resumes ( resume_id,jd_id, 
-				application_date, status ) 
-				values (%s,%s,
-				%s, %s)"""
-		
-			params = (int(resume_id),int(jd_id),application_date,int(status))
-
-			print ( cursor.mogrify(sql, params))
-		
-			cursor.execute(sql, params)
-			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
-
-			#result = cursor.fetchone()
-	
-		db_con.commit()
-		return (RetCodes.success.value, "Resume creation successful.", None)
-			
-	except Exception as e:
-		print(e)
-		db_con.rollback()
-		return (RetCodes.server_error.value, str(e),None)
-	
-	finally:
-		if cursor is not None:
-			cursor.close()
-		dbUtils.returnToPool(db_con)
 
 
 

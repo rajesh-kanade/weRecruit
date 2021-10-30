@@ -301,11 +301,56 @@ def insert_job_application_status(job_id, resume_id,change_date,changed_by,statu
 		cursor.execute(sql, params)
 		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
+		#now update the wr_jd_resumes table with this latest status and notes
+		sql = """update wr_jd_resumes set status = %s, notes = %s 
+				where jd_id = %s and resume_id = %s"""
+		params = ( int(status),notes,job_id,resume_id)
+		cursor.execute(sql, params)
+		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
 		#result = cursor.fetchone()
 	
 		db_con.commit()
 		
 		return (RetCodes.success.value, "Application status updated successful.", None)
+			
+	except Exception as e:
+		print(e)
+		db_con.rollback()
+		return (RetCodes.server_error.value, str(e),None)
+	
+	finally:
+		if cursor is not None:
+			cursor.close()
+		dbUtils.returnToPool(db_con)
+# we may not need this function at all ....
+def shortlist(resume_id,jd_id, application_date,status,recruiterid):
+	print('inside shortlist function')
+	db_con = dbUtils.getConnFromPool()
+	cursor = db_con.cursor()
+	try:
+
+		sql = """insert into public.wr_jd_resumes ( resume_id,jd_id, 
+			application_date, status ) 
+			values (%s,%s,
+			%s, %s)"""
+	
+		params = (int(resume_id),int(jd_id),application_date,int(status))
+
+		print ( cursor.mogrify(sql, params))
+	
+		cursor.execute(sql, params)
+		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."			
+		#result = cursor.fetchone()
+		db_con.commit()
+
+		#Now insert into application status table also as the first record
+		# TODO can both be part of same transaction to save 1 query but more then that
+		# have data consistency		
+		insert_job_application_status(jd_id,resume_id,
+			application_date,recruiterid, status, "")
+
+		return (RetCodes.success.value, "Resume creation successful.", None)
 			
 	except Exception as e:
 		print(e)

@@ -512,14 +512,14 @@ def jd_resume_shortlist():
 	resume_id = request.args.get('resume_id')
 	jd_id = request.args.get('job_id')
 
-	(retCode,msg,data) = resumeUtils.shortlist( resume_id, [jd_id],
+	(retCode,msg,data) = jdUtils.shortlist( resume_id, jd_id,
 				datetime.now(tz=timezone.utc),resumeUtils.ApplicationStatusCodes.shortlisted.value, 
 				session.get('user_id'))
 
-	if retCode == resumeUtils.RetCodes.success.value:
+	if retCode == jdUtils.RetCodes.success.value:
 		flash ('Candidate successfully shortlisted. Happy recruiting !!!',"is-success")
 	else:
-		flash (retCode + ':' + msg,"is-danger")
+		flash ('Candidate shortlisting failed. Error details are as under - ' + retCode + ':' + msg,"is-danger")
 
 	# redirect and show all the resumes shortlisted for this job
 	#return redirect(url_for('show_resume_work_page', id = jd_id))
@@ -539,7 +539,7 @@ def jd_resume_shortlist():
 
 	#return render_template('jd/show_modal_msg.html')
 
-#May need to delete this function
+#TODO deprecate we may need to delete this function
 @app.route('/resume/shortlist', methods = ['POST'])
 @login_required
 def resume_shortlist():
@@ -552,11 +552,11 @@ def resume_shortlist():
 	print('Resume id is {0}'.format(form.id.data))
 	print('Selected JD List is {0}'.format(form.selected_jd_list.data))
 
-	(retCode,msg,data) = resumeUtils.shortlist( form.id.data, form.selected_jd_list.data,
+	(retCode,msg,data) = jdUtils.shortlist( form.id.data, form.selected_jd_list.data,
 				datetime.now(tz=timezone.utc),resumeUtils.ApplicationStatusCodes.shortlisted.value, 
 				loggedInUserID)
 
-	if retCode == resumeUtils.RetCodes.success.value:
+	if retCode == jdUtils.RetCodes.success.value:
 		flash (retCode + ':' + msg,"is-success")
 		return redirect(url_for("show_resume_browser_page"))
 		#return render_template('resume/shortlist.html', form= form)	
