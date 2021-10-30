@@ -203,7 +203,8 @@ def get(id):
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 		
-		query = """SELECT * FROM wr_jds 
+		query = """SELECT *
+				FROM wr_jds 
 				where id = %s"""
 	
 		params = (id,)

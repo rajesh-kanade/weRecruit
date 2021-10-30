@@ -345,6 +345,12 @@ def show_resume_upload_page():
 
 	return render_template('resume/edit.html', form=form)
 
+@app.route('/resume/showUploadPageViaEmail', methods = ['GET'])
+@login_required
+def show_resume_upload_via_email_page():
+
+	return render_template('resume/show_resume_upload_via_email_page.html')
+
 @app.route('/resume/save', methods = ['POST'])
 @login_required
 def resume_save():
@@ -478,10 +484,14 @@ def show_shortlisted_candidates_page(id):
 	(retCode, msg, jd) = jdUtils.get(id)
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
 
+	(retCode, msg, appStatusCodesList) = resumeUtils.list_application_status_codes()
+	assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch application status codes. Error code is {0}. Error message is {1}".format(retCode,msg)
+
 	(retCode, msg, resumeList) = jdUtils.get_resumes_associated_with_job(id)
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
 
-	return render_template('jd/shortlisted_candidates_list.html',jd = jd, resumeList =resumeList,actionTemplate="work")		   
+	return render_template('jd/shortlisted_candidates_list.html',jd = jd, 
+		resumeList =resumeList,actionTemplate="work",appStatusCodesList = appStatusCodesList)		   
 
 #This shows all the resumes / candidates not associated with a job id
 @app.route('/jd/showShortlistPage/<int:job_id>', methods = ['GET'])

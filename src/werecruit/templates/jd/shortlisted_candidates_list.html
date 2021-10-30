@@ -24,20 +24,16 @@
                 <a href="#" class="dropdown-item is-active">
                     All
                 </a>   
-                <hr class="dropdown-divider">               
+                <hr class="dropdown-divider"> 
+                {% for asc in appStatusCodesList %}
                 <a href="#" class="dropdown-item">
-                    Round 1 interview scheduled
+                  {{asc.id}}-{{asc.description}}
                 </a>
-                <a href="#" class="dropdown-item">
-                  Round 1 interview cleared
-                </a>
-                <a class="dropdown-item">
-                  Round 1 interview rejected
-                </a>
-                <hr class="dropdown-divider">
-                <a class="dropdown-item">
-                    Round 2 interview scheduled
-                </a>
+              {% else %}
+                <div class="notification is-warning">
+                  No Resumes found !!!
+                </div>
+              {% endfor %}
     
               </div>
             </div>
