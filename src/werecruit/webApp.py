@@ -622,5 +622,20 @@ def update_job_application_status():
 	return redirect(url_for('show_shortlisted_candidates_page',id = form.job_id.data) )
 
 
+@app.route('/jd/showSummaryPage/<int:job_id>', methods = ['GET'])
+@login_required
+def show_job_summary_page(job_id):
+	
+	#get the job details to show the job header
+	(retCode, msg,jd) = jdUtils.get(job_id)
+	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for job_id {0)".format(job_id)
+
+	#get the summary
+	(retCode, msg,jobStatusSummary) = jdUtils.get_job_status_summary(job_id)
+	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job status summary for job_id {0)".format(job_id)
+
+	return render_template("jd/show_status_summary_page.html", jd=jd, statusSummary = jobStatusSummary)
+
+
 if __name__ == "__main__":
 	app.run()

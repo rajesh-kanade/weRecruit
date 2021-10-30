@@ -21,7 +21,7 @@
                     <th class="has-text-centered has-text-light">TITLE</th>
                     <th class="has-text-centered has-text-light">OPEN DATE</th>
                     <th class="has-text-centered has-text-light">HIRING MANAGER</th>
-                    <th class="has-text-centered has-text-light">ACTIONS</th>
+                    <th class="has-text-centered has-text-light"></th>
                   </tr>
                 </thead>
               {%endif %}
@@ -33,11 +33,24 @@
                 <td class="has-text-centered has-text-light">{{ jd.open_date.strftime("%Y-%b-%d") }}</td> 
                 <td class="has-text-centered has-text-light">{{ jd.hiring_mgr_name }}</td>
                 <td class="has-text-centered has-text-light">
-                  <div class ="field is-grouped">
-                    <p class="control"><a class="button is-info  is-small" title ="Click to browse thru existing resumes & shortlist them" href="/jd/showShortlistPage/{{jd.id}}">Shortlist candidates</a></p>
-                    <p class="control"><a class="button is-info  is-small" title ="Click to see all shortlisted candidates & take further action" href="/jd/showWorkPage/{{jd.id}}">View shortlisted candidates</a></p>
-                    <p class="control"><a class="button is-info is-small" title ="Click to edit this job posting." href="/jd/showEditPage/{{jd.id}}" >Edit</a></p>                 
-                  </div>    
+                  <div class="dropdown is-hoverable">
+                    <div class="dropdown-trigger">
+                      <button class="button is-info" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <span>Actions</span>
+                        <span class="icon is-small">
+                          <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                      </button>
+                    </div>
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                      <div class="dropdown-content">
+                        <a class="dropdown-item" title ="Click to browse thru existing resumes & shortlist them" href="/jd/showShortlistPage/{{jd.id}}">Shortlist candidates</a>
+                        <a class="dropdown-item" title ="Click to see all shortlisted candidates & take further action" href="/jd/showWorkPage/{{jd.id}}">View shortlisted candidates</a>
+                        <a class="dropdown-item" title ="Click to show summary." href="/jd/showSummaryPage/{{jd.id}}" >View Status Summary</a>
+                        <a class="dropdown-item" title ="Click to edit this job posting." href="/jd/showEditPage/{{jd.id}}" >Edit</a>    
+                      </div>
+                    </div>    
+                </div> 
                 </td>       
   
               </tr>

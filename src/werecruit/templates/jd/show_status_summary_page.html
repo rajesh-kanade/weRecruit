@@ -1,0 +1,50 @@
+{%extends "app_header.html" %}
+{%block content%}
+
+<section class="container is-fullheight">
+
+    {% include 'utils/show_modal_msg.html'%}
+    {% include 'jd/header1.html'%}
+    <div class = "block has-text-left">
+        <span class="title is-size-4 has-text-info">Candidates status summary page</span><br>
+        <span class="is-size-7 has-text-info">This page shows number of candidates for various phases an application goes thru.</span>
+    </div>
+    
+    <div class="block">   
+        <div class="table-container has-text-centered">
+          <table class="table is-striped">
+            <tbody>
+            {% for ss in statusSummary %}
+              {%if loop.first %}
+
+                <thead>
+                  <tr class="has-background-dark">
+                    <th class="has-text-centered has-text-light">STATUS CODE</th>
+                    <th class="has-text-centered has-text-light">STATUS DESCRIPTION</th>
+                    <th class="has-text-centered has-text-light">CANDIDATES COUNT</th>
+
+                </tr>
+                </thead>
+              {%endif %}
+              <tr class="has-background-dark">
+                <td class="has-text-centered has-text-light">{{ ss.status }}</td>
+                <td class="has-text-centered has-text-light">{{ ss.description }}</td>
+                <td class="has-text-centered has-text-light">{{ ss.count }}</td>
+              </tr>
+            {% else %}
+              <div class="notification is-warning">
+                No status summary found for this job. !!!
+              </div>
+            {% endfor %}
+          </tbody>
+          </table>
+        </div>  
+    </div>
+
+    <a class="button is-success is-rounded" onclick="window.print();">Print</a>
+    <a class="button is-success is-rounded" href="">EMail</a>
+
+</section>
+
+{% endblock %}
+

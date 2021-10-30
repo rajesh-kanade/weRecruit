@@ -232,7 +232,9 @@ def get_resumes_associated_with_job(job_id):
 		
 		#query = """select * from wr_resumes 
 		#			where id in ( select resume_id from wr_jd_resumes where jd_id = %s)"""
-		query = """select wr_resumes.*,wr_jd_resumes.status from wr_resumes ,wr_jd_resumes
+		query = """select wr_resumes.*,wr_jd_resumes.status ,
+					(select description from application_status_codes where id = status)
+					from wr_resumes ,wr_jd_resumes
 					where wr_resumes.id = wr_jd_resumes.resume_id
 					and wr_jd_resumes.jd_id = %s """
 
@@ -323,6 +325,7 @@ def insert_job_application_status(job_id, resume_id,change_date,changed_by,statu
 		if cursor is not None:
 			cursor.close()
 		dbUtils.returnToPool(db_con)
+
 # we may not need this function at all ....
 def shortlist(resume_id,jd_id, application_date,status,recruiterid):
 	print('inside shortlist function')
@@ -361,6 +364,38 @@ def shortlist(resume_id,jd_id, application_date,status,recruiterid):
 		if cursor is not None:
 			cursor.close()
 		dbUtils.returnToPool(db_con)
+
+def get_job_status_summary(job_id):
+	
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		query = """select status, 
+					( select description from application_status_codes where id = status) ,
+					count(status) 
+					from wr_jd_resumes 
+					where jd_id IN ( select id from wr_jds 
+						where id =%s )
+						group by status;
+				"""
+
+		params = (int(job_id),)
+		print ( cursor.mogrify(query, params))
+		cursor.execute(query,params)
+
+		jobStatusSummaryList = cursor.fetchall()
+
+		return(RetCodes.success.value, "Status summary  for job JD {0}  fetched successfully.".format(job_id), jobStatusSummaryList)
+
+	except Exception as dbe:
+		print(dbe)
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
+
 
 def save_resume_to_job(job_id, resume_id, resumeFileName, candidateName, candidateEmail, candidatePhone):
 	
@@ -469,9 +504,8 @@ if __name__ == "__main__":
 	#(code,msg,resumeList) = get_resumes_not_associated_with_job(18)
 	#print (code)
 	dt = datetime.now(tz=timezone.utc)
-	(code,msg,result) = insert_job_application_status( 1,1,dt,1,10,"Testing status update")
+	(code,msg,result) = get_job_status_summary(18)
 	print(code)
 	print(msg)
-
-
+	print(result)
 
