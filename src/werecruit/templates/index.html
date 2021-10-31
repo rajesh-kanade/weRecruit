@@ -1,12 +1,58 @@
 {%extends "header.html" %}
 {%block content%}
 {% set messages = get_flashed_messages(with_categories = true ) %}
-<div class = "hero is-fullheight">
-  <div class = "hero-body">
-    <div class="section is-size-1 has-text-grey-light">Welcome to world's simplest Recruitment system </div>
-    <p></p>
-  </div>
-</div>
 
+<section class = "container is-fullheight">
+    <div class="block mt-5 is-size-4">Welcome to world's simplest,fastest Recruitment 
+      system designed to help you focus on hiring great talent & delighting your 
+      customers. </div>
+    <div class="block is-size-4">If you are a freelance recruiter or a small recruitment 
+      agency using excel sheets and gmail, {% include '/utils/werecruit.html'%} is the 
+      right recruitment platform for you.</div>
+
+    <div class="tile is-ancestor">
+      <div class="tile">
+        <div class ="card is-size-4">
+          <p class="card-header-title">
+            MONTHLY
+          </p>
+          <div class = "card-content">
+            5$ per user per month
+          </div>      
+        </div>
+      </div>
+      <div class="tile">
+        <div class ="card is-size-4">
+          <p class="card-header-title">
+            YEARLY
+          </p>
+          <div class = "card-content">
+            50$ per user per year
+          </div>      
+        </div>
+      </div>
+      <div class="tile">
+        <div class ="card is-size-4">
+          <p class="card-header-title">
+            LIFETIME
+          </p>
+          <div class = "card-content">
+            100$ per user lifetime
+          </div>      
+        </div>
+      </div>
+      <div class="tile">
+        <div class ="card is-size-4">
+          <p class="card-header-title">
+            
+          </p>
+          <div class = "card-content">
+            50$ per user per year
+          </div>      
+        </div>
+      </div>
+    </div>
+  
+</section>
 
 {% endblock %}

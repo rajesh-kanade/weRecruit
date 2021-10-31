@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    {{ fontawesome_html() }}
 
     <meta charset="utf-8">
     <title>We Recruit</title>
@@ -23,12 +24,12 @@
     <meta name="theme-color" content="#fafafa">
   </head>
 
-  <body class ="has-background-dark has-text-centered has-text-grey-light is-family-primary">
+  <body >
     
-    <nav class="navbar has-background-dark has-text-grey-light" role="navigation" aria-label="main navigation">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
 
-        <a class="navbar-item" href="#">
+        <a class="navbar-item" href="/">
           
           <img src="{{url_for('static', filename='CareerInsights.png')}}" >
         </a>
@@ -45,63 +46,34 @@
     
       <div id="navbar" class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item has-text-grey-light" href ="/">
-            Home
-          </a>
-    
-          <div class="navbar-item has-text-grey-light has-dropdown is-hoverable">
-            <a class="navbar-link has-text-grey-light">
-              More
-            </a>
-    
-            <div class="navbar-dropdown">
-              <a class="navbar-item has-text-grey-light">
-                About
-              </a>
-              <a class="navbar-item has-text-grey-light">
-                Jobs
-              </a>
-              <a class="navbar-item has-text-grey-light">
-                Contact
-              </a>
-              <hr class="navbar-divider">
-              <a class="navbar-item has-text-grey-light">
-                Report an issue
-              </a>
-            </div>
+
+          <div class="block"> 
+            <h1 class="title is-size-1 mt-3">
+            W<span class="has-text-primary is-italic">e</span>RECRUIT</h1> 
           </div>
         </div>
-        <div class="block"> <h1 class="title is-size-1 has-background-dark has-text-white mt-3">
-          WeRECRUIT</h1> </div>
         <div class="navbar-end">
           <div class="navbar-item">
-            {% if session.user_id %}              
-              <div class="buttons">
-                <a href="/user/showUserProfilePage" class="mr-3 has-text-white is-primary">
-                  {{ session.user_name }}
-                </a>
-                
-                <a href="/user/doSignout" class="button is-primary">
-                  Sign out
-                </a>
+            <a href="#">Features</a>
+          </div>
+          <div class="navbar-item">
+            <a href="#">Pricing</a>
+          </div>
 
-              </div>
-
-            {% else %}
+          <div class="navbar-item">
               <div class="buttons">
                 <a href="/user/showSignupPage" class="button is-primary">
-                  <strong>Sign up</strong>
+                  SIGN UP
                 </a>
                 <a href="/user/showSigninPage" class="button is-primary">
-                  Sign in
+                  SIGN IN
                 </a>
               </div>
-            {% endif %}
-
           </div>
         </div>
       </div>
     </nav>
+
     {% block content %}
     {% endblock %}
   </body>
