@@ -3,17 +3,58 @@
 {% set messages = get_flashed_messages(with_categories = true ) %}
 
 <section class = "container is-fullheight">
+    <div class="block"><br></div>
     <div class="block mt-5 is-size-4">Welcome to world's simplest,fastest Recruitment 
       system designed to help you focus on hiring great talent & delighting your 
       customers. </div>
     <div class="block is-size-4">If you are a freelance recruiter or a small recruitment 
       agency using excel sheets and gmail, {% include '/utils/werecruit.html'%} is the 
       right recruitment platform for you.</div>
+    
+    <br><hr><br>
+    <div id="features" class="block is-size-2 has-text-centered">Features designed to make recruitment a breeze</div>
+
+    <div class="tile is-ancestor">
+      <div class="tile">
+        <div class="box is-size-4 has-text-info"> 
+          Create unlimited job descriptions for your clients. 
+          Define the team of interview panels, Hiring manager & HR to collaborate seamlessly.
+
+        </div>      
+      </div>
+      <div class="tile">
+        <div class="box is-size-4 has-text-info">
+          Upload resumes using web App or via email. 
+          Auto detect key fields like candidate names, phones, email automatically 
+          from uploaded email.
+          Advanced capabilities to efficiently search resumes and shortlist them for one or more JDs.     
+        </div>    
+      </div>
+    </div>
+
+    <div class="tile is-ancestor">
+      <div class="tile">
+        <div class="box is-size-4 has-text-info"> 
+          Large library of job application status codes. 
+          Take unlimited notes as you update the the job application status.
+          Flexible ways to notify candidates and interview panel.
+        </div>      
+      </div>
+      <div class="tile">
+        <div class="box is-size-4 has-text-info">
+          Collection of summary and detailed reports to communicate effectively with your clients.
+        </div>    
+      </div>
+    </div>
+
+    <br><hr><br>
+    <div id="pricing" class="block is-size-2 has-text-centered">Pricing that works for every Staffing Agency.</div>
+    <div class="block is-size-3 has-text-centered">Avail 30-day free trial. No credit card required.</div>
 
     <div class="tile is-ancestor">
       <div class="tile">
         <div class ="card is-size-4">
-          <p class="card-header-title">
+          <p class="card-header-title has-background-primary">
             MONTHLY
           </p>
           <div class = "card-content">
@@ -23,7 +64,7 @@
       </div>
       <div class="tile">
         <div class ="card is-size-4">
-          <p class="card-header-title">
+          <p class="card-header-title has-background-primary">
             YEARLY
           </p>
           <div class = "card-content">
@@ -33,7 +74,7 @@
       </div>
       <div class="tile">
         <div class ="card is-size-4">
-          <p class="card-header-title">
+          <p class="card-header-title has-background-primary">
             LIFETIME
           </p>
           <div class = "card-content">
@@ -43,16 +84,18 @@
       </div>
       <div class="tile">
         <div class ="card is-size-4">
-          <p class="card-header-title">
-            
+          <p class="card-header-title has-background-primary">
+            UNLIMITED LIFETIME
           </p>
           <div class = "card-content">
-            50$ per user per year
+            250$ unlimited users lifetime
           </div>      
         </div>
       </div>
     </div>
-  
+    
+    <br>
+
 </section>
 
 {% endblock %}
