@@ -2,7 +2,7 @@
 {%block content%}
 
 <section class="container is-fullheight">
-  <div class = "block is-size-4 has-text-light">
+  <div class = "block is-size-4 {{theme_text_color}}">
       Upload resumes
   </div>
       <div class="columns is-centered">
@@ -48,7 +48,7 @@
           </div>
 
             <div class="field">
-              <label class="label has-text-light has-text-left">{{ form.candidate_name.label }}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{ form.candidate_name.label }}</label>
               <div class="control">
                 {{form.candidate_name(class='input', placeholder="Enter candidate's name")}}
                 {% for error in form.candidate_name.errors %}
@@ -57,7 +57,7 @@
               </div>
             </div>
             <div class="field">
-              <label class="label has-text-light has-text-left">{{ form.candidate_email.label }}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{ form.candidate_email.label }}</label>
               <div class="control">
                 {{form.candidate_email(class='input', placeholder="Enter candidate's email")}}
                 {% for error in form.candidate_email.errors %}
@@ -66,7 +66,7 @@
               </div>
             </div>
             <div class="field">
-              <label class="label has-text-light has-text-left">{{ form.candidate_phone.label }}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{ form.candidate_phone.label }}</label>
               <div class="control">
                 {{form.candidate_phone(class='input', placeholder="Enter candidate's phone")}}
                 {% for error in form.candidate_phone.errors %}

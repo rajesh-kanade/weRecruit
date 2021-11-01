@@ -22,7 +22,7 @@
           <form action = "/user/createUser" method="POST">
             {{ form.hidden_tag() }}
             <div class="field">
-              <label class="label has-text-grey-light has-text-left">{{ form.company_name.label }}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{ form.company_name.label }}</label>
               <div class="control has-icons-left has-icons-right">
                 {{form.company_name(class='input', placeholder='Enter company name')}}
                 <span class="icon is-small is-left">
@@ -32,7 +32,7 @@
             </div>
 
             <div class="field">
-              <label class="label has-text-grey-light has-text-left">{{ form.name.label }}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{ form.name.label }}</label>
               <div class="control has-icons-left has-icons-right">
                 {{form.name(class='input', placeholder='Enter name')}}
                 <span class="icon is-small is-left">
@@ -41,7 +41,7 @@
               </div>
             </div>
             <div class="field">
-              <label class="label has-text-grey-light has-text-left">{{ form.email.label }}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{ form.email.label }}</label>
               <div class="control has-icons-left has-icons-right">
                 {{ form.email(class='input', placeholder='Enter email') }}
                 <span class="icon is-small is-left">
@@ -51,7 +51,7 @@
             </div>
 
             <div class="field">
-              <label class="label has-text-grey-light has-text-left">{{form.password.label}}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{form.password.label}}</label>
               <div class="control has-icons-left has-icons-right">
                 {{ form.password(class='input', placeholder='Enter password') }}
                 <span class="icon is-small is-left">

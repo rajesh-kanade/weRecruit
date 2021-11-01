@@ -5,23 +5,23 @@
             {% for resume in resumeList %}
               {%if loop.first %}
                 <thead>
-                  <tr class="has-background-dark">
-                    <th class="has-text-centered has-text-light">RESUME ID</th>
-                    <th class="has-text-centered has-text-light">NAME</th>
-                    <th class="has-text-centered has-text-light">EMAIL</th>
-                    <th class="has-text-centered has-text-light">PHONE</th>
-                    <th class="has-text-centered has-text-light">STATUS</th>
-                    <th class="has-text-centered has-text-light"></th>
+                  <tr class="{{theme_bg_color}}">
+                    <th class="has-text-centered {{theme_text_color}}">RESUME ID</th>
+                    <th class="has-text-centered {{theme_text_color}}">NAME</th>
+                    <th class="has-text-centered {{theme_text_color}}">EMAIL</th>
+                    <th class="has-text-centered {{theme_text_color}}">PHONE</th>
+                    <th class="has-text-centered {{theme_text_color}}">STATUS</th>
+                    <th class="has-text-centered {{theme_text_color}}"></th>
                   </tr>
                 </thead>
               {%endif %}
-              <tr class="has-background-dark">
-                <td class="has-text-centered has-text-light">{{ resume.id }}</td>
-                <td class="has-text-centered has-text-light">{{ resume.name }}</td>
-                <td class="has-text-centered has-text-light">{{ resume.email }}</td> 
-                <td class="has-text-centered has-text-light">{{ resume.phone }}</td>
-                <td class="has-text-centered has-text-light">{{ resume.status }}-{{resume.description}}</td>
-                <td class="has-text-centered has-text-light">
+              <tr class="{{theme_bg_color}}">
+                <td class="has-text-centered {{theme_text_color}}">{{ resume.id }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ resume.name }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ resume.email }}</td> 
+                <td class="has-text-centered {{theme_text_color}}">{{ resume.phone }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ resume.status }}-{{resume.description}}</td>
+                <td class="has-text-centered {{theme_text_color}}">
                   {%if actionTemplate == 'shortlist' %}
                     {% include 'jd/shortlist_actions.html'%}
                   {%endif %}

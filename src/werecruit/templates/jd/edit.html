@@ -3,8 +3,8 @@
 
 <section class="container is-fullheight">
   <div class = "block">
-    <span class="title has-text-white">Create/Edit Job Posting</span><br>
-    <span class="is-size-7 has-text-white">This section allows you to create or edit a job posting.</span>
+    <span class="title has-text-info">Create/Edit Job Posting</span><br>
+    <span class="is-size-7 has-text-info">This section allows you to create or edit a job posting.</span>
   </div>
 
       <div class="columns is-centered">
@@ -25,35 +25,35 @@
             {{ form.hidden_tag() }}
             {{form.id()}}
             <div class="field">
-              <label class="label has-text-light has-text-left">{{ form.title.label }}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{ form.title.label }}</label>
               <div class="control">
                 {{form.title(class='input', title ="Enter short & meaning title for this job posting" , placeholder='Enter Title')}}
               </div>
             </div>
 
             <div class="field">
-              <label class="label has-text-light has-text-left">{{ form.details.label }}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{ form.details.label }}</label>
               <div class="control">
                 {{form.details(class='textarea', title ="Enter job details like primary skill, location, years of experience.",placeholder='Enter details')}}
               </div>
             </div>
 
             <div class="field">
-              <label class="label has-text-light has-text-left">{{ form.client.label }}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{ form.client.label }}</label>
               <div class="control">
                 {{form.client(class='input', placeholder='Enter Client Name')}}
               </div>
             </div>
 
             <div class="field">
-              <label class="label has-text-light has-text-left">{{ form.status.label }}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{ form.status.label }}</label>
               <div class="select is-fullwidth">
                 {{form.status(class='select', placeholder='Enter status')}}
               </div>
             </div>
 
             <div class="field">
-              <label class="label has-text-light has-text-left">{{ form.total_positions.label }}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{ form.total_positions.label }}</label>
               <div class="control">
                 {{form.total_positions(class='input', placeholder='Enter total number of positions.')}}
               </div>

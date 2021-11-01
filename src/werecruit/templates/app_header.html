@@ -2,6 +2,19 @@
 <html>
   <head>
     {{ fontawesome_html() }}
+
+    <!--set the app theme --> 
+    {% set theme = 'LIGHT' %}
+
+    {% if theme == 'DARK' %}
+      {% set theme_bg_color = 'has-background-dark' %}
+      {% set theme_text_color = 'has-text-light' %}
+    {% else %}  
+      {% set theme_bg_color = 'has-background-light' %}
+      {% set theme_text_color = 'has-text-dark' %}
+    {% endif %}
+    
+   
     <meta charset="utf-8">
     <title>We Recruit</title>
     <meta name="description" content="Website of WeRecruit">
@@ -24,10 +37,10 @@
  
   </head>
 
-  <body class ="has-background-dark has-text-centered has-text-grey-light is-family-primary">
+  <body class ="{{theme_bg_color}} has-text-centered {{theme_text_color}} is-family-primary">
     {% set messages = get_flashed_messages(with_categories = true ) %}            
 
-    <nav class="navbar has-background-dark has-text-grey-light" role="navigation" aria-label="main navigation">
+    <nav class="navbar {{theme_bg_color}} {{them_text_color}}" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
 
         <a class="navbar-item" href="#">
@@ -49,58 +62,58 @@
         <div class="navbar-start ">
           <div class="navbar-item">
             <a href="/showHomePage">
-              <span class ="has-text-grey-light has-text-weight-bold">Home</span>
+              <span class ="{{theme_text_color}} has-text-weight-bold">Home</span>
             </a>             
           </div>
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
-              <span class ="has-text-grey-light has-text-weight-bold">Jobs</span>
+              <span class ="{{theme_text_color}} has-text-weight-bold">Jobs</span>
             </a>    
             <div class="navbar-dropdown">
-              <a href ="/jd/showCreatePage" class="navbar-item"><span class ="has-text-grey-light">New posting</span></a>
+              <a href ="/jd/showCreatePage" class="navbar-item"><span class ="{{theme_text_color}}">New posting</span></a>
 
               <a href ="/jd/showAllPage"class="navbar-item">
-                <span class ="has-text-grey-light">Browser</span>
+                <span class ="{{theme_text_color}}">Browser</span>
               </a>
             </div>
           </div>
           
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
-              <span class ="has-text-grey-light has-text-weight-bold">Resumes</span>
+              <span class ="{{theme_text_color}} has-text-weight-bold">Resumes</span>
             </a>    
             <div class="navbar-dropdown">
-              <a href ="/resume/showUploadPage" class="navbar-item"><span class ="has-text-grey-light">Upload</span></a>
-              <a href ="/resume/showUploadPageViaEmail" class="navbar-item"><span class ="has-text-grey-light">Upload via email</span></a>
+              <a href ="/resume/showUploadPage" class="navbar-item"><span class ="{{theme_text_color}}">Upload</span></a>
+              <a href ="/resume/showUploadPageViaEmail" class="navbar-item"><span class ="{{theme_text_color}}">Upload via email</span></a>
 
               <a href ="/resume/showBrowser"class="navbar-item">
-                <span class ="has-text-grey-light">Browser</span>
+                <span class ="{{theme_text_color}}">Browser</span>
               </a>
             </div>
           </div>
 
           <div class="navbar-item has-dropdown is-hoverable">
             <a class="navbar-link">
-              <span class ="has-text-grey-light has-text-weight-bold">Reports</span>
+              <span class ="{{theme_text_color}} has-text-weight-bold">Reports</span>
             </a>    
             <div class="navbar-dropdown">
-              <a href ="/resume/showReportSummaryPage" class="navbar-item"><span class ="has-text-grey-light">Summary</span></a>
+              <a href ="/resume/showReportSummaryPage" class="navbar-item"><span class ="{{theme_text_color}}">Summary</span></a>
 
               <a href ="#"class="navbar-item">
-                <span class ="has-text-grey-light">Detail</span>
+                <span class ="{{theme_text_color}}">Detail</span>
               </a>
             </div>
           </div>
 
         </div>
-        <div class="block"> <h1 class="title is-size-1 has-background-dark has-text-white mt-3">
+        <div class="block"> <h1 class="title is-size-1 {{theme_bg_color}} {{theme_text_color}} mt-3">
           W<span class="has-text-primary is-italic">e</span>RECRUIT</h1> </div>
 
         <div class="navbar-end">
           <div class="navbar-item">
             {% if session.user_id %}              
               <div class="buttons">
-                <a href="/user/showUserProfilePage" class="mr-3 has-text-white">
+                <a href="/user/showUserProfilePage" class="mr-3 {{theme_text_color}}">
                   {{ session.user_name }}
                 </a>
                 

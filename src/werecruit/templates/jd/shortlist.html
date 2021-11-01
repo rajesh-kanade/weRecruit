@@ -11,10 +11,10 @@
     </div>
     
     <div class="tile is-ancestor">
-        <div class="tile is-child box has-background-dark">
+        <div class="tile is-child box {{theme_bg_color}}">
             {% include '/resume/browser.html'%}
         </div>
-        <div class="tile is-child box has-background-dark">
+        <div class="tile is-child box {{theme_bg_color}}">
             <div class="block">   
                 <div class="table-container has-text-centered">
                   <table class="table is-striped">
@@ -23,13 +23,13 @@
                       {%if loop.first %}
 
                         <thead>
-                          <tr class="has-background-dark">
-                            <th class="has-text-centered has-text-light">CURRENTLY SHORTLISTED </th>
+                          <tr class="{{theme_bg_color}}">
+                            <th class="has-text-centered {{theme_text_color}}">CURRENTLY SHORTLISTED </th>
                           </tr>
                         </thead>
                       {%endif %}
-                      <tr class="has-background-dark">
-                        <td class="has-text-centered has-text-light">{{ resume.name }}</td>
+                      <tr class="{{theme_bg_color}}">
+                        <td class="has-text-centered {{theme_text_color}}">{{ resume.name }}</td>
                       </tr>
                     {% else %}
                       <div class="notification is-warning">

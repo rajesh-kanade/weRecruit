@@ -18,18 +18,18 @@
               {%if loop.first %}
 
                 <thead>
-                  <tr class="has-background-dark">
-                    <th class="has-text-centered has-text-light">STATUS CODE</th>
-                    <th class="has-text-centered has-text-light">STATUS DESCRIPTION</th>
-                    <th class="has-text-centered has-text-light">CANDIDATES COUNT</th>
+                  <tr class="{{theme_bg_color}}">
+                    <th class="has-text-centered {{theme_text_color}}">STATUS CODE</th>
+                    <th class="has-text-centered {{theme_text_color}}">STATUS DESCRIPTION</th>
+                    <th class="has-text-centered {{theme_text_color}}">CANDIDATES COUNT</th>
 
                 </tr>
                 </thead>
               {%endif %}
-              <tr class="has-background-dark">
-                <td class="has-text-centered has-text-light">{{ ss.status }}</td>
-                <td class="has-text-centered has-text-light">{{ ss.description }}</td>
-                <td class="has-text-centered has-text-light">{{ ss.count }}</td>
+              <tr class="{{theme_bg_color}}">
+                <td class="has-text-centered {{theme_text_color}}">{{ ss.status }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ ss.description }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ ss.count }}</td>
               </tr>
             {% else %}
               <div class="notification is-warning">

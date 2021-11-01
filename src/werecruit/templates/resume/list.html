@@ -13,7 +13,7 @@
           {% endfor %}                  
       {% endif %}
     </div>
-    <div class = "block is-size-4 has-text-light">
+    <div class = "block is-size-4 {{theme_text_color}}">
         Search and Browse through the resumes you uploaded.
     </div>
     <div class="block">   
@@ -23,24 +23,24 @@
             {% for resume in resumeList %}
               {%if loop.first %}
                 <thead>
-                  <tr class="has-background-dark">
-                    <th class="has-text-centered has-text-light">ID</th>
-                    <th class="has-text-centered has-text-light">NAME</th>
-                    <th class="has-text-centered has-text-light">EMAIL</th>
-                    <th class="has-text-centered has-text-light">PHONE</th>
-                    <th class="has-text-centered has-text-light">ACTIONS</th>
+                  <tr class="{{theme_bg_color}}">
+                    <th class="has-text-centered {{theme_text_color}}">ID</th>
+                    <th class="has-text-centered {{theme_text_color}}">NAME</th>
+                    <th class="has-text-centered {{theme_text_color}}">EMAIL</th>
+                    <th class="has-text-centered {{theme_text_color}}">PHONE</th>
+                    <th class="has-text-centered {{theme_text_color}}">ACTIONS</th>
                   </tr>
                 </thead>
               {%endif %}
-              <tr class="has-background-dark">
-                <td class="has-text-centered has-text-light">{{ resume.id }}</td>
-                <td class="has-text-centered has-text-light">{{ resume.name }}</td>
-                <td class="has-text-centered has-text-light">{{ resume.email }}</td> 
-                <td class="has-text-centered has-text-light">{{ resume.phone }}</td>
-                <td class="has-text-centered has-text-light">
+              <tr class="{{theme_bg_color}}">
+                <td class="has-text-centered {{theme_text_color}}">{{ resume.id }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ resume.name }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ resume.email }}</td> 
+                <td class="has-text-centered {{theme_text_color}}">{{ resume.phone }}</td>
+                <td class="has-text-centered {{theme_text_color}}">
                   <div class ="field is-grouped">
-                  <p class="control"><a class="button is-link  is-small" href="/resume/download?resume={{resume.resume_filename}}">Download</a></p>
-                  <p class="control"><a class="button is-link  is-small" href="/resume/showEditPage/{{resume.id}}">Edit</a></p>
+                  <p class="control"><a class="button is-info  is-small" href="/resume/download?resume={{resume.resume_filename}}">Download</a></p>
+                  <p class="control"><a class="button is-info  is-small" href="/resume/showEditPage/{{resume.id}}">Edit</a></p>
             
                  </div>    
                 </td>       

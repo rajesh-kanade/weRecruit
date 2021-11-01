@@ -14,25 +14,25 @@
             {% for jd in jdList %}
               {%if loop.first %}
                 <thead>
-                  <tr class="has-background-dark">
-                    <th class="has-text-centered has-text-light">JOB ID</th>
-                    <th class="has-text-centered has-text-light">CLIENT</th>
-                    <th class="has-text-centered has-text-light">STATUS</th>
-                    <th class="has-text-centered has-text-light">TITLE</th>
-                    <th class="has-text-centered has-text-light">OPEN DATE</th>
-                    <th class="has-text-centered has-text-light">HIRING MANAGER</th>
-                    <th class="has-text-centered has-text-light"></th>
+                  <tr class="{{theme_bg_color}}">
+                    <th class="has-text-centered {{theme_text_color}}">JOB ID</th>
+                    <th class="has-text-centered {{theme_text_color}}">CLIENT</th>
+                    <th class="has-text-centered {{theme_text_color}}">STATUS</th>
+                    <th class="has-text-centered {{theme_text_color}}">TITLE</th>
+                    <th class="has-text-centered {{theme_text_color}}">OPEN DATE</th>
+                    <th class="has-text-centered {{theme_text_color}}">HIRING MANAGER</th>
+                    <th class="has-text-centered {{theme_text_color}}"></th>
                   </tr>
                 </thead>
               {%endif %}
-              <tr class="has-background-dark">
-                <td class="has-text-centered has-text-light">{{ jd.id }}</td>
-                <td class="has-text-centered has-text-light">{{ jd.client }}</td>
-                <td class="has-text-centered has-text-light">{{ jd.status }}</td>
-                <td class="has-text-centered has-text-light">{{ jd.title }}</td>
-                <td class="has-text-centered has-text-light">{{ jd.open_date.strftime("%Y-%b-%d") }}</td> 
-                <td class="has-text-centered has-text-light">{{ jd.hiring_mgr_name }}</td>
-                <td class="has-text-centered has-text-light">
+              <tr class="{{theme_bg_color}}">
+                <td class="has-text-centered {{theme_text_color}}">{{ jd.id }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ jd.client }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ jd.status }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ jd.title }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ jd.open_date.strftime("%Y-%b-%d") }}</td> 
+                <td class="has-text-centered {{theme_text_color}}">{{ jd.hiring_mgr_name }}</td>
+                <td class="has-text-centered {{theme_text_color}}">
                   <div class="dropdown is-hoverable">
                     <div class="dropdown-trigger">
                       <button class="button is-info" aria-haspopup="true" aria-controls="dropdown-menu">

@@ -37,5 +37,5 @@ hr.gn-main {
   }
   a.is-link:hover, .a.is-link.is-hovered {
     border-color: transparent;
-    color: #fff;
+    color: rgb(255, 255, 255);
   }
