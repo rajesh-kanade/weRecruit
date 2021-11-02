@@ -4,11 +4,11 @@
     {{ fontawesome_html() }}
 
     <!--set the app theme --> 
-    {% set theme = 'LIGHT' %}
-
+    {% set theme = 'DARK' %}
+  
     {% if theme == 'DARK' %}
       {% set theme_bg_color = 'has-background-dark' %}
-      {% set theme_text_color = 'has-text-light' %}
+      {% set theme_text_color = 'has-text-grey' %}
     {% else %}  
       {% set theme_bg_color = 'has-background-light' %}
       {% set theme_text_color = 'has-text-dark' %}
