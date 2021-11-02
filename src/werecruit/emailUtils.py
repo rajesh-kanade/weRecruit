@@ -20,7 +20,7 @@ def sendMail(ToEmailAddr, subject, body, contentType):
     print("Setting up SMTP server again")
 
     msg = MIMEMultipart()
-    msg['From'] = constants.SMTP_MAIL_USERNAME
+    msg['From'] = os.environ.get("SMTP_MAIL_USERNAME")
     msg['To'] = ToEmailAddr
     msg['Subject'] = str(subject)
 
@@ -28,9 +28,9 @@ def sendMail(ToEmailAddr, subject, body, contentType):
 
     print( msg.as_string() )
 
-    with smtplib.SMTP(constants.SMTP_MAIL_SERVER, constants.SMTP_MAIL_PORT) as server:
-        server.login(constants.SMTP_MAIL_USERNAME, constants.SMTP_MAIL_PASSWORD)
-        server.sendmail(constants.SMTP_MAIL_USERNAME, ToEmailAddr, msg.as_string())
+    with smtplib.SMTP(os.environ.get("SMTP_MAIL_SERVER"), os.environ.get("SMTP_MAIL_PORT")) as server:
+        server.login(os.environ.get("SMTP_MAIL_USERNAME"), os.environ.get("SMTP_MAIL_PASSWORD"))
+        server.sendmail(os.environ.get("SMTP_MAIL_USERNAME"), ToEmailAddr, msg.as_string())
         server.close()
 
     print("Mail sent successfully.")
@@ -39,4 +39,4 @@ def sendMail(ToEmailAddr, subject, body, contentType):
 if __name__ == "__main__":
     #processEmailsForApp(constants.APP_CODE_CAMI);
     #processEmails("rrkanade22@yahoo.com","CAMI")
-    sendMail('rrkanade22@yahoo.com', "test subject", "test body")
+    sendMail('rrkanade22@yahoo.com', "test subject", "test body",'plain')
