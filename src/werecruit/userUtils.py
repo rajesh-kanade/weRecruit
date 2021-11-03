@@ -64,7 +64,7 @@ def hashit(plain_text):
 	return result.hexdigest()
 
 
-def create_user(user_attrs):
+def do_signUp(user_attrs):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = db_con.cursor()
@@ -453,15 +453,15 @@ if __name__ == "__main__":
 	
 
 	(retCode, msg, userRecord ) = delete_user('rk1')
-	#(retCode, msg, userRecord ) = create_user({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
+	#(retCode, msg, userRecord ) = do_signUp({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
 
 	print( retCode)
 	print ( msg)
 	print ( userRecord)
 	"""
 
-	(retCode, msg, userRecord ) = create_user({'id':'rk5','name':'RK5','status':Status.active.value,'password':'pwd'})
-	#(retCode, msg, userRecord ) = create_user({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
+	(retCode, msg, userRecord ) = do_signUp({'id':'rk5','name':'RK5','status':Status.active.value,'password':'pwd'})
+	#(retCode, msg, userRecord ) = do_signUp({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
 
 	print( retCode)
 	print ( msg)

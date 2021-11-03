@@ -86,8 +86,8 @@ def show_signup_page():
 	form=SignUpForm()
 	return render_template('sign_up.html', form = form)
 
-@app.route('/user/createUser',  methods = ['POST'])
-def create_user():
+@app.route('/user/signUp',  methods = ['POST'])
+def sign_up():
 
 	form = SignUpForm()
 
@@ -100,7 +100,7 @@ def create_user():
 	userAttrs['tname'] = form.company_name.data
 
 
-	results = userUtils.create_user( userAttrs)
+	results = userUtils.do_signUp( userAttrs)
 
 	if (results[0] == userUtils.RetCodes.success.value):        
 		flash ("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(form.name.data), "is-info")
