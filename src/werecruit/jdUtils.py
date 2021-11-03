@@ -172,7 +172,7 @@ def save_header(id, title,details,client):
 			cursor.close()
 		dbUtils.returnToPool(db_con)
 
-def list_jds(recruiterID, statusFilter = None):
+def list_jds_by_recruiter(recruiterID, statusFilter = None):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
@@ -188,6 +188,32 @@ def list_jds(recruiterID, statusFilter = None):
 		jdList =cursor.fetchall()
 
 		return(RetCodes.success.value, "JD List successfully fetched from db", jdList)
+
+
+	except Exception as dbe:
+		print(dbe)
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
+
+def list_jds_by_tenant(tenantID, statusFilter = None):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		query = """SELECT * FROM wr_jds 
+				where recruiter_id = ( select uid from tenant_user_roles where tid = %s)
+				order by open_date DESC"""
+	
+		params = (tenantID,)
+		print ( cursor.mogrify(query, params))
+		cursor.execute(query,params)
+
+		jdList =cursor.fetchall()
+
+		return(RetCodes.success.value, "JD List successfully fetched from db for tenant ID".format(tenantID), jdList)
 
 
 	except Exception as dbe:

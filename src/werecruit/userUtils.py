@@ -384,7 +384,8 @@ def do_SignIn(id, password):
 			db_con = dbUtils.getConnFromPool()
 			cursor = dbUtils.getNamedTupleCursor(db_con)
 			
-			query = """SELECT * FROM users WHERE
+			query = """SELECT * , 
+					(select tid from tenant_user_roles where uid = id) FROM users WHERE
 					email = %s and password = %s and is_deleted = %s"""
 		
 			data_tuple = (id, password, False)

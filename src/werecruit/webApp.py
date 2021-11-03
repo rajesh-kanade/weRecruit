@@ -65,19 +65,19 @@ def do_signin():
 
 	form = SignInForm()
 
-	results = userUtils.do_SignIn( form.email.data, form.password.data)
+	(retCode,msg,user) = userUtils.do_SignIn( form.email.data, form.password.data)
 
-	if (results[0] == userUtils.RetCodes.success.value):        
+	if (retCode == userUtils.RetCodes.success.value):        
 		#flash (results[1],"is-info")
-		user = results[2] 
+		#user = results[2] 
 
 		session["user_id"] = user.id  #form.email.data
 		session["user_name"] = user.name #'Mr. Customer'
-
+		session["tenant_id"] = user.tid 
 		return redirect(url_for('show_home_page'))
 
 	else:
-		flash (results[1],"is-danger")
+		flash (msg,"is-danger")
 		return redirect('/user/showSigninPage')
 
 
@@ -162,7 +162,7 @@ def show_jd_create_page():
 @app.route('/jd/showAllPage', methods = ['GET'])
 @login_required
 def show_jd_all_page():
-	results = jdUtils.list_jds(session.get('user_id'))
+	results = jdUtils.list_jds_by_tenant(session.get('tenant_id'))
 	if (results[0] == jdUtils.RetCodes.success.value): 
 		print( 'success')
 		jdList = results[2]    
@@ -400,7 +400,7 @@ def resume_save():
 @app.route('/resume/showBrowser', methods = ['GET'])
 @login_required
 def show_resume_browser_page():
-	results = resumeUtils.list_resumes(session.get('user_id'))
+	results = resumeUtils.list_resumes_by_tenant(session.get('tenant_id'))
 	if (results[0] == resumeUtils.RetCodes.success.value): 
 		print( 'success')
 		resumeList = results[2]    
@@ -463,7 +463,7 @@ def show_resume_shortlist_page():
 	form.id.data = request.args.get('id')
 	form.candidate_name.data = request.args.get('name')
 
-	results = jdUtils.list_jds(session.get('user_id'))
+	results = jdUtils.list_jds_by_tenant(session.get('tenant_id'))
 
 	if (results[0] == jdUtils.RetCodes.success.value): 
 		jdList = results[2]    
@@ -536,18 +536,6 @@ def jd_resume_shortlist():
 
 	#/jd/showShortlistPage/<int:job_id>
 	return redirect(url_for('show_shortlist_resumes_page', job_id = jd_id))
-
-	''' continue showing shortlist page
-	(retCode, msg, jd) = jdUtils.get(jd_id) #show JD summary on the page
-	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(jd_id, retCode,msg)
-
-	(retCode, msg, resumeList) = resumeUtils.list_resumes(session.get('user_id'))
-	assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
-
-	#return render_template('/jd/shortlist.html',jd = jd, resumeList =resumeList,actionTemplate="shortlist")		   
-	'''
-
-	#return render_template('jd/show_modal_msg.html')
 
 #TODO deprecate we may need to delete this function
 @app.route('/resume/shortlist', methods = ['POST'])

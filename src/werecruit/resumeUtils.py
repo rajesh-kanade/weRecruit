@@ -138,7 +138,7 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 			cursor.close()
 		dbUtils.returnToPool(db_con)
 
-def list_resumes(recruiterID):
+def list_resumes_by_recruiter(recruiterID):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
@@ -154,6 +154,31 @@ def list_resumes(recruiterID):
 
 		return(RetCodes.success.value, "Resume List successfully fetched from db", resumeList)
 
+
+	except Exception as dbe:
+		print(dbe)
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
+
+def list_resumes_by_tenant(tenantID):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		query = """SELECT * FROM wr_resumes 
+				where recruiter_id = ( select uid from tenant_user_roles where tid = %s) 
+				order by id desc"""
+	
+		params = (tenantID,)
+		print ( cursor.mogrify(query, params))
+		cursor.execute(query,params)
+
+		resumeList =cursor.fetchall()
+
+		return(RetCodes.success.value, "Resume List successfully fetched from db for tenant ID {0}".format(tenantID), resumeList)
 
 	except Exception as dbe:
 		print(dbe)
