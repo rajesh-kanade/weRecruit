@@ -84,7 +84,7 @@ ALTER TABLE public.application_status_codes
 CREATE TABLE public.users
 (
     email text COLLATE pg_catalog."default" NOT NULL UNIQUE,
-    name text COLLATE pg_catalog."default" NOT NULL,
+    name text COLLATE pg_catalog."default" NOT NULL UNIQUE,
     status smallint NOT NULL,
     is_deleted boolean NOT NULL,
     password text COLLATE pg_catalog."default" NOT NULL,
@@ -124,6 +124,18 @@ CREATE TABLE public.wr_jds
     details text COLLATE pg_catalog."default" ,
     positions smallint ,
     client text COLLATE pg_catalog."default" ,
+    location text COLLATE pg_catalog."default",
+
+    yrs_of_exp smallint ,
+    primary_skills text COLLATE pg_catalog."default",
+    secondary_skills text COLLATE pg_catalog."default",
+    jd_file_name text COLLATE pg_catalog."default",
+    ctc_min_range NUMERIC(15,2),
+    ctc_max_range NUMERIC(15,2),
+    ctc_currency text COLLATE pg_catalog."default",
+
+    fees_in_percent  NUMERIC (3, 2),
+    warranty_period_in_months smallint ,
 
     hiring_mgr_name text COLLATE pg_catalog."default" ,
     hiring_mgr_emailid text COLLATE pg_catalog."default",
@@ -220,6 +232,8 @@ ALTER TABLE public.wr_jd_resume_status_audit_log
 
 
 insert into public.roles(id,name,is_deleted, status) values (1,'admin',false,0);
+insert into public.roles(id,name,is_deleted, status) values (2,'recruiter',false,0);
+
 
 insert into public.application_status_codes(id,description,is_deleted) values (0,'Shortlisted',false);
 
