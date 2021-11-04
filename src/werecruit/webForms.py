@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import  SelectMultipleField,SelectField, StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
+from wtforms import DecimalField, SelectMultipleField,SelectField, StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
 from wtforms.fields.core import IntegerField,DateField
 from wtforms.validators import DataRequired, Email,NumberRange
 from flask_wtf.file import FileField, FileRequired, FileAllowed
@@ -27,14 +27,25 @@ class JDForm(FlaskForm):
     
     id = HiddenField('ID' )
 
-    title = StringField('Title', validators=[DataRequired(message='Enter Title*')])
-    details = TextAreaField('Details', validators=[DataRequired('Enter  Details')])
+    title = StringField('Title*', validators=[DataRequired(message='Enter Title*')])
+    details = TextAreaField('Details')
     total_positions = IntegerField('Total Positions', 
                         validators=[DataRequired('Enter number of positions'),NumberRange(min=1, max=5)])
                    
     open_date = DateField('Open Date',validators=[DataRequired('Enter  Open Date')])
 
     client = StringField('Client Name', validators=[DataRequired('Enter Client Name')])
+    
+    location = StringField('Location')
+    yrs_of_exp = DecimalField("Years of Experience")
+    primary_skills = TextAreaField('Primary Skills')
+    secondary_skills = TextAreaField('Secondary Skills')
+    ctc_min = DecimalField("CTC Min Range")
+    ctc_max = DecimalField("CTC Max Range")
+    ctc_currency = SelectField( "Currency", choices =[('INR', 'INR'),('USD', 'USD')])
+    fees_percent = DecimalField("Fees Percent")
+    warranty_in_months = IntegerField("Warranty in months")
+
     status = SelectField('Status', choices=[(jdUtils.JDStatusCodes.open.value, 'Open'), 
                         (jdUtils.JDStatusCodes.draft.value, 'Draft'), 
                         (jdUtils.JDStatusCodes.close.value, 'Close')])

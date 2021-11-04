@@ -245,7 +245,7 @@ def get(id):
 
 ## main entry point
 if __name__ == "__main__":
-	#save_resume(constants.NEW_ENTITY_ID,'ddd.pdf','rahul','rahul-email','rahul-phone',1)
-	shortlist(25,[17], datetime.now(tz=timezone.utc),
-		ApplicationStatusCodes.shortlisted.value,1)
+	save_resume(constants.NEW_ENTITY_ID,'ddd.pdf','rahul','rahul-email','rahul-phone',1)
+	#shortlist(25,[17], datetime.now(tz=timezone.utc),
+	#	ApplicationStatusCodes.shortlisted.value,1)
 
