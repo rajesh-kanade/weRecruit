@@ -397,7 +397,9 @@ def do_SignIn(id, password):
 			print ( "user length ",len(userList))
 
 			if (userList is None or len(userList) != 1) :
-				return (RetCodes.sign_in_failed, "Login failed as either no user exists or either wrong emaild ID or password has been provided.")
+				return (RetCodes.sign_in_failed, 
+				"Sign in failed as either no user with this email ID exists or wrong password has been provided.", 
+				None)
 
 			for user in userList:
 				print(user)
@@ -407,7 +409,7 @@ def do_SignIn(id, password):
 
 		except Exception as dbe:
 			print(dbe)
-			return ( RetCodes.server_error, str(dbe))
+			return ( RetCodes.server_error, str(dbe), None)
 			#db_con.rollback()
 			#raise
 		

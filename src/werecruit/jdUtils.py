@@ -198,16 +198,16 @@ def list_jds_by_recruiter(recruiterID, statusFilter = None):
 		cursor.close()
 		dbUtils.returnToPool(db_con)	
 
-def list_jds_by_tenant(tenantID, statusFilter = None):
+def list_jds_by_tenant(tenantID, limit = 1000, statusFilter = None):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 		
 		query = """SELECT * FROM wr_jds 
 				where recruiter_id = ( select uid from tenant_user_roles where tid = %s)
-				order by open_date DESC"""
+				order by open_date DESC limit %s"""
 	
-		params = (tenantID,)
+		params = (tenantID,limit)
 		print ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 

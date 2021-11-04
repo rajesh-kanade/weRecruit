@@ -32,7 +32,7 @@ app.secret_key = 'somesecretkeythatonlyishouldknow'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
-UPLOAD_FOLDER = '\\resume_uploads'  #TODO win specific for now. Take care of path sep on linux
+UPLOAD_FOLDER = '/resume_uploads'  #TODO win specific for now. Take care of path sep on linux
 ALLOWED_EXTENSIONS = {'doc', 'pdf', 'docx'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
