@@ -2,6 +2,8 @@
 import dbUtils
 import constants
 
+import decimal
+
 from datetime import datetime
 from datetime import timezone 
 
@@ -27,7 +29,12 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 			ip_name2=None, ip_email2=None,ip_phone2=None,
 			hiring_mgr_name= None, hiring_mgr_email=None,hiring_mgr_phone=None,
 			hr_name= None, hr_email=None,hr_phone=None,
-			status=JDStatusCodes.open.value ):
+			status=JDStatusCodes.open.value,
+			location=None, yrs_of_exp=None,jd_file_name=None,
+			primary_skills=None, secondary_skills=None,
+			ctc_min=None, ctc_max=None,ctc_currency=None,
+			fees_percent=None,warranty_period_in_months=None,
+			 ):
 	
 	print('inside save_jd function')
 	db_con = dbUtils.getConnFromPool()
@@ -37,8 +44,8 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 		if not title.strip():
 			 return(RetCodes.empty_ent_attrs_error.value,"Title field empty or null.", None)
 
-		if not details.strip():
-			 return(RetCodes.empty_ent_attrs_error.value,"Details field empty or null.", None)
+		#if not details.strip():
+		#	 return(RetCodes.empty_ent_attrs_error.value,"Details field empty or null.", None)
 
 		if not client.strip():
 			 return(RetCodes.empty_ent_attrs_error.value,"Client field is empty or null.", None)
@@ -59,20 +66,32 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 					ip_name_1, ip_emailid_1,ip_phone_1,
 					ip_name_2, ip_emailid_2,ip_phone_2,
 					hiring_mgr_name, hiring_mgr_emailid,hiring_mgr_phone,
-					hr_name,hr_emailid,hr_phone ) 
+					hr_name,hr_emailid,hr_phone,
+					location,yrs_of_exp,jd_file_name,
+					primary_skills, secondary_skills,
+					ctc_min,ctc_max,ctc_currency ,
+					fees_in_percent,warranty_period_in_months) 
 					values (%s,%s,%s,
 					%s,%s,%s,%s,
 					%s,%s,%s,
 					%s,%s,%s,
 					%s,%s,%s,
-					%s,%s,%s) returning id """
+					%s,%s,%s,
+					%s,%s,%s,
+					%s,%s,
+					%s,%s,%s,
+					%s,%s) returning id """
 			
 			params = (title,details,client,
 					recruiterID,int(positions),int(status),open_date,
 					ip_name1,ip_email1,ip_phone1,
 					ip_name2,ip_email2,ip_phone2,
 					hiring_mgr_name,hiring_mgr_email,hiring_mgr_phone,
-					hr_name,hr_email,hr_phone)
+					hr_name,hr_email,hr_phone,
+					location,yrs_of_exp,jd_file_name,
+					primary_skills,secondary_skills,
+					ctc_min,ctc_max, ctc_currency,
+					fees_percent,warranty_period_in_months)
 
 			print ( cursor.mogrify(sql, params))
 			

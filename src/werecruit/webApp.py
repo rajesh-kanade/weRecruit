@@ -23,6 +23,7 @@ import resumeUtils
 import functools
 import os
 
+
 from datetime import datetime
 from datetime import timezone
 
@@ -184,13 +185,31 @@ def save_JD():
 	loggedInUserID = session.get('user_id')
 	print('JD id is {0}'.format(form.id.data))
 	
+	if form.client_jd.data != None:
+		f = form.client_jd.data
+		filename = secure_filename(f.filename)
+		print('app root path is {0}'.format(app.root_path))
+		#resource_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
+		#print ( 'resource path is {0}'.format(resource_path))
+		#f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+		f.save(os.path.join(app.root_path + UPLOAD_FOLDER, filename))
+
+		#f.save(resource_path,filename)
+		f.close()
+	else:
+		filename = None
+
 	results = jdUtils.save_jd(form.id.data, form.title.data,form.details.data,
 								form.client.data,int(loggedInUserID),int(form.total_positions.data),form.open_date.data,
 								form.intv_panel_name_1.data,form.intv_panel_email_1.data,form.intv_panel_phone_1.data,
 								form.intv_panel_name_2.data,form.intv_panel_email_2.data,form.intv_panel_phone_2.data,
 								form.hiring_mgr_name.data,form.hiring_mgr_email.data,form.hiring_mgr_phone.data,
 								form.hr_name.data,form.hr_email.data,form.hr_phone.data,
-								int(form.status.data))
+								int(form.status.data),
+								form.location.data,form.yrs_of_exp.data,filename,
+								form.primary_skills.data,form.secondary_skills.data,
+								form.ctc_min.data,form.ctc_max.data,form.ctc_currency.data,
+								form.fees_percent.data,form.warranty_in_months.data)
 
 	if (results[0] == jdUtils.RetCodes.success.value):        
 		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")

@@ -34,8 +34,9 @@ class JDForm(FlaskForm):
                    
     open_date = DateField('Open Date',validators=[DataRequired('Enter  Open Date')])
 
-    client = StringField('Client Name', validators=[DataRequired('Enter Client Name')])
-    
+    client = StringField('Client Name*', validators=[DataRequired('Enter Client Name')])
+    client_jd = FileField('Client JD File')
+
     location = StringField('Location')
     yrs_of_exp = DecimalField("Years of Experience")
     primary_skills = TextAreaField('Primary Skills')

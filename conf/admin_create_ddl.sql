@@ -126,15 +126,15 @@ CREATE TABLE public.wr_jds
     client text COLLATE pg_catalog."default" ,
     location text COLLATE pg_catalog."default",
 
-    yrs_of_exp smallint ,
+    yrs_of_exp NUMERIC(4,2) ,
     primary_skills text COLLATE pg_catalog."default",
     secondary_skills text COLLATE pg_catalog."default",
     jd_file_name text COLLATE pg_catalog."default",
-    ctc_min_range NUMERIC(15,2),
-    ctc_max_range NUMERIC(15,2),
+    ctc_min NUMERIC(15,2),
+    ctc_max NUMERIC(15,2),
     ctc_currency text COLLATE pg_catalog."default",
 
-    fees_in_percent  NUMERIC (3, 2),
+    fees_in_percent  NUMERIC (4, 2),
     warranty_period_in_months smallint ,
 
     hiring_mgr_name text COLLATE pg_catalog."default" ,
