@@ -108,7 +108,7 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 			db_con.commit()
 			return (RetCodes.success.value, "Resume creation successful.", resume_id)
 		else:
-			sql = """update public.wr_jds set  
+			sql = """update public.wr_resumes set  
 						resume_filename = %s,  name = %s,  email = %s, phone = %s,
 						recruiter_id = %s
 					where id = %s"""

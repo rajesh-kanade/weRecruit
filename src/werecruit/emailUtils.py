@@ -14,8 +14,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 
-def readEmails():
+import time
 
+def readEmails():
+	mailbox = None 
 	try:
 		print("Reading mailbox")
 
@@ -33,7 +35,7 @@ def readEmails():
 		print( "printing email configurations")
 		print("Mail server is ",mailserver)
 		print(email)
-		print(password)
+		#print(password)
 		print(folder)
 
 		mailbox = MailBox(mailserver)
@@ -44,7 +46,7 @@ def readEmails():
 
 		print("start reading emails")
 
-		for msg in mailbox.fetch(AND( seen = True )):  #shold be False
+		for msg in mailbox.fetch(AND( seen = False )):  #should be False in prod
 			print(msg.subject)
 			print(msg.text)
 			for att in msg.attachments:
@@ -56,15 +58,21 @@ def readEmails():
 				f.write( att.payload)
 				f.close()
 				
-				resumeUtils.save_resume(constants.NEW_ENTITY_ID, att.filename,'Dummy Name',
+				(retcode,msg,resumeId) = resumeUtils.save_resume(constants.NEW_ENTITY_ID, att.filename,'Dummy Name',
 								'Dummy Email','Dummy phone',1)
-		
-		mailbox.logout()
+
+				assert retcode == resumeUtils.RetCodes.success.value, "Failed to save resume sent via email. Please contact your sys admin"
+
+		#mailbox.logout()
 		print("logged out from mailbox")
 	
 	except Exception as e:
 		print( e )
-		print ( " Exception reading email ")
+		#mailbox.logout()
+
+	finally:
+		if mailbox is not None:
+			mailbox.logout()
 
 	#res_dir_path = "./data/"
 	#resume_List =  os.listdir(path=res_dir_path)
@@ -103,4 +111,8 @@ if __name__ == "__main__":
 	#processEmailsForApp(constants.APP_CODE_CAMI);
 	#processEmails("rrkanade22@yahoo.com","CAMI")
 	#sendMail('rrkanade22@yahoo.com', "test subject", "test body",'plain')
-	readEmails()
+
+	while True:
+		readEmails()
+		time.sleep(60)
+
