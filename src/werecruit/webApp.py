@@ -265,6 +265,20 @@ def show_jd_edit_page(id):
 		form.hr_email.data = jd.hr_emailid
 		form.hr_phone.data = jd.hr_phone
 
+		form.location.data = jd.location
+		form.yrs_of_exp.data = jd.yrs_of_exp
+		form.client_jd.data = jd.jd_file_name
+
+		form.primary_skills.data = jd.primary_skills
+		form.secondary_skills.data = jd.secondary_skills
+
+		form.ctc_min.data = jd.ctc_min
+		form.ctc_max.data = jd.ctc_max
+		form.ctc_currency.data = jd.ctc_currency
+
+		form.fees_percent.data = jd.fees_in_percent
+		form.warranty_in_months.data = jd.warranty_period_in_months
+
 		return render_template('jd/edit.html', form=form)
 	else:
 		flash (results[0] + ':' +results[1],"is-danger")

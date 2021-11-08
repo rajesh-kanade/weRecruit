@@ -33,7 +33,7 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 			location=None, yrs_of_exp=None,jd_file_name=None,
 			primary_skills=None, secondary_skills=None,
 			ctc_min=None, ctc_max=None,ctc_currency=None,
-			fees_percent=None,warranty_period_in_months=None,
+			fees_percent=None,warranty_period_in_months=None
 			 ):
 	
 	print('inside save_jd function')
@@ -112,7 +112,11 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 						ip_name_1 = %s, ip_emailid_1 = %s, ip_phone_1 = %s,
 						ip_name_2 = %s, ip_emailid_2 = %s, ip_phone_2 = %s,
 						hiring_mgr_name = %s, hiring_mgr_emailid = %s, hiring_mgr_phone = %s,
-						hr_name = %s, hr_emailid = %s, hr_phone = %s
+						hr_name = %s, hr_emailid = %s, hr_phone = %s,
+						location=%s,yrs_of_exp =%s,
+						primary_skills=%s,secondary_skills=%s,
+						ctc_min=%s,ctc_max=%s,ctc_currency=%s,
+						fees_in_percent=%s,warranty_period_in_months=%s
 					where id = %s"""
 			params = (title,details,client, 
 						recruiterID, int(positions), int(status), open_date,
@@ -120,6 +124,10 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 						ip_name2,ip_email2,ip_phone2,
 						hiring_mgr_name, hiring_mgr_email,hiring_mgr_phone,
 						hr_name, hr_email,hr_phone,
+						location,yrs_of_exp,
+						primary_skills,secondary_skills,
+						ctc_min,ctc_max,ctc_currency,
+						fees_percent,warranty_period_in_months,
 						int(id))
 						
 			print ( cursor.mogrify(sql, params))
@@ -127,11 +135,20 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 			cursor.execute(sql, params)
 			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
-			#result = cursor.fetchone()
-			#jd_id = result[0]
-			print ("JD id {0} updated successfully.".format(id) )
+			#This is bad code as unnecessary second db call is being made, need to be refactored
+			if (jd_file_name != None):
+				sql1 = """update public.wr_jds set  
+						jd_file_name = %s
+						where id = %s
+					"""
+				params1 = (jd_file_name,id)
+				cursor.execute(sql1, params1)
+				assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
 		
 			db_con.commit()
+			print ("JD id {0} updated successfully.".format(id) )
+
 			return (RetCodes.success.value, "JD {0} updated successfully.".format(id),id)
 			
 
