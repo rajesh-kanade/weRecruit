@@ -103,16 +103,15 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 			result = cursor.fetchone()
 			resume_id = result[0]
 			print ("Resume id {} successfully created.".format(resume_id))
-		
 
 			db_con.commit()
-			return (RetCodes.success.value, "Resume creation successful.", resume_id)
+			return (RetCodes.success.value, "Resume id {} successfully uploaded.".format(resume_id), resume_id)
 		else:
 			sql = """update public.wr_resumes set  
-						resume_filename = %s,  name = %s,  email = %s, phone = %s,
+						name = %s,  email = %s, phone = %s,
 						recruiter_id = %s
 					where id = %s"""
-			params = (fileName,candidateName,candidateEmail, candidatePhone,
+			params = (candidateName,candidateEmail, candidatePhone,
 						recruiterID,
 						int(id))
 						
@@ -121,12 +120,19 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 			cursor.execute(sql, params)
 			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
-			#result = cursor.fetchone()
-			#jd_id = result[0]
+			if fileName != None:
+				sql1 = """update public.wr_resumes set  
+						resume_filename = %s
+					where id = %s"""
+				params1 = (fileName,
+						int(id))
+				cursor.execute(sql1, params1)
+				assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+				
 			print ("Resume id {0} updated successfully.".format(id) )
 		
 			db_con.commit()
-			return (RetCodes.success.value, "Resume {0} updated successfully.".format(id),id)
+			return (RetCodes.success.value, "Resume id {0} updated successfully.".format(id),id)
 			
 	except Exception as e:
 		print(e)

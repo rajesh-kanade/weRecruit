@@ -108,7 +108,7 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 		else:
 			sql = """update public.wr_jds set  
 						title = %s,  details = %s,  client = %s,
-						recruiter_id = %s, positions = %s, status =%s, open_date= %s ,
+						recruiter_id = %s, positions = %s, status =%s,
 						ip_name_1 = %s, ip_emailid_1 = %s, ip_phone_1 = %s,
 						ip_name_2 = %s, ip_emailid_2 = %s, ip_phone_2 = %s,
 						hiring_mgr_name = %s, hiring_mgr_emailid = %s, hiring_mgr_phone = %s,
@@ -119,7 +119,7 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 						fees_in_percent=%s,warranty_period_in_months=%s
 					where id = %s"""
 			params = (title,details,client, 
-						recruiterID, int(positions), int(status), open_date,
+						recruiterID, int(positions), int(status),
 						ip_name1,ip_email1,ip_phone1,
 						ip_name2,ip_email2,ip_phone2,
 						hiring_mgr_name, hiring_mgr_email,hiring_mgr_phone,
@@ -241,7 +241,7 @@ def list_jds_by_tenant(tenantID, limit = 1000, statusFilter = None):
 		
 		query = """SELECT * FROM wr_jds 
 				where recruiter_id = ( select uid from tenant_user_roles where tid = %s)
-				order by open_date DESC limit %s"""
+				order by id DESC limit %s"""
 	
 		params = (tenantID,limit)
 		print ( cursor.mogrify(query, params))

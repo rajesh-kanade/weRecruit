@@ -2,19 +2,10 @@
 {%block content%}
 <section class="container is-fullheight">
 
-    <div class="block">
-      {% set messages = get_flashed_messages(with_categories = true ) %}            
-      {% if messages %}    
-        {% for category, message in messages %}  
-            <div class="notification {{ category }}">
-              <button class="delete"></button>
-              {{ message }}
-            </div>
-          {% endfor %}                  
-      {% endif %}
-    </div>
-    <div class = "block">
-      <span class="title has-text-info"> Resume Browser </span><br>
+  {% include 'utils/show_modal_msg.html'%}
+
+    <div class = "block has-text-left">
+      <span class="title has-text-info">Resume Browser</span><br>
       <span class="is-size-7 has-text-info">Search and Browse through the resumes you uploaded.
       </span>
     </div>

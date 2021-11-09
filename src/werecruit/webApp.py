@@ -213,10 +213,10 @@ def save_JD():
 
 	if (results[0] == jdUtils.RetCodes.success.value):        
 		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
-		return redirect(url_for("show_home_page"))
+		return redirect(url_for("show_jd_all_page"))
 	else:
 		flash (results[0] + ':' +results[1],"is-danger")
-		return redirect(url_for("show_home_page"))
+		return redirect(url_for("show_jd_all_page"))
 
 @app.route('/jd/showEditPage/<int:id>', methods = ['GET'])
 @login_required
@@ -399,7 +399,7 @@ def resume_save():
 	print('candidate phone is {0}'.format(form.candidate_phone.data))
 	print('candidate resume file name is {0}'.format(form.candidate_resume.data))
 
-	if form.validate_on_submit():
+	if form.candidate_resume.data != None:
 		f = form.candidate_resume.data
 		filename = secure_filename(f.filename)
 		print('app root path is {0}'.format(app.root_path))
@@ -410,17 +410,21 @@ def resume_save():
 
 		#f.save(resource_path,filename)
 		f.close()
-
-		results = resumeUtils.save_resume(constants.NEW_ENTITY_ID, filename,form.candidate_name.data,
-								form.candidate_email.data,form.candidate_phone.data,int(session.get('user_id')))
-		if results[0] == resumeUtils.RetCodes.success.value:
-			return redirect(url_for("show_home_page"))
-		else:
-			flash (results[0] + ':' +results[1],"is-danger")
-			form.submit.errors.append(results[1])
-			return render_template('resume/edit.html', form= form)	
 	else:
-		return render_template('resume/edit.html', form= form)
+		filename = None
+
+	(retCode,msg,data) = resumeUtils.save_resume(form.id.data, filename,form.candidate_name.data,
+							form.candidate_email.data,form.candidate_phone.data,int(session.get('user_id')))
+	if retCode == resumeUtils.RetCodes.success.value:
+		#return redirect(url_for("show_home_page"))
+		flash (msg, "is-success")
+		return redirect(url_for('show_resume_browser_page'))
+	else:
+		flash (retCode + ':' + msg,"is-danger")
+		form.submit.errors.append(msg)
+		return render_template('resume/edit.html', form= form)	
+	#else:
+	#	return render_template('resume/edit.html', form= form)
 		
 	'''if (results[0] == jdUtils.RetCodes.success.value):        
 		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
