@@ -11,8 +11,8 @@ class SignUpForm(FlaskForm):
 
     company_name = StringField('Company Name', validators=[DataRequired(message='Please enter company name')])
     
-    name = StringField('User Name', validators=[DataRequired(message='Please enter your name')])
-    email = StringField('Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
+    name = StringField( 'Admin User Name', validators=[DataRequired(message='Please enter your name')])
+    email = StringField('Admin Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
     password = PasswordField('Password', validators=[DataRequired('Please enter password.')])
     
     submit = SubmitField('Create WeRecruit account')

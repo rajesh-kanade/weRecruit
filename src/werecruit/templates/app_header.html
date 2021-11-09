@@ -107,29 +107,24 @@
           W<span class="has-text-primary is-italic">e</span>RECRUIT</h1> </div>
 
         <div class="navbar-end">
+          <div class ="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              <span class ="{{theme_text_color}} has-text-weight-bold">{{session.user_name}}</span>
+            </a>    
+            <div class="navbar-dropdown">
+              <a href ="#" class="navbar-item">
+                <span class ="{{theme_text_color}}">Reset Password</span>
+              </a>
+
+              <a href ="#"class="navbar-item">
+                <span class ="{{theme_text_color}}">Update Profile</span>
+              </a>
+            </div>            
+          </div>
           <div class="navbar-item">
-            {% if session.user_id %}              
-              <div class="buttons">
-                <a href="/user/showUserProfilePage" class="mr-3 {{theme_text_color}}">
-                  {{ session.user_name }}
-                </a>
-                
-                <a href="/user/doSignout" class="button is-danger">
-                  Sign out
-                </a>
-
-              </div>
-
-            {% else %}
-              <div class="buttons">
-                <a href="/user/showSignupPage" class="button is-primary">
-                  <strong>Sign up</strong>
-                </a>
-                <a href="/user/showSigninPage" class="button is-primary">
-                  Sign in
-                </a>
-              </div>
-            {% endif %}
+              <a href="/user/doSignout" class="button is-danger">
+                Sign out
+              </a>
 
           </div>
         </div>
