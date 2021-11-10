@@ -20,6 +20,8 @@ import userUtils
 import jdUtils
 import constants
 import resumeUtils
+import reports
+
 import functools
 import os
 
@@ -670,6 +672,17 @@ def show_job_summary_page(job_id):
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job status summary for job_id {0)".format(job_id)
 
 	return render_template("jd/show_status_summary_page.html", jd=jd, statusSummary = jobStatusSummary)
+
+#/reports/showClientWiseSummary
+@app.route('/reports/showClientWiseSummary', methods = ['GET'])
+@login_required
+def show_clientwise_summary_report_page():
+	
+	#get the summary
+	(retCode, msg,clientSummary) = reports.get_client_wise_summary_report(session["tenant_id"])
+	assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise summary report"
+
+	return render_template("reports/show_clientwise_summary_reportpage.html", clientSummary = clientSummary)
 
 
 if __name__ == "__main__":
