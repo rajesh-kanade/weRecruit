@@ -1,0 +1,55 @@
+{%extends "app_header.html" %}
+{%block content%}
+
+<section class="container is-fullheight">
+
+    {% include 'utils/show_modal_msg.html'%}
+    <div class = "block has-text-left">
+        <span class="title is-size-4 has-text-info">Client wise active job position application status summary</span><br>
+        <span class="is-size-7 has-text-info">This report summarizes job applications  in various phase for all job positions.</span>
+    </div>
+    
+    <div class="block">   
+        <div class="table-container has-text-centered">
+          <table class="table is-striped">
+            <tbody>
+            {% for cs in clientSummary %}
+              {%if loop.first %}
+
+                <thead>
+                  <tr class="{{theme_bg_color}}">
+                    <th class="has-text-centered {{theme_text_color}}">CLIENT</th>
+                    <th class="has-text-centered {{theme_text_color}}">JOB ID</th>
+                    <th class="has-text-centered {{theme_text_color}}">JOB TITLE</th>
+                    <th class="has-text-centered {{theme_text_color}}">STATUS ID</th>
+                    <th class="has-text-centered {{theme_text_color}}">STATUS DESCRIPTION</th>
+                    <th class="has-text-centered {{theme_text_color}}">COUNT</th>
+                </tr>
+                </thead>
+              {%endif %}
+              <tr class="{{theme_bg_color}}">
+                <td class="has-text-centered {{theme_text_color}}">{{ cs.client }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ cs.id }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ cs.title }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ cs.status }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ cs.description }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{ cs.count }}</td>
+  
+            </tr>
+            {% else %}
+              <div class="notification is-warning">
+                No job application summary data. !!!
+              </div>
+            {% endfor %}
+          </tbody>
+          </table>
+        </div>  
+    </div>
+
+    <a class="button is-success is-rounded" onclick="window.print();">Print</a>
+    <a class="button is-success is-rounded" href="/">Email</a>
+
+</section>
+
+{% endblock %}
+

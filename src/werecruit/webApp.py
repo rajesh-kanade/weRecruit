@@ -684,6 +684,14 @@ def show_clientwise_summary_report_page():
 
 	return render_template("reports/show_clientwise_summary_reportpage.html", clientSummary = clientSummary)
 
+@app.route('/reports/showClientWiseJobApplicationStatusSummary', methods = ['GET'])
+@login_required
+def show_clientwise_job_application_status_summary_report_page():
+	
+	(retCode, msg,clientSummary) = reports.get_client_wise_job_application_status_summary_report(session["tenant_id"])
+	assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise job application summary report"
+
+	return render_template("reports/show_clientwise_job_app_summary_reportpage.html", clientSummary = clientSummary)
 
 if __name__ == "__main__":
 	app.run()
