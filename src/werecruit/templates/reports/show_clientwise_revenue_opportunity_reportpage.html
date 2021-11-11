@@ -5,8 +5,8 @@
 
     {% include 'utils/show_modal_msg.html'%}
     <div class = "block has-text-left">
-        <span class="title is-size-4 has-text-info">Job applications status summary</span><br>
-        <span class="is-size-7 has-text-info">This report summarizes job applications  in various phases for every active job positions.</span>
+        <span class="title is-size-4 has-text-info">Revenue opportunity summary</span><br>
+        <span class="is-size-7 has-text-info">This report summarizes potential revenue opportunity for every active job position. For revenue opportunity to be shown please provide ctc, positions and fees percent information in job details. </span>
     </div>
     
     <div class="block">   
@@ -21,9 +21,9 @@
                     <th class="has-text-centered {{theme_text_color}}">CLIENT</th>
                     <th class="has-text-centered {{theme_text_color}}">JOB ID</th>
                     <th class="has-text-centered {{theme_text_color}}">JOB TITLE</th>
-                    <th class="has-text-centered {{theme_text_color}}">STATUS ID</th>
-                    <th class="has-text-centered {{theme_text_color}}">STATUS DESCRIPTION</th>
-                    <th class="has-text-centered {{theme_text_color}}">COUNT</th>
+                    <th class="has-text-centered {{theme_text_color}}">POSITIONS</th>                    
+                    <th class="has-text-centered {{theme_text_color}}">REVENUE OPPORTUNITY</th>
+                    
                 </tr>
                 </thead>
               {%endif %}
@@ -31,10 +31,8 @@
                 <td class="has-text-centered {{theme_text_color}}">{{ cs.client }}</td>
                 <td class="has-text-centered {{theme_text_color}}">{{ cs.id }}</td>
                 <td class="has-text-centered {{theme_text_color}}">{{ cs.title }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ cs.status }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ cs.description }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ cs.count }}</td>
-  
+                <td class="has-text-centered {{theme_text_color}}">{{ cs.positions }}</td>
+                <td class="has-text-centered {{theme_text_color}}">{%if cs.ro is not none %} {{cs.ctc_currency}} {{cs.ro | round(2)}} {% endif %}</td>  
             </tr>
             {% else %}
               <div class="notification is-warning">
