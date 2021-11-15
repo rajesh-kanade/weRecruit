@@ -50,7 +50,7 @@ def get_client_wise_job_application_status_summary_report(tenantID):
 					from wr_jds,wr_jd_resumes
 					where wr_jds.id = wr_jd_resumes.jd_id 
 					and wr_jds.status = 0
-					and wr_jds.id in ( select id from wr_jds where recruiter_id = 1)
+					and wr_jds.id in ( select id from wr_jds where recruiter_id = %s)
 					group by id, jd_id,wr_jd_resumes.status
 					order by client,wr_jd_resumes.status"""
 
@@ -84,7 +84,7 @@ def get_client_wise_revenue_opportunity_report(tenantID):
 			sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
 			where status = 0  
 				and ctc_max is not NULL
-				and recruiter_id = ( select uid from tenant_user_roles where tid = 1) group by client ,id
+				and recruiter_id = ( select uid from tenant_user_roles where tid = %s) group by client ,id
 				order by ro asc
 			"""
 
