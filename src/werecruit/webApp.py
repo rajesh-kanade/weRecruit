@@ -21,13 +21,20 @@ import jdUtils
 import constants
 import resumeUtils
 import reports
+import emailUtils
 
 import functools
 import os
 
+from jinja2 import Environment, FileSystemLoader
 
 from datetime import datetime
 from datetime import timezone
+
+
+from threading import Thread
+import time
+
 
 app = Flask(__name__)
 app.secret_key = 'somesecretkeythatonlyishouldknow'
@@ -653,6 +660,17 @@ def update_job_application_status():
 
 	if retCode == jdUtils.RetCodes.success.value :
 		flash ("Status updated successfully.","is-success")
+		
+		file_loader = FileSystemLoader('./conf')
+		env = Environment(loader=file_loader)
+		template = env.get_template('job_appl_status_change.template')
+		
+		body = template.render(resumeID = str(form.resume_id.data), jobID = str( form.job_id.data),new_status= str(form.new_status.data) )
+		#send email 
+		emailUtils.sendMail_async('rkanade@gmail.com','Status change notification' , body,'plain' )
+
+		print("Email sent successfully.")
+
 	else:
 		flash ("Status update failed. Failure detail as follow - " + retCode + ':' + msg,"is-danger")
 
@@ -703,5 +721,15 @@ def show_clientwise_revenue_opportunity_summary_report_page():
 
 	return render_template("reports/show_clientwise_revenue_opportunity_reportpage.html", clientSummary = clientSummary)
 
+def start_read_email_bg_job():
+	while True:
+		emailUtils.readEmails()
+		time.sleep(60)		
+
 if __name__ == "__main__":
+	
+	thread = Thread(target=start_read_email_bg_job)
+	thread.daemon = True
+	thread.start()
+
 	app.run()

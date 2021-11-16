@@ -14,6 +14,9 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 
+from jinja2 import Environment, FileSystemLoader
+
+import _thread
 import time
 
 def readEmails():
@@ -45,7 +48,7 @@ def readEmails():
 		print("Logged into mail box")
 
 		print("start reading emails")
-
+		
 		for msg in mailbox.fetch(AND( seen = False )):  #should be False in prod
 			print(msg.subject)
 			print(msg.text)
@@ -62,7 +65,14 @@ def readEmails():
 								'Dummy Email','Dummy phone',1)
 
 				assert retcode == resumeUtils.RetCodes.success.value, "Failed to save resume sent via email. Please contact your sys admin"
-
+				
+				file_loader = FileSystemLoader('./conf')
+				env = Environment(loader=file_loader)
+				template = env.get_template('resume_upload_response.template')
+		
+				body = template.render(resumeID = resumeId )
+				
+				sendMail(email,'Resume upload notification',body,'plain')
 		#mailbox.logout()
 		print("logged out from mailbox")
 	
@@ -83,6 +93,10 @@ def readEmails():
 		resumeUtils.process_single_resume(userID, str( res_dir_path + resume_file))
 		os.remove(str( res_dir_path + resume_file))
 	'''
+
+def sendMail_async(ToEmailAddr, subject, body, contentType):
+	_thread.start_new_thread ( sendMail,(ToEmailAddr, subject, body, contentType) )
+
 
 def sendMail(ToEmailAddr, subject, body, contentType):
 	
@@ -110,9 +124,10 @@ def sendMail(ToEmailAddr, subject, body, contentType):
 if __name__ == "__main__":
 	#processEmailsForApp(constants.APP_CODE_CAMI);
 	#processEmails("rrkanade22@yahoo.com","CAMI")
-	#sendMail('rrkanade22@yahoo.com', "test subject", "test body",'plain')
-
-	while True:
-		readEmails()
-		time.sleep(60)
+	sendMail('rrkanade22@yahoo.com', "test subject", "test body",'plain')
+	time.sleep(60)
+	
+	#while True:
+	#	readEmails()
+	#	time.sleep(60)
 
