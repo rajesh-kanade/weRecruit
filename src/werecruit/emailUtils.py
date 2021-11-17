@@ -23,12 +23,6 @@ def readEmails():
 	mailbox = None 
 	try:
 		print("Reading mailbox")
-
-		#mailbox = MailBox('mail.fulgorithm.com')
-		#(retCode,retMsg,mailserver) = userUtils.getUserConfig(userID,appID, "email_server")
-		#(retCode,retMsg,email) = userUtils.getUserConfig(userID,appID, "mailbox")
-		#(retCode,retMsg,password) = userUtils.getUserConfig(userID,appID, "password")
-		#(retCode,retMsg,folder) = userUtils.getUserConfig(userID,appID, "folder")
 		
 		mailserver = os.environ.get("IMAP_MAIL_SERVER")
 		email = os.environ.get("IMAP_MAILBOX")
@@ -61,10 +55,10 @@ def readEmails():
 				f.write( att.payload)
 				f.close()
 				
-				(retcode,msg,resumeId) = resumeUtils.save_resume(constants.NEW_ENTITY_ID, att.filename,'Dummy Name',
-								'Dummy Email','Dummy phone',1)
+				(retcode,msg,resumeId) = resumeUtils.save_resume(constants.NEW_ENTITY_ID, att.filename,'Candidate Name',
+								'Candidate Email','Candidate phone',1)
 
-				assert retcode == resumeUtils.RetCodes.success.value, "Failed to save resume sent via email. Please contact your sys admin"
+				assert retcode == resumeUtils.RetCodes.success.value, "Failed to save resume sent via email. Please contact your sys admin."
 				
 				file_loader = FileSystemLoader('./conf')
 				env = Environment(loader=file_loader)
