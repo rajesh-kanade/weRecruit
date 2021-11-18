@@ -29,11 +29,8 @@ from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
 from io import StringIO
 
-#import pandas as pd
-#from pandas.io.json import json_normalize
 import en_core_web_sm
 import spacy
-#import wikipedia
 
 from spacy.matcher import PhraseMatcher
 from spacy.matcher import Matcher
@@ -45,12 +42,6 @@ from spacy.matcher import Matcher
 
 #import ast
 import unicodedata
-
-#import json
-#import uuid
-#import emailUtils
-
-#from jinja2 import Environment, FileSystemLoader
 
 _nlp = spacy.load("en_core_web_sm")
 
@@ -501,10 +492,10 @@ def extract_full_name1(text):
 
 ## main entry point
 if __name__ == "__main__":
-	(retCode,msg,data) = save_resume(constants.NEW_ENTITY_ID,None,'rajesh','rkanade@gmail.com','9890303698',1)
-	print(retCode)
-	print(msg)
+	#(retCode,msg,data) = save_resume(constants.NEW_ENTITY_ID,None,'rajesh','rkanade@gmail.com','9890303698',1)
+	#print(retCode)
+	#print(msg)
 	#shortlist(25,[17], datetime.now(tz=timezone.utc),
 	#	ApplicationStatusCodes.shortlisted.value,1)
-	#result = process_single_resume('C:\\Users\\rajesh\\Downloads\\jr.docx')
+	result = process_single_resume('C:\\Users\\rajesh\\Downloads\\AK.pdf')
 
