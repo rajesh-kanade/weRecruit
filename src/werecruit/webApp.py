@@ -430,7 +430,7 @@ def resume_save():
 		return redirect(url_for('show_resume_browser_page'))
 	else:
 		flash (retCode + ':' + msg,"is-danger")
-		form.submit.errors.append(msg)
+		#form.errors.append(msg)
 		return render_template('resume/edit.html', form= form)	
 	#else:
 	#	return render_template('resume/edit.html', form= form)

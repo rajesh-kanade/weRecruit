@@ -4,6 +4,57 @@ import constants
 from datetime import datetime
 from datetime import timezone
 
+#import logging
+#import shutil
+
+
+#from jinja2.environment import create_cache
+
+#Logging = logging.basicConfig(filename='resume-insights.log',level=logging.INFO)
+
+#logger = logging.getLogger("resumeUtils")
+
+#testResumeFileName = '.\\data\\AbadheshMishra.docx'
+#testResumeFileName = '.\\data\\prashitshah.pdf'
+#testResumeFileName = '.\\data\\Abdullah_Shaikh_Software_Engineer_(Java).pdf'
+#import constants
+
+import docx2txt
+import re
+#import docx
+import os.path
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfpage import PDFPage
+from io import StringIO
+
+#import pandas as pd
+#from pandas.io.json import json_normalize
+import en_core_web_sm
+import spacy
+#import wikipedia
+
+from spacy.matcher import PhraseMatcher
+from spacy.matcher import Matcher
+
+#from collections import Counter
+
+#import sqlite3
+#import dbUtils
+
+#import ast
+import unicodedata
+
+#import json
+#import uuid
+#import emailUtils
+
+#from jinja2 import Environment, FileSystemLoader
+
+_nlp = spacy.load("en_core_web_sm")
+
+
 from enum import Enum
 class RetCodes(Enum):
 	success = 'RES_CRUD_S200'
@@ -71,14 +122,15 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 	db_con = dbUtils.getConnFromPool()
 	cursor = db_con.cursor()
 	try:
-		
-		if not candidateName.strip():
+		print(candidateName)
+		if not bool(candidateName):
 			 return(RetCodes.empty_ent_attrs_error.value,"Candidate Name empty or null.", None)
-
-		if not candidateEmail.strip():
+		
+		print(candidateEmail)
+		if not bool(candidateEmail):
 			 return(RetCodes.empty_ent_attrs_error.value,"Candidate Email empty or null.", None)
 
-		if not candidatePhone.strip():
+		if not bool(candidatePhone):
 			 return(RetCodes.empty_ent_attrs_error.value,"Candidate Phone empty or null.", None)
 
 		if not recruiterID:
@@ -247,11 +299,212 @@ def get(id):
 		dbUtils.returnToPool(db_con)	
 
 
+def process_single_resume( testResumeFileName ):
+		
+	ext = getFileExtension(testResumeFileName)
 
+	#print(ext)
+	#print("Extension found is", ext)
+	resumeText=''
+
+	if ext == 'docx':
+		resumeText = readDocx(testResumeFileName)
+	elif ext == 'pdf': 
+		resumeText = readPDF(testResumeFileName)
+	else:
+		return
+
+	#wordTokenizer(resumeText)
+	#_summary_list.append({"resume-file-name": testResumeFileName})
+	#_summary_list['resume-file-name'] = testResumeFileName
+	#_summary_list.append({"res-text": resumeText})
+
+	#logger.debug("\n\n *************** Text resume after rmoving special chars ************* \n\n ")
+	resumeText = clean_text(resumeText)
+
+
+	name = extract_full_name(resumeText)
+	#extract_full_name1(resumeText)
+	phone=extract_phones(resumeText)
+	email = extract_emails(resumeText)
+	
+	return("",email,phone)
+
+def readPDF(pdf_file_name):
+	rsrcmgr = PDFResourceManager()
+	retstr = StringIO()
+	codec = 'utf-8'
+	laparams = LAParams()
+	device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
+	fp = open(pdf_file_name, 'rb')
+	interpreter = PDFPageInterpreter(rsrcmgr, device)
+	password = ""
+	maxpages = 0
+	caching = True
+	pagenos=set()
+
+	for page in PDFPage.get_pages(fp, pagenos, maxpages=maxpages, password=password,caching=caching, check_extractable=True):
+		interpreter.process_page(page)
+
+	text = retstr.getvalue()
+
+	fp.close()
+	device.close()
+	retstr.close()
+
+	return text
+
+def readDocx(doc_file_name):
+	#doc = docx.Document(doc_file_name)
+	#paras = [p.text for p in doc.paragraphs if p.text]   
+	
+	#return " ".join(paras)
+	# extract text
+	print(doc_file_name)
+	text = docx2txt.process(doc_file_name)
+	return(text)
+
+
+## get file extension
+def getFileExtension ( fileName):
+	extension = os.path.splitext(fileName)[1][1:]
+	return extension
+
+def clean_text(text):
+	#resumeText = resumeText.replace("\r", ' ')
+	#resumeText = resumeText.replace("\n", ' ')
+	text = text.replace("\t", ' ')
+	text = text.replace("\n", ' ')
+
+	#text = text.replace("-", ' ')
+
+
+	text = re.sub(r'[^\x00-\x7F]+', ' ', text)
+	#resumeText = re.sub(r'[^\\x00-\\x7F]+', '', resumeText)
+
+	text = unicodedata.normalize("NFKD",text)
+	#_summary_list.append({"cleaned-res-text": text})
+
+	return text
+
+def extract_emails(text):
+	
+	emailMatcher = Matcher(_nlp.vocab,True)
+	doc = _nlp(text)
+
+	print ("****** Get Email address ")
+	emailMatcher.add("email",[[{"LIKE_EMAIL" : True}]],on_match=None)
+	matches = emailMatcher(doc)  #EMail matcher
+	results = []
+	for match_id, start, end in matches:
+		rule_id = _nlp.vocab.strings[match_id]  # get the unicode ID, i.e. 'COLOR'
+		span = doc[start : end]  # get the matched slice of the doc
+		print("Email Found : " , span.text)
+		#logger.info("EMail Found : %s " , span.text)
+		if span.text.lower() not in results:
+			results.append(span.text.lower())
+
+	#_summary_list.append({"Emails":results})
+	#_summary_list['Emails'] = results
+
+def extract_phones(text):
+	
+	doc = _nlp(text)
+	
+	print ("****** Get Phone ************* ")
+	matcher = Matcher(_nlp.vocab,True)
+
+	pattern = [{"LIKE_NUM": True, "LENGTH":10}]
+	matcher.add("phone",[pattern],on_match=None)
+
+	results =[]
+	matches = matcher(doc)  #Phone phrase matcher
+	for match_id, start, end in matches:
+		rule_id = _nlp.vocab.strings[match_id]  # get the unicode ID, i.e. 'COLOR'
+		span = doc[start : end]  # get the matched slice of the doc
+		#logger.info("phone Found : %s " , span.text)
+		if span.text.lower() not in results:
+			results.append(span.text.lower())
+		#results.append(span.text)
+
+
+	pMatcher = PhraseMatcher(_nlp.vocab, attr="SHAPE")
+
+	pattern = _nlp('0123456789')
+	pMatcher.add("PHONE_NUMBER", None, pattern)
+
+	pattern = _nlp('+91 0123456789')    
+	pMatcher.add("PHONE_NUMBER", None, pattern)
+
+	pattern = _nlp('+91-0123456789')
+	pMatcher.add("PHONE_NUMBER", None, pattern)
+	
+	matches = pMatcher(doc)  #Phone phrase matcher
+	for match_id, start, end in matches:
+		rule_id = _nlp.vocab.strings[match_id]  # get the unicode ID, i.e. 'COLOR'
+		span = doc[start : end]  # get the matched slice of the doc
+		#logger.info("phone Found : %s " , span.text)
+		if  len(span.text) >= 10 :
+			#results.append(span.text)
+			if span.text.lower() not in results:
+				results.append(span.text.lower())
+			break
+
+	#_summary_list.append({"Phones":results})
+	#_summary_list['Phones'] = results
+
+def extract_full_name(text):
+	doc = _nlp(text)
+	matcher = Matcher(_nlp.vocab,True)
+
+	pattern = [{'POS': 'PROPN'}, {'POS': 'PROPN'}]
+	matcher.add('FULL_NAME',[pattern],on_match=None)
+	
+	results = []
+	matches = matcher(doc)
+	for match_id, start, end in matches:
+		span = doc[start:end]
+		print ("Full Name is " + span.text)
+		#logger.info("Full Name : %s " , span.text)
+
+		#this is added to ensure if someone has added F Name M Name L Name, then we need to fetch the immediate next word if it proper noun 
+		tokens = [token for token in doc]
+
+		t = tokens[end] #get the next word
+
+		print(t.text)
+		print(t.pos_)
+		if ( str(t.pos_) == 'PROPN'):
+			print( span.text + " " + t.text )
+			results.append(span.text + " " + t.text )
+
+		else:
+			print( span.text)
+			results.append(span.text)
+
+		break 
+	
+	#_summary_list.append({"Name":results})
+	#_summary_list['Name'] = results
+
+def extract_full_name1(text):
+	
+	doc = _nlp(text)
+	results =[]
+	for sent in doc.sents:
+		#if len(results) > 0:
+		#    break
+		doc1 = _nlp(sent.text.lower())
+		for ent in doc1.ents:
+			if (ent.label_ == 'PERSON'):
+				results.append(ent.text)
 
 ## main entry point
 if __name__ == "__main__":
-	save_resume(constants.NEW_ENTITY_ID,'ddd.pdf','rahul','rahul-email','rahul-phone',1)
+	(retCode,msg,data) = save_resume(constants.NEW_ENTITY_ID,None,'rajesh','rkanade@gmail.com','9890303698',1)
+	print(retCode)
+	print(msg)
 	#shortlist(25,[17], datetime.now(tz=timezone.utc),
 	#	ApplicationStatusCodes.shortlisted.value,1)
+	#result = process_single_resume('C:\\Users\\rajesh\\Downloads\\jr.docx')
 
