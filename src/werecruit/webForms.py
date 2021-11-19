@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import DecimalField, SelectMultipleField,SelectField, StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
-from wtforms.fields.core import IntegerField,DateField
 from wtforms.validators import DataRequired, Email,NumberRange
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-
+from wtforms import IntegerField, DateField
+#from wtforms.fields.form import IntegerField, DateField
 
 import jdUtils
 

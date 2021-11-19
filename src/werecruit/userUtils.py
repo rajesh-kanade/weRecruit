@@ -12,8 +12,8 @@ from datetime import date
 from flask import Flask, jsonify, request 
 
 import random
-from flask_mail import Mail, Message 
-from flask_cors import CORS
+#from flask_mail import Mail, Message 
+#from flask_cors import CORS
 
 from werkzeug.utils import secure_filename
 from dataclasses import dataclass
