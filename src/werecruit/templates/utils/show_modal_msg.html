@@ -1,23 +1,5 @@
 {% set messages = get_flashed_messages(with_categories = true ) %}            
 {% if messages %} 
-    <!--
-    <div id= "modal-window" class="modal is-active">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-        <header class="modal-card-head">
-            <p class="modal-card-title">We Recruit</p>
-            <button class="delete" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-            {% for category, message in messages %}  
-                <div class="notification {{ category }}">{{ message }}</div>
-            {% endfor %}  
-        </section>
-        <footer class="modal-card-foot">
-            <button class="button" onclick="document.getElementById('modal-window').style.display = 'none';">Close</button>
-        </footer>
-        </div>
-    </div>   -->
     <div id= "modal-window" onclick="document.getElementById('modal-window').style.display = 'none';" class="modal is-active">
         <div class="modal-background"></div>
         <div class="modal-content">
