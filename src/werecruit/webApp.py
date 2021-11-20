@@ -51,10 +51,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 Session(app)
 fa = FontAwesome(app)
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(filename='werecruit.log', level=logging.DEBUG)
 
 """def cleanup(sender, **extra):
-	print('inside Tearing down cleanup  function')
+	logging.debug('inside Tearing down cleanup  function')
 	session.close()
 
 from flask import appcontext_tearing_down
@@ -136,10 +136,8 @@ def login_required(func):
 @login_required
 def show_home_page():
 
-	#form=JDCreateForm()
 	return render_template('home.html')
-	#return redirect('create_jd.html', form = form)
-	#redirect('/user/showSigninPage')
+
 
 @app.route('/user/doSignout', methods = ['GET'])
 @login_required
@@ -174,10 +172,10 @@ def show_jd_create_page():
 def show_jd_all_page():
 	results = jdUtils.list_jds_by_tenant(session.get('tenant_id'))
 	if (results[0] == jdUtils.RetCodes.success.value): 
-		print( 'success')
+		logging.debug( 'success')
 		jdList = results[2]    
 		for jd in jdList:
-			print(jd.title)   
+			logging.debug(jd.title)   
 		return render_template('jd/list.html', jdList = jdList )
 	else:
 		flash (results[0] + ':' +results[1],"is-danger")
@@ -187,19 +185,19 @@ def show_jd_all_page():
 @login_required
 def save_JD():
 
-	print('inside save JD.')
+	logging.debug('inside save JD.')
 
 	form = JDForm()
 
 	loggedInUserID = session.get('user_id')
-	print('JD id is {0}'.format(form.id.data))
+	logging.debug('JD id is {0}'.format(form.id.data))
 	
 	if form.client_jd.data != None:
 		f = form.client_jd.data
 		filename = secure_filename(f.filename)
-		print('app root path is {0}'.format(app.root_path))
+		logging.debug('app root path is {0}'.format(app.root_path))
 		#resource_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
-		#print ( 'resource path is {0}'.format(resource_path))
+		#logging.debug ( 'resource path is {0}'.format(resource_path))
 		#f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 		f.save(os.path.join(app.root_path + UPLOAD_FOLDER, filename))
 
@@ -231,7 +229,7 @@ def save_JD():
 @login_required
 def show_jd_edit_page(id):
 
-	print('inside edit JD page for Job ID : ' , id)
+	logging.debug('inside edit JD page for Job ID : ' , id)
 
 	#loggedInUserID = session.get('user_id')
 	
@@ -241,7 +239,7 @@ def show_jd_edit_page(id):
 	results = jdUtils.get(id)
 
 	"""if 'show' in request.args:
-		print('inside show')
+		logging.debug('inside show')
 		show = request.args.get('show')
 	else:
 		show="header" """
@@ -299,13 +297,13 @@ def show_jd_edit_page(id):
 @login_required
 def jd_save_header():
 
-	print('inside save header')
+	logging.debug('inside save header')
 
 	form =  JDHeaderForm()
-	print( form.id.data)
-	print ( form.title.data)
-	print ( form.details.data)
-	print ( form.client.data)
+	logging.debug( form.id.data)
+	logging.debug ( form.title.data)
+	logging.debug ( form.details.data)
+	logging.debug ( form.client.data)
 
 	results = jdUtils.save_header(form.id.data,form.title.data,form.details.data,form.client.data)
 	if (results[0] == jdUtils.RetCodes.success.value):
@@ -321,7 +319,7 @@ def jd_save_header():
 @login_required
 def show_jd_apply_page(id):
 
-	print('inside apply JD page for Job ID : ' , id)
+	logging.debug('inside apply JD page for Job ID : ' , id)
 	
 	form = JDApply()
 
@@ -335,16 +333,16 @@ def show_jd_apply_page(id):
 @login_required
 def apply_to_JD():
 
-	print('inside apply to JD.')
+	logging.debug('inside apply to JD.')
 
 	form = JDApply()
 
 	loggedInUserID = session.get('user_id')
-	print('JD id is {0}'.format(form.jd_id.data))
-	print('candidate name is {0}'.format(form.candidate_name.data))
-	print('candidate email is {0}'.format(form.candidate_email.data))
-	print('candidate phone is {0}'.format(form.candidate_phone.data))
-	print('candidate resume file name is {0}'.format(form.candidate_resume.data))
+	logging.debug('JD id is {0}'.format(form.jd_id.data))
+	logging.debug('candidate name is {0}'.format(form.candidate_name.data))
+	logging.debug('candidate email is {0}'.format(form.candidate_email.data))
+	logging.debug('candidate phone is {0}'.format(form.candidate_phone.data))
+	logging.debug('candidate resume file name is {0}'.format(form.candidate_resume.data))
 
 
 	'''results = jdUtils.appy_to_jd(form.id.data, form.title.data,form.details.data,
@@ -359,8 +357,8 @@ def apply_to_JD():
 	if form.validate_on_submit():
 		f = form.candidate_resume.data
 		filename = secure_filename(f.filename)
-		print( app.instance_path)
-		print(filename)
+		logging.debug( app.instance_path)
+		logging.debug(filename)
 		f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 		f.save(filename)
 
@@ -397,23 +395,23 @@ def show_resume_upload_via_email_page():
 @login_required
 def resume_save():
 
-	print('inside resume save.')
+	logging.debug('inside resume save.')
 
 	form = ResumeForm()
 
 	loggedInUserID = session.get('user_id')
-	print('Resume id is {0}'.format(form.id.data))
-	print('candidate name is {0}'.format(form.candidate_name.data))
-	print('candidate email is {0}'.format(form.candidate_email.data))
-	print('candidate phone is {0}'.format(form.candidate_phone.data))
-	print('candidate resume file name is {0}'.format(form.candidate_resume.data))
+	logging.debug('Resume id is {0}'.format(form.id.data))
+	logging.debug('candidate name is {0}'.format(form.candidate_name.data))
+	logging.debug('candidate email is {0}'.format(form.candidate_email.data))
+	logging.debug('candidate phone is {0}'.format(form.candidate_phone.data))
+	logging.debug('candidate resume file name is {0}'.format(form.candidate_resume.data))
 
 	if form.candidate_resume.data != None:
 		f = form.candidate_resume.data
 		filename = secure_filename(f.filename)
-		print('app root path is {0}'.format(app.root_path))
+		logging.debug('app root path is {0}'.format(app.root_path))
 		#resource_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
-		#print ( 'resource path is {0}'.format(resource_path))
+		#logging.debug ( 'resource path is {0}'.format(resource_path))
 		#f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 		f.save(os.path.join(app.root_path + UPLOAD_FOLDER, filename))
 
@@ -448,10 +446,10 @@ def resume_save():
 def show_resume_browser_page():
 	results = resumeUtils.list_resumes_by_tenant(session.get('tenant_id'))
 	if (results[0] == resumeUtils.RetCodes.success.value): 
-		print( 'success')
+		logging.debug( 'success')
 		resumeList = results[2]    
 		for resume in resumeList:
-			print(resume.name)   
+			logging.debug(resume.name)   
 		return render_template('resume/list.html', resumeList = resumeList )
 	else:
 		flash (results[0] + ':' +results[1],"is-danger")
@@ -461,7 +459,7 @@ def show_resume_browser_page():
 @login_required
 def show_resume_edit_page(id):
 
-	print('inside edit resume page for  ID {0} '.format(id))
+	logging.debug('inside edit resume page for  ID {0} '.format(id))
 
 	#loggedInUserID = session.get('user_id')
 	
@@ -500,7 +498,7 @@ def resume_download():
 @login_required
 def show_resume_shortlist_page():
 
-	print('inside shortlist resume page for  ID {0} '.format(id))
+	logging.debug('inside shortlist resume page for  ID {0} '.format(id))
 
 	assert request.args.get('id'), "Resume ID request parameter not found."
 	assert request.args.get('name'), "Candidate Name request parameter not found."
@@ -514,7 +512,7 @@ def show_resume_shortlist_page():
 	if (results[0] == jdUtils.RetCodes.success.value): 
 		jdList = results[2]    
 		for jd in jdList:
-			print(jd.title)
+			logging.debug(jd.title)
 		form.selected_jd_list.choices = [(jd.id, jd.title + " | " + str(jd.id)) for jd in jdList]
 		return render_template('resume/shortlist.html', form=form)		   
 	else:
@@ -525,7 +523,7 @@ def show_resume_shortlist_page():
 @login_required
 def show_shortlisted_candidates_page(id):
 
-	print('inside work on resumes page for JD ID {0} '.format(id))
+	logging.debug('inside work on resumes page for JD ID {0} '.format(id))
 
 	(retCode, msg, jd) = jdUtils.get(id)
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
@@ -544,7 +542,7 @@ def show_shortlisted_candidates_page(id):
 @login_required
 def show_shortlist_resumes_page(job_id):
 
-	print('inside show shortlist resumes for Job ID {0} '.format(job_id))
+	logging.debug('inside show shortlist resumes for Job ID {0} '.format(job_id))
 
 	(retCode, msg, jd) = jdUtils.get(job_id) #show JD summary on the page
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
@@ -588,13 +586,13 @@ def jd_resume_shortlist():
 @login_required
 def resume_shortlist():
 
-	print('inside resume shortlist.')
+	logging.debug('inside resume shortlist.')
 
 	form = ResumeShortlistForm()
 
 	loggedInUserID = session.get('user_id')
-	print('Resume id is {0}'.format(form.id.data))
-	print('Selected JD List is {0}'.format(form.selected_jd_list.data))
+	logging.debug('Resume id is {0}'.format(form.id.data))
+	logging.debug('Selected JD List is {0}'.format(form.selected_jd_list.data))
 
 	(retCode,msg,data) = jdUtils.shortlist( form.id.data, form.selected_jd_list.data,
 				datetime.now(tz=timezone.utc),resumeUtils.ApplicationStatusCodes.shortlisted.value, 
@@ -623,7 +621,7 @@ def show_job_application_update_page():
 	assert 'job_id' in request.args, "Query parameter {0} not found in request".format('job_id')
 	job_id = request.args.get('job_id')
 
-	print('inside show Job application update page for Job ID {0}, resume ID {1} '.format(job_id,resume_id))
+	logging.debug('inside show Job application update page for Job ID {0}, resume ID {1} '.format(job_id,resume_id))
 	
 	form = ApplicationStatusUpdate()
 	form.resume_id.data = resume_id
@@ -669,7 +667,7 @@ def update_job_application_status():
 		#send email 
 		emailUtils.sendMail_async('rkanade@gmail.com','Status change notification' , body,'plain' )
 
-		print("Email sent successfully.")
+		logging.debug("Email sent successfully.")
 
 	else:
 		flash ("Status update failed. Failure detail as follow - " + retCode + ':' + msg,"is-danger")

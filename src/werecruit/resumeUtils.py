@@ -8,16 +8,6 @@ from datetime import timezone
 #import shutil
 
 
-#from jinja2.environment import create_cache
-
-#Logging = logging.basicConfig(filename='resume-insights.log',level=logging.INFO)
-
-#logger = logging.getLogger("resumeUtils")
-
-#testResumeFileName = '.\\data\\AbadheshMishra.docx'
-#testResumeFileName = '.\\data\\prashitshah.pdf'
-#testResumeFileName = '.\\data\\Abdullah_Shaikh_Software_Engineer_(Java).pdf'
-#import constants
 
 import docx2txt
 import re
@@ -35,13 +25,8 @@ import spacy
 from spacy.matcher import PhraseMatcher
 from spacy.matcher import Matcher
 
-#from collections import Counter
-
-#import sqlite3
-#import dbUtils
-
-#import ast
 import unicodedata
+import logging
 
 _nlp = spacy.load("en_core_web_sm")
 
@@ -109,15 +94,15 @@ ApplicationStatusNames = {
 
 
 def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recruiterID):
-	print('inside save_resume function')
+	logging.debug('inside save_resume function')
 	db_con = dbUtils.getConnFromPool()
 	cursor = db_con.cursor()
 	try:
-		print(candidateName)
+		logging.debug(candidateName)
 		if not bool(candidateName):
 			 return(RetCodes.empty_ent_attrs_error.value,"Candidate Name empty or null.", None)
 		
-		print(candidateEmail)
+		logging.debug(candidateEmail)
 		if not bool(candidateEmail):
 			 return(RetCodes.empty_ent_attrs_error.value,"Candidate Email empty or null.", None)
 
@@ -138,14 +123,14 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 			params = (fileName,candidateName,candidateEmail,
 					candidatePhone,int(recruiterID))
 
-			print ( cursor.mogrify(sql, params))
+			logging.debug ( cursor.mogrify(sql, params))
 			
 			cursor.execute(sql, params)
 			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
 			result = cursor.fetchone()
 			resume_id = result[0]
-			print ("Resume id {} successfully created.".format(resume_id))
+			logging.debug ("Resume id {} successfully created.".format(resume_id))
 
 			db_con.commit()
 			return (RetCodes.success.value, "Resume id {} successfully uploaded.".format(resume_id), resume_id)
@@ -158,7 +143,7 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 						recruiterID,
 						int(id))
 						
-			print ( cursor.mogrify(sql, params))
+			logging.debug ( cursor.mogrify(sql, params))
 			
 			cursor.execute(sql, params)
 			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
@@ -172,13 +157,13 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 				cursor.execute(sql1, params1)
 				assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 				
-			print ("Resume id {0} updated successfully.".format(id) )
+			logging.debug ("Resume id {0} updated successfully.".format(id) )
 		
 			db_con.commit()
 			return (RetCodes.success.value, "Resume id {0} updated successfully.".format(id),id)
 			
 	except Exception as e:
-		print(e)
+		logging.error(e)
 		db_con.rollback()
 		return (RetCodes.server_error.value, str(e),None)
 	
@@ -196,7 +181,7 @@ def list_resumes_by_recruiter(recruiterID):
 				where recruiter_id = %s order by id desc"""
 	
 		params = (recruiterID,)
-		print ( cursor.mogrify(query, params))
+		logging.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		resumeList =cursor.fetchall()
@@ -205,7 +190,7 @@ def list_resumes_by_recruiter(recruiterID):
 
 
 	except Exception as dbe:
-		print(dbe)
+		logging.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -222,7 +207,7 @@ def list_resumes_by_tenant(tenantID):
 				order by id desc"""
 	
 		params = (tenantID,)
-		print ( cursor.mogrify(query, params))
+		logging.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		resumeList =cursor.fetchall()
@@ -230,7 +215,7 @@ def list_resumes_by_tenant(tenantID):
 		return(RetCodes.success.value, "Resume List successfully fetched from db for tenant ID {0}".format(tenantID), resumeList)
 
 	except Exception as dbe:
-		print(dbe)
+		logging.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -246,7 +231,7 @@ def list_application_status_codes():
 					order by id asc"""
 	
 		#params = (recruiterID,)
-		print ( cursor.mogrify(query, ))
+		logging.debug ( cursor.mogrify(query, ))
 		cursor.execute(query,)
 
 		appStatusCodesList =cursor.fetchall()
@@ -255,7 +240,7 @@ def list_application_status_codes():
 
 
 	except Exception as dbe:
-		print(dbe)
+		logging.error(dbe)
 		return ( RetCodes.server_error.value, str(dbe), None)
 	
 	finally:
@@ -271,7 +256,7 @@ def get(id):
 				where id = %s"""
 	
 		params = (id,)
-		print ( cursor.mogrify(query, params))
+		logging.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		assert cursor.rowcount == 1, "assertion failed : Effected row count is not equal to 1."
@@ -282,7 +267,7 @@ def get(id):
 
 
 	except Exception as dbe:
-		print(dbe)
+		logging.debug(dbe)
 		return ( RetCodes.server_error.value, str(dbe), None)
 	
 	finally:
@@ -294,8 +279,8 @@ def process_single_resume( testResumeFileName ):
 		
 	ext = getFileExtension(testResumeFileName)
 
-	#print(ext)
-	#print("Extension found is", ext)
+	#logging.debug(ext)
+	#logging.debug("Extension found is", ext)
 	resumeText=''
 
 	if ext == 'docx':
@@ -351,7 +336,7 @@ def readDocx(doc_file_name):
 	
 	#return " ".join(paras)
 	# extract text
-	print(doc_file_name)
+	logging.debug(doc_file_name)
 	text = docx2txt.process(doc_file_name)
 	return(text)
 
@@ -383,14 +368,14 @@ def extract_emails(text):
 	emailMatcher = Matcher(_nlp.vocab,True)
 	doc = _nlp(text)
 
-	print ("****** Get Email address ")
+	logging.debug ("****** Get Email address ")
 	emailMatcher.add("email",[[{"LIKE_EMAIL" : True}]],on_match=None)
 	matches = emailMatcher(doc)  #EMail matcher
 	results = []
 	for match_id, start, end in matches:
 		rule_id = _nlp.vocab.strings[match_id]  # get the unicode ID, i.e. 'COLOR'
 		span = doc[start : end]  # get the matched slice of the doc
-		print("Email Found : " , span.text)
+		logging.debug("Email Found : " , span.text)
 		#logger.info("EMail Found : %s " , span.text)
 		if span.text.lower() not in results:
 			results.append(span.text.lower())
@@ -402,7 +387,7 @@ def extract_phones(text):
 	
 	doc = _nlp(text)
 	
-	print ("****** Get Phone ************* ")
+	logging.debug ("****** Get Phone ************* ")
 	matcher = Matcher(_nlp.vocab,True)
 
 	pattern = [{"LIKE_NUM": True, "LENGTH":10}]
@@ -455,7 +440,7 @@ def extract_full_name(text):
 	matches = matcher(doc)
 	for match_id, start, end in matches:
 		span = doc[start:end]
-		print ("Full Name is " + span.text)
+		logging.debug ("Full Name is " + span.text)
 		#logger.info("Full Name : %s " , span.text)
 
 		#this is added to ensure if someone has added F Name M Name L Name, then we need to fetch the immediate next word if it proper noun 
@@ -463,14 +448,14 @@ def extract_full_name(text):
 
 		t = tokens[end] #get the next word
 
-		print(t.text)
-		print(t.pos_)
+		logging.debug(t.text)
+		logging.debug(t.pos_)
 		if ( str(t.pos_) == 'PROPN'):
-			print( span.text + " " + t.text )
+			logging.debug( span.text + " " + t.text )
 			results.append(span.text + " " + t.text )
 
 		else:
-			print( span.text)
+			logging.debug( span.text)
 			results.append(span.text)
 
 		break 
@@ -493,9 +478,10 @@ def extract_full_name1(text):
 ## main entry point
 if __name__ == "__main__":
 	#(retCode,msg,data) = save_resume(constants.NEW_ENTITY_ID,None,'rajesh','rkanade@gmail.com','9890303698',1)
-	#print(retCode)
-	#print(msg)
+	#logging.debug(retCode)
+	#logging.debug(msg)
 	#shortlist(25,[17], datetime.now(tz=timezone.utc),
 	#	ApplicationStatusCodes.shortlisted.value,1)
+	logging.basicConfig(level=logging.DEBUG)
 	result = process_single_resume('C:\\Users\\rajesh\\Downloads\\AK.pdf')
 

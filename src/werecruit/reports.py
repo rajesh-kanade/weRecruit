@@ -1,4 +1,5 @@
 import dbUtils
+import logging
 
 from enum import Enum
 
@@ -21,7 +22,7 @@ def get_client_wise_summary_report(tenantID):
 				group by client order by count desc"""
 
 		params = (int(tenantID),)
-		print ( cursor.mogrify(query, params))
+		logging.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		clientSummaryList =cursor.fetchall()
@@ -30,7 +31,7 @@ def get_client_wise_summary_report(tenantID):
 
 
 	except Exception as dbe:
-		print(dbe)
+		logging.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -56,7 +57,7 @@ def get_client_wise_job_application_status_summary_report(tenantID):
 
 
 		params = (int(tenantID),)
-		print ( cursor.mogrify(query, params))
+		logging.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		clientSummaryList =cursor.fetchall()
@@ -65,7 +66,7 @@ def get_client_wise_job_application_status_summary_report(tenantID):
 
 
 	except Exception as dbe:
-		print(dbe)
+		logging.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -89,7 +90,7 @@ def get_client_wise_revenue_opportunity_report(tenantID):
 			"""
 
 		params = (int(tenantID),)
-		print ( cursor.mogrify(query, params))
+		logging.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		clientSummaryList =cursor.fetchall()
@@ -98,7 +99,7 @@ def get_client_wise_revenue_opportunity_report(tenantID):
 
 
 	except Exception as dbe:
-		print(dbe)
+		logging.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -108,9 +109,9 @@ def get_client_wise_revenue_opportunity_report(tenantID):
 if __name__ == "__main__":
 
 	#(code,msg,resumeList) = get_resumes_not_associated_with_job(18)
-	#print (code)
+	#logging.debug (code)
 	(code,msg,result) = get_client_wise_revenue_opportunity_report(1)
-	print(code)
-	print(msg)
-	print(result)
+	logging.debug(code)
+	logging.debug(msg)
+	logging.debug(result)
 

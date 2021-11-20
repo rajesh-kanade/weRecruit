@@ -1,6 +1,6 @@
 #import fulgorithm.constants
 import datetime
-
+import logging
 import json
 from jinja2 import Environment, FileSystemLoader
 #import emailUtils
@@ -114,32 +114,32 @@ def do_signUp(user_attrs):
 		sql = """insert into users ( email, name, status, password,is_deleted) 
 				values (%s,%s, %s,%s,%s) returning id """
 		params = (email,name,status,password,False)
-		print ( cursor.mogrify(sql, params))
+		logging.debug ( cursor.mogrify(sql, params))
 		
 		cursor.execute(sql, params)
 		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
 		result = cursor.fetchone()
 		uid = result[0]
-		print ("user id created is",uid )
+		logging.debug ("user id created is",uid )
 
 		## insert a record into tenant 
 		sql = """insert into tenants ( name,status,is_deleted) 
 			values (%s,%s, %s) returning id """
 		params = (tname,0,False)
-		print ( cursor.mogrify(sql, params))
+		logging.debug ( cursor.mogrify(sql, params))
 	
 		cursor.execute(sql, params)
 		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 		result = cursor.fetchone()
 		tid = result[0]
-		print ("Tenant id created is",tid )
+		logging.debug ("Tenant id created is",tid )
 
 		## insert a record into tenant users table with isadmin field set to true
 		sql = """insert into tenant_user_roles ( tid,uid,rid) 
 			values (%s,%s, %s)  """
 		params = (tid,uid,1)
-		print ( cursor.mogrify(sql, params))
+		logging.debug ( cursor.mogrify(sql, params))
 	
 		cursor.execute(sql, params)
 		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
@@ -151,7 +151,7 @@ def do_signUp(user_attrs):
 
 
 	except Exception as e:
-		print(e)
+		logging.error(e)
 		db_con.rollback()
 		return (RetCodes.server_error.value, str(e),None)
 	
@@ -182,7 +182,7 @@ def update_user(userID,update_attrs):
 			sql = sql.format(', '.join(update_attrs.keys()), str(userID))
 			params = (tuple(update_attrs.values()),)
 
-		print ( cursor.mogrify(sql, params))
+		logging.debug ( cursor.mogrify(sql, params))
 		
 		cursor.execute(sql, params)
 		updated_rows = cursor.rowcount
@@ -195,7 +195,7 @@ def update_user(userID,update_attrs):
 			return (RetCodes.save_ent_error.value, "User update failed as updated rows is <> 1", updated_rows)
 
 	except Exception as e:
-		print(e)
+		logging.error(e)
 		db_con.rollback()
 		return (RetCodes.server_error.value, str(e),None)
 	
@@ -215,8 +215,8 @@ def delete_user(userID):
 		sql = """UPDATE fl_iam_users SET is_deleted = %s WHERE id = %s"""		
 		params = (True,userID)
 		
-		print (sql)		
-		print ( cursor.mogrify(sql, params))
+		logging.debug (sql)		
+		logging.debug ( cursor.mogrify(sql, params))
 
 		cursor.execute(sql, params)
 		updated_rows = cursor.rowcount
@@ -229,7 +229,7 @@ def delete_user(userID):
 			return(RetCodes.success.value, "DELETE for User ID '{0}' succeeded.".format(userID),updated_rows)
 	
 	except Exception as e:
-		print(e)
+		logging.error(e)
 		return(RetCodes.server_error.value, str(e), None) 
 
 	finally:
@@ -248,8 +248,8 @@ def get_user(userID):
 		sql = """SELECT * FROM fl_iam_users WHERE id = %s and is_deleted = %s """		
 		params = (userID,False)
 		
-		print (sql)		
-		print ( cursor.mogrify(sql, params))
+		logging.debug (sql)		
+		logging.debug ( cursor.mogrify(sql, params))
 
 		cursor.execute(sql, params)
 
@@ -262,12 +262,12 @@ def get_user(userID):
 			return(RetCodes.get_ent_error.value, "Found '{0}' records for User ID '{1}' when 1 record was expected.".format(len(userList),userID), len(userList))
 
 		for user in userList:
-			print(user)
+			logging.debug(user)
 
 		return(RetCodes.success.value, "User ID '{0}' successfully fetched from db".format(userID), userList[0])
 	
 	except Exception as e:
-		print(e)
+		logging.error(e)
 		return(RetCodes.server_error.value, str(e), None) 
 
 	finally:
@@ -284,20 +284,20 @@ def list_users():
 		sql = """SELECT * FROM fl_iam_users WHERE is_deleted = %s """		
 		params = (False,)
 		
-		print (sql)		
-		print ( cursor.mogrify(sql, params))
+		logging.debug (sql)		
+		logging.debug ( cursor.mogrify(sql, params))
 
 		cursor.execute(sql, params)
 
 		userList =cursor.fetchall()
 
 		for user in userList:
-			print(user)
+			logging.debug(user)
 
 		return(RetCodes.success.value, "User List successfully fetched from db", userList)
 	
 	except Exception as e:
-		print(e)
+		logging.error(e)
 		return(RetCodes.server_error.value, str(e), None) 
 
 	finally:
@@ -322,19 +322,19 @@ def getUsersForApp (appcode):
 		
 		query = """SELECT "user-id" FROM "user-app" WHERE "app-id" = %s """
 		data_tuple = (appcode,)
-		print (query)
+		logging.debug (query)
 		
 		cursor.execute(query, data_tuple)
 		records = cursor.fetchall()
-		print("Total rows are:  ", len(records))
-		print("Printing each row")
+		logging.debug("Total rows are:  ", len(records))
+		logging.debug("logging.debuging each row")
 
 		for row in records:
-			print("User ID is : ", row[0])
+			logging.debug("User ID is : ", row[0])
 			userList.append( str(row[0]))
 
 	except Exception as e:
-		print(e)
+		logging.error(e)
 		return(-1, str(e), None)
 
 	finally:
@@ -351,15 +351,15 @@ def getUserConfig(userID, appcode,key):
 		
 		query = """SELECT config -> %s as value FROM "user-app-config" WHERE user_id = %s and app_id = %s and config ?  %s """
 		data_tuple = (str(key), str(userID), str(appcode), str(key))
-		print (query)
-		print ( data_tuple)
+		logging.debug (query)
+		logging.debug ( data_tuple)
 		cursor.execute(query, data_tuple)
 		records = cursor.fetchall()
-		print("Total rows are:  ", len(records))
+		logging.debug("Total rows are:  ", len(records))
 		
 		if (len(records) ==1):
 			row = records[0]
-			print("Config Value is : ", row[0])
+			logging.debug("Config Value is : ", row[0])
 			return (0, 'success', row[0])
 		else:
 			if (len(records) == 0):
@@ -368,8 +368,8 @@ def getUserConfig(userID, appcode,key):
 				return (2,'Too many values for the specified Config key.', None)
 
 	except Exception as e:
-		print(e)
-		return ( -1, print(e), None)
+		logging.error(e)
+		return ( -1, logging.debug(e), None)
 		
 	finally:
 		cursor.close()
@@ -390,11 +390,11 @@ def do_SignIn(id, password):
 		
 			data_tuple = (id, password, False)
 
-			print ( cursor.mogrify(query, data_tuple))
+			logging.debug ( cursor.mogrify(query, data_tuple))
 			cursor.execute(query, data_tuple)
 
 			userList =cursor.fetchall()
-			print ( "user length ",len(userList))
+			logging.debug ( "user length ",len(userList))
 
 			if (userList is None or len(userList) != 1) :
 				return (RetCodes.sign_in_failed, 
@@ -402,13 +402,13 @@ def do_SignIn(id, password):
 				None)
 
 			for user in userList:
-				print(user)
+				logging.debug(user)
 
 			return(RetCodes.success.value, "User List successfully fetched from db", userList[0])
 
 
 		except Exception as dbe:
-			print(dbe)
+			logging.error(dbe)
 			return ( RetCodes.server_error, str(dbe), None)
 			#db_con.rollback()
 			#raise
@@ -418,8 +418,8 @@ def do_SignIn(id, password):
 			dbUtils.returnToPool(db_con)	
 
 	except Exception as e:
-		print ("In the exception block.")
-		print(e)
+		logging.error ("In the exception block.")
+		logging.error(e)
 		return ( RetCodes.server_error, str(e))
 
 
@@ -429,19 +429,19 @@ def do_SignIn(id, password):
 if __name__ == "__main__":
 	#getUserConfigList('rrkanade22@yahoo.com','CAMI')
 	#value = getUserConfig('rrkanade22@yahoo.com','CAMI', "email_server")
-	#print(value)
+	#logging.debug(value)
 	#getUsersForApp(constants.APP_CODE_CAMI)
 	#getSummaryReportForToday( 'rrkanade22@yahoo.com' )
-	
+	logging.basicConfig(level=logging.DEBUG)	
 	(retCode, msg ) = signUp("Rajesh Kanade", "rrkanade@yahoo.com")
 	#(retCode, msg, userRecord ) = get_user("rajesh")
 	#(retCode, msg, userRecord ) = delete_user("rajesh")
 	
 	#(retCode, msg, userRecord ) = update_user("rk4",{'status':Status.active.value,'name':'rajesh hash', 'password':'hashit'})
 	
-	print( retCode)
-	print ( msg)
-	print ( userRecord)
+	logging.debug( retCode)
+	logging.debug ( msg)
+	logging.debug ( userRecord)
 
 	"""
 	(retCode, msg, userRecord ) = update_user("rajesh",{'status':Status.active.value,'name':'rajesh python'})
@@ -449,35 +449,35 @@ if __name__ == "__main__":
 	(retCode, msg, userRecord ) = update_user("rajesh",{})
 	(retCode, msg, userRecord ) = update_user("rajesh",{'name':'vs code'})
 	
-	print( retCode)
-	print ( msg)
-	print ( userRecord)
+	logging.debug( retCode)
+	logging.debug ( msg)
+	logging.debug ( userRecord)
 	
 	
 
 	(retCode, msg, userRecord ) = delete_user('rk1')
 	#(retCode, msg, userRecord ) = do_signUp({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
 
-	print( retCode)
-	print ( msg)
-	print ( userRecord)
+	logging.debug( retCode)
+	logging.debug ( msg)
+	logging.debug ( userRecord)
 	"""
 
 	(retCode, msg, userRecord ) = do_signUp({'id':'rk5','name':'RK5','status':Status.active.value,'password':'pwd'})
 	#(retCode, msg, userRecord ) = do_signUp({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
 
-	print( retCode)
-	print ( msg)
-	print ( userRecord)
+	logging.debug( retCode)
+	logging.debug ( msg)
+	logging.debug ( userRecord)
 	
 	
 	(retCode, msg, userList ) = list_users()
-	print( retCode)
-	print ( msg)
+	logging.debug( retCode)
+	logging.debug ( msg)
 	for user in userList:
-		print ( user)
+		logging.debug ( user)
 	
 	(retCode, msg, userList ) = get_user('rk1')
-	print( retCode)
-	print ( msg)
+	logging.debug( retCode)
+	logging.debug ( msg)
 	

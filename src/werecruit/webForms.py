@@ -3,7 +3,6 @@ from wtforms import DecimalField, SelectMultipleField,SelectField, StringField, 
 from wtforms.validators import DataRequired, Email,NumberRange
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import IntegerField, DateField
-#from wtforms.fields.form import IntegerField, DateField
 
 import jdUtils
 

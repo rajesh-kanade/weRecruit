@@ -18,38 +18,39 @@ from jinja2 import Environment, FileSystemLoader
 
 import _thread
 import time
+import logging
 
 def readEmails():
 	mailbox = None 
 	try:
-		print("Reading mailbox")
+		logging.info("Reading mailbox")
 		
 		mailserver = os.environ.get("IMAP_MAIL_SERVER")
 		email = os.environ.get("IMAP_MAILBOX")
 		password = os.environ.get("IMAP_MAILBOX_PWD")
 		folder = os.environ.get("IMAP_FOLDER")
 
-		print( "printing email configurations")
-		print("Mail server is ",mailserver)
-		print(email)
-		#print(password)
-		print(folder)
+		logging.debug( "logging.debuging email configurations")
+		logging.debug("Mail server is ",mailserver)
+		logging.debug(email)
+		#logging.debug(password)
+		logging.debug(folder)
 
 		mailbox = MailBox(mailserver)
 
 		mailbox.login(email, password, initial_folder=folder)  
 
-		print("Logged into mail box")
+		logging.debug("Logged into mail box")
 
-		print("start reading emails")
+		logging.debug("start reading emails")
 		
 		for msg in mailbox.fetch(AND( seen = False )):  #should be False in prod
-			print(msg.subject)
-			print(msg.text)
+			logging.debug(msg.subject)
+			logging.debug(msg.text)
 			for att in msg.attachments:
-				print(os.getcwd(),att.filename, att.content_type)
+				logging.debug(os.getcwd(),att.filename, att.content_type)
 				cwd = os.getcwd() + "\\";
-				print("working dir is " + cwd)
+				logging.debug("working dir is " + cwd)
 				
 				f = open("./src/werecruit/resume_uploads/" + att.filename,'wb' )
 				f.write( att.payload)
@@ -68,10 +69,10 @@ def readEmails():
 				
 				sendMail(email,'Resume upload notification',body,'plain')
 		#mailbox.logout()
-		print("logged out from mailbox")
+		logging.info("logged out from mailbox")
 	
 	except Exception as e:
-		print( e )
+		logging.error( e )
 		#mailbox.logout()
 
 	finally:
@@ -81,7 +82,7 @@ def readEmails():
 	#res_dir_path = "./data/"
 	#resume_List =  os.listdir(path=res_dir_path)
 
-	#print("Start processing resumes from folder " + res_dir_path)
+	#logging.debug("Start processing resumes from folder " + res_dir_path)
 
 	'''for resume_file in resume_List:
 		resumeUtils.process_single_resume(userID, str( res_dir_path + resume_file))
@@ -96,7 +97,7 @@ def sendMail(ToEmailAddr, subject, body, contentType):
 	
 	ToEmailAddr = 'rkanade@gmail.com' #ToEmailAddr -> done purposefully to avoid sending emails to
 	
-	print("Setting up SMTP server again")
+	logging.info("Setting up SMTP server again")
 
 	msg = MIMEMultipart()
 	msg['From'] = os.environ.get("SMTP_MAIL_USERNAME")
@@ -105,19 +106,21 @@ def sendMail(ToEmailAddr, subject, body, contentType):
 
 	msg.attach(MIMEText(body,contentType)) #'plain'
 
-	print( msg.as_string() )
+	logging.debug( msg.as_string() )
 
 	with smtplib.SMTP(os.environ.get("SMTP_MAIL_SERVER"), os.environ.get("SMTP_MAIL_PORT")) as server:
 		server.login(os.environ.get("SMTP_MAIL_USERNAME"), os.environ.get("SMTP_MAIL_PASSWORD"))
 		server.sendmail(os.environ.get("SMTP_MAIL_USERNAME"), ToEmailAddr, msg.as_string())
 		server.close()
 
-	print("Mail sent successfully.")
+	logging.info("Mail sent successfully.")
 
 
 if __name__ == "__main__":
 	#processEmailsForApp(constants.APP_CODE_CAMI);
 	#processEmails("rrkanade22@yahoo.com","CAMI")
+	logging.basicConfig(level=logging.DEBUG)
+
 	sendMail('rrkanade22@yahoo.com', "test subject", "test body",'plain')
 	time.sleep(60)
 	
