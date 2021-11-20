@@ -14,3 +14,28 @@ h = sha256()
 h.update(b'<STRING>')
 hash = h.hexdigest()
 print(hash)
+
+******************************weRecruit on Ubuntu *****
+
+Python is installed ( 3.8 )
+git is installed
+postgres is installed ( 12 or above )
+
+
+git clone
+virtualenv venv
+
+
+pip and install all dependencies -> this may include cython 
+
+sudo apt install libpq-dev python3-dev  -> this may be a pre req for psycopyg2 ( postgres library ) 
+please follow all 3 steps of spacy
+
+create .env file on linux
+
+you may need pip install python-dotenv for code to read from .env
+
+
+
+create the .env file
+
