@@ -1,17 +1,11 @@
 {%extends "app_header.html" %}
 {%block content%}
 
-<section class="container is-fullheight">
-    {% include 'utils/show_modal_msg.html'%}
+<div id= "modal-window"  class="modal is-active">
+  <div class="modal-background"></div>
+    <div class="modal-card">
 
-    {% include 'jd/header1.html'%}
-    <div class="tile is-ancestor">
-        <div class="tile is-child  box {{theme_bg_color}}">
-          <!-- Add content or other tiles -->
-          {% include 'resume/summary.html' %}
-        </div>
-        <div class="tile is-child box {{theme_bg_color}}">
-          <div class = "block">
+          <div class = "modal-card-body">
             <span class="title is-size-4 has-text-info">Status Update</span>
             
             <form action = "/jd/updateJobApplicationStatus" method="POST">
@@ -42,21 +36,10 @@
               </form>
     
           </div>
-        </div>
-        <div class="tile is-child box {{theme_bg_color}}">
-          <div class="tabs">
-            <ul>
-              <li class="is-active"><a>Status History</a></li>
-              <li><a>Notes History</a></li>
-            </ul>
-          </div>        
-        </div>
-    </div>
+      </div>
+      <button onclick="document.getElementById('modal-window').style.display = 'none';" class="modal-close is-large" aria-label="close"></button>
 
-
-
-
-</section>
+</div>
 
 {% endblock %}
 
