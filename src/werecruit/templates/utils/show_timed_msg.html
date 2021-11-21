@@ -1,0 +1,12 @@
+
+{% set messages = get_flashed_messages(with_categories = true ) %}            
+{% if messages %} 
+    <div id ="expiring_msg">
+        {% for category, message in messages %}  
+            <div class="notification {{ category }}">{{ message }}</div>
+        {% endfor %}  
+    </div>    
+    <script>
+        setTimeout(function(){ document.getElementById('expiring_msg').style.display = 'none'; }, 3000);    
+    </script>
+{% endif %}

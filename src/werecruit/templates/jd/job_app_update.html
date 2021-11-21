@@ -4,40 +4,47 @@
 <div id= "modal-window"  class="modal is-active">
   <div class="modal-background"></div>
     <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Job Application Status Update</p>
+      </header>
+      <div class = "modal-card-body">            
+        <form action = "/jd/updateJobApplicationStatus" method="POST">
+            {{ form.hidden_tag() }}
 
-          <div class = "modal-card-body">
-            <span class="title is-size-4 has-text-info">Status Update</span>
+            {{form.job_id()}}
+            {{form.resume_id()}}
+
+            <div class="field ">
+              <label class="label {{theme_text_color}}">{{ form.new_status.label }}</label>
+              <div class="select">
+                {{form.new_status(class='select', placeholder='Select status')}}
+              </div>
+            </div>
+
+            <div class="field">
+                <label class="label {{theme_text_color}}">{{ form.notes.label }}</label>
+                <div class="control">
+                  {{form.notes(class='textarea', placeholder='Please enter your notes about status change.')}}
+                </div>
+              </div>
             
-            <form action = "/jd/updateJobApplicationStatus" method="POST">
-                {{ form.hidden_tag() }}
+            <div class="field is-grouped">
 
-                {{form.job_id()}}
-                {{form.resume_id()}}
-    
-                <div class="field ">
-                  <label class="label {{theme_text_color}}">{{ form.new_status.label }}</label>
-                  <div class="select">
-                    {{form.new_status(class='select', placeholder='Select status')}}
-                  </div>
-                </div>
+              <div class="field">
+                <p class="control">
+                  {{ form.submit( class = 'button is-success is-rounded') }}    
+                </p>      
+              </div>
+              <div class="field">
+                <p class="control">
+                  <button class="button is-danger is-rounded" onclick="document.location.href = '/jd/showWorkPage/{{form.job_id.data}}';">Close</button>
+                </p>      
+              </div>
+            </div>
+          </form>
 
-                <div class="field">
-                    <label class="label {{theme_text_color}}">{{ form.notes.label }}</label>
-                    <div class="control">
-                      {{form.notes(class='textarea', placeholder='Please enter your notes about status change.')}}
-                    </div>
-                  </div>
-
-                <div class="field">
-                  <p class="control">
-                    {{ form.submit( class = 'button is-success is-rounded') }}    
-                  </p>      
-                </div>
-              </form>
-    
-          </div>
       </div>
-      <button onclick="document.getElementById('modal-window').style.display = 'none';" class="modal-close is-large" aria-label="close"></button>
+  </div>
 
 </div>
 
