@@ -9,41 +9,46 @@
         <span class="is-size-7 has-text-info">This report summarizes job applications  in various phases for every active job positions.</span>
     </div>
     
-    <div class="block">   
-        <div class="table-container has-text-centered">
-          <table class="table is-striped">
-            <tbody>
-            {% for cs in clientSummary %}
-              {%if loop.first %}
+    <div class="block has-text-left">   
+      {% for client, cs in clientSummary|groupby("client") %}
+        <p class="title is-size-4 {{theme_text_color}}">Client Name : {{client}}</p>
+        
+        {% for id, cs in clientSummary|groupby("id") %}
+          <p class="title is-size-4 {{theme_text_color}}" title ="{{client}}">{{client}} - Job ID : {{id}}</p>
 
-                <thead>
-                  <tr class="{{theme_bg_color}}">
-                    <th class="has-text-centered {{theme_text_color}}">CLIENT</th>
-                    <th class="has-text-centered {{theme_text_color}}">JOB ID</th>
-                    <th class="has-text-centered {{theme_text_color}}">JOB TITLE</th>
-                    <th class="has-text-centered {{theme_text_color}}">STATUS ID</th>
-                    <th class="has-text-centered {{theme_text_color}}">STATUS DESCRIPTION</th>
-                    <th class="has-text-centered {{theme_text_color}}">COUNT</th>
-                </tr>
-                </thead>
-              {%endif %}
-              <tr class="{{theme_bg_color}}">
-                <td class="has-text-centered {{theme_text_color}}">{{ cs.client }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ cs.id }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ cs.title }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ cs.status }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ cs.description }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ cs.count }}</td>
-  
-            </tr>
-            {% else %}
-              <div class="notification is-warning">
-                No job application summary data. !!!
-              </div>
-            {% endfor %}
-          </tbody>
-          </table>
-        </div>  
+          <div class="table-container has-text-centered">
+            <table class="table is-striped">
+              <tbody>
+              {% for cs in clientSummary %}
+                {%if loop.first %}
+
+                  <thead>
+                    <tr>
+                      <td class="has-text-centered {{theme_text_color}}">{{ cs.title }}</td>
+                    </tr>
+                    <tr class="{{theme_bg_color}}">
+                      <th class="has-text-centered {{theme_text_color}}">STATUS ID</th>
+                      <th class="has-text-centered {{theme_text_color}}">STATUS DESCRIPTION</th>
+                      <th class="has-text-centered {{theme_text_color}}">COUNT</th>
+                    </tr>
+                  </thead>
+                {%endif %}
+                <tr class="{{theme_bg_color}}">
+                  <td class="has-text-centered {{theme_text_color}}">{{ cs.status }}</td>
+                  <td class="has-text-centered {{theme_text_color}}">{{ cs.description }}</td>
+                  <td class="has-text-centered {{theme_text_color}}">{{ cs.count }}</td>
+    
+              </tr>
+              {% else %}
+                <div class="notification is-warning">
+                  No job application summary data. !!!
+                </div>
+              {% endfor %}
+            </tbody>
+            </table>
+          </div>
+          {% endfor %} 
+      {% endfor %}
     </div>
 
     <a class="button is-success is-rounded" onclick="window.print();">Print</a>
