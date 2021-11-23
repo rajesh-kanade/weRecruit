@@ -19,45 +19,62 @@ from jinja2 import Environment, FileSystemLoader
 import _thread
 import time
 import logging
+_logger = logging.getLogger('emailUtils')
 
 def readEmails():
 	mailbox = None 
 	try:
-		logging.info("Reading mailbox")
+		_logger.info("Reading mailbox")
 		
 		mailserver = os.environ.get("IMAP_MAIL_SERVER")
 		email = os.environ.get("IMAP_MAILBOX")
 		password = os.environ.get("IMAP_MAILBOX_PWD")
 		folder = os.environ.get("IMAP_FOLDER")
 
-		logging.debug( "logging.debuging email configurations")
-		logging.debug("Mail server is ",mailserver)
-		logging.debug(email)
+		_logger.info( "Reading email configurations")
+		_logger.info("Mail server is ",mailserver)
+		_logger.info(email)
 		#logging.debug(password)
-		logging.debug(folder)
+		_logger.info(folder)
 
 		mailbox = MailBox(mailserver)
 
 		mailbox.login(email, password, initial_folder=folder)  
 
-		logging.debug("Logged into mail box")
+		_logger.info("Logged into mail box")
 
-		logging.debug("start reading emails")
+		_logger.info("start reading emails")
 		
-		for msg in mailbox.fetch(AND( seen = False )):  #should be False in prod
-			logging.debug(msg.subject)
-			logging.debug(msg.text)
+		for msg in mailbox.fetch(AND( seen = True )):  #should be False in prod
+			_logger.info(msg.subject)
+			_logger.info(msg.text)
 			for att in msg.attachments:
-				logging.debug(os.getcwd(),att.filename, att.content_type)
+				_logger.debug(os.getcwd(),att.filename, att.content_type)
 				cwd = os.getcwd() + "\\";
-				logging.debug("working dir is " + cwd)
+				_logger.debug("working dir is " + cwd)
 				
 				f = open("./src/werecruit/resume_uploads/" + att.filename,'wb' )
 				f.write( att.payload)
 				f.close()
 				
-				(retcode,msg,resumeId) = resumeUtils.save_resume(constants.NEW_ENTITY_ID, att.filename,'Candidate Name',
-								'Candidate Email','Candidate phone',1)
+				(candidate_name,candidate_email,candidate_phone) = resumeUtils.process_single_resume("./src/werecruit/resume_uploads/" + att.filename)
+				_logger.debug(candidate_name)
+				_logger.debug(candidate_email)
+				_logger.debug(candidate_phone)
+				
+				if not bool(candidate_name):
+					candidate_name ='Please change manually'
+
+				if not bool(candidate_email):
+					candidate_email ='Please change manually'
+
+				if not bool(candidate_phone):
+					candidate_name ='Please change manually'
+
+
+				#TODO : instead of hardcoded recruiter id, we need to get recruiterID from email
+				(retcode,msg,resumeId) = resumeUtils.save_resume(constants.NEW_ENTITY_ID, att.filename,candidate_name,
+								candidate_email,candidate_phone,1)
 
 				assert retcode == resumeUtils.RetCodes.success.value, "Failed to save resume sent via email. Please contact your sys admin."
 				
@@ -69,10 +86,10 @@ def readEmails():
 				
 				sendMail(email,'Resume upload notification',body,'plain')
 		#mailbox.logout()
-		logging.info("logged out from mailbox")
+		_logger.info("logged out from mailbox")
 	
 	except Exception as e:
-		logging.error( e )
+		_logger.error( e )
 		#mailbox.logout()
 
 	finally:
@@ -106,14 +123,14 @@ def sendMail(ToEmailAddr, subject, body, contentType):
 
 	msg.attach(MIMEText(body,contentType)) #'plain'
 
-	logging.debug( msg.as_string() )
+	_logger.debug( msg.as_string() )
 
 	with smtplib.SMTP(os.environ.get("SMTP_MAIL_SERVER"), os.environ.get("SMTP_MAIL_PORT")) as server:
 		server.login(os.environ.get("SMTP_MAIL_USERNAME"), os.environ.get("SMTP_MAIL_PASSWORD"))
 		server.sendmail(os.environ.get("SMTP_MAIL_USERNAME"), ToEmailAddr, msg.as_string())
 		server.close()
 
-	logging.info("Mail sent successfully.")
+	_logger.info("Mail sent successfully.")
 
 
 if __name__ == "__main__":
@@ -121,10 +138,10 @@ if __name__ == "__main__":
 	#processEmails("rrkanade22@yahoo.com","CAMI")
 	logging.basicConfig(level=logging.DEBUG)
 
-	sendMail('rrkanade22@yahoo.com', "test subject", "test body",'plain')
-	time.sleep(60)
+	#sendMail('rrkanade22@yahoo.com', "test subject", "test body",'plain')
+	#time.sleep(60)
 	
 	#while True:
-	#	readEmails()
+	readEmails()
 	#	time.sleep(60)
 
