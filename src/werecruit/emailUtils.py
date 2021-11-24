@@ -63,22 +63,24 @@ def readEmails():
 				f.write( att.payload)
 				f.close()
 				
-				(candidate_name,candidate_email,candidate_phone) = resumeUtils.process_single_resume("./src/werecruit/resume_uploads/" + att.filename)
-				_logger.debug(candidate_name)
-				_logger.debug(candidate_email)
-				_logger.debug(candidate_phone)
+				(candidate_name_list,candidate_email_list,candidate_phone_list) = resumeUtils.process_single_resume("./src/werecruit/resume_uploads/" + att.filename)
 				
-				if not bool(candidate_name):
-					candidate_name ='Please change manually'
+				## resumeUtils sends back a list of potential matches, for now use the first one
+				if not bool(candidate_name_list):
+					candidate_name ='Please enter manually'
+				else:
+					candidate_name = candidate_name_list[0]
+				
+				if not bool(candidate_email_list):
+					candidate_email ='Please enter manually'
+				else:
+					candidate_email = candidate_email_list[0]
 
-				if not bool(candidate_email):
-					candidate_email ='Please change manually'
+				if not bool(candidate_phone_list):
+					candidate_phone ='Please enter manually'
+				else:
+					candidate_phone = candidate_phone_list[0]
 
-				if not bool(candidate_phone):
-					candidate_name ='Please change manually'
-
-
-				#TODO : instead of hardcoded recruiter id, we need to get recruiterID from email
 				(retcode,msg,user) = userUtils.get_user_by_email(msg.from_)
 				#assert retCode == userUtils.RetCodes.success.value,"Failed to get user ID associated with email ID {0}".format(msg.from_)
 				if retcode == userUtils.RetCodes.success.value:
