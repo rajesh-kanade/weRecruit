@@ -19,6 +19,9 @@ from jinja2 import Environment, FileSystemLoader
 import _thread
 import time
 import logging
+
+#logging.propagate = False 
+
 _logger = logging.getLogger('emailUtils')
 
 def readEmails():
@@ -45,9 +48,12 @@ def readEmails():
 
 		_logger.info("start reading emails")
 		
-		for msg in mailbox.fetch(AND( seen = True )):  #should be False in prod
+		for msg in mailbox.fetch(AND( seen = False )):  #should be False in prod
 			_logger.info(msg.subject)
 			_logger.info(msg.text)
+			_logger.info(msg.from_)
+			from_email_addr =str(msg.from_)
+			_logger.debug('Email received from {0}'.format(from_email_addr))
 			for att in msg.attachments:
 				_logger.debug(os.getcwd(),att.filename, att.content_type)
 				cwd = os.getcwd() + "\\";
@@ -73,18 +79,24 @@ def readEmails():
 
 
 				#TODO : instead of hardcoded recruiter id, we need to get recruiterID from email
-				(retcode,msg,resumeId) = resumeUtils.save_resume(constants.NEW_ENTITY_ID, att.filename,candidate_name,
-								candidate_email,candidate_phone,1)
-
-				assert retcode == resumeUtils.RetCodes.success.value, "Failed to save resume sent via email. Please contact your sys admin."
+				(retcode,msg,user) = userUtils.get_user_by_email(msg.from_)
+				#assert retCode == userUtils.RetCodes.success.value,"Failed to get user ID associated with email ID {0}".format(msg.from_)
+				if retcode == userUtils.RetCodes.success.value:
+					(retcode,msg,resumeId) = resumeUtils.save_resume(constants.NEW_ENTITY_ID, att.filename,candidate_name,
+								candidate_email,candidate_phone,user.id)
+					assert retcode == resumeUtils.RetCodes.success.value, "Failed to save resume sent via email. Please contact your sys admin."
 				
-				file_loader = FileSystemLoader('./conf')
-				env = Environment(loader=file_loader)
-				template = env.get_template('resume_upload_response.template')
+					file_loader = FileSystemLoader('./conf')
+					env = Environment(loader=file_loader)
+					template = env.get_template('resume_upload_response.template')
 		
-				body = template.render(resumeID = resumeId )
+					body = template.render(resumeID = resumeId )
 				
-				sendMail(email,'Resume upload notification',body,'plain')
+					sendMail(from_email_addr,'Resume upload notification',body,'plain')
+				else:
+					_logger.warning("Failed to get user record associated with email ID")
+					sendMail(from_email_addr,'Resume upload failure notification','Your email ID is not registered with weRecruit.','plain')
+
 		#mailbox.logout()
 		_logger.info("logged out from mailbox")
 	

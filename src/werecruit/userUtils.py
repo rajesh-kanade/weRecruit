@@ -238,33 +238,26 @@ def delete_user(userID):
 
 		dbUtils.returnToPool(db_con)
 
-def get_user(userID):
+def get_user_by_email(email):
 	
 	try:
 		
 		db_con = dbUtils.getConnFromPool()		
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
-		sql = """SELECT * FROM fl_iam_users WHERE id = %s and is_deleted = %s """		
-		params = (userID,False)
+		sql = """SELECT * FROM users WHERE is_deleted = %s and email =%s"""		
+
+		params = (False,email)
 		
 		logging.debug (sql)		
 		logging.debug ( cursor.mogrify(sql, params))
 
 		cursor.execute(sql, params)
+		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
-		userList =cursor.fetchall()
+		user =cursor.fetchone()
 
-		#if userList == None or len(userList) <= 0 :
-		#	return(RetCodes.get_ent_error1.value, "User ID '{0}' not found in database".format(userID), None)
-
-		if userList == None or len(userList) != 1 :
-			return(RetCodes.get_ent_error.value, "Found '{0}' records for User ID '{1}' when 1 record was expected.".format(len(userList),userID), len(userList))
-
-		for user in userList:
-			logging.debug(user)
-
-		return(RetCodes.success.value, "User ID '{0}' successfully fetched from db".format(userID), userList[0])
+		return(RetCodes.success.value, "User record with email ID  '{0}' successfully fetched from db".format(email), user)
 	
 	except Exception as e:
 		logging.error(e)
@@ -432,7 +425,11 @@ if __name__ == "__main__":
 	#logging.debug(value)
 	#getUsersForApp(constants.APP_CODE_CAMI)
 	#getSummaryReportForToday( 'rrkanade22@yahoo.com' )
-	logging.basicConfig(level=logging.DEBUG)	
+	logging.basicConfig(level=logging.DEBUG)
+	result = get_user_by_email('c1_admin@gmail.com')
+	print(result)
+	quit()
+
 	(retCode, msg ) = signUp("Rajesh Kanade", "rrkanade@yahoo.com")
 	#(retCode, msg, userRecord ) = get_user("rajesh")
 	#(retCode, msg, userRecord ) = delete_user("rajesh")

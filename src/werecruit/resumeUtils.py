@@ -22,6 +22,7 @@ from spacy.matcher import Matcher
 
 import unicodedata
 import logging
+logging.getLogger("pdfminer").setLevel(logging.WARNING)
 
 _logger = logging.getLogger('resumeUtils')
 _nlp = spacy.load("en_core_web_sm")
@@ -332,11 +333,6 @@ def readPDF(pdf_file_name):
 	return text
 
 def readDocx(doc_file_name):
-	#doc = docx.Document(doc_file_name)
-	#paras = [p.text for p in doc.paragraphs if p.text]   
-	
-	#return " ".join(paras)
-	# extract text
 	_logger.debug(doc_file_name)
 	text = docx2txt.process(doc_file_name)
 	return(text)
@@ -488,8 +484,10 @@ if __name__ == "__main__":
 	#_logger.debug(msg)
 	#shortlist(25,[17], datetime.now(tz=timezone.utc),
 	#	ApplicationStatusCodes.shortlisted.value,1)
-	logging.basicConfig(level= logging.DEBUG)
-	(name,email,phone) = process_single_resume('C:\\Users\\rajesh\\Downloads\\jr.docx')
+
+	logging.basicConfig(level = logging.DEBUG)
+	
+	(name,email,phone) = process_single_resume('C:\\Users\\rajesh\\Downloads\\AK.pdf')
 	
 	_logger.debug(name)
 	_logger.debug(email)
