@@ -626,6 +626,7 @@ def show_job_application_update_page():
 	form = ApplicationStatusUpdate()
 	form.resume_id.data = resume_id
 	form.job_id.data = job_id
+	form.change_date.data = datetime.now(tz=timezone.utc)
 
 	(retCode, msg, jd) = jdUtils.get(job_id) #show JD summary on the page
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
@@ -653,7 +654,7 @@ def update_job_application_status():
 	#new_status_code = form.new_status.data
 
 	(retCode,msg,retData) = jdUtils.insert_job_application_status(form.job_id.data,form.resume_id.data,
-						datetime.now(tz=timezone.utc),session.get('user_id'),
+						form.change_date.data,session.get('user_id'),
 						form.new_status.data,form.notes.data)
 
 	if retCode == jdUtils.RetCodes.success.value :

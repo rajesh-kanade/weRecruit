@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import DecimalField, SelectMultipleField,SelectField, StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
 from wtforms.validators import DataRequired, Email,NumberRange
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import IntegerField, DateField
+from wtforms import IntegerField, DateField, DateTimeField
 
 import jdUtils
 
@@ -123,5 +123,5 @@ class ApplicationStatusUpdate( FlaskForm):
 
     new_status = SelectField('Select New Status')
     notes = TextAreaField('Notes')
-
+    change_date = DateField('Update Date & Time', format='%Y-%m-%d')
     submit = SubmitField('Update')
