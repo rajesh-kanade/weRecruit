@@ -156,6 +156,8 @@ CREATE TABLE public.wr_jds
     hr_name text COLLATE pg_catalog."default" ,
     hr_emailid text COLLATE pg_catalog."default",
     hr_phone text COLLATE pg_catalog."default",
+    
+    jd_stats jsonb,
 
     PRIMARY KEY (id),
     foreign key ( recruiter_id) references public.users(id)

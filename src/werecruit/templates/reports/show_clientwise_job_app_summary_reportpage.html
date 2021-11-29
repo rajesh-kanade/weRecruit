@@ -20,21 +20,75 @@
                   <tr class="{{theme_bg_color}}">
                     <th class="has-text-centered {{theme_text_color}}">CLIENT</th>
                     <th class="has-text-centered {{theme_text_color}}">JOB ID</th>
-                    <th class="has-text-centered {{theme_text_color}}">JOB TITLE</th>
-                    <th class="has-text-centered {{theme_text_color}}">STATUS ID</th>
-                    <th class="has-text-centered {{theme_text_color}}">STATUS DESCRIPTION</th>
-                    <th class="has-text-centered {{theme_text_color}}">COUNT</th>
-                </tr>
+                    <th class="has-text-centered {{theme_text_color}}">TITLE</th>
+                    
+                    <th class="has-text-centered {{theme_text_color}}">Shortlisted</th>
+
+                    <th class="has-text-centered {{theme_text_color}}">Joined</th>
+                    <th class="has-text-centered {{theme_text_color}}">No show</th>
+
+
+                    <th class="has-text-centered {{theme_text_color}}">Offers pending</th>
+                    <th class="has-text-centered {{theme_text_color}}">Offers released</th>
+                    <th class="has-text-centered {{theme_text_color}}">Offers accepted</th>
+
+                    <th class="has-text-centered {{theme_text_color}}">R1 Interview Scheduled</th>
+                    <th class="has-text-centered {{theme_text_color}}">R1 Interview Cleared</th>
+                    <th class="has-text-centered {{theme_text_color}}">R1 Interview Rejected</th>
+                    <th class="has-text-centered {{theme_text_color}}">R1 Interview No Show</th>
+
+                    <th class="has-text-centered {{theme_text_color}}">R2 Interview Scheduled</th>
+                    <th class="has-text-centered {{theme_text_color}}">R2 Interview Cleared</th>
+                    <th class="has-text-centered {{theme_text_color}}">R2 Interview Rejected</th>
+                    <th class="has-text-centered {{theme_text_color}}">R2 Interview No Show</th>
+
+                    <th class="has-text-centered {{theme_text_color}}">HM Interview Scheduled</th>
+                    <th class="has-text-centered {{theme_text_color}}">HM Interview Cleared</th>
+                    <th class="has-text-centered {{theme_text_color}}">HM Interview Rejected</th>
+                    <th class="has-text-centered {{theme_text_color}}">HM Interview No Show</th>
+
+                    <th class="has-text-centered {{theme_text_color}}">HR Interview Scheduled</th>
+                    <th class="has-text-centered {{theme_text_color}}">HR Interview Cleared</th>
+                    <th class="has-text-centered {{theme_text_color}}">HR Interview Rejected</th>
+                    <th class="has-text-centered {{theme_text_color}}">HR Interview No Show</th>
+
+                  </tr>
                 </thead>
               {%endif %}
               <tr class="{{theme_bg_color}}">
                 <td class="has-text-centered {{theme_text_color}}">{{ cs.client }}</td>
                 <td class="has-text-centered {{theme_text_color}}">{{ cs.id }}</td>
                 <td class="has-text-centered {{theme_text_color}}">{{ cs.title }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ cs.status }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ cs.description }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ cs.count }}</td>
-  
+                
+                <td class="has-text-centered {{theme_text_color}}" title ="Shortlisted">{{ cs.shortlisted if cs.shortlisted !=0 else ''}}</td>
+
+                <td class="has-text-centered has-text-success-dark" title ="Joined">{{ cs.joined if cs.joined !=0 else ''}}</td>
+                <td class="has-text-centered has-text-danger" title ="No shows">{{ cs.no_show if cs.no_show !=0 else '' }}</td>
+
+                <td class="has-text-centered has-text-warning" title ="Offers pending">{{ cs.offer_pending if cs.offer_pending !=0 else '' }}</td>
+                <td class="has-text-centered {{theme_text_color}}" title ="Offers released">{{ cs.offer_released if cs.offer_released !=0 else '' }}</td>
+                <td class="has-text-centered has-text-success" title ="Offers accepted">{{ cs.offer_accepted if cs.offer_accepted !=0 else ''}}</td>
+
+                <td class="has-text-centered {{theme_text_color}}" title ="R1 Interviews scheduled">{{ cs.r1_interview_scheduled if cs.r1_interview_scheduled !=0 else ''}}</td>
+                <td class="has-text-centered {{theme_text_color}}" title ="R1 Interviews cleared">{{ cs.r1_interview_cleared if cs.r1_interview_cleared !=0 else '' }}</td>
+                <td class="has-text-centered {{theme_text_color}}" title ="R1 Interviews rejected">{{ cs.r1_interview_failed if cs.r1_interview_failed !=0 else ''}}</td>
+                <td class="has-text-centered {{theme_text_color}}" title ="R1 Interviews no show">{{ cs.r1_interview_no_show if cs.r1_interview_no_show !=0 else ''}}</td>
+
+                <td class="has-text-centered {{theme_text_color}}" title ="R2 Interviews scheduled">{{ cs.r2_interview_scheduled if cs.r2_interview_scheduled !=0 else ''}}</td>
+                <td class="has-text-centered {{theme_text_color}}" title ="R2 Interviews cleared">{{ cs.r2_interview_cleared if cs.r2_interview_cleared !=0 else ''}}</td>
+                <td class="has-text-centered {{theme_text_color}}" title="R2 Interviews rejected">{{ cs.r2_interview_failed if cs.r2_interview_failed !=0 else ''}}</td>
+                <td class="has-text-centered {{theme_text_color}}" title ="R2 Interviews no shows">{{ cs.r2_interview_no_show if cs.r2_interview_no_show !=0 else ''}}</td>
+
+                <td class="has-text-centered {{theme_text_color}}" title ="Hiring manager interview scheduled">{{ cs.hm_interview_scheduled if cs.hm_interview_scheduled !=0 else '' }}</td>
+                <td class="has-text-centered {{theme_text_color}}" title="Hiring manager interview cleared">{{ cs.hm_interview_cleared if cs.hm_interview_cleared !=0 else ''}}</td>
+                <td class="has-text-centered {{theme_text_color}}" title="Hiring manager interview rejected">{{ cs.hm_interview_failed if cs.hm_interview_failed !=0 else ''}}</td>
+                <td class="has-text-centered {{theme_text_color}}" title="Hiring manager interview no show">{{ cs.hm_interview_no_show if cs.hm_interview_no_show !=0 else ''}}</td>
+
+                <td class="has-text-centered {{theme_text_color}}" title="HR interview scheduled">{{ cs.hr_interview_scheduled if cs.hr_interview_scheduled !=0 else ''}}</td>
+                <td class="has-text-centered {{theme_text_color}}" title="HR interview cleared">{{ cs.hr_interview_cleared if cs.hr_interview_cleared !=0 else ''}}</td>
+                <td class="has-text-centered {{theme_text_color}}" title="HR interview rejected">{{ cs.hr_interview_failed if cs.hr_interview_failed !=0 else ''}}</td>
+                <td class="has-text-centered {{theme_text_color}}" title="HR interview no show">{{ cs.hr_interview_no_show if cs.hr_interview_no_show !=0 else ''}}</td>
+
             </tr>
             {% else %}
               <div class="notification is-warning">

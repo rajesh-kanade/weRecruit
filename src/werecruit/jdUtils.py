@@ -1,9 +1,12 @@
 
 import dbUtils
 import constants
+import resumeUtils
 
 import decimal
 import logging
+
+import json
 
 from datetime import datetime
 from datetime import timezone 
@@ -461,6 +464,71 @@ def get_job_status_summary(job_id):
 		dbUtils.returnToPool(db_con)	
 
 
+def update_job_stats():
+	#get all active jobs across tenants
+	# get stats for each such job and keep them in job stats column
+
+	db_con = dbUtils.getConnFromPool()
+	cursor = dbUtils.getNamedTupleCursor(db_con)
+
+	try:	
+		query = """SELECT * FROM wr_jds 
+				where status = %s"""
+
+		params = (JDStatusCodes.open.value,)
+		logging.debug ( cursor.mogrify(query, params))		
+		#logging.debug ( cursor.mogrify(query, params))
+		cursor.execute(query,params)
+
+		jdList =cursor.fetchall()
+
+		(retCode,msg,appStatusCodes) = resumeUtils.list_application_status_codes()
+		assert retCode == resumeUtils.RetCodes.success.value,"Failed to fetch application status codes."
+
+		for job in jdList:
+			print (job.id)
+			jdstats = {}
+			
+			cursor1 = dbUtils.getNamedTupleCursor(db_con)
+
+			for code in appStatusCodes:
+				#print (code.id)
+				query = """SELECT count(status) FROM wr_jd_resumes
+					where status = %s and jd_id = %s"""
+				#params = ( code.id, job.id)
+				params = ( code.id, job.id)
+				logging.debug ( cursor.mogrify(query, params))		
+				cursor1.execute(query,params)
+				data = cursor1.fetchone()
+				jdstats[code.id] = data.count
+				#cursor.close()
+				#cursor.clear()
+
+			cursor1.close()
+			print(jdstats)
+			
+			cursor2 = dbUtils.getNamedTupleCursor(db_con)
+
+			query = """UPDATE wr_jds set jd_stats =%s where id = %s"""
+			jdstats_json = json.dumps(jdstats, indent=4, sort_keys=False)
+
+			params = (str(jdstats_json), job.id)
+			logging.debug ( cursor.mogrify(query, params))		
+			cursor2.execute(query,params)
+			#cursor.commit()
+			db_con.commit()
+			cursor2.close()
+
+	except Exception as dbe:
+		logging.error(dbe)
+		db_con.rollback()
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		cursor1.close()
+		cursor2.close()
+		dbUtils.returnToPool(db_con)	
 
 
 
@@ -471,9 +539,13 @@ if __name__ == "__main__":
 	#logging.debug (code)
 	logging.basicConfig(level=logging.DEBUG)
 
-	dt = datetime.now(tz=timezone.utc)
+	'''dt = datetime.now(tz=timezone.utc)
 	(code,msg,result) = get_job_status_summary(18)
 	logging.debug(code)
 	logging.debug(msg)
-	logging.debug(result)
+	logging.debug(result)'''
+
+	update_job_stats()
+
+
 
