@@ -5,6 +5,7 @@ import resumeUtils
 
 import decimal
 import logging
+_logger = logging.getLogger('jdUtils')
 
 import json
 
@@ -40,7 +41,7 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 			fees_percent=None,warranty_period_in_months=None
 			 ):
 	
-	logging.debug('inside save_jd function')
+	_logger.debug('inside save_jd function')
 	db_con = dbUtils.getConnFromPool()
 	cursor = db_con.cursor()
 	try:
@@ -97,14 +98,14 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 					ctc_min,ctc_max, ctc_currency,
 					fees_percent,warranty_period_in_months)
 
-			logging.debug ( cursor.mogrify(sql, params))
+			_logger.debug ( cursor.mogrify(sql, params))
 			
 			cursor.execute(sql, params)
 			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
 			result = cursor.fetchone()
 			jd_id = result[0]
-			logging.debug ("JD id created is",jd_id )
+			_logger.debug ("JD id created is",jd_id )
 		
 
 			db_con.commit()
@@ -134,7 +135,7 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 						fees_percent,warranty_period_in_months,
 						int(id))
 						
-			logging.debug ( cursor.mogrify(sql, params))
+			_logger.debug ( cursor.mogrify(sql, params))
 			
 			cursor.execute(sql, params)
 			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
@@ -151,13 +152,13 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 
 		
 			db_con.commit()
-			logging.debug ("JD id {0} updated successfully.".format(id) )
+			_logger.debug ("JD id {0} updated successfully.".format(id) )
 
 			return (RetCodes.success.value, "JD {0} updated successfully.".format(id),id)
 			
 
 	except Exception as e:
-		logging.error(e)
+		_logger.error(e)
 		db_con.rollback()
 		return (RetCodes.server_error.value, str(e),None)
 	
@@ -190,10 +191,10 @@ def save_header(id, title,details,client):
 		params = (title,details,client, int(id))
 
 
-		logging.debug ( cursor.mogrify(sql, params))
+		_logger.debug ( cursor.mogrify(sql, params))
 		
 		cursor.execute(sql, params)
-		logging.debug(cursor.rowcount)
+		_logger.debug(cursor.rowcount)
 		assert cursor.rowcount == 1, "assertion failed : {0} Rows returned which is not equal to 1.".format(cursor.rowcount)
 
 		#result = cursor.fetchone()
@@ -203,7 +204,7 @@ def save_header(id, title,details,client):
 
 
 	except Exception as e:
-		logging.error(e)
+		_logger.error(e)
 		db_con.rollback()
 		return (RetCodes.server_error.value, str(e),None)
 	
@@ -222,7 +223,7 @@ def list_jds_by_recruiter(recruiterID, statusFilter = None):
 				order by open_date DESC"""
 	
 		params = (recruiterID,)
-		logging.debug ( cursor.mogrify(query, params))
+		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		jdList =cursor.fetchall()
@@ -231,7 +232,7 @@ def list_jds_by_recruiter(recruiterID, statusFilter = None):
 
 
 	except Exception as dbe:
-		logging.error(dbe)
+		_logger.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -248,7 +249,7 @@ def list_jds_by_tenant(tenantID, limit = 1000, statusFilter = None):
 				order by id DESC limit %s"""
 	
 		params = (tenantID,limit)
-		logging.debug ( cursor.mogrify(query, params))
+		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		jdList =cursor.fetchall()
@@ -257,7 +258,7 @@ def list_jds_by_tenant(tenantID, limit = 1000, statusFilter = None):
 
 
 	except Exception as dbe:
-		logging.error(dbe)
+		_logger.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -274,7 +275,7 @@ def get(id):
 				where id = %s"""
 	
 		params = (id,)
-		logging.debug ( cursor.mogrify(query, params))
+		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
@@ -285,7 +286,7 @@ def get(id):
 
 
 	except Exception as dbe:
-		logging.error(dbe)
+		_logger.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -306,7 +307,7 @@ def get_resumes_associated_with_job(job_id):
 					and wr_jd_resumes.jd_id = %s """
 
 		params = (int(job_id),)
-		logging.debug ( cursor.mogrify(query, params))
+		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		resumeList = cursor.fetchall()
@@ -314,7 +315,7 @@ def get_resumes_associated_with_job(job_id):
 		return(RetCodes.success.value, "Resumes associated with job JD {0}  fetched successfully.".format(job_id), resumeList)
 
 	except Exception as dbe:
-		logging.error(dbe)
+		_logger.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -334,7 +335,7 @@ def get_resumes_not_associated_with_job(job_id):
 					( select resume_id from wr_jd_resumes where jd_id = %s)"""
 
 		params = (int(job_id),)
-		logging.debug ( cursor.mogrify(query, params))
+		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		resumeList = cursor.fetchall()
@@ -342,7 +343,7 @@ def get_resumes_not_associated_with_job(job_id):
 		return(RetCodes.success.value, "Resumes not associated with job JD {0}  fetched successfully.".format(job_id), resumeList)
 
 	except Exception as dbe:
-		logging.error(dbe)
+		_logger.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -365,7 +366,7 @@ def insert_job_application_status(job_id, resume_id,change_date,changed_by,statu
 		params = (int(job_id), int(resume_id),
 				change_date,int(changed_by),int(status),notes)
 
-		logging.debug (cursor.mogrify(sql, params))
+		_logger.debug (cursor.mogrify(sql, params))
 	
 		cursor.execute(sql, params)
 		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
@@ -384,7 +385,7 @@ def insert_job_application_status(job_id, resume_id,change_date,changed_by,statu
 		return (RetCodes.success.value, "Application status updated successful.", None)
 			
 	except Exception as e:
-		logging.error(e)
+		_logger.error(e)
 		db_con.rollback()
 		return (RetCodes.server_error.value, str(e),None)
 	
@@ -395,7 +396,7 @@ def insert_job_application_status(job_id, resume_id,change_date,changed_by,statu
 
 # we may not need this function at all ....
 def shortlist(resume_id,jd_id, application_date,status,recruiterid):
-	logging.debug('inside shortlist function')
+	_logger.debug('inside shortlist function')
 	db_con = dbUtils.getConnFromPool()
 	cursor = db_con.cursor()
 	try:
@@ -407,7 +408,7 @@ def shortlist(resume_id,jd_id, application_date,status,recruiterid):
 	
 		params = (int(resume_id),int(jd_id),application_date,int(status))
 
-		logging.debug ( cursor.mogrify(sql, params))
+		_logger.debug ( cursor.mogrify(sql, params))
 	
 		cursor.execute(sql, params)
 		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."			
@@ -423,7 +424,7 @@ def shortlist(resume_id,jd_id, application_date,status,recruiterid):
 		return (RetCodes.success.value, "Resume creation successful.", None)
 			
 	except Exception as e:
-		logging.error(e)
+		_logger.error(e)
 		db_con.rollback()
 		return (RetCodes.server_error.value, str(e),None)
 	
@@ -448,7 +449,7 @@ def get_job_status_summary(job_id):
 				"""
 
 		params = (int(job_id),)
-		logging.debug ( cursor.mogrify(query, params))
+		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		jobStatusSummaryList = cursor.fetchall()
@@ -456,7 +457,7 @@ def get_job_status_summary(job_id):
 		return(RetCodes.success.value, "Status summary  for job JD {0}  fetched successfully.".format(job_id), jobStatusSummaryList)
 
 	except Exception as dbe:
-		logging.error(dbe)
+		_logger.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -476,8 +477,8 @@ def update_job_stats():
 				where status = %s"""
 
 		params = (JDStatusCodes.open.value,)
-		logging.debug ( cursor.mogrify(query, params))		
-		#logging.debug ( cursor.mogrify(query, params))
+		_logger.debug ( cursor.mogrify(query, params))		
+		#_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		jdList =cursor.fetchall()
@@ -497,7 +498,7 @@ def update_job_stats():
 					where status = %s and jd_id = %s"""
 				#params = ( code.id, job.id)
 				params = ( code.id, job.id)
-				logging.debug ( cursor.mogrify(query, params))		
+				_logger.debug ( cursor.mogrify(query, params))		
 				cursor1.execute(query,params)
 				data = cursor1.fetchone()
 				jdstats[code.id] = data.count
@@ -513,14 +514,14 @@ def update_job_stats():
 			jdstats_json = json.dumps(jdstats, indent=4, sort_keys=False)
 
 			params = (str(jdstats_json), job.id)
-			logging.debug ( cursor.mogrify(query, params))		
+			_logger.debug ( cursor.mogrify(query, params))		
 			cursor2.execute(query,params)
 			#cursor.commit()
 			db_con.commit()
 			cursor2.close()
 
 	except Exception as dbe:
-		logging.error(dbe)
+		_logger.error(dbe)
 		db_con.rollback()
 		return ( RetCodes.server_error, str(dbe), None)
 	
@@ -536,14 +537,14 @@ def update_job_stats():
 if __name__ == "__main__":
 
 	#(code,msg,resumeList) = get_resumes_not_associated_with_job(18)
-	#logging.debug (code)
+	#_logger.debug (code)
 	logging.basicConfig(level=logging.DEBUG)
 
 	'''dt = datetime.now(tz=timezone.utc)
 	(code,msg,result) = get_job_status_summary(18)
-	logging.debug(code)
-	logging.debug(msg)
-	logging.debug(result)'''
+	_logger.debug(code)
+	_logger.debug(msg)
+	_logger.debug(result)'''
 
 	update_job_stats()
 
