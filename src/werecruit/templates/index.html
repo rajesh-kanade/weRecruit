@@ -2,156 +2,46 @@
 {%block content%}
 {% set messages = get_flashed_messages(with_categories = true ) %}
 
-<section class = "container is-fullheight has-text-centered">
-    <div class="block"><br></div>
-    <div class="block mt-5 is-size-4">Welcome to world's simplest,fastest Recruitment 
-      system designed to help you focus on hiring great talent & delighting your 
-      customers. </div>
-    <div class="block is-size-4">If you are a freelance recruiter or a small/medium sized recruitment 
-      agency using excel sheets and gmail, {% include '/utils/werecruit.html'%} is the 
-      right recruitment platform for you.</div>
+<section class = "container is-fullheight">
+  <div class="columns is-mobile is-centered mt-5 is-size-1 has-background-dark has-text-white">
+    <div class="column is-half">
+      <div class="block">
+        We<span style="color:#f46524;">RECRUIT</span> is a SaaS based recruitment solution for 
+        <span style="color:#f46524;">Freelancers, Bootstrapped Startups & Small recruitment teams.
+        </span>
+      </div>
+      <div class="block">
+        We are on a mission is to make every <span style="color:#f46524;">recruiter's</span> life a <span style="color:#f46524;">breeze</span> 
+        & every <span style="color:#f46524;">hiring manager's</span> life a 
+        <span style="color:#f46524;">delight</span>
+      </div>
+      <div class="block">
+        Our competition is <span style="color:#f46524;">emails</span> and 
+        <span style="color:#f46524;">excel sheets</span>
+      </div>
+      <div class="block">
+        By religiously avoiding the trap of <span style="color:#f46524;">feature creep & bloatware</span>, we plan to make 
+        our services <span style="color:#f46524;">affordable</span> for everyone. 
+      </div>   
     
-    <br><hr><br>
-    <div id="features" class="block is-size-2 has-text-centered">Features designed to make recruitment a breeze</div>
-
-    <div class="tile is-ancestor">
-      <div class="tile">
-        <div class="box is-size-4"> 
-          Create unlimited job positions for your clients. 
-          Define the team of interview panels, Hiring manager & HR to collaborate seamlessly.
-        </div>      
-      </div>      
-      <div class="tile">
-        <div class="box is-size-4">
-          <figure class="image is-512x512">
-            <img src="{{url_for('static', filename='job_browser_1.png')}}" >
-          </figure>  
-        </div>    
-      </div>
     </div>
+  </div>
+
+  <div class="columns is-mobile is-centered mt-5 mb-5 is-size-1 has-background-dark has-text-white">
+    <div class="column is-half">
+
+
+      <div class="block">
+        <a href="/user/showSignupPage" class="is-link"><u><span style="color:#f46524;">Sign Up</span></u></a> 
+        today for <span style="color:#f46524;">100 days</span> free trial.
+      </div>
+
+      <div class="block">
+        Talk to us at <span style="color:#f46524;">sales@werecruit.cloud</span>
+      </div>    
     
-    <br>
-    <div class="tile is-ancestor">
-      <div class="tile">
-        <div class="box is-size-4">
-        <figure class="image is-512x512">
-          <img src="{{url_for('static', filename='job_shortlisting.png')}}" >
-        </figure>   
-        </div>    
-      </div>      
-      <div class="tile">
-        <div class="box is-size-4"> 
-          Upload resumes using web App or via email. 
-          Auto detect key fields like candidate names, phones, email automatically 
-          from uploaded email.
-          Advanced capabilities to efficiently search resumes and shortlist them for one or more JDs.     
-        </div>    
-      </div>
     </div>
-
-    <div class="tile is-ancestor">
-      <div class="tile">
-        <div class="box is-size-4"> 
-          Large library of job application status codes. 
-          Take unlimited notes as you update the the job application status.
-          Assessment tests and quizzes.
-          Schedule on line / on campus interviews 
-        </div>      
-      </div>
-      <div class="tile">
-        <div class="box is-size-4">
-          <figure class="image is-512x512">
-            <img src="{{url_for('static', filename='job_appl_status_1.png')}}" >
-          </figure>   
-        </div>    
-      </div>
-    </div>
-    
-    <br>
-
-    
-    <div class="tile is-ancestor">
-      <div class="tile">
-        <div class="box is-size-4">
-          <figure class="image is-512x512">
-            <img src="{{url_for('static', filename='job_summary_report.png')}}" >
-          </figure>   
-        </div>     
-      </div>
-      <div class="tile">
-
-        <div class="box is-size-4">
-          Collection of summary and detailed reports to communicate effectively with your clients.
-          Real time dashboards to help you focus on things that matter.
-          Large number of email templates for notifications and reminders.
-        </div>    
-      </div>
-    </div>
-    <br>
-    <div class="tile is-ancestor">
-      <div class="tile">
-        <div class="box is-size-4"> 
-          Engagement recipes for candidates who have accepted the offers but not yet joined.
-          Communicate internally about a candidates joining risk and mitigate them.
-        </div>      
-      </div>
-      <div class="tile">
-        <div class="box is-size-4">
-          <figure class="image is-512x512">
-            <img src="{{url_for('static', filename='rev_oppr_report_1.png')}}" >
-          </figure>   
-        </div>     
-      </div>
-    </div>
-
-    <br><hr><br>
-    <div id="pricing" class="block is-size-2 has-text-centered">Pricing that works for every one.</div>
-    <div class="block is-size-3 has-text-centered">Avail 30-day free trial. No credit card required.</div>
-
-    <div class="tile is-ancestor">
-      <div class="tile">
-        <div class ="card is-size-4">
-          <p class="card-header-title has-background-primary">
-            MONTHLY
-          </p>
-          <div class = "card-content">
-            5$ per user per month
-          </div>      
-        </div>
-      </div>
-      <div class="tile">
-        <div class ="card is-size-4">
-          <p class="card-header-title has-background-primary">
-            YEARLY
-          </p>
-          <div class = "card-content">
-            50$ per user per year
-          </div>      
-        </div>
-      </div>
-      <div class="tile">
-        <div class ="card is-size-4">
-          <p class="card-header-title has-background-primary">
-            LIFETIME
-          </p>
-          <div class = "card-content">
-            100$ per user lifetime
-          </div>      
-        </div>
-      </div>
-      <div class="tile">
-        <div class ="card is-size-4">
-          <p class="card-header-title has-background-primary">
-            UNLIMITED LIFETIME
-          </p>
-          <div class = "card-content">
-            250$ unlimited users lifetime
-          </div>      
-        </div>
-      </div>
-    </div>
-    
-    <br>
+  </div>
 
 </section>
 

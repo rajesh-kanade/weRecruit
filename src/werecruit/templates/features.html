@@ -1,0 +1,104 @@
+{%extends "header.html" %}
+{%block content%}
+{% set messages = get_flashed_messages(with_categories = true ) %}
+
+<section class = "container is-fullheight is-justify-content-center">
+
+    <br><hr><br>
+    <div id="features" class="block is-size-2 has-text-centered">Features designed to make recruitment a breeze</div>
+
+    <div class="tile is-ancestor">
+      <div class="tile">
+        <div class="box is-size-4"> 
+          Create unlimited job positions for your clients. 
+          Define the team of interview panels, Hiring manager & HR to collaborate seamlessly.
+        </div>      
+      </div>      
+      <div class="tile">
+        <div class="box is-size-4">
+          <figure class="image is-512x512">
+            <img src="{{url_for('static', filename='job_browser_1.png')}}" >
+          </figure>  
+        </div>    
+      </div>
+    </div>
+    
+    <br>
+    <div class="tile is-ancestor">
+      <div class="tile">
+        <div class="box is-size-4">
+        <figure class="image is-512x512">
+          <img src="{{url_for('static', filename='job_shortlisting.png')}}" >
+        </figure>   
+        </div>    
+      </div>      
+      <div class="tile">
+        <div class="box is-size-4"> 
+          Upload resumes using web App or via email. 
+          Auto detect key fields like candidate names, phones, email automatically 
+          from uploaded email.
+          Advanced capabilities to efficiently search resumes and shortlist them for one or more JDs.     
+        </div>    
+      </div>
+    </div>
+
+    <div class="tile is-ancestor">
+      <div class="tile">
+        <div class="box is-size-4"> 
+          Large library of job application status codes. 
+          Take unlimited notes as you update the the job application status.
+          Assessment tests and quizzes.
+          Schedule on line / on campus interviews 
+        </div>      
+      </div>
+      <div class="tile">
+        <div class="box is-size-4">
+          <figure class="image is-512x512">
+            <img src="{{url_for('static', filename='job_appl_status_1.png')}}" >
+          </figure>   
+        </div>    
+      </div>
+    </div>
+    
+    <br>
+
+    
+    <div class="tile is-ancestor">
+      <div class="tile">
+        <div class="box is-size-4">
+          <figure class="image is-512x512">
+            <img src="{{url_for('static', filename='job_summary_report.png')}}" >
+          </figure>   
+        </div>     
+      </div>
+      <div class="tile">
+
+        <div class="box is-size-4">
+          Collection of summary and detailed reports to communicate effectively with your clients.
+          Real time dashboards to help you focus on things that matter.
+          Large number of email templates for notifications and reminders.
+        </div>    
+      </div>
+    </div>
+    <br>
+    <div class="tile is-ancestor">
+      <div class="tile">
+        <div class="box is-size-4"> 
+          Engagement recipes for candidates who have accepted the offers but not yet joined.
+          Communicate internally about a candidates joining risk and mitigate them.
+        </div>      
+      </div>
+      <div class="tile">
+        <div class="box is-size-4">
+          <figure class="image is-512x512">
+            <img src="{{url_for('static', filename='rev_oppr_report_1.png')}}" >
+          </figure>   
+        </div>     
+      </div>
+    </div>
+
+    <br><hr><br>
+
+</section>
+
+{% endblock %}
