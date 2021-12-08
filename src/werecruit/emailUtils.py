@@ -35,7 +35,7 @@ def readEmails():
 		folder = os.environ.get("IMAP_FOLDER")
 
 		_logger.info( "Reading email configurations")
-		_logger.info("Mail server is ",mailserver)
+		_logger.info("Mail server is : ".format(mailserver))
 		_logger.info(email)
 		#logging.debug(password)
 		_logger.info(folder)

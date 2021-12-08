@@ -2,6 +2,7 @@ import dbUtils
 import logging
 
 from enum import Enum
+_logger = logging.getLogger('reports')
 
 class RetCodes(Enum):
 	success = 'RPT_CRUD_S200'
@@ -22,7 +23,7 @@ def get_client_wise_summary_report(tenantID):
 				group by client order by count desc"""
 
 		params = (int(tenantID),)
-		logging.debug ( cursor.mogrify(query, params))
+		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		clientSummaryList =cursor.fetchall()
@@ -31,7 +32,7 @@ def get_client_wise_summary_report(tenantID):
 
 
 	except Exception as dbe:
-		logging.error(dbe)
+		_logger.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -76,7 +77,7 @@ def get_client_wise_job_application_status_summary_report(tenantID):
 
 
 		params = (int(tenantID),)
-		logging.debug ( cursor.mogrify(query, params))
+		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		clientSummaryList =cursor.fetchall()
@@ -85,7 +86,7 @@ def get_client_wise_job_application_status_summary_report(tenantID):
 
 
 	except Exception as dbe:
-		logging.error(dbe)
+		_logger.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -109,7 +110,7 @@ def get_client_wise_revenue_opportunity_report(tenantID):
 			"""
 
 		params = (int(tenantID),)
-		logging.debug ( cursor.mogrify(query, params))
+		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		clientSummaryList =cursor.fetchall()
@@ -118,7 +119,7 @@ def get_client_wise_revenue_opportunity_report(tenantID):
 
 
 	except Exception as dbe:
-		logging.error(dbe)
+		_logger.error(dbe)
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
@@ -128,9 +129,9 @@ def get_client_wise_revenue_opportunity_report(tenantID):
 if __name__ == "__main__":
 
 	#(code,msg,resumeList) = get_resumes_not_associated_with_job(18)
-	#logging.debug (code)
+	#_logger.debug (code)
 	(code,msg,result) = get_client_wise_revenue_opportunity_report(1)
-	logging.debug(code)
-	logging.debug(msg)
-	logging.debug(result)
+	_logger.debug(code)
+	_logger.debug(msg)
+	_logger.debug(result)
 
