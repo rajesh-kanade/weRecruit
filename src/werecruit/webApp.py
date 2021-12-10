@@ -720,7 +720,7 @@ def show_clientwise_revenue_opportunity_summary_report_page():
 
 if __name__ == "__main__":
 	
-	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get("LOG_LEVEL")))
+	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get("LOG_LEVEL",20)))
 
 	#app.run()
 	app.run(host='0.0.0.0', port=5000)
