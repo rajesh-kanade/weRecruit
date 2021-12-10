@@ -4,12 +4,16 @@ import os
 import emailUtils
 import jdUtils
 
+from dotenv import load_dotenv
+
 _logger = logging.getLogger("cronjobs")
 
 if __name__ == "__main__":
 	
-
+	
+	load_dotenv()
 	print(int(os.environ.get("WR_LOG_LEVEL")))
+	
 	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get("WR_LOG_LEVEL",20)))
 
 	try:
