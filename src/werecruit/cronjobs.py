@@ -4,35 +4,47 @@ import os
 import emailUtils
 import jdUtils
 
+import schedule
+import time
+
 from dotenv import load_dotenv
 
 _logger = logging.getLogger("cronjobs")
 
-if __name__ == "__main__":
-	
+def job():
+
+	_logger.debug("Start read email job")
+	emailUtils.readEmails()
+	_logger.debug("read email job completed")
+
+	_logger.debug("Start update job stats job")
+	jdUtils.update_job_stats()
+	_logger.debug("Completed update job stats job")
+
+if __name__ == "__main__":	
 	
 	load_dotenv()
-	print(int(os.environ.get("LOG_LEVEL")))
 
 	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get("LOG_LEVEL",20)))
 
+	schedule.every(1).minutes.do(job)
+
 	try:
 		
-		_logger.info("Inside scheduled job")
+		_logger.info("scheduler started")
 
-		_logger.debug("Start read email job")
-		emailUtils.readEmails()
-		_logger.debug("read email job completed")
+		while 1:
+			schedule.run_pending()
+			time.sleep(1)
 
-		_logger.debug("Start update job stats job")
-		jdUtils.update_job_stats()
-		_logger.debug("Completed update job stats job")
+		_logger.warn("Scheduler stopped normally.")
 
-		_logger.info("Completed scheduled job successfully. Will sleep now.!!!")
-
+	except KeyboardInterrupt:
+		_logger.warn("Scheduler stopped bcas of keyboard interrupt.")
+		schedule.clear()
 
 	except Exception as e:
 		_logger.error("Exception occured during running scheduled jobs.")
 		_logger.error(e)
-		_logger.info("Completed scheduled job with errors. Will sleep now.!!!")
+		_logger.warn("Scheduler stopped with errors.")
 
