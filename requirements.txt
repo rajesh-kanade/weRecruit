@@ -55,4 +55,5 @@ wsproto==1.0.0
 WTForms==3.0.0
 
 python-dotenv==0.19.2
+schedule==1.1.0
 
