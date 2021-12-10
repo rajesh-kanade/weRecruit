@@ -12,9 +12,9 @@ if __name__ == "__main__":
 	
 	
 	load_dotenv()
-	print(int(os.environ.get("WR_LOG_LEVEL")))
-	
-	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get("WR_LOG_LEVEL",20)))
+	print(int(os.environ.get("LOG_LEVEL")))
+
+	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get("LOG_LEVEL",20)))
 
 	try:
 		
