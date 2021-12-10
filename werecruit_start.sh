@@ -5,3 +5,4 @@ echo "Starting scheduler"
 nohup python3 ./src/werecruit/cronjobs.py &
 
 echo "weRecruit started !!!"
+
