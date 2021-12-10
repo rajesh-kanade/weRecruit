@@ -36,8 +36,8 @@ from datetime import timezone
 _logger = logging.getLogger('webApp')
 
 app = Flask(__name__)
-app.secret_key = 'somesecretkeythatonlyishouldknow'
 
+app.secret_key = 'somesecretkeythatonlyishouldknow'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
@@ -720,7 +720,7 @@ def show_clientwise_revenue_opportunity_summary_report_page():
 
 if __name__ == "__main__":
 	
-	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get('LOG_LEVEL')))
+	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get("LOG_LEVEL")))
 
 	#app.run()
 	app.run(host='0.0.0.0', port=5000)
