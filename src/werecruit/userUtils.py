@@ -389,7 +389,7 @@ def do_SignIn(id, password):
 			cursor.execute(query, data_tuple)
 
 			userList =cursor.fetchall()
-			_logger.debug ( "user length ",len(userList))
+			#_logger.debug ( "user length ",len(userList))
 
 			if (userList is None or len(userList) != 1) :
 				return (RetCodes.sign_in_failed, 
