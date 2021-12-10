@@ -33,9 +33,6 @@ from datetime import datetime
 from datetime import timezone
 
 
-from threading import Thread
-import time
-
 _logger = logging.getLogger('webApp')
 
 app = Flask(__name__)
@@ -719,20 +716,11 @@ def show_clientwise_revenue_opportunity_summary_report_page():
 	(retCode, msg,clientSummary) = reports.get_client_wise_revenue_opportunity_report(session["tenant_id"])
 	assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise job application summary report"
 
-	return render_template("reports/show_clientwise_revenue_opportunity_reportpage.html", clientSummary = clientSummary)
-
-def start_read_email_bg_job():
-	while True:
-		emailUtils.readEmails()
-		time.sleep(60)		
+	return render_template("reports/show_clientwise_revenue_opportunity_reportpage.html", clientSummary = clientSummary)		
 
 if __name__ == "__main__":
 	
 	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get('LOG_LEVEL')))
-
-	thread = Thread(target=start_read_email_bg_job)
-	thread.daemon = True
-	thread.start()
 
 	#app.run()
 	app.run(host='0.0.0.0', port=5000)
