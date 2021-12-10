@@ -468,11 +468,12 @@ def get_job_status_summary(job_id):
 def update_job_stats():
 	#get all active jobs across tenants
 	# get stats for each such job and keep them in job stats column
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
 
-	db_con = dbUtils.getConnFromPool()
-	cursor = dbUtils.getNamedTupleCursor(db_con)
+		#assert False,"Hardcoded fail"
 
-	try:	
 		query = """SELECT * FROM wr_jds 
 				where status = %s"""
 
@@ -526,16 +527,15 @@ def update_job_stats():
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
-		if cursor is not None:
+		if 'cursor' in locals() and cursor is not None:
 			cursor.close()  
-		if cursor1 is not None:	
+		if 'cursor1' in locals() and cursor1 is not None:	
 			cursor1.close()
-		if cursor2 is not None:
+		if 'cursor2' in locals() and cursor2 is not None:
 			cursor2.close()
 		
+		#if db_con in locals() and db_con is not None:
 		dbUtils.returnToPool(db_con)	
-
-
 
 ## main entry point
 if __name__ == "__main__":
