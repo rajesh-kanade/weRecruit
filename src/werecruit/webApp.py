@@ -15,6 +15,7 @@ from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask_fontawesome import FontAwesome
+from dotenv import load_dotenv
 
 import logging
 import userUtils
@@ -720,6 +721,8 @@ def show_clientwise_revenue_opportunity_summary_report_page():
 
 if __name__ == "__main__":
 	
+	load_dotenv()
+
 	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get("LOG_LEVEL",20)))
 
 	#app.run()

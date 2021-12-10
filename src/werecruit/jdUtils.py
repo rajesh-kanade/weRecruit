@@ -505,7 +505,7 @@ def update_job_stats():
 				#cursor.close()
 				#cursor.clear()
 
-			cursor1.close()
+			#cursor1.close()
 			print(jdstats)
 			
 			cursor2 = dbUtils.getNamedTupleCursor(db_con)
@@ -518,7 +518,7 @@ def update_job_stats():
 			cursor2.execute(query,params)
 			#cursor.commit()
 			db_con.commit()
-			cursor2.close()
+			#cursor2.close()
 
 	except Exception as dbe:
 		_logger.error(dbe)
@@ -526,9 +526,13 @@ def update_job_stats():
 		return ( RetCodes.server_error, str(dbe), None)
 	
 	finally:
-		cursor.close()
-		cursor1.close()
-		cursor2.close()
+		if cursor is not None:
+			cursor.close()  
+		if cursor1 is not None:	
+			cursor1.close()
+		if cursor2 is not None:
+			cursor2.close()
+		
 		dbUtils.returnToPool(db_con)	
 
 

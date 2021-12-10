@@ -28,12 +28,11 @@ if __name__ == "__main__":
 		jdUtils.update_job_stats()
 		_logger.debug("Completed update job stats job")
 
+		_logger.info("Completed scheduled job successfully. Will sleep now.!!!")
+
+
 	except Exception as e:
 		_logger.error("Exception occured during running scheduled jobs.")
 		_logger.error(e)
-	finally:
-		_logger.info("Completed scheduled job. Will sleep now.!!!")
+		_logger.info("Completed scheduled job with errors. Will sleep now.!!!")
 
-	#thread = Thread(target=start_read_email_bg_job)
-	#thread.daemon = True
-	#thread.start()
