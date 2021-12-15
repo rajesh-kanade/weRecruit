@@ -37,5 +37,11 @@ you may need pip install python-dotenv for code to read from .env
 
 
 
-create the .env file
+create the .env file and make sure all keys are configured.
+
+Run the werecruit_start.sh scripts to start following python programs
+    nohup python3 webApp.py & 
+    nohup python3 ./src/werecruit/cronjobs.py & 
+
+we can also write a maintenance script to run once a day and clean up sessions folder and also werecruit.log file ( which eventually should rollover ) 
 
