@@ -38,7 +38,7 @@ _logger = logging.getLogger('webApp')
 
 app = Flask(__name__)
 
-app.secret_key = 'somesecretkeythatonlyishouldknow'
+#app.secret_key = 'somesecretkeythatonlyishouldknow'
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
@@ -723,6 +723,7 @@ if __name__ == "__main__":
 	
 	load_dotenv()
 
+	app.secret_key = os.environ.get("FLASK_SESSION_API_KEY")
 	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get("LOG_LEVEL",20)))
 
 	#app.run()
