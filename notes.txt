@@ -1,3 +1,4 @@
+************ Dev Notes ***********************************
 install pip3 by following https://linuxize.com/post/how-to-install-pip-on-ubuntu-18.04/
 install venv on ubuntu : apt-get install python3-venv
 
@@ -15,16 +16,15 @@ h.update(b'<STRING>')
 hash = h.hexdigest()
 print(hash)
 
-******************************weRecruit on Ubuntu *****
+******************************prod Notes : weRecruit on Ubuntu **************************
 
 Python is installed ( 3.8 )
 git is installed
 postgres is installed ( 12 or above )
 
 
-git clone
+git clone <repo url> .
 virtualenv venv
-
 
 pip and install all dependencies -> this may include cython 
 
@@ -45,3 +45,17 @@ Run the werecruit_start.sh scripts to start following python programs
 
 we can also write a maintenance script to run once a day and clean up sessions folder and also werecruit.log file ( which eventually should rollover ) 
 
+Maintenance checklist
+1. stop both python processes related to werecruit/cronjobs
+2. cleanup sessions related folder
+3. cleanup werecruit.log file
+
+Upgrade checklist
+1. stop both python processes related to werecruit.
+2. git pull 
+3. Db upgrade if applicable
+4. .env file update if applicable
+5. optionally clean up flask sessions folder
+6. optionally clean up werecruit.log folder
+7. run we_recruit_start.sh
+8. sanity test
