@@ -1,27 +1,11 @@
-#import fulgorithm.constants
-import datetime
+
+
 import logging
-import json
-from jinja2 import Environment, FileSystemLoader
-#import emailUtils
-import psycopg2
 import dbUtils
 
-from datetime import date
-
-from flask import Flask, jsonify, request 
-
-import random
-#from flask_mail import Mail, Message 
-#from flask_cors import CORS
-
-from werkzeug.utils import secure_filename
-from dataclasses import dataclass
-
-import os
 from enum import Enum
-
 import hashlib
+
 
 _logger = logging.getLogger('userUtils')
 
@@ -39,6 +23,8 @@ class RetCodes(Enum):
 	get_ent_error = "IAM_CRUD_E405"
 	server_error = "IAM_CRUD_E500"
 	sign_in_failed = "IAM_CRUD_E411"
+	reset_password_failed = "IAM_CRUD_E420"
+
 
 '''@dataclass(frozen=True)
 class User:
@@ -417,66 +403,50 @@ def do_SignIn(id, password):
 		_logger.error(e)
 		return ( RetCodes.server_error, str(e))
 
+def do_reset_password(id, email, cur_password, new_password):
+	
+	try:
+		new_password = hashit(new_password)
+		cur_password = hashit(cur_password)
+		try:
+			db_con = dbUtils.getConnFromPool()
+			cursor = dbUtils.getNamedTupleCursor(db_con)
+			
+			query = """UPDATE users set password =%s 
+					WHERE id =%s and email = %s and password =%s"""
+		
+			data_tuple = (new_password,id, email, cur_password)
 
+			_logger.debug ( cursor.mogrify(query, data_tuple))
+			cursor.execute(query, data_tuple)
 
+			assert cursor.rowcount == 1, "Failed to find user record. Please contact support"
+
+			db_con.commit()
+			return(RetCodes.success.value, "Password reset successfully.", id)
+
+		except Exception as dbe:
+			_logger.error(dbe)
+			db_con.rollback()
+			return ( RetCodes.server_error, str(dbe), None)
+		
+		finally:
+			if 'cursor' in locals() and cursor is not None:
+				cursor.close()
+			dbUtils.returnToPool(db_con)	
+
+	except Exception as e:
+		_logger.error ("In the exception block.")
+		_logger.error(e)
+		return ( RetCodes.server_error, str(e))
 
 ## main entry point
 if __name__ == "__main__":
-	#getUserConfigList('rrkanade22@yahoo.com','CAMI')
-	#value = getUserConfig('rrkanade22@yahoo.com','CAMI', "email_server")
-	#_logger.debug(value)
-	#getUsersForApp(constants.APP_CODE_CAMI)
-	#getSummaryReportForToday( 'rrkanade22@yahoo.com' )
-	logging.basicConfig(level=logging.DEBUG)
-	result = get_user_by_email('c1_admin@gmail.com')
-	print(result)
-	quit()
 
-	(retCode, msg ) = signUp("Rajesh Kanade", "rrkanade@yahoo.com")
-	#(retCode, msg, userRecord ) = get_user("rajesh")
-	#(retCode, msg, userRecord ) = delete_user("rajesh")
-	
-	#(retCode, msg, userRecord ) = update_user("rk4",{'status':Status.active.value,'name':'rajesh hash', 'password':'hashit'})
-	
-	_logger.debug( retCode)
-	_logger.debug ( msg)
-	_logger.debug ( userRecord)
+	#load_dotenv()
+	logging.basicConfig(filename='werecruit.log',level=logging.DEBUG)
 
-	"""
-	(retCode, msg, userRecord ) = update_user("rajesh",{'status':Status.active.value,'name':'rajesh python'})
-	
-	(retCode, msg, userRecord ) = update_user("rajesh",{})
-	(retCode, msg, userRecord ) = update_user("rajesh",{'name':'vs code'})
-	
-	_logger.debug( retCode)
-	_logger.debug ( msg)
-	_logger.debug ( userRecord)
-	
-	
-
-	(retCode, msg, userRecord ) = delete_user('rk1')
-	#(retCode, msg, userRecord ) = do_signUp({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
-
-	_logger.debug( retCode)
-	_logger.debug ( msg)
-	_logger.debug ( userRecord)
-	"""
-
-	(retCode, msg, userRecord ) = do_signUp({'id':'rk5','name':'RK5','status':Status.active.value,'password':'pwd'})
-	#(retCode, msg, userRecord ) = do_signUp({'id':'RK2','status':Status.active.value,'name':'R K 2','password':'dummy'})
-
-	_logger.debug( retCode)
-	_logger.debug ( msg)
-	_logger.debug ( userRecord)
-	
-	
-	(retCode, msg, userList ) = list_users()
-	_logger.debug( retCode)
-	_logger.debug ( msg)
-	for user in userList:
-		_logger.debug ( user)
-	
-	(retCode, msg, userList ) = get_user('rk1')
+	(retCode, msg, data ) = do_reset_password(1,'c1_admin@gmail.com','rajesh','rajesh1')
 	_logger.debug( retCode)
 	_logger.debug ( msg)
 	

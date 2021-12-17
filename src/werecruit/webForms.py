@@ -22,6 +22,16 @@ class SignInForm(FlaskForm):
     
     submit = SubmitField('Sign In')
 
+class ResetPasswordForm(FlaskForm):
+
+    id = HiddenField('ID' )
+
+    email = StringField('Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
+    current_password = PasswordField('Current Password', validators=[DataRequired('Please enter current password.')])
+    new_password = PasswordField('New Password', validators=[DataRequired('Please enter new password.')])
+
+    submit = SubmitField('Save')
+
 class JDForm(FlaskForm):
     
     id = HiddenField('ID' )

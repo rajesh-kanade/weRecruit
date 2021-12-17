@@ -10,7 +10,7 @@ from flask import (
 	url_for
 )
 from flask_session import Session
-from webForms import ApplicationStatusUpdate,ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm , SignInForm
+from webForms import ResetPasswordForm,ApplicationStatusUpdate,ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm , SignInForm
 from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
 from flask import send_file
@@ -83,6 +83,7 @@ def do_signin():
 		session["user_id"] = user.id  #form.email.data
 		session["user_name"] = user.name #'Mr. Customer'
 		session["tenant_id"] = user.tid 
+		session["email_id"] = user.email
 		return redirect(url_for('show_home_page'))
 
 	else:
@@ -718,6 +719,36 @@ def show_clientwise_revenue_opportunity_summary_report_page():
 	assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise job application summary report"
 
 	return render_template("reports/show_clientwise_revenue_opportunity_reportpage.html", clientSummary = clientSummary)		
+
+@app.route('/user/showResetPassword', methods = ['GET'])
+@login_required
+def show_reset_password():
+	
+	form = ResetPasswordForm()
+
+	form.id.data = session["user_id"]
+	form.email.data = session["email_id"]
+
+	return render_template("user/password_reset.html", form = form)		
+
+@app.route('/user/doResetPassword', methods = ['POST'])
+@login_required
+def do_reset_password():
+	
+	form = ResetPasswordForm()
+
+	form.id.data = session["user_id"]
+	form.email.data = session["email_id"]
+	
+	(retCode,msg, data) = userUtils.do_reset_password(form.id.data, form.email.data,form.current_password.data, form.new_password.data)
+	if retCode == userUtils.RetCodes.success.value:
+		session.clear()
+		flash ("Password reset successfully. Please sign-in again with your new password", "is-success")
+		return redirect(url_for("show_signin_page"))
+		#do_signout()
+	else:
+		flash ("Password reset failed. {0} ".format(msg), "is-danger")
+		return render_template("user/password_reset.html", form = form)		
 
 if __name__ == "__main__":
 	
