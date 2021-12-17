@@ -1,4 +1,6 @@
 # Dev Notes
+Life is good
+
 
 # Prod Notes : weRecruit on Ubuntu
 
@@ -7,16 +9,15 @@
 * Python is installed ( 3.8 )
 * git is installed
 * postgres is installed ( 12 or above )
-* `mkdir \etc\werecruit`
-* `cd \etc\werecruit`
-* `git clone <repo url> . `.
-* `pip install -r requirements.txt` 
+* run command `mkdir \etc\werecruit`
+* run command `cd \etc\werecruit`
+* run command `git clone <repo url> . `.
+* run command `pip install -r requirements.txt` 
 * create .env file & make sure all keys are configured
 
 # starting weRecruit
-* Run the werecruit_start.sh scripts to start following python programs 
-    nohup python3 webApp.py & 
-    nohup python3 ./src/werecruit/cronjobs.py & 
+* Run `/etc/werecruit/werecruit_start.sh` script
+* if you get permission error please run `chmod +X werecruit_start.sh`. Typically file permissions are lost after you do git pull.
 
 # Maintenance checklist ( TODO -> write script for this )
 1. stop both python processes related to werecruit/cronjobs
@@ -43,6 +44,7 @@
 3. docker unpause werecruit_prod
 
 # How to take Database backup
-** coming soon **
+**coming soon**
+
 
 
