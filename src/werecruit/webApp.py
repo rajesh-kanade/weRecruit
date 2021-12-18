@@ -15,8 +15,7 @@ from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask_fontawesome import FontAwesome
-from dotenv import load_dotenv
-
+from dotenv import load_dotenv , find_dotenv
 import logging
 import userUtils
 import jdUtils
@@ -39,6 +38,11 @@ _logger = logging.getLogger('webApp')
 app = Flask(__name__)
 
 #app.secret_key = 'somesecretkeythatonlyishouldknow'
+
+load_dotenv(find_dotenv())
+
+print(os.environ.get("FLASK_SESSION_API_KEY"))
+app.secret_key = os.environ.get("FLASK_SESSION_API_KEY",'')
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
@@ -752,9 +756,9 @@ def do_reset_password():
 
 if __name__ == "__main__":
 	
-	load_dotenv()
+	#load_dotenv()
 
-	app.secret_key = os.environ.get("FLASK_SESSION_API_KEY")
+	#app.secret_key = os.environ.get("FLASK_SESSION_API_KEY")
 	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get("LOG_LEVEL",20)))
 
 	#app.run()
