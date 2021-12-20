@@ -1,5 +1,18 @@
 # Dev Notes
-Life is good
+
+from docker machine do `docker exec -it werecruit_prod /bin/bash` to loginto werecruit container.
+
+## frequently used linux commands
+- nano to edit files
+- chmod +x for sh scripts where permissions are lost as we do git pull
+- nohup <command to be executed> &
+
+
+## frequently used git commands
+- git pull
+- git status
+- git restore
+- git clone <repo name> . - only done once
 
 
 # Prod Notes : weRecruit on Ubuntu
@@ -16,14 +29,28 @@ Life is good
 * create .env file & make sure all keys are configured
 
 # starting weRecruit
-* Run `/etc/werecruit/werecruit_start.sh` script
+* cd to `etc/werecruit` .
+* Run `./werecruit_start.sh`
 * if you get permission error please run `chmod +X werecruit_start.sh`. Typically file permissions are lost after you do git pull.
 
+# stopping weRecruit
+- find weRecruit scheduler process by running command `ps ax|grep python`. In theory you should see only python process listed ( excluding gunicorn related processes.)
+- To stop weRecruit scheduler note down the pid listed in above step and run `kill <pid.>`
+- find running gunicorn processes by running `ps ax|grep gunicorn`.
+- stop gunicorn by running `pkill gunicorn` .
+- Confirm it is stopped by vising werecruit website from browser & verify you get a gateway error.
+
 # Maintenance checklist ( TODO -> write script for this )
-1. stop both python processes related to werecruit/cronjobs
-2. cleanup sessions related folder
-3. cleanup werecruit.log file
-4. DB backups ?
+- if you want to stop and start werecruit, please follow the steps in stop and start section respectively.
+- cleanup sessions related folder by 
+    - `cd /etc/werecruit/sessions`
+    - `rm *`
+- cleanup werecruit.log file by running following commands 
+    - `cd /etc/werecruit` 
+    - `rm werecruit.log`
+
+- DB backups 
+    - Coming soon
 
 # Upgrade checklist ( TODO -> write script for this)
 1. stop both python processes related to werecruit.
@@ -45,6 +72,7 @@ Life is good
 
 # How to take Database backup
 **coming soon**
+
 
 
 
