@@ -245,7 +245,7 @@ def list_jds_by_tenant(tenantID, limit = 1000, statusFilter = None):
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 		
 		query = """SELECT * FROM wr_jds 
-				where recruiter_id = ( select uid from tenant_user_roles where tid = %s)
+				where recruiter_id in ( select uid from tenant_user_roles where tid = %s)
 				order by id DESC limit %s"""
 	
 		params = (tenantID,limit)

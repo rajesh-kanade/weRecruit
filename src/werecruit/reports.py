@@ -19,7 +19,7 @@ def get_client_wise_summary_report(tenantID):
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
 		query = """select client, count(*) from wr_jds 
-				where status = 0 and recruiter_id = ( select uid from tenant_user_roles where tid = %s) 
+				where status = 0 and recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
 				group by client order by count desc"""
 
 		params = (int(tenantID),)
@@ -105,7 +105,7 @@ def get_client_wise_revenue_opportunity_report(tenantID):
 			sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
 			where status = 0  
 				and ctc_max is not NULL
-				and recruiter_id = ( select uid from tenant_user_roles where tid = %s) group by client ,id
+				and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
 				order by ro asc
 			"""
 

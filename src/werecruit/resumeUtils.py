@@ -200,7 +200,7 @@ def list_resumes_by_tenant(tenantID):
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 		
 		query = """SELECT * FROM wr_resumes 
-				where recruiter_id = ( select uid from tenant_user_roles where tid = %s) 
+				where recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
 				order by id desc"""
 	
 		params = (tenantID,)
