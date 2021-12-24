@@ -791,8 +791,7 @@ def show_edit_user_page(id):
 		form.email.data = user.email
 		form.password.data = user.password
 		form.role.data = int(user.rid)
-		form.role.default = form.role.data
-
+		form.role.default = int(form.role.data)  #TODO Need to ensure the current role is selected by default
 		return render_template("user/edit.html", form = form)		
 	else:
 		flash (msg,"is-danger")
