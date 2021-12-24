@@ -1,5 +1,4 @@
-import imaplib
-import poplib
+
 import os
 import constants
 import smtplib
