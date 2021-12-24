@@ -10,7 +10,7 @@ from flask import (
 	url_for
 )
 from flask_session import Session
-from webForms import ResetPasswordForm,ApplicationStatusUpdate,ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm , SignInForm
+from webForms import UserForm, ResetPasswordForm,ApplicationStatusUpdate,ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm , SignInForm, UserForm
 from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
 from flask import send_file
@@ -32,12 +32,10 @@ from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 from datetime import timezone
 
-
+FORMAT = '%(asctime)s %(message)s'
 _logger = logging.getLogger('webApp')
 
 app = Flask(__name__)
-
-#app.secret_key = 'somesecretkeythatonlyishouldknow'
 
 load_dotenv(find_dotenv())
 
@@ -88,6 +86,7 @@ def do_signin():
 		session["user_name"] = user.name #'Mr. Customer'
 		session["tenant_id"] = user.tid 
 		session["email_id"] = user.email
+		session["role_id"] = user.rid
 		return redirect(url_for('show_home_page'))
 
 	else:
@@ -754,12 +753,95 @@ def do_reset_password():
 		flash ("Password reset failed. {0} ".format(msg), "is-danger")
 		return render_template("user/password_reset.html", form = form)		
 
+
+@app.route('/user/showManageUsersPage', methods = ['GET'])
+@login_required
+def show_manage_users_page():
+	
+	#form = ResetPasswordForm()
+
+	#form.id.data = session["user_id"]
+	#form.email.data = session["email_id"]
+
+	(retCode,msg,userList) = userUtils.list_users(session["tenant_id"])
+	assert retCode == userUtils.RetCodes.success.value, msg
+	
+	return render_template("user/manage_users.html", userList = userList)		
+
+@app.route('/user/showAddPage', methods = ['GET'])
+@login_required
+def show_add_user_page():
+	
+	form = UserForm()
+
+	form.user_id.data = constants.NEW_ENTITY_ID
+	return render_template("user/edit.html", form = form)		
+
+@app.route('/user/showEditPage/<int:id>', methods = ['GET'])
+@login_required
+def show_edit_user_page(id):
+	
+	form = UserForm()
+
+	(retcode,msg, user) = userUtils.get(id)
+	if (retcode == userUtils.RetCodes.success.value):
+		#flash (msg,"is-info")
+		form.user_id.data = user.id
+		form.name.data = user.name
+		form.email.data = user.email
+		form.password.data = user.password
+		form.role.data = int(user.rid)
+		form.role.default = form.role.data
+
+		return render_template("user/edit.html", form = form)		
+	else:
+		flash (msg,"is-danger")
+		return redirect(url_for("show_manage_users_page"))		
+
+@app.route('/user/showDeletePage/<int:id>', methods = ['GET'])
+@login_required
+def show_delete_user_page(id):
+	return render_template("user/delete.html", id = id)		
+		
+
+@app.route('/user/delete/<int:id>', methods = ['GET'])
+@login_required
+def do_delete_user(id):
+	
+	(retcode,msg,updated_rows) = userUtils.delete(id)
+
+	if (retcode == userUtils.RetCodes.success.value):
+		_logger.debug('User delete successful. Rows updated is '.format(updated_rows))
+		flash (msg,"is-success")
+	else:
+		_logger.debug('User delete failed. Rows updated is '.format(updated_rows))
+		flash (msg,"is-danger")
+		#return redirect(url_for("show_manage_users_page"))		
+	return redirect(url_for("show_manage_users_page"))		
+
+@app.route('/user/save', methods = ['POST'])
+@login_required
+def save_user():
+	
+	form = UserForm()
+
+	(retcode,msg,data) = userUtils.save_user(session['tenant_id'],
+					form.user_id.data, form.name.data, form.email.data,
+					form.password.data, form.role.data)
+
+	if retcode == userUtils.RetCodes.success.value :
+		flash (msg,"is-info")
+		return redirect(url_for("show_manage_users_page"))
+	else:
+		flash (msg,"is-danger")
+		return render_template("user/edit.html", form = form)		
+
 if __name__ == "__main__":
 	
 	#load_dotenv()
 
 	#app.secret_key = os.environ.get("FLASK_SESSION_API_KEY")
-	logging.basicConfig(filename='werecruit.log', level=int(os.environ.get("LOG_LEVEL",20)))
+	logging.basicConfig(filename='werecruit.log',format=FORMAT, level=int(os.environ.get("LOG_LEVEL",20)))
 
-	#app.run()
-	app.run(host='0.0.0.0', port=5000)
+	app.run()
+	#app.run(host='0.0.0.0', port=5000)

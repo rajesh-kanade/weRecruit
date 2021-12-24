@@ -118,11 +118,11 @@
               <a href ="#"class="navbar-item">
                 <span class ="{{theme_text_color}}">Update Profile</span>
               </a>
-
-              <a href ="#"class="navbar-item">
-                <span class ="{{theme_text_color}}">Invite users</span>
-              </a>
-
+              {% if session['role_id'] == 1 %}
+                <a href ="/user/showManageUsersPage"class="navbar-item">
+                  <span class ="{{theme_text_color}}">Manage users</span>
+                </a>
+              {% endif %}
             
             </div>            
           </div>

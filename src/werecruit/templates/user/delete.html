@@ -1,0 +1,24 @@
+{%extends "app_header.html" %}
+{%block content%}
+
+<div id= "modal-window"  class="modal is-active">
+  <div class="modal-background">
+
+  </div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Confirm</p>
+      </header>
+      <div class = "modal-card-body"> 
+        <div class="notification is-danger">A user record once deleted can not be recovered!!!. Are you sure you want to proceed? </div> 
+        <div class="button is-danger" onclick="document.location.href = '/user/delete/{{id}}';">Yes</div>         
+        <div class="button is-" onclick="document.location.href = '/user/showManageUsersPage';">No</div>         
+
+        <button onclick="document.location.href = '/user/showManageUsersPage';" class="modal-close is-large" aria-label="close"></button>
+      </div>
+  </div>
+
+</div>
+
+{% endblock %}
+

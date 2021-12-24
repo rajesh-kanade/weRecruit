@@ -1,10 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import DecimalField, SelectMultipleField,SelectField, StringField, PasswordField, BooleanField, SubmitField,TextAreaField, HiddenField
+from wtforms import DecimalField, SelectMultipleField, SelectField, StringField, PasswordField, SubmitField, TextAreaField, HiddenField
 from wtforms.validators import DataRequired, Email,NumberRange
 from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms import IntegerField, DateField, DateTimeField
+from wtforms import IntegerField, DateField
 
 import jdUtils
+import userUtils
 
 class SignUpForm(FlaskForm):
 
@@ -29,6 +30,20 @@ class ResetPasswordForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
     current_password = PasswordField('Current Password', validators=[DataRequired('Please enter current password.')])
     new_password = PasswordField('New Password', validators=[DataRequired('Please enter new password.')])
+
+    submit = SubmitField('Save')
+
+class UserForm(FlaskForm):
+
+    #company_name = StringField('Company Name', validators=[DataRequired(message='Please enter company name')])
+    user_id = HiddenField('ID' )
+    
+    name = StringField( 'Name', validators=[DataRequired(message='Please enter your name')])
+    email = StringField('Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
+    password = PasswordField('Password', validators=[DataRequired('Please enter password.')])
+
+    role = SelectField('Role', choices=[(int(userUtils.RoleIDs.ADMIN.value), 'Admin'), 
+                        (int(userUtils.RoleIDs.RECRUITER.value), 'Recruiter')])
 
     submit = SubmitField('Save')
 

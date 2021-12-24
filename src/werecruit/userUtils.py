@@ -2,12 +2,18 @@
 
 import logging
 import dbUtils
+import constants
 
+from dotenv import load_dotenv , find_dotenv
 from enum import Enum
 import hashlib
 
 
 _logger = logging.getLogger('userUtils')
+
+class RoleIDs(Enum):
+	ADMIN = 1
+	RECRUITER = 2
 
 class Status(Enum):
 	active = 1
@@ -109,7 +115,7 @@ def do_signUp(user_attrs):
 
 		result = cursor.fetchone()
 		uid = result[0]
-		_logger.debug ("user id created is",uid )
+		_logger.debug ("user id created is {0}".format(uid) )
 
 		## insert a record into tenant 
 		sql = """insert into tenants ( name,status,is_deleted) 
@@ -132,7 +138,6 @@ def do_signUp(user_attrs):
 		cursor.execute(sql, params)
 		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
-
 		db_con.commit()
 
 		return (RetCodes.success.value, "User sign up successful.", None)
@@ -148,6 +153,117 @@ def do_signUp(user_attrs):
 			cursor.close()
 		dbUtils.returnToPool(db_con)
 
+def save_user(tenantID,userID,name,email,password,roleID):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = db_con.cursor()
+
+		if not tenantID:
+			 return(RetCodes.empty_ent_attrs_error.value,"Tenant ID empty or None.", None)
+
+		if not userID:
+			 return(RetCodes.empty_ent_attrs_error.value,"User ID empty or None.", None)
+
+		if not name:
+			 return(RetCodes.empty_ent_attrs_error.value,"Name empty or None.", None)
+
+		if not email:
+			 return(RetCodes.empty_ent_attrs_error.value,"Email empty or None.", None)
+
+		if not password:
+			 return(RetCodes.empty_ent_attrs_error.value,"password empty or None.", None)
+
+		if not roleID:
+			 return(RetCodes.empty_ent_attrs_error.value,"Role ID empty or None.", None)
+
+		
+		password = hashit(password)
+
+		if int(userID) == constants.NEW_ENTITY_ID :
+			##insert a record in user table
+			sql = """insert into users ( email, name, password,is_deleted,status) 
+				values (%s,%s, %s,%s,%s) returning id """
+			params = (email,name,password,False,Status.active.value)
+			_logger.debug ( cursor.mogrify(sql, params))
+		
+			cursor.execute(sql, params)
+			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+			result = cursor.fetchone()
+			userID = result[0]
+			_logger.debug ("user id created is {0}".format(userID) )
+
+			sql = """insert into tenant_user_roles ( tid,uid,rid) 
+				values (%s,%s, %s)  """
+			params = (tenantID,userID,roleID)
+			_logger.debug ( cursor.mogrify(sql, params))
+	
+			cursor.execute(sql, params)
+			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+			db_con.commit()
+
+			return (RetCodes.success.value, "User {0} added successful.".format(userID), userID)
+
+		else:
+			sql = """update users set name = %s, email =%s, password =%s
+					where id = %s"""
+			params = (name,email,password,userID)
+			_logger.debug ( cursor.mogrify(sql, params))
+		
+			cursor.execute(sql, params)
+			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+			sql = """update tenant_user_roles set rid = %s where tid =%s and uid =%s """
+			params = (roleID,tenantID,userID)
+			_logger.debug ( cursor.mogrify(sql, params))
+	
+			cursor.execute(sql, params)
+			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+			db_con.commit()
+
+			return (RetCodes.success.value, "User {0} record updated successful.".format(userID), userID)
+
+	except Exception as e:
+		_logger.error(e)
+		db_con.rollback()
+		return (RetCodes.server_error.value, str(e),None)
+
+	finally:
+		if 'cursor' in locals() and cursor is not None:
+			 cursor.close()
+		dbUtils.returnToPool(db_con)
+
+def get(id):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		query = """SELECT *,
+				(select rid from tenant_user_roles where uid = %s )
+				FROM users 
+				where id = %s"""
+	
+		params = (id,id)
+		_logger.debug ( cursor.mogrify(query, params))
+		cursor.execute(query,params)
+
+		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+		user = cursor.fetchone()
+		_logger.debug(user)
+		
+		return(RetCodes.success.value, "User info for {0} successfully fetched from db".format(id), user)
+
+
+	except Exception as dbe:
+		_logger.error(dbe)
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
 
 def update_user(userID,update_attrs):
 	try:
@@ -194,13 +310,13 @@ def update_user(userID,update_attrs):
 
 
 
-def delete_user(userID):
+def delete(userID):
 	try:
 		
 		db_con = dbUtils.getConnFromPool()		
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
-		sql = """UPDATE fl_iam_users SET is_deleted = %s WHERE id = %s"""		
+		sql = """UPDATE users SET is_deleted = %s WHERE id = %s"""		
 		params = (True,userID)
 		
 		_logger.debug (sql)		
@@ -211,8 +327,8 @@ def delete_user(userID):
 
 		db_con.commit()
 		
-		if updated_rows != 1 :
-			return(RetCodes.del_ent_error.value, "DELETE for User ID '{0}' failed.".format(userID), updated_rows)
+		if int(updated_rows) != 1 :
+			return(RetCodes.del_ent_error.value, "DELETE for User ID '{0}' failed. No. of rows updated was {1} instead of 1".format(userID,updated_rows), updated_rows)
 		else:
 			return(RetCodes.success.value, "DELETE for User ID '{0}' succeeded.".format(userID),updated_rows)
 	
@@ -255,15 +371,17 @@ def get_user_by_email(email):
 		cursor.close()
 		dbUtils.returnToPool(db_con)
 
-def list_users():
+def list_users(tenant_id):
 	
 	try:
 		
 		db_con = dbUtils.getConnFromPool()		
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
-		sql = """SELECT * FROM fl_iam_users WHERE is_deleted = %s """		
-		params = (False,)
+		sql = """SELECT * FROM users WHERE is_deleted = %s and
+				id in (select uid from tenant_user_roles where tid =%s)
+				order by id"""		
+		params = (False,tenant_id)
 		
 		_logger.debug (sql)		
 		_logger.debug ( cursor.mogrify(sql, params))
@@ -366,7 +484,9 @@ def do_SignIn(id, password):
 			cursor = dbUtils.getNamedTupleCursor(db_con)
 			
 			query = """SELECT * , 
-					(select tid from tenant_user_roles where uid = id) FROM users WHERE
+					(select tid from tenant_user_roles where uid = id),
+					(select rid from tenant_user_roles where uid = id) 
+					FROM users WHERE
 					email = %s and password = %s and is_deleted = %s"""
 		
 			data_tuple = (id, password, False)
@@ -443,10 +563,10 @@ def do_reset_password(id, email, cur_password, new_password):
 ## main entry point
 if __name__ == "__main__":
 
-	#load_dotenv()
+	load_dotenv(find_dotenv())
 	logging.basicConfig(filename='werecruit.log',level=logging.DEBUG)
 
-	(retCode, msg, data ) = do_reset_password(1,'c1_admin@gmail.com','rajesh','rajesh1')
+	(retCode, msg, data ) = save_user(1,constants.NEW_ENTITY_ID,'c1_rec','c1_recruiter@gmail.com','rajesh',2)
 	_logger.debug( retCode)
 	_logger.debug ( msg)
 	

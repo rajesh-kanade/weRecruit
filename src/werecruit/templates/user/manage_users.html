@@ -1,0 +1,72 @@
+{%extends "/app_header.html" %}
+{%block content%}
+
+<section class="container is-fullheight">
+    <div class = "block has-text-left">
+        <span class="title has-text-info">Manage Users</span><br>
+        <span class="is-size-7 has-text-info">This section allows tenant administrator to add / delete users to his tenant.</span>
+    </div>
+    <div class="block has-text-left">
+        <a class="button is-success is-rounded" href="/user/showAddPage">Add user</a>
+    </div>    
+
+    <div class="block">  
+        {% include '/utils/show_timed_msg.html'%}
+ 
+        <table class="table is-striped">
+          <tbody>
+          {% for user in userList %}
+            {%if loop.first %}
+              <thead>
+                <tr class="{{theme_bg_color}}">
+                  <th class="has-text-centered {{theme_text_color}}">ID</th>
+                  <th class="has-text-centered {{theme_text_color}}">NAME</th>
+                  <th class="has-text-centered {{theme_text_color}}">EMAIL</th>
+                  <th class="has-text-centered {{theme_text_color}}">STATUS</th>  
+                  <th class="has-text-centered {{theme_text_color}}"></th>
+                </tr>
+              </thead>
+            {%endif %}
+            <tr class="{{theme_bg_color}}">
+              <td class="has-text-centered {{theme_text_color}}">{{ user.id }}</td>
+              <td class="has-text-centered {{theme_text_color}}">{{ user.name }}</td>
+              <td class="has-text-centered {{theme_text_color}}">{{ user.email }}</td> 
+              <td class="has-text-centered {{theme_text_color}}">{{ user.status }}</td>
+              <td class="has-text-centered {{theme_text_color}}">
+                <div class = "block has-text-left"> 
+                    <div class="dropdown is-hoverable">
+                        <div class="dropdown-trigger">
+                          <button class="button is-info" aria-haspopup="true" aria-controls="dropdown-menu">
+                            <span>Actions</span>
+                            <span class="icon is-small">
+                              <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                          </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                          <div class="dropdown-content">
+                            <a href="/user/showEditPage/{{user.id}}" class="dropdown-item">
+                                Edit
+                            </a> 
+                            <a href="/user/showDeletePage/{{user.id}}" class="dropdown-item">
+                                Delete
+                            </a>
+                          </div>
+                        </div>    
+                    </div>
+                </div>
+              </td>       
+            </tr>
+          {% else %}
+            <div class="notification is-warning">
+              No users found !!!
+            </div>
+          {% endfor %}
+          </tbody>
+        </table>
+    </div>
+
+</section>
+
+{% endblock %}
+
