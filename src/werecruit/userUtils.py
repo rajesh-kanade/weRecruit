@@ -1,5 +1,4 @@
 
-
 import logging
 import dbUtils
 import constants
@@ -7,7 +6,6 @@ import constants
 from dotenv import load_dotenv , find_dotenv
 from enum import Enum
 import hashlib
-
 
 _logger = logging.getLogger('userUtils')
 
@@ -31,25 +29,6 @@ class RetCodes(Enum):
 	sign_in_failed = "IAM_CRUD_E411"
 	reset_password_failed = "IAM_CRUD_E420"
 
-
-'''@dataclass(frozen=True)
-class User:
-	id: str
-	name: str
-	email : str
-	password: str
-	status : int =  Status.active.value
-	is_deleted : bool = False
-'''
-'''
-@dataclass(frozen=True)
-class Tenant:
-	id: int
-	name:str
-	admin_id : str
-	status : int =  Status.active.value
-	is_deleted : bool = False
-'''
 
 def hashit(plain_text):
   
@@ -265,50 +244,6 @@ def get(id):
 		cursor.close()
 		dbUtils.returnToPool(db_con)	
 
-def update_user(userID,update_attrs):
-	try:
-		db_con = dbUtils.getConnFromPool()
-		cursor = db_con.cursor()
-
-		if update_attrs is None or len(update_attrs) <= 0 :
-			 return(RetCodes.missing_ent_attrs_error.value,"update attributes dictionary is missing.", None)
-		#TODO: Check column key is valid key representing a column
-
-		#hash the password 
-		update_attrs['password'] = hashit(str(update_attrs['password']))
-
-		if len(update_attrs) == 1:
-			sql = "UPDATE fl_iam_users SET {} = %s WHERE id = %s"	
-			sql = sql.format(list(update_attrs.keys())[0])
-			params = (list(update_attrs.values())[0],userID)
-		else:
-			sql = "UPDATE fl_iam_users SET ({}) = %s WHERE id = '{}'"
-			sql = sql.format(', '.join(update_attrs.keys()), str(userID))
-			params = (tuple(update_attrs.values()),)
-
-		_logger.debug ( cursor.mogrify(sql, params))
-		
-		cursor.execute(sql, params)
-		updated_rows = cursor.rowcount
-			
-		if updated_rows == 1:
-			db_con.commit()
-			return (RetCodes.success.value, "User update successed.", updated_rows)
-		else:
-			db_con.rollback()
-			return (RetCodes.save_ent_error.value, "User update failed as updated rows is <> 1", updated_rows)
-
-	except Exception as e:
-		_logger.error(e)
-		db_con.rollback()
-		return (RetCodes.server_error.value, str(e),None)
-	
-	finally:
-		if cursor is not None:
-			 cursor.close()
-		dbUtils.returnToPool(db_con)
-
-
 
 def delete(userID):
 	try:
@@ -403,76 +338,6 @@ def list_users(tenant_id):
 		cursor.close()
 		dbUtils.returnToPool(db_con)
 
-
-def checkUserExist(email):
-	try:
-		return True
-	except Exception as e:
-		return False
-
-def getUsersForApp (appcode):
-
-	userList =[] #empty userList 
-
-	try:
-		#db_con = sqlite3.connect(constants.DB_NAME)
-		db_con = dbUtils.getConnFromPool()
-		cursor = db_con.cursor()
-		
-		query = """SELECT "user-id" FROM "user-app" WHERE "app-id" = %s """
-		data_tuple = (appcode,)
-		_logger.debug (query)
-		
-		cursor.execute(query, data_tuple)
-		records = cursor.fetchall()
-		_logger.debug("Total rows are:  ", len(records))
-		_logger.debug("_logger.debuging each row")
-
-		for row in records:
-			_logger.debug("User ID is : ", row[0])
-			userList.append( str(row[0]))
-
-	except Exception as e:
-		_logger.error(e)
-		return(-1, str(e), None)
-
-	finally:
-		cursor.close()
-		dbUtils.returnToPool(db_con)
-
-	return (0, "successful", userList )
-
-def getUserConfig(userID, appcode,key):
-	try:
-		#db_con = sqlite3.connect(constants.DB_NAME)
-		db_con = dbUtils.getConnFromPool()
-		cursor = db_con.cursor()
-		
-		query = """SELECT config -> %s as value FROM "user-app-config" WHERE user_id = %s and app_id = %s and config ?  %s """
-		data_tuple = (str(key), str(userID), str(appcode), str(key))
-		_logger.debug (query)
-		_logger.debug ( data_tuple)
-		cursor.execute(query, data_tuple)
-		records = cursor.fetchall()
-		_logger.debug("Total rows are:  ", len(records))
-		
-		if (len(records) ==1):
-			row = records[0]
-			_logger.debug("Config Value is : ", row[0])
-			return (0, 'success', row[0])
-		else:
-			if (len(records) == 0):
-				return (1,'Config key not found.', None)
-			if ( len(records) > 1):
-				return (2,'Too many values for the specified Config key.', None)
-
-	except Exception as e:
-		_logger.error(e)
-		return ( -1, _logger.debug(e), None)
-		
-	finally:
-		cursor.close()
-		dbUtils.returnToPool(db_con)
 
 def do_SignIn(id, password):
 	

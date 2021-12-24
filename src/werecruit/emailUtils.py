@@ -3,9 +3,6 @@ import os
 import constants
 import smtplib
 
-#from userUtils import getUserConfig, get
-#import resumeUtils
-
 from imap_tools import MailBox, AND
 import userUtils 
 import resumeUtils
