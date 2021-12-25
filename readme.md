@@ -53,15 +53,17 @@ from docker machine do `docker exec -it werecruit_prod /bin/bash` to loginto wer
     - Coming soon
 
 ## Upgrade checklist ( TODO -> write script for this)
-1. [stop](#stopping-werecruit) werecruit 
-2. git pull 
-3. Db upgrade if applicable
-4. .env file update if applicable
-5. optionally clean up flask sessions folder
-6. optionally clean up werecruit.log folder
-7. do `chmod +x werecruit_start.sh`. Note executable permisions are lost after every git pull.
-8. run `we_recruit_start.sh`
-9. sanity test
+- [stop](#stopping-werecruit) werecruit  
+    - run `git status` to list files you may changed on the prod.  
+    - if the werecruit_start.sh is changed then you may first want to restore it on server b by running `git restore werecruit_start.sh`
+- Db upgrade *if applicable*
+- .env file update *if applicable*.
+- optionally clean up flask sessions folder
+- optionally clean up werecruit.log folder.
+- do `chmod +x werecruit_start.sh`. Note executable permisions are lost in every git pull which has a modified version of wercecruit_start.sh.
+- run `we_recruit_start.sh`
+- sanity test with test data 
+    - test user acct -> rkanade@gmail.com
 
 ## How to create an docker image - 
 From the main contabo machine run following commands
