@@ -42,9 +42,11 @@ class UserForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
     password = PasswordField('Password', validators=[DataRequired('Please enter password.')])
 
-    role = SelectField('Role', choices=[(int(userUtils.RoleIDs.ADMIN.value), 'Admin'), 
-                        (int(userUtils.RoleIDs.RECRUITER.value), 'Recruiter')])
-
+    #role = SelectField('Role', choices=[(int(userUtils.RoleIDs.ADMIN.value), 'Admin'), 
+    #                    (int(userUtils.RoleIDs.RECRUITER.value), 'Recruiter')])
+    
+    role = SelectField('Select Role', coerce=int)
+    
     submit = SubmitField('Save')
 
 class JDForm(FlaskForm):

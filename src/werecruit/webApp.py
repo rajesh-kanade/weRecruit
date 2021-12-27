@@ -775,6 +775,9 @@ def show_add_user_page():
 	form = UserForm()
 
 	form.user_id.data = constants.NEW_ENTITY_ID
+	form.role.choices = [(userUtils.RoleIDs.ADMIN.value,'Admin'),
+								(userUtils.RoleIDs.RECRUITER.value,'Recruiter')]
+	
 	return render_template("user/edit.html", form = form)		
 
 @app.route('/user/showEditPage/<int:id>', methods = ['GET'])
@@ -790,8 +793,13 @@ def show_edit_user_page(id):
 		form.name.data = user.name
 		form.email.data = user.email
 		form.password.data = user.password
-		form.role.data = int(user.rid)
-		form.role.default = int(form.role.data)  #TODO Need to ensure the current role is selected by default
+
+		_logger.debug( ('Role ID is : {0} ').format(str(user.rid )))
+
+		form.role.choices = [(userUtils.RoleIDs.ADMIN.value,'Admin'),
+								(userUtils.RoleIDs.RECRUITER.value,'Recruiter')]
+		form.role.data = user.rid
+				
 		return render_template("user/edit.html", form = form)		
 	else:
 		flash (msg,"is-danger")
