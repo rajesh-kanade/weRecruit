@@ -32,7 +32,6 @@ from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 from datetime import timezone
 
-FORMAT = '%(asctime)s %(message)s'
 _logger = logging.getLogger('webApp')
 
 app = Flask(__name__)
@@ -851,7 +850,7 @@ if __name__ == "__main__":
 	#load_dotenv()
 
 	#app.secret_key = os.environ.get("FLASK_SESSION_API_KEY")
-	logging.basicConfig(filename='werecruit.log',format=FORMAT, level=int(os.environ.get("LOG_LEVEL",20)))
+	logging.basicConfig(filename='werecruit.log',format=constants.LOG_FORMAT, level=int(os.environ.get("LOG_LEVEL",20)))
 
 	app.run()
 	#app.run(host='0.0.0.0', port=5000)

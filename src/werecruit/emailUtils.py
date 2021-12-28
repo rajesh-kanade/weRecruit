@@ -45,9 +45,9 @@ def readEmails():
 		_logger.info("start reading emails")
 		
 		for msg in mailbox.fetch(AND( seen = False )):  #should be False in prod
-			_logger.info(msg.subject)
-			_logger.info(msg.text)
-			_logger.info(msg.from_)
+			_logger.debug(msg.subject)
+			_logger.debug(msg.text)
+			_logger.debug(msg.from_)
 			from_email_addr =str(msg.from_)
 			_logger.debug('Email received from {0}'.format(from_email_addr))
 			for att in msg.attachments:
@@ -59,23 +59,9 @@ def readEmails():
 				f.write( att.payload)
 				f.close()
 				
-				(candidate_name_list,candidate_email_list,candidate_phone_list) = resumeUtils.process_single_resume("./src/werecruit/resume_uploads/" + att.filename)
-				
-				## resumeUtils sends back a list of potential matches, for now use the first one
-				if not bool(candidate_name_list):
-					candidate_name ='Please enter manually'
-				else:
-					candidate_name = candidate_name_list[0]
-				
-				if not bool(candidate_email_list):
-					candidate_email ='Please enter manually'
-				else:
-					candidate_email = candidate_email_list[0]
-
-				if not bool(candidate_phone_list):
-					candidate_phone ='Please enter manually'
-				else:
-					candidate_phone = candidate_phone_list[0]
+				candidate_name ='Waiting for Resume parser to update.'
+				candidate_email ='Waiting for Resume parser to update.'
+				candidate_phone ='Waiting for Resume parser to update.'
 
 				(retcode,msg,user) = userUtils.get_user_by_email(msg.from_)
 				#assert retCode == userUtils.RetCodes.success.value,"Failed to get user ID associated with email ID {0}".format(msg.from_)
@@ -96,7 +82,6 @@ def readEmails():
 					sendMail(from_email_addr,'Resume upload failure notification','Your email ID is not registered with weRecruit.','plain')
 
 		#mailbox.logout()
-		_logger.info("logged out from mailbox")
 	
 	except Exception as e:
 		_logger.error( e )
@@ -105,6 +90,8 @@ def readEmails():
 	finally:
 		if mailbox is not None:
 			mailbox.logout()
+			_logger.info("successfully logged out from mailbox")
+
 
 	#res_dir_path = "./data/"
 	#resume_List =  os.listdir(path=res_dir_path)
@@ -146,7 +133,7 @@ def sendMail(ToEmailAddr, subject, body, contentType):
 if __name__ == "__main__":
 	#processEmailsForApp(constants.APP_CODE_CAMI);
 	#processEmails("rrkanade22@yahoo.com","CAMI")
-	logging.basicConfig(level=logging.DEBUG)
+	#logging.basicConfig(level=logging.DEBUG)
 
 	#sendMail('rrkanade22@yahoo.com', "test subject", "test body",'plain')
 	#time.sleep(60)

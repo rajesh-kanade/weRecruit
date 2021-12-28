@@ -542,7 +542,7 @@ if __name__ == "__main__":
 
 	#(code,msg,resumeList) = get_resumes_not_associated_with_job(18)
 	#_logger.debug (code)
-	logging.basicConfig(level=logging.DEBUG)
+	#logging.basicConfig(level=logging.DEBUG)
 
 	'''dt = datetime.now(tz=timezone.utc)
 	(code,msg,result) = get_job_status_summary(18)

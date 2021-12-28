@@ -20,6 +20,8 @@ import spacy
 from spacy.matcher import PhraseMatcher
 from spacy.matcher import Matcher
 
+import json
+
 import unicodedata
 import logging
 logging.getLogger("pdfminer").setLevel(logging.WARNING)
@@ -89,6 +91,68 @@ ApplicationStatusNames = {
 	ApplicationStatusCodes.offer_accepted.value :  'Offer accepted by candidate'		
 	}
 
+def update_resume(id, resume_attr_list):
+	
+	_logger.debug('inside save_resume function')
+	db_con = dbUtils.getConnFromPool()
+	cursor = db_con.cursor()
+	
+	try:
+		_logger.debug(id)
+		if not bool(id):
+			 return(RetCodes.empty_ent_attrs_error.value,"Resume ID is empty or null.", None)
+		
+		_logger.debug(resume_attr_list)
+		if not bool(resume_attr_list):
+			 return(RetCodes.empty_ent_attrs_error.value,"Resume attribute list empty or null.", None)
+		
+		# resume parser returns list of potential matches for name , phone, email. 
+		# Update the first one else ask user to update manually.
+		if bool(resume_attr_list['name']):
+			name = resume_attr_list['name'][0]
+		else:
+			name = 'Resume parser can not update this field.Manual update required.'
+		
+		if bool(resume_attr_list['phone']):
+			phone = resume_attr_list['phone'][0]
+		else:
+			phone = 'Resume parser can not update this field.Manual update required.'
+
+		if bool(resume_attr_list['email']):
+			email = resume_attr_list['email'][0]
+		else:
+			email = 'Resume parser can not update this field.Manual update required.'
+
+		json_resume = json.dumps(resume_attr_list, indent=4, sort_keys=False)
+
+		sql = """update public.wr_resumes set  
+					name = %s,  email = %s, phone = %s,
+						json_resume = %s
+					where id = %s"""
+		params = (name,email, phone,
+						json_resume,
+						int(id))
+						
+		_logger.debug ( cursor.mogrify(sql, params))
+			
+		cursor.execute(sql, params)
+		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+				
+		_logger.debug ("Resume id {0} updated successfully.".format(id) )
+		
+		db_con.commit()
+		return (RetCodes.success.value, "Resume id {0} updated successfully.".format(id),id)
+			
+	except Exception as e:
+		_logger.error(e)
+		db_con.rollback()
+		return (RetCodes.server_error.value, str(e),None)
+	
+	finally:
+		if cursor is not None:
+			cursor.close()
+		dbUtils.returnToPool(db_con)
+
 
 def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recruiterID):
 	_logger.debug('inside save_resume function')
@@ -132,6 +196,9 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 			db_con.commit()
 			return (RetCodes.success.value, "Resume id {} successfully uploaded.".format(resume_id), resume_id)
 		else:
+			# When record is updated, resume can be left null or can be uploaded with a new or same resume.
+			# Handle resume upload case seperately... 
+			# TODO rewrite this block in a better way
 			sql = """update public.wr_resumes set  
 						name = %s,  email = %s, phone = %s,
 						recruiter_id = %s
@@ -145,6 +212,8 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 			cursor.execute(sql, params)
 			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
+			#TODO -> Think of better way to do this
+			# following handles the case where resume was uploaded again ( same one or new one)
 			if fileName != None:
 				sql1 = """update public.wr_resumes set  
 						resume_filename = %s
@@ -273,27 +342,28 @@ def get(id):
 
 
 def process_single_resume( testResumeFileName ):
-		
-	ext = getFileExtension(testResumeFileName)
+
+	resumefolder = "./src/werecruit/resume_uploads/"	
+	ext = getFileExtension(resumefolder+testResumeFileName)
 
 	#_logger.debug(ext)
 	#_logger.debug("Extension found is", ext)
 	resumeText=''
 
 	if ext == 'docx':
-		resumeText = readDocx(testResumeFileName)
+		rawText = readDocx(resumefolder+testResumeFileName)
 	elif ext == 'pdf': 
-		resumeText = readPDF(testResumeFileName)
+		rawText = readPDF(resumefolder+testResumeFileName)
 	else:
-		return
+		raise Exception('unsupported resume file type {0}'.format(ext)) 
 
 	#wordTokenizer(resumeText)
 	#_summary_list.append({"resume-file-name": testResumeFileName})
 	#_summary_list['resume-file-name'] = testResumeFileName
 	#_summary_list.append({"res-text": resumeText})
 
-	_logger.debug("\n\n *************** Text resume after rmoving special chars ************* \n\n ")
-	resumeText = clean_text(resumeText)
+	_logger.debug("\n\n *************** Text resume after removing special chars ************* \n\n ")
+	resumeText = clean_text(rawText)
 
 	_logger.debug(resumeText)
 
@@ -301,12 +371,18 @@ def process_single_resume( testResumeFileName ):
 	#extract_full_name1(resumeText)
 	phone=extract_phones(resumeText)
 	email = extract_emails(resumeText)
-	
+
+	json_list ={}
+	json_list['processed-date'] = str(datetime.now(tz=timezone.utc)) #dt_string
+	json_list['raw-text'] = rawText
+	json_list['name'] = name
+	json_list['phone'] = phone
+	json_list['email'] = email
 	'''print(name)
 	print(email)
 	print(phone)'''
 
-	return(name,email,phone)
+	return(json_list)
 
 def readPDF(pdf_file_name):
 	rsrcmgr = PDFResourceManager()
@@ -477,6 +553,42 @@ def extract_full_name1(text):
 			if (ent.label_ == 'PERSON'):
 				results.append(ent.text)
 
+def populate_json_resumes():
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		query = """SELECT * FROM wr_resumes 
+				where json_resume is null"""
+	
+		#params = (tenantID,)
+		_logger.debug ( cursor.mogrify(query))
+		cursor.execute(query)
+
+		resumeList =cursor.fetchall()
+		for rec in resumeList:
+			try:
+				#TODO better to keep this condition based on last processed time stamp
+				if rec.resume_filename != None:
+					_logger.debug(rec.resume_filename)
+					(resume_attr_list) = process_single_resume(rec.resume_filename)
+					_logger.debug(resume_attr_list)
+					(retcode,msg,data) = update_resume(rec.id,resume_attr_list)
+			except Exception as e:
+				_logger.error (e)
+				_logger.error( 'Error occured. Logging it and continue processing next record')
+
+		return(RetCodes.success.value, "json resumes populated successfully.", None)
+
+	except Exception as dbe:
+		_logger.error(dbe)
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
+
+
 ## main entry point
 if __name__ == "__main__":
 	#(retCode,msg,data) = save_resume(constants.NEW_ENTITY_ID,None,'rajesh','rkanade@gmail.com','9890303698',1)
@@ -487,11 +599,11 @@ if __name__ == "__main__":
 
 	logging.basicConfig(level = logging.DEBUG)
 	
-	(name,email,phone) = process_single_resume('C:\\Users\\rajesh\\Downloads\\AK.pdf')
-	
-	_logger.debug(name)
-	_logger.debug(email)
-	_logger.debug(phone)
+	#(name,email,phone) = process_single_resume('C:\\Users\\rajesh\\Downloads\\AK.pdf')
+
+	resultData = populate_json_resumes()
+
+
 
 
 
