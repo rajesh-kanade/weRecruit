@@ -65,6 +65,9 @@ appcontext_tearing_down.connect(cleanup, app)"""
 def home():
 	return render_template('index.html')        
 		
+@app.route('/website/show_release_history')
+def show_release_history_page():
+	return render_template('/website/release_history.html')
 
 @app.route('/user/showSigninPage')
 def show_signin_page():

@@ -1,0 +1,63 @@
+{%extends "header.html" %}
+{%block content%}
+{% set messages = get_flashed_messages(with_categories = true ) %}
+
+<section class = "container is-fullheight has-text-centered">
+    <div class="block"><br></div>
+    
+    <div class="block is-size-3" id ="releases">
+      <div class ="card is-size-6">
+        <p class="card-header-title has-background-info">
+          Dec 26th 2021 Release
+        </p>
+        <div class = "card-content has-text-left">
+          <li>Ability to reset password.</li>
+          <li>Ability for administrator to configure additional users with either Admin or Recruiter role.</li>
+          <li>Ability for administrator to delete,deactivate users.</li>     
+        </div>      
+      </div>
+
+      <div class ="card is-size-6">
+        <p class="card-header-title has-background-info">
+          Dec 10th 2021 release
+        </p>
+        <div class = "card-content has-text-left">
+            <li>Support for additional fields like location, revenue potential, number of positions when creating new job positions.</li>
+            <li>View revenue summary report.</li>
+            <li>Upgrade cloud infrastructure. Docker based deployment with basic CI/CD.</li>
+
+        </div>      
+      </div>
+
+      <div class ="card is-size-6">
+        <p class="card-header-title has-background-info">
+          Nov 23rd 2021 release
+        </p>
+        <div class = "card-content has-text-left">
+          <li>Upload resumes via email. Extract name, phone,email automatically from resumes attached to email.</li>
+          <li>Email notifications on a job status change.</li>
+          <li>View Job summary ( pipeline ) report.</li>
+          <li>Multiple bug fixes in Sign Up / Sign in process.</li>
+        </div>      
+      </div>
+
+      <div class ="card is-size-6">
+        <p class="card-header-title has-background-info">
+          Nov 9th 2021 release
+        </p>
+        <div class = "card-content has-text-left">
+          <li>Create job positions gathering important information like required skills,interview panel, hiring manager, HR manager</li>
+          <li>Create candidate records capturing candidate contact information along with attaching his resumes in pdf or docx format</li>
+          <li>Shortlist candidates for a job position.</li>
+          <li>View job progress summary for a job position.</li>
+          <li>Ability to Update job status.</li>   
+          <li>View Client summary report.</li>  
+        </div>      
+      </div>
+
+    </div>
+    <br>
+    
+</section>
+
+{% endblock %}
