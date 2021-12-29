@@ -17,6 +17,8 @@ from docker machine do `docker exec -it werecruit_prod /bin/bash` to loginto wer
 
 # Prod Notes : weRecruit on Ubuntu
 
+from main machine do `docker exec -it werecruit_prod /bin/bash` to loginto werecruit container.
+
 ## First time installation checklist
 * get a docker image based on ubuntu 20 LTS
 * Python is installed ( 3.8 )
@@ -53,14 +55,17 @@ from docker machine do `docker exec -it werecruit_prod /bin/bash` to loginto wer
     - Coming soon
 
 ## Upgrade checklist ( TODO -> write script for this)
+- from terminal login to the werecruit container. For creds contact admin.
+- run  `cd /etc/werecruit` 
 - [stop](#stopping-werecruit) werecruit  
     - run `git status` to list files you may changed on the prod.  
     - if the werecruit_start.sh is changed then you may first want to restore it on server b by running `git restore werecruit_start.sh`
 - Db upgrade *if applicable*
 - .env file update *if applicable*.
-- optionally clean up flask sessions folder
-- optionally clean up werecruit.log folder.
-- do `chmod +x werecruit_start.sh`. Note executable permisions are lost in every git pull which has a modified version of wercecruit_start.sh.
+- *optionally* clean up flask sessions folder
+- *optionally* clean up werecruit.log folder.
+- run `git pull` to get all the latest code
+- do `chmod +x werecruit_start.sh`. Note executable permisions are lost in every git pull which has a *modified version of wercecruit_start.sh*.
 - run `we_recruit_start.sh`
 - sanity test with test data 
     - test user acct -> rkanade@gmail.com
