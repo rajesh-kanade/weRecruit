@@ -11,3 +11,5 @@ flask_session/
 src/werecruit/resume_uploads/
 
 
+werecruit.log
+werecruit_scheduled_jobs.log
