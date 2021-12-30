@@ -9,7 +9,7 @@ build/
 dist/
 flask_session/
 src/werecruit/resume_uploads/
-
+src/werecruit/temp/
 
 werecruit.log
 werecruit_scheduled_jobs.log
