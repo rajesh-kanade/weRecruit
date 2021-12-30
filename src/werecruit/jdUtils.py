@@ -4,8 +4,11 @@ import constants
 import resumeUtils
 
 import decimal
+
+from dotenv import load_dotenv , find_dotenv
 import logging
 _logger = logging.getLogger('jdUtils')
+load_dotenv(find_dotenv())
 
 import json
 
@@ -38,8 +41,7 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 			location=None, yrs_of_exp=None,jd_file_name=None,
 			primary_skills=None, secondary_skills=None,
 			ctc_min=None, ctc_max=None,ctc_currency=None,
-			fees_percent=None,warranty_period_in_months=None
-			 ):
+			fees_percent=None,warranty_period_in_months=None):
 	
 	_logger.debug('inside save_jd function')
 	db_con = dbUtils.getConnFromPool()
@@ -63,6 +65,12 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 
 		if open_date is None:
 			open_date = datetime.now(tz=timezone.utc)
+		
+		_logger.debug('Client JD file name is {0}'.format(jd_file_name))
+		if (jd_file_name is None):
+			file_data = None
+		else:
+			file_data = bytes(open(jd_file_name, "rb").read())
 
 		if (int(id) == constants.NEW_ENTITY_ID):
 			##insert a record in user table
@@ -75,7 +83,7 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 					location,yrs_of_exp,jd_file_name,
 					primary_skills, secondary_skills,
 					ctc_min,ctc_max,ctc_currency ,
-					fees_in_percent,warranty_period_in_months) 
+					fees_in_percent,warranty_period_in_months,client_jd) 
 					values (%s,%s,%s,
 					%s,%s,%s,%s,
 					%s,%s,%s,
@@ -85,7 +93,7 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 					%s,%s,%s,
 					%s,%s,
 					%s,%s,%s,
-					%s,%s) returning id """
+					%s,%s,%s) returning id """
 			
 			params = (title,details,client,
 					recruiterID,int(positions),int(status),open_date,
@@ -96,7 +104,8 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 					location,yrs_of_exp,jd_file_name,
 					primary_skills,secondary_skills,
 					ctc_min,ctc_max, ctc_currency,
-					fees_percent,warranty_period_in_months)
+					fees_percent,warranty_period_in_months,
+					file_data)
 
 			_logger.debug ( cursor.mogrify(sql, params))
 			
@@ -105,12 +114,13 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 
 			result = cursor.fetchone()
 			jd_id = result[0]
-			_logger.debug ("JD id created is",jd_id )
+			_logger.debug ("JD id{0} successfully created.".format(jd_id) )
 		
 
 			db_con.commit()
 			return (RetCodes.success.value, "JD creation successful.", jd_id)
 		else:
+			_logger.debug("inside save_jd update. jd file path is : ".format(jd_file_name))
 			sql = """update public.wr_jds set  
 						title = %s,  details = %s,  client = %s,
 						recruiter_id = %s, positions = %s, status =%s,
@@ -142,14 +152,15 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 
 			#This is bad code as unnecessary second db call is being made, need to be refactored
 			if (jd_file_name != None):
+				_logger.debug('JD file name is not null so updating the file name and content for job id {0}'.format(id))
 				sql1 = """update public.wr_jds set  
-						jd_file_name = %s
+						jd_file_name = %s,
+						client_jd = %s
 						where id = %s
 					"""
-				params1 = (jd_file_name,id)
+				params1 = (jd_file_name,file_data,id)
 				cursor.execute(sql1, params1)
 				assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
-
 		
 			db_con.commit()
 			_logger.debug ("JD id {0} updated successfully.".format(id) )
@@ -550,7 +561,17 @@ if __name__ == "__main__":
 	_logger.debug(msg)
 	_logger.debug(result)'''
 
-	update_job_stats()
+	#update_job_stats()
+	#(code,msg,resumeList) = save_jd(-1,"test for attachment",'','testclient')
+
+	(code,msg,data) = get(30)
+	print(data)
+	bin_data= bytes(data.client_jd)
+	print(bin_data)
+
+	f = open("my_bin_file.pdf", "wb")
+	f.write(bin_data)
+	f.close()
 
 
 

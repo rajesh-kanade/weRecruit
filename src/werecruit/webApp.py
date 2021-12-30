@@ -38,12 +38,12 @@ app = Flask(__name__)
 
 load_dotenv(find_dotenv())
 
-print(os.environ.get("FLASK_SESSION_API_KEY"))
+#print(os.environ.get("FLASK_SESSION_API_KEY"))
 app.secret_key = os.environ.get("FLASK_SESSION_API_KEY",'')
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
-UPLOAD_FOLDER = '/resume_uploads'  #TODO win specific for now. Take care of path sep on linux
+UPLOAD_FOLDER = '/temp'  #TODO win specific for now. Take care of path sep on linux
 ALLOWED_EXTENSIONS = {'doc', 'pdf', 'docx'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -83,7 +83,7 @@ def do_signin():
 	if (retCode == userUtils.RetCodes.success.value):        
 		#flash (results[1],"is-info")
 		#user = results[2] 
-
+		session.permanent = False
 		session["user_id"] = user.id  #form.email.data
 		session["user_name"] = user.name #'Mr. Customer'
 		session["tenant_id"] = user.tid 
@@ -148,7 +148,8 @@ def show_home_page():
 @login_required
 def do_signout():
 
-	session.clear()
+	session.clear()  
+	#TODO figure out if session pop is required for each session variable
 	flash('Successfully logged out.',"is-info")
 	return redirect('/user/showSigninPage') 
 		
@@ -204,7 +205,9 @@ def save_JD():
 		#resource_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
 		#_logger.debug ( 'resource path is {0}'.format(resource_path))
 		#f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-		f.save(os.path.join(app.root_path + UPLOAD_FOLDER, filename))
+		filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
+		f.save(filename)
+		#f.save(os.path.join(app.root_path + UPLOAD_FOLDER, filename))
 
 		#f.save(resource_path,filename)
 		f.close()
@@ -225,16 +228,19 @@ def save_JD():
 
 	if (results[0] == jdUtils.RetCodes.success.value):        
 		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
-		return redirect(url_for("show_jd_all_page"))
 	else:
 		flash (results[0] + ':' +results[1],"is-danger")
-		return redirect(url_for("show_jd_all_page"))
+	
+	if filename is not None and os.path.exists(filename):
+  		os.remove(filename)
+	
+	return redirect(url_for("show_jd_all_page"))
 
 @app.route('/jd/showEditPage/<int:id>', methods = ['GET'])
 @login_required
 def show_jd_edit_page(id):
 
-	_logger.debug('inside edit JD page for Job ID : ' , id)
+	_logger.debug('inside edit JD page for Job ID {0} '.format(id))
 
 	#loggedInUserID = session.get('user_id')
 	
@@ -498,6 +504,33 @@ def resume_download():
 	path = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
 
 	return send_file(path, as_attachment=True)
+
+@app.route('/jd/download/<int:id>', methods = ['GET'])
+@login_required
+def jd_download(id):
+	#assert request.args['resume'], "Did not find resume key in request parameters."
+	
+	#filename = request.args['resume']
+	try:
+		(code,msg,jd) = jdUtils.get(id)
+		assert code == jdUtils.RetCodes.success.value , "Failed to fetch job {0} ".format(id) 
+				
+		if jd.client_jd == None or jd.jd_file_name == None:
+			flash ("No client JD is attached with this job","is-info")
+			return redirect(url_for("show_jd_all_page"))
+		else:
+			file_data= bytes(jd.client_jd)
+
+			f = open(jd.jd_file_name, "wb")
+			f.write(file_data)
+			f.close()			#path = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
+
+			return send_file(jd.jd_file_name, as_attachment=True)
+
+	except Exception as e:
+			flash (str(e),"is-danger")
+			return redirect(url_for("show_jd_all_page"))
+
 
 @app.route('/resume/showshortlistpage', methods = ['GET'])
 @login_required
