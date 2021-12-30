@@ -60,8 +60,6 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 		if not recruiterID:
 			 return(RetCodes.empty_ent_attrs_error.value,"Recruiter ID field is empty or null.", None)
 
-		if not positions:
-			 return(RetCodes.empty_ent_attrs_error.value,"Positions field is empty or null.", None)
 
 		if open_date is None:
 			open_date = datetime.now(tz=timezone.utc)

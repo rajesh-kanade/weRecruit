@@ -226,15 +226,18 @@ def save_JD():
 								form.ctc_min.data,form.ctc_max.data,form.ctc_currency.data,
 								form.fees_percent.data,form.warranty_in_months.data)
 
-	if (results[0] == jdUtils.RetCodes.success.value):        
-		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
-	else:
-		flash (results[0] + ':' +results[1],"is-danger")
-	
 	if filename is not None and os.path.exists(filename):
   		os.remove(filename)
+
+	if (results[0] == jdUtils.RetCodes.success.value):        
+		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
+		return redirect(url_for("show_jd_all_page"))
+
+	else:
+		flash (results[0] + ':' +results[1],"is-danger")
+		return redirect(url_for("show_jd_edit_page"))
 	
-	return redirect(url_for("show_jd_all_page"))
+	
 
 @app.route('/jd/showEditPage/<int:id>', methods = ['GET'])
 @login_required
@@ -421,36 +424,24 @@ def resume_save():
 		f = form.candidate_resume.data
 		filename = secure_filename(f.filename)
 		_logger.debug('app root path is {0}'.format(app.root_path))
-		#resource_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
-		#_logger.debug ( 'resource path is {0}'.format(resource_path))
-		#f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-		f.save(os.path.join(app.root_path + UPLOAD_FOLDER, filename))
-
-		#f.save(resource_path,filename)
+		filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
+		f.save(filename)
 		f.close()
 	else:
 		filename = None
 
 	(retCode,msg,data) = resumeUtils.save_resume(form.id.data, filename,form.candidate_name.data,
 							form.candidate_email.data,form.candidate_phone.data,int(session.get('user_id')))
+	
+	if filename is not None and os.path.exists(filename):
+  		os.remove(filename)
+
 	if retCode == resumeUtils.RetCodes.success.value:
-		#return redirect(url_for("show_home_page"))
 		flash (msg, "is-success")
 		return redirect(url_for('show_resume_browser_page'))
 	else:
 		flash (retCode + ':' + msg,"is-danger")
-		#form.errors.append(msg)
 		return render_template('resume/edit.html', form= form)	
-	#else:
-	#	return render_template('resume/edit.html', form= form)
-		
-	'''if (results[0] == jdUtils.RetCodes.success.value):        
-		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
-		return redirect(url_for("show_home_page"))
-	else:
-		flash (results[0] + ':' +results[1],"is-danger")
-		return redirect(url_for("show_home_page"))
-	'''
 
 @app.route('/resume/showBrowser', methods = ['GET'])
 @login_required
@@ -495,15 +486,31 @@ def show_resume_edit_page(id):
 		flash (results[0] + ':' +results[1],"is-danger")
 		return redirect(url_for("show_home_page"))
 
-@app.route('/resume/download', methods = ['GET'])
+@app.route('/resume/download/<int:id>', methods = ['GET'])
 @login_required
-def resume_download():
-	assert request.args['resume'], "Did not find resume key in request parameters."
-	
-	filename = request.args['resume']
-	path = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
+def resume_download(id):
 
-	return send_file(path, as_attachment=True)
+	try:
+		(code,msg,resume) = resumeUtils.get(id)
+		assert code == resumeUtils.RetCodes.success.value , "Failed to fetch resume {0} ".format(id) 
+				
+		if resume.resume_content == None or resume.resume_filename == None:
+			flash ("No client JD is attached with this job","is-info")
+			return redirect(url_for("show_resume_browser_page"))
+		else:
+			file_data= bytes(resume.resume_content)
+
+			f = open(resume.resume_filename, "wb")
+			f.write(file_data)
+			f.close()			#path = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
+
+			return send_file(resume.resume_filename, as_attachment=True)
+
+	except Exception as e:
+			flash (str(e),"is-danger")
+			return redirect(url_for("show_resume_browser_page"))
+
+
 
 @app.route('/jd/download/<int:id>', methods = ['GET'])
 @login_required

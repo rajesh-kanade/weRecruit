@@ -173,16 +173,21 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 		if not recruiterID:
 			 return(RetCodes.empty_ent_attrs_error.value,"Recruiter ID field is empty or null.", None)
 
+		_logger.debug('Resume file name is {0}'.format(fileName))
+		if (fileName is None):
+			file_data = None
+		else:
+			file_data = bytes(open(fileName, "rb").read())
 
 		if (int(id) == constants.NEW_ENTITY_ID):
 			##insert a record in user table
 			sql = """insert into public.wr_resumes ( resume_filename, name, email, 
-					phone, recruiter_id ) 
+					phone, recruiter_id,resume_content ) 
 					values (%s,%s,%s,
-					%s,%s) returning id """
+					%s,%s,%s) returning id """
 			
 			params = (fileName,candidateName,candidateEmail,
-					candidatePhone,int(recruiterID))
+					candidatePhone,int(recruiterID),file_data)
 
 			_logger.debug ( cursor.mogrify(sql, params))
 			
@@ -216,9 +221,9 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 			# following handles the case where resume was uploaded again ( same one or new one)
 			if fileName != None:
 				sql1 = """update public.wr_resumes set  
-						resume_filename = %s
+						resume_filename = %s,resume_content = %s
 					where id = %s"""
-				params1 = (fileName,
+				params1 = (fileName,file_data,
 						int(id))
 				cursor.execute(sql1, params1)
 				assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
