@@ -5,7 +5,7 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import IntegerField, DateField
 
 import jdUtils
-import userUtils
+
 
 class SignUpForm(FlaskForm):
 

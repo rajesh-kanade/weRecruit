@@ -5,10 +5,10 @@ import resumeUtils
 
 import decimal
 
-from dotenv import load_dotenv , find_dotenv
+#from dotenv import load_dotenv , find_dotenv
 import logging
-_logger = logging.getLogger('jdUtils')
-load_dotenv(find_dotenv())
+_logger = logging.getLogger()
+#load_dotenv(find_dotenv())
 
 import json
 
@@ -497,7 +497,7 @@ def update_job_stats():
 		assert retCode == resumeUtils.RetCodes.success.value,"Failed to fetch application status codes."
 
 		for job in jdList:
-			print (job.id)
+			#print (job.id)
 			jdstats = {}
 			
 			cursor1 = dbUtils.getNamedTupleCursor(db_con)
@@ -516,7 +516,7 @@ def update_job_stats():
 				#cursor.clear()
 
 			#cursor1.close()
-			print(jdstats)
+			#print(jdstats)
 			
 			cursor2 = dbUtils.getNamedTupleCursor(db_con)
 
@@ -549,6 +549,8 @@ def update_job_stats():
 ## main entry point
 if __name__ == "__main__":
 
+	#logging.basicConfig(level=logging.DEBUG)
+
 	#(code,msg,resumeList) = get_resumes_not_associated_with_job(18)
 	#_logger.debug (code)
 	#logging.basicConfig(level=logging.DEBUG)
@@ -562,14 +564,7 @@ if __name__ == "__main__":
 	#update_job_stats()
 	#(code,msg,resumeList) = save_jd(-1,"test for attachment",'','testclient')
 
-	(code,msg,data) = get(30)
-	print(data)
-	bin_data= bytes(data.client_jd)
-	print(bin_data)
 
-	f = open("my_bin_file.pdf", "wb")
-	f.write(bin_data)
-	f.close()
 
 
 

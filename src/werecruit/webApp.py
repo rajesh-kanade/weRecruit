@@ -15,8 +15,7 @@ from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask_fontawesome import FontAwesome
-from dotenv import load_dotenv , find_dotenv
-import logging
+
 import userUtils
 import jdUtils
 import constants
@@ -32,11 +31,13 @@ from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 from datetime import timezone
 
-_logger = logging.getLogger('webApp')
+from dotenv import load_dotenv , find_dotenv
+load_dotenv(find_dotenv())
+
+import logging
+from logging.handlers import TimedRotatingFileHandler
 
 app = Flask(__name__)
-
-load_dotenv(find_dotenv())
 
 #print(os.environ.get("FLASK_SESSION_API_KEY"))
 app.secret_key = os.environ.get("FLASK_SESSION_API_KEY",'')
@@ -45,7 +46,6 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 UPLOAD_FOLDER = '/temp'  #TODO win specific for now. Take care of path sep on linux
 ALLOWED_EXTENSIONS = {'doc', 'pdf', 'docx'}
-
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #turbo = Turbo(app)
@@ -178,7 +178,6 @@ def show_jd_create_page():
 def show_jd_all_page():
 	results = jdUtils.list_jds_by_tenant(session.get('tenant_id'))
 	if (results[0] == jdUtils.RetCodes.success.value): 
-		_logger.debug( 'success')
 		jdList = results[2]    
 		for jd in jdList:
 			_logger.debug(jd.title)   
@@ -202,14 +201,8 @@ def save_JD():
 		f = form.client_jd.data
 		filename = secure_filename(f.filename)
 		_logger.debug('app root path is {0}'.format(app.root_path))
-		#resource_path = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
-		#_logger.debug ( 'resource path is {0}'.format(resource_path))
-		#f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 		filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
 		f.save(filename)
-		#f.save(os.path.join(app.root_path + UPLOAD_FOLDER, filename))
-
-		#f.save(resource_path,filename)
 		f.close()
 	else:
 		filename = None
@@ -377,25 +370,19 @@ def apply_to_JD():
 		f.save(filename)
 
 		resumeUtils.save_resume(constants.NEW_ENTITY_ID, filename,form.candidate_name.data,
-								form.candidate_email.data,form.candidate_phone,int(session.get('user_id')))
+								form.candidate_email.data,form.candidate_phone,
+								int(session.get('user_id')))
 		return redirect(url_for("show_home_page"))
 	else:
 		return render_template('jd/apply.html', form= form)
 		
-	'''if (results[0] == jdUtils.RetCodes.success.value):        
-		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
-		return redirect(url_for("show_home_page"))
-	else:
-		flash (results[0] + ':' +results[1],"is-danger")
-		return redirect(url_for("show_home_page"))
-	'''
+
 @app.route('/resume/showUploadPage', methods = ['GET'])
 @login_required
 def show_resume_upload_page():
 	form = ResumeForm()
 	
 	form.id.data = constants.NEW_ENTITY_ID
-	#form.status.data = jdUtils.JDStatusCodes.open.value
 
 	return render_template('resume/edit.html', form=form)
 
@@ -885,12 +872,24 @@ def save_user():
 		flash (msg,"is-danger")
 		return render_template("user/edit.html", form = form)		
 
+def get_file_handler():
+   file_handler = TimedRotatingFileHandler(constants.LOG_FILENAME_WEB, when='midnight')
+   file_handler.setFormatter(logging.Formatter(constants.LOG_FORMAT))
+   file_handler.setLevel(int(os.environ.get("LOG_LEVEL",20)))
+   return file_handler
+
 if __name__ == "__main__":
 	
 	#load_dotenv()
 
 	#app.secret_key = os.environ.get("FLASK_SESSION_API_KEY")
-	logging.basicConfig(filename='werecruit.log',format=constants.LOG_FORMAT, level=int(os.environ.get("LOG_LEVEL",20)))
+	logging.basicConfig(filename = constants.LOG_FILENAME_WEB, format=constants.LOG_FORMAT, 
+					level=int(os.environ.get("LOG_LEVEL",20)))
+
+	_logger = logging.getLogger()
+	_logger.addHandler(get_file_handler())
+	print("Effective logging level is :", _logger.getEffectiveLevel())
 
 	app.run()
+
 	#app.run(host='0.0.0.0', port=5000)

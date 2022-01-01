@@ -2,7 +2,7 @@ import dbUtils
 import logging
 
 from enum import Enum
-_logger = logging.getLogger('reports')
+_logger = logging.getLogger()
 
 class RetCodes(Enum):
 	success = 'RPT_CRUD_S200'

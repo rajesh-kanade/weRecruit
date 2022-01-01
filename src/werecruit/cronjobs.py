@@ -11,7 +11,7 @@ import time
 
 from dotenv import load_dotenv,find_dotenv
 
-_logger = logging.getLogger("scheduledJobs")
+_logger = logging.getLogger()
 
 def read_email_job():
 
@@ -34,8 +34,7 @@ def parse_resumes_job():
 if __name__ == "__main__":	
 	
 	load_dotenv(find_dotenv())
-
-	logging.basicConfig(filename='werecruit_scheduled_jobs.log', format=constants.LOG_FORMAT, level=int(os.environ.get("LOG_LEVEL",20)))
+	logging.basicConfig(filename=constants.LOG_FILENAME_SCHED, format=constants.LOG_FORMAT, level=int(os.environ.get("LOG_LEVEL",20)))
 
 	try:
 

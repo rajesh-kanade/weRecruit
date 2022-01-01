@@ -13,3 +13,6 @@ src/werecruit/temp/
 
 werecruit.log
 werecruit_scheduled_jobs.log
+wr_job.log
+wr_web.log
+

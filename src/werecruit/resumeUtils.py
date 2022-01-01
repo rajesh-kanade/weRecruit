@@ -26,7 +26,11 @@ import unicodedata
 import logging
 logging.getLogger("pdfminer").setLevel(logging.WARNING)
 
-_logger = logging.getLogger('resumeUtils')
+#from dotenv import load_dotenv , find_dotenv
+#load_dotenv(find_dotenv())
+#logging.basicConfig(format=constants.LOG_FORMAT, level=int(os.environ.get("LOG_LEVEL",20)))
+
+_logger = logging.getLogger()
 _nlp = spacy.load("en_core_web_sm")
 
 
@@ -91,9 +95,10 @@ ApplicationStatusNames = {
 	ApplicationStatusCodes.offer_accepted.value :  'Offer accepted by candidate'		
 	}
 
+#primarly called from resume parser
 def update_resume(id, resume_attr_list):
 	
-	_logger.debug('inside save_resume function')
+	_logger.debug('inside update_resume function')
 	db_con = dbUtils.getConnFromPool()
 	cursor = db_con.cursor()
 	
@@ -219,11 +224,13 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 
 			#TODO -> Think of better way to do this
 			# following handles the case where resume was uploaded again ( same one or new one)
+			# By setting resume_json field to NULL, our background scheduler will pick it up for
+			# parsing it again. This way the new uploaded resume will get parsed.
 			if fileName != None:
 				sql1 = """update public.wr_resumes set  
-						resume_filename = %s,resume_content = %s
+						resume_filename = %s,resume_content = %s,json_resume =%s
 					where id = %s"""
-				params1 = (fileName,file_data,
+				params1 = (fileName,file_data,None,
 						int(id))
 				cursor.execute(sql1, params1)
 				assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
@@ -348,17 +355,17 @@ def get(id):
 
 def process_single_resume( testResumeFileName ):
 
-	resumefolder = "./src/werecruit/resume_uploads/"	
-	ext = getFileExtension(resumefolder+testResumeFileName)
+	#resumefolder = "./src/werecruit/resume_uploads/"	
+	ext = getFileExtension(testResumeFileName)
 
 	#_logger.debug(ext)
 	#_logger.debug("Extension found is", ext)
 	resumeText=''
 
 	if ext == 'docx':
-		rawText = readDocx(resumefolder+testResumeFileName)
+		rawText = readDocx(testResumeFileName)
 	elif ext == 'pdf': 
-		rawText = readPDF(resumefolder+testResumeFileName)
+		rawText = readPDF(testResumeFileName)
 	else:
 		raise Exception('unsupported resume file type {0}'.format(ext)) 
 
@@ -573,15 +580,33 @@ def populate_json_resumes():
 		resumeList =cursor.fetchall()
 		for rec in resumeList:
 			try:
-				#TODO better to keep this condition based on last processed time stamp
-				if rec.resume_filename != None:
+
+				if rec.resume_content != None:
+					#write the file to disk
 					_logger.debug(rec.resume_filename)
+					file_data= bytes(rec.resume_content)
+
+					f = open(rec.resume_filename, "wb")
+					f.write(file_data)
+					f.close()
+
 					(resume_attr_list) = process_single_resume(rec.resume_filename)
+
 					_logger.debug(resume_attr_list)
 					(retcode,msg,data) = update_resume(rec.id,resume_attr_list)
+
+					if (retcode == RetCodes.success.value):
+						_logger.info("Resume with id {0} success parsed.".format(rec.id))
+					else:
+						_logger.warn("Resume with id {0} could not be parsed. Error details are : {1}".format(rec.id,msg))
+
 			except Exception as e:
 				_logger.error (e)
 				_logger.error( 'Error occured. Logging it and continue processing next record')
+			
+			finally:
+				if rec.resume_filename is not None and os.path.exists(rec.resume_filename):
+  					os.remove(rec.resume_filename)
 
 		return(RetCodes.success.value, "json resumes populated successfully.", None)
 
@@ -602,10 +627,10 @@ if __name__ == "__main__":
 	#shortlist(25,[17], datetime.now(tz=timezone.utc),
 	#	ApplicationStatusCodes.shortlisted.value,1)
 
-	logging.basicConfig(level = logging.DEBUG)
+	#logging.basicConfig(level = logging.DEBUG)
 	
 	#(name,email,phone) = process_single_resume('C:\\Users\\rajesh\\Downloads\\AK.pdf')
-
+	logging.basicConfig(level=logging.DEBUG)
 	resultData = populate_json_resumes()
 
 

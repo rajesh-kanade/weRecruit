@@ -7,7 +7,7 @@ from dotenv import load_dotenv , find_dotenv
 from enum import Enum
 import hashlib
 
-_logger = logging.getLogger('userUtils')
+_logger = logging.getLogger()
 
 class RoleIDs(Enum):
 	ADMIN = 1
@@ -429,7 +429,7 @@ def do_reset_password(id, email, cur_password, new_password):
 if __name__ == "__main__":
 
 	load_dotenv(find_dotenv())
-	logging.basicConfig(filename='werecruit.log',level=logging.DEBUG)
+	logging.basicConfig(level=logging.DEBUG)
 
 	(retCode, msg, data ) = save_user(1,constants.NEW_ENTITY_ID,'c1_rec','c1_recruiter@gmail.com','rajesh',2)
 	_logger.debug( retCode)
