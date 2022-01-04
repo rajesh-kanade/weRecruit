@@ -135,6 +135,11 @@ class ResumeForm( FlaskForm):
 
     submit = SubmitField('Upload Resume')
 
+class ResumeSearchForm( FlaskForm):
+        
+    ft_search = StringField('',validators=[DataRequired(message='Search field can not be empty.')])
+    submit = SubmitField('Search')
+
 class ResumeShortlistForm ( FlaskForm):
     id = HiddenField('Resume ID') #IntegerField('resume_ID',render_kw={'readonly': True})
     candidate_name = StringField('Candidate Name',validators=[DataRequired(message='Candidate Name can not be blank.')])

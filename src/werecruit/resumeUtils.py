@@ -300,6 +300,50 @@ def list_resumes_by_tenant(tenantID):
 		cursor.close()
 		dbUtils.returnToPool(db_con)	
 
+def  search_resumes(tenantID, ftSearch):
+	try:
+		
+		if not bool(ftSearch):
+			return(RetCodes.missing_ent_attrs_error.value, "Search criteria not specified.".format(tenantID), None)
+
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		#to_tsvector('english',json_resume) 
+		#@@ to_tsquery('Java') 
+
+		kwrdList = ftSearch.split()
+		_logger.debug("Keyword list for free text is as under %s", kwrdList)
+		ft_cond = ' AND '.join("to_tsvector('english',json_resume) @@ to_tsquery('{0}')".format(word) for word in kwrdList)
+		
+		'''ft_cond = ""
+		for word in kwrdList:
+			ft_cond += "to_tsvector('english',json_resume) @@ to_tsquery('{0}')".format(word)
+			ft_cond += " AND "
+		'''
+
+		_logger.debug("Full text search is %s", ft_cond)
+
+		query = """SELECT * FROM wr_resumes 
+				where recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
+				and """ + str(ft_cond) + " order by id desc"
+	
+		params = (tenantID,)
+		_logger.debug ( cursor.mogrify(query, params))
+		cursor.execute(query,params)
+
+		resumeList =cursor.fetchall()
+
+		return(RetCodes.success.value, "Resume List successfully fetched from db for tenant ID {0}".format(tenantID), resumeList)
+
+	except Exception as dbe:
+		_logger.error(dbe, exc_info=True)
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
+
 def list_application_status_codes():
 	try:
 		db_con = dbUtils.getConnFromPool()
@@ -631,7 +675,9 @@ if __name__ == "__main__":
 	
 	#(name,email,phone) = process_single_resume('C:\\Users\\rajesh\\Downloads\\AK.pdf')
 	logging.basicConfig(level=logging.DEBUG)
-	resultData = populate_json_resumes()
+	resultData = search_resumes(1,"Pune")
+	print(resultData)
+
 
 
 

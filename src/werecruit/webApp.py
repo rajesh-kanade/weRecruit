@@ -10,7 +10,7 @@ from flask import (
 	url_for
 )
 from flask_session import Session
-from webForms import UserForm, ResetPasswordForm,ApplicationStatusUpdate,ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm , SignInForm, UserForm
+from webForms import ResumeSearchForm, UserForm, ResetPasswordForm,ApplicationStatusUpdate,ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm , SignInForm, UserForm
 from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
 from flask import send_file
@@ -430,16 +430,33 @@ def resume_save():
 		flash (retCode + ':' + msg,"is-danger")
 		return render_template('resume/edit.html', form= form)	
 
+@app.route('/resume/search', methods = ['POST'])
+@login_required
+def search_resume():
+
+	form = ResumeSearchForm()
+
+	(retCode,msg,resumeList) = resumeUtils.search_resumes(session.get('tenant_id'),
+								form.ft_search.data)
+	if ( retCode == resumeUtils.RetCodes.success.value):
+		return render_template('resume/list.html', resumeList = resumeList, form = form )
+	else:	
+		flash (retCode + ':' + msg,"is-danger")
+		return render_template('resume/list.html',resumeList = None, form= form)
+
+
 @app.route('/resume/showBrowser', methods = ['GET'])
 @login_required
 def show_resume_browser_page():
 	results = resumeUtils.list_resumes_by_tenant(session.get('tenant_id'))
+	form = ResumeSearchForm()
+
 	if (results[0] == resumeUtils.RetCodes.success.value): 
 		_logger.debug( 'success')
 		resumeList = results[2]    
 		for resume in resumeList:
 			_logger.debug(resume.name)   
-		return render_template('resume/list.html', resumeList = resumeList )
+		return render_template('resume/list.html', resumeList = resumeList, form = form )
 	else:
 		flash (results[0] + ':' +results[1],"is-danger")
 		return render_template('resume/list.html',resumeList = None)
