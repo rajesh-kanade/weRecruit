@@ -2,6 +2,13 @@
 
 from docker machine do `docker exec -it werecruit_prod /bin/bash` to loginto werecruit container.
 
+To figure out all resumes where we did *not parse resume*, run following your query
+select count(*) from wr_resumes 
+where json_resume is NULL and resume_content is not null
+
+To figure out all *open connections on pg*, run following sql on db
+
+
 ## frequently used linux commands
 - nano to edit files
 - chmod +x for sh scripts where permissions are lost as we do git pull
