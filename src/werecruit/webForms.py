@@ -137,7 +137,9 @@ class ResumeForm( FlaskForm):
 
 class ResumeSearchForm( FlaskForm):
         
-    ft_search = StringField('',validators=[DataRequired(message='Search field can not be empty.')])
+    #ft_search = StringField('',validators=[DataRequired(message='Search field can not be empty.')])
+    ft_search = StringField('Enter search criteria.')
+
     submit = SubmitField('Search')
 
 class ResumeShortlistForm ( FlaskForm):

@@ -440,6 +440,10 @@ def search_resume():
 
 	form = ResumeSearchForm()
 
+	if not bool(form.ft_search.data):
+		#return(RetCodes.missing_ent_attrs_error.value, "Search criteria not specified.".format(tenantID), None)
+		return redirect(url_for('show_resume_browser_page'))
+
 	(retCode,msg,resumeList) = resumeUtils.search_resumes(session.get('tenant_id'),
 								form.ft_search.data)
 	if ( retCode == resumeUtils.RetCodes.success.value):
@@ -551,25 +555,30 @@ def jd_download(id):
 @login_required
 def show_resume_shortlist_page():
 
-	_logger.debug('inside shortlist resume page for  ID {0} '.format(id))
+	try:
+		_logger.debug('inside shortlist resume page for  ID {0} '.format(id))
 
-	assert request.args.get('id'), "Resume ID request parameter not found."
-	assert request.args.get('name'), "Candidate Name request parameter not found."
+		assert request.args.get('id'), "Resume ID request parameter not found."
+		assert request.args.get('name'), "Candidate Name request parameter not found."
 
-	form = ResumeShortlistForm()
-	form.id.data = request.args.get('id')
-	form.candidate_name.data = request.args.get('name')
+		form = ResumeShortlistForm()
+		form.id.data = request.args.get('id')
+		form.candidate_name.data = request.args.get('name')
 
-	results = jdUtils.list_jds_by_tenant(session.get('tenant_id'))
+		results = jdUtils.list_jds_by_tenant(session.get('tenant_id'))
 
-	if (results[0] == jdUtils.RetCodes.success.value): 
-		jdList = results[2]    
-		for jd in jdList:
-			_logger.debug(jd.title)
-		form.selected_jd_list.choices = [(jd.id, jd.title + " | " + str(jd.id)) for jd in jdList]
-		return render_template('resume/shortlist.html', form=form)		   
-	else:
-		flash (results[0] + ':' +results[1],"is-danger")
+		if (results[0] == jdUtils.RetCodes.success.value): 
+			jdList = results[2]    
+			for jd in jdList:
+				_logger.debug(jd.title)
+			form.selected_jd_list.choices = [(jd.id, jd.title + " | " + str(jd.id)) for jd in jdList]
+			return render_template('resume/shortlist.html', form=form)		   
+		else:
+			flash (results[0] + ':' +results[1],"is-danger")
+			return render_template('resume/shortlist.html',form = form)
+	except Exception as e:
+		flash (str(e),"is-danger")
+		_logger.error("System Exeption occured. Details are %s", str(e),exc_info=1)
 		return render_template('resume/shortlist.html',form = form)
 
 @app.route('/jd/showWorkPage/<int:id>', methods = ['GET'])
@@ -587,8 +596,11 @@ def show_shortlisted_candidates_page(id):
 	(retCode, msg, resumeList) = jdUtils.get_resumes_associated_with_job(id)
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(id, retCode,msg)
 
+	searchForm = ResumeSearchForm()
+
 	return render_template('jd/shortlisted_candidates_list.html',jd = jd, 
-		resumeList =resumeList,actionTemplate="work",appStatusCodesList = appStatusCodesList)		   
+		resumeList =resumeList,actionTemplate="work",
+		appStatusCodesList = appStatusCodesList,searchForm = searchForm)		   
 
 #This shows all the resumes / candidates not associated with a job id
 @app.route('/jd/showShortlistPage/<int:job_id>', methods = ['GET'])
@@ -608,7 +620,19 @@ def show_shortlist_resumes_page(job_id):
 	(retCode, msg, shortlistedList) = jdUtils.get_resumes_associated_with_job(job_id)
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
 
-	return render_template('/jd/shortlist.html',jd = jd, resumeList =resumeList,shortlistedList =shortlistedList, actionTemplate="shortlist")		   
+	searchForm = ResumeSearchForm()
+
+	return render_template('/jd/shortlist.html',jd = jd, resumeList =resumeList,
+							shortlistedList =shortlistedList, actionTemplate="shortlist", 
+							searchForm = searchForm)		   
+	
+
+@app.errorhandler(500)
+def internal_error(error):
+	_logger.error(str(error),exc_info=1)
+	#flash (str(error),"is-danger")
+	#flash("An unexpected error occured. Please contact you system administrator","is-danger")
+	return render_template('utils/error.html'), 500
 
 # Shortlists a resume for a Job. 
 # Expects query parameter jd_id, resume_id to be supplied.
