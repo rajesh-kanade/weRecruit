@@ -11,7 +11,7 @@
     </div>
     
     <div class="block">   
-
+      <turbo-frame id="show_resumeList">
       <form action = "/resume/search" method="POST" enctype="multipart/form-data">
         <div class="field">
 
@@ -48,7 +48,7 @@
                 <td class="has-text-centered {{theme_text_color}}">{{ resume.email }}</td> 
                 <td class="has-text-centered {{theme_text_color}}">{{ resume.phone }}</td>
                 <td class="has-text-centered {{theme_text_color}}">
-                  <div class ="field is-grouped">
+                  <div class ="field is-grouped" data-turbo="false">
                   <p class="control"><a class="button is-info  is-small" href="/resume/download/{{resume.id}}">Download</a></p>
                   <p class="control"><a class="button is-info  is-small" href="/resume/showEditPage/{{resume.id}}">Edit</a></p>
             
@@ -63,6 +63,7 @@
           </tbody>
           </table>
         </div>  
+      </turbo-frame>
     </div>
 </section>
 {% endblock %}

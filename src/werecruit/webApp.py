@@ -49,7 +49,7 @@ UPLOAD_FOLDER = '/temp'  #TODO win specific for now. Take care of path sep on li
 ALLOWED_EXTENSIONS = {'doc', 'pdf', 'docx'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-#turbo = Turbo(app)
+turbo = Turbo(app)
 Session(app)
 fa = FontAwesome(app)
 
@@ -446,6 +446,7 @@ def search_resume():
 
 	(retCode,msg,resumeList) = resumeUtils.search_resumes(session.get('tenant_id'),
 								form.ft_search.data)
+
 	if ( retCode == resumeUtils.RetCodes.success.value):
 		return render_template('resume/list.html', resumeList = resumeList, form = form )
 	else:	
@@ -507,7 +508,7 @@ def resume_download(id):
 		assert code == resumeUtils.RetCodes.success.value , "Failed to fetch resume {0} ".format(id) 
 				
 		if resume.resume_content == None or resume.resume_filename == None:
-			flash ("No client JD is attached with this job","is-info")
+			flash ("No resume is attached with this candidate","is-info")
 			return redirect(url_for("show_resume_browser_page"))
 		else:
 			file_data= bytes(resume.resume_content)
@@ -621,7 +622,7 @@ def show_shortlist_resumes_page(job_id):
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
 
 	searchForm = ResumeSearchForm()
-
+	searchForm.source.data = "jd_shorlist_resumes_page"  #set the source field of search box
 	return render_template('/jd/shortlist.html',jd = jd, resumeList =resumeList,
 							shortlistedList =shortlistedList, actionTemplate="shortlist", 
 							searchForm = searchForm)		   
