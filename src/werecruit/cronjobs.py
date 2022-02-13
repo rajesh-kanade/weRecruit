@@ -10,6 +10,8 @@ import schedule
 import time
 
 from dotenv import load_dotenv,find_dotenv
+load_dotenv(find_dotenv())
+logging.basicConfig(filename=constants.LOG_FILENAME_SCHED, format=constants.LOG_FORMAT, level=int(os.environ.get("LOG_LEVEL",20)))
 
 _logger = logging.getLogger()
 
@@ -33,8 +35,8 @@ def parse_resumes_job():
 
 if __name__ == "__main__":	
 	
-	load_dotenv(find_dotenv())
-	logging.basicConfig(filename=constants.LOG_FILENAME_SCHED, format=constants.LOG_FORMAT, level=int(os.environ.get("LOG_LEVEL",20)))
+	#load_dotenv(find_dotenv())
+	#logging.basicConfig(filename=constants.LOG_FILENAME_SCHED, format=constants.LOG_FORMAT, level=int(os.environ.get("LOG_LEVEL",20)))
 
 	try:
 
