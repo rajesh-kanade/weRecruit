@@ -927,13 +927,13 @@ def get_file_handler():
 if __name__ == "__main__":
 	
 	#load_dotenv()
-
+	load_dotenv(find_dotenv())
 	#app.secret_key = os.environ.get("FLASK_SESSION_API_KEY")
 	logging.basicConfig(filename = constants.LOG_FILENAME_WEB, format=constants.LOG_FORMAT, 
 					level=int(os.environ.get("LOG_LEVEL",20)))
 
 	_logger = logging.getLogger()
-	_logger.addHandler(get_file_handler())
+	#_logger.addHandler(get_file_handler())
 	print("Effective logging level is :", _logger.getEffectiveLevel())
 
 	app.run()
