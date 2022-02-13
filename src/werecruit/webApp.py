@@ -33,10 +33,12 @@ from datetime import timezone
 from datetime import timedelta
 
 from dotenv import load_dotenv , find_dotenv
-load_dotenv(find_dotenv())
 
 import logging
 from logging.handlers import TimedRotatingFileHandler
+
+load_dotenv(find_dotenv())
+_logger = logging.getLogger()
 
 app = Flask(__name__)
 
@@ -932,7 +934,6 @@ if __name__ == "__main__":
 	logging.basicConfig(filename = constants.LOG_FILENAME_WEB, format=constants.LOG_FORMAT, 
 					level=int(os.environ.get("LOG_LEVEL",20)))
 
-	_logger = logging.getLogger()
 	#_logger.addHandler(get_file_handler())
 	print("Effective logging level is :", _logger.getEffectiveLevel())
 
