@@ -24,7 +24,7 @@ To figure out all *open connections on pg*, run following sql on db
 
 # Prod Notes : weRecruit on Ubuntu
 
-from main machine do `docker exec -it werecruit_prod /bin/bash` to loginto werecruit container.
+from main contabo machine do `docker exec -it werecruit_prod /bin/bash` to login to werecruit container.
 
 ## First time installation checklist
 * get a docker image based on ubuntu 20 LTS
@@ -43,10 +43,10 @@ from main machine do `docker exec -it werecruit_prod /bin/bash` to loginto werec
 * if you get permission error please run `chmod +X werecruit_start.sh`. Typically file permissions are lost after you do git pull.
 
 ## stopping weRecruit
+- find running gunicorn processes by running `ps ax|grep gunicorn`.
+- stop gunicorn by running `pkill gunicorn` 
 - find weRecruit scheduler process by running command `ps ax|grep python`. In theory you should see only python process listed ( excluding gunicorn related python processes if any.)
 - To stop weRecruit scheduler note down the pid listed in above step and run `kill <pid>`
-- find running gunicorn processes by running `ps ax|grep gunicorn`.
-- stop gunicorn by running `pkill gunicorn` .
 - Confirm it is stopped by vising werecruit website from browser & verify you get a gateway error.
 
 ## Maintenance checklist ( TODO -> write script for this )
@@ -72,7 +72,7 @@ from main machine do `docker exec -it werecruit_prod /bin/bash` to loginto werec
 - *optionally* clean up flask sessions folder
 - *optionally* clean up werecruit.log folder.
 - run `git pull` to get all the latest code
-- do `chmod +x werecruit_start.sh`. Note executable permisions are lost in every git pull which has a *modified version of wercecruit_start.sh*.
+- do `chmod +x werecruit_start.sh`. Note executable permisions are lost in every git pull which has a **modified version of wercecruit_start.sh**.
 - run `we_recruit_start.sh`
 - sanity test with test data 
     - test user acct -> rkanade@gmail.com
