@@ -48,11 +48,14 @@ def readEmails():
 		_logger.info("start reading emails")
 		
 		for msg in mailbox.fetch(AND( seen = False )):  #should be False in prod
+			msg.seen = True
+
 			try:	
 				_logger.debug(msg.subject)
 				_logger.debug(msg.text)
 				_logger.debug(msg.from_)
 				
+
 				from_email_addr =str(msg.from_) #is this really required?
 				_logger.debug('Email received from {0}'.format(from_email_addr))
 
@@ -75,7 +78,11 @@ def readEmails():
 						#TODO check for supported file type and exit if unsupported
 
 						#save the attachment in temp file
-						file_name = "./src/werecruit/temp/" + att.filename
+						#_logger.debug('app current working dir is {0}'.format(os.getcwd()))
+						#file_name = os.path.join(os.getcwd() + "/temp", att.filename)
+						#file_name = "/src/werecruit/temp/" + att.filename
+						file_name = constants.getUploadFolderPath() + att.filename
+
 						f = open(file_name,'wb' )
 						f.write( att.payload)
 						f.close()
@@ -84,7 +91,7 @@ def readEmails():
 						candidate_email ='Waiting for Resume parser to update.'
 						candidate_phone ='Waiting for Resume parser to update.'
 
-						(retcode,msg,resumeId) = resumeUtils.save_resume(constants.NEW_ENTITY_ID, file_name,
+						(retcode,retmsg,resumeId) = resumeUtils.save_resume(constants.NEW_ENTITY_ID, file_name,
 													candidate_name,candidate_email,candidate_phone,user.id)
 										
 						if file_name is not None and os.path.exists(file_name):
