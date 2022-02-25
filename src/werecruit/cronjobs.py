@@ -47,19 +47,22 @@ if __name__ == "__main__":
 		_logger.info("scheduler started")
 
 		while 1:
-			schedule.run_pending()
-			time.sleep(1)
+			try:
+				schedule.run_pending()
+				time.sleep(1)
+			except Exception as innerExc:
+				_logger.error("Exception occured during running scheduled jobs.",exc_info=1)
+				_logger.error(innerExc)
 
 		_logger.info("Scheduler stopped normally.")
 
 	except KeyboardInterrupt:
 		_logger.warning("Scheduler stopped bcas of keyboard interrupt.")
 		
-
 	except Exception as e:
-		_logger.error("Exception occured during running scheduled jobs.")
+		_logger.error("Exception occured during running scheduled jobs.",exc_info=1)
 		_logger.error(e)
-		_logger.warning("Scheduler stopped with errors.")
+		_logger.warning("Scheduler stopped with errors.",exc_info=1)
 
 	finally:
 		schedule.clear()
