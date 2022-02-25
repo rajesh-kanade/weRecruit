@@ -131,9 +131,11 @@ def readEmails():
 
 	finally:
 		if mailbox is not None:
-			mailbox.logout()
-			_logger.info("successfully logged out from mailbox")
-
+			try:
+				mailbox.logout()
+				_logger.info("successfully logged out from mailbox")
+			except Exception as e1:
+				_logger.debug("Exception occured while logging out of mailbox.",exc_info=1)
 
 	#res_dir_path = "./data/"
 	#resume_List =  os.listdir(path=res_dir_path)
@@ -150,10 +152,13 @@ def sendMail_async(ToEmailAddr, subject, body, contentType):
 
 
 def sendMail(ToEmailAddr, subject, body, contentType):
-	
-	ToEmailAddr = 'rkanade@gmail.com' #ToEmailAddr -> done purposefully to avoid sending emails to
-	
-	logging.info("Setting up SMTP server again")
+	if os.environ.get("ENV_NAME").upper() == "PROD":
+		ToEmailAddr = ToEmailAddr 
+	else:
+		_logger.debug('Non prod environment detected. So sending emails to rkanade@gmail.com instead of %s', ToEmailAddr)
+		ToEmailAddr = 'rkanade@gmail.com' #ToEmailAddr -> done purposefully to avoid sending emails to
+
+	_logger.info("Setting up SMTP server again")
 
 	msg = MIMEMultipart()
 	msg['From'] = os.environ.get("SMTP_MAIL_USERNAME")
