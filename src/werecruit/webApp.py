@@ -458,6 +458,33 @@ def search_resume():
 		flash (retCode + ':' + msg,"is-danger")
 		return render_template('resume/list.html',resumeList = None, form= form)
 
+@app.route('/jd/searchNonShortlistedResumes', methods = ['POST'])
+@login_required
+def search_non_shortlisted_resumes():
+
+	form = ResumeSearchForm()
+	
+	_logger.debug('Job ID is %s & search criteria is %s', form.job_id.data, form.ft_search.data)
+	
+	(retCode,msg,resumeList) = jdUtils.get_resumes_not_associated_with_job(form.job_id.data,
+								form.ft_search.data)
+	#_logger.debug("ResumeList is %s", resumeList)
+	if ( retCode == jdUtils.RetCodes.success.value):
+		#return render_template('resume/list.html', resumeList = resumeList, form = form )
+		_logger.debug('ready to render')
+		_logger.debug('Non shortlisted resumes count found is %s', len(resumeList) )
+		#return render_template('/showHomepage')
+		#return redirect(url_for("show_home_page"),303)
+		
+		return render_template('/jd/non_shortlisted_candidates_list.html',
+			resumeList = resumeList,
+			job_id=form.job_id.data, 
+			searchForm = form)
+
+	else:	
+		flash (retCode + ':' + msg,"is-danger")
+		return render_template('jd/non_shortlisted_candidates_list.html',resumeList = resumeList,job_id=form.job_id.data, searchForm = form)
+
 
 @app.route('/resume/showBrowser', methods = ['GET'])
 @login_required
@@ -468,8 +495,8 @@ def show_resume_browser_page():
 	if (results[0] == resumeUtils.RetCodes.success.value): 
 		_logger.debug( 'success')
 		resumeList = results[2]    
-		for resume in resumeList:
-			_logger.debug(resume.name)   
+		#for resume in resumeList:
+		#	_logger.debug(resume.name)   
 		return render_template('resume/list.html', resumeList = resumeList, form = form )
 	else:
 		flash (results[0] + ':' +results[1],"is-danger")
@@ -514,7 +541,9 @@ def resume_download(id):
 				
 		if resume.resume_content == None or resume.resume_filename == None:
 			flash ("No resume is attached with this candidate","is-info")
-			return redirect(url_for("show_resume_browser_page"))
+			#_logger.debug("called from %s", request.referrer)
+			#return redirect(url_for("show_resume_browser_page"))
+			return redirect(request.referrer)
 		else:
 			file_data= bytes(resume.resume_content)
 
@@ -526,7 +555,7 @@ def resume_download(id):
 
 	except Exception as e:
 			flash (str(e),"is-danger")
-			return redirect(url_for("show_resume_browser_page"))
+			return redirect(request.referrer)
 
 
 
@@ -556,7 +585,7 @@ def jd_download(id):
 			flash (str(e),"is-danger")
 			return redirect(url_for("show_jd_all_page"))
 
-
+'''
 @app.route('/resume/showshortlistpage', methods = ['GET'])
 @login_required
 def show_resume_shortlist_page():
@@ -586,6 +615,7 @@ def show_resume_shortlist_page():
 		flash (str(e),"is-danger")
 		_logger.error("System Exeption occured. Details are %s", str(e),exc_info=1)
 		return render_template('resume/shortlist.html',form = form)
+'''
 
 @app.route('/jd/showWorkPage/<int:id>', methods = ['GET'])
 @login_required
@@ -608,7 +638,7 @@ def show_shortlisted_candidates_page(id):
 		resumeList =resumeList,actionTemplate="work",
 		appStatusCodesList = appStatusCodesList,searchForm = searchForm)		   
 
-#This shows all the resumes / candidates not associated with a job id
+#This shows all the resumes / candidates not yet associated with a specific job id
 @app.route('/jd/showShortlistPage/<int:job_id>', methods = ['GET'])
 @login_required
 def show_shortlist_resumes_page(job_id):
@@ -619,7 +649,7 @@ def show_shortlist_resumes_page(job_id):
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
 
 	#get all candidates not associated with a job
-	(retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(job_id)
+	(retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(job_id, None)
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes not associated with job  id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
 
 	#get all candidates who are currently associated with the job
@@ -627,13 +657,16 @@ def show_shortlist_resumes_page(job_id):
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
 
 	searchForm = ResumeSearchForm()
-	searchForm.source.data = "jd_shorlist_resumes_page"  #set the source field of search box
-	return render_template('/jd/shortlist.html',jd = jd, resumeList =resumeList,
+	searchForm.job_id.data = job_id
+	#searchForm.source.data = "jd_shorlist_resumes_page"  #set the source field of search box
+	
+	return render_template('/jd/shortlist.html',jd = jd, job_id =jd.id,
+							resumeList =resumeList,
 							shortlistedList =shortlistedList, actionTemplate="shortlist", 
 							searchForm = searchForm)		   
 	
 
-@app.errorhandler(500)
+#@app.errorhandler(500)
 def internal_error(error):
 	_logger.error(str(error),exc_info=1)
 	#flash (str(error),"is-danger")

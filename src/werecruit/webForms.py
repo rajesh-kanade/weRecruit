@@ -133,13 +133,14 @@ class ResumeForm( FlaskForm):
     candidate_email = StringField('Candidate Email*',validators=[DataRequired(message='Candidate Email can not be blank.')])
     candidate_phone = StringField('Candidate Phone*',validators=[DataRequired(message='Candidate Phone can not be blank.')])
 
-    submit = SubmitField('Upload Resume')
+    submit = SubmitField('Save')
 
 class ResumeSearchForm( FlaskForm):
         
     #ft_search = StringField('',validators=[DataRequired(message='Search field can not be empty.')])
     ft_search = StringField('Enter search criteria.')
-    source = HiddenField('source')
+    #source = StringField('source')
+    job_id = HiddenField()
     submit = SubmitField('Search')
 
 class ResumeShortlistForm ( FlaskForm):

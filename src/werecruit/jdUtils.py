@@ -334,7 +334,7 @@ def get_resumes_associated_with_job(job_id):
 
 # This function returns all the resume records that are not currently 
 # associated with a particular job id
-def get_resumes_not_associated_with_job(job_id):
+def get_resumes_not_associated_with_job(job_id,ftsearch):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
@@ -342,7 +342,16 @@ def get_resumes_not_associated_with_job(job_id):
 		query = """select *
 					from wr_resumes where id not in 
 					( select resume_id from wr_jd_resumes where jd_id = %s)"""
+		
+		if bool(ftsearch):
+			kwrdList = ftsearch.split()
+			_logger.debug("Keyword list for free text is as under %s", kwrdList)
+			ft_cond = ' AND '.join("to_tsvector('english',json_resume) @@ to_tsquery('{0}')".format(word) for word in kwrdList)
+			query = query + " and " + ft_cond 
 
+		query = query + " order by id desc "
+
+		
 		params = (int(job_id),)
 		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
@@ -549,10 +558,14 @@ def update_job_stats():
 ## main entry point
 if __name__ == "__main__":
 
-	#logging.basicConfig(level=logging.DEBUG)
+	logging.basicConfig(level=logging.DEBUG)
 
-	#(code,msg,resumeList) = get_resumes_not_associated_with_job(18)
-	#_logger.debug (code)
+	(code,msg,resumeList) = get_resumes_not_associated_with_job(40, 'pune')
+	_logger.debug (code)
+	_logger.debug( msg)
+	_logger.debug( 'Total resumes found is %s', len(resumeList) )
+	#_logger.debug( resumeList)
+
 	#logging.basicConfig(level=logging.DEBUG)
 
 	'''dt = datetime.now(tz=timezone.utc)
