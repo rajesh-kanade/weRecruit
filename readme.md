@@ -13,6 +13,7 @@ To figure out all *open connections on pg*, run following sql on db
 - nano to edit files
 - chmod +x for sh scripts where permissions are lost as we do git pull
 - nohup <command to be executed> &
+- grep ERROR wr_job.log
 
 
 ## frequently used git commands
