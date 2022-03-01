@@ -56,7 +56,7 @@ class JDForm(FlaskForm):
     title = StringField('Title*', validators=[DataRequired(message='Enter Title*')])
     details = TextAreaField('Details')
     total_positions = IntegerField('Total Positions', 
-                        validators=[DataRequired('Enter number of positions'),NumberRange(min=1, max=5)])
+                        validators=[DataRequired('Enter number of positions'),NumberRange(min=1, max=50)])
                    
     open_date = DateField('Open Date',validators=[DataRequired('Enter  Open Date')])
 
