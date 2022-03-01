@@ -782,7 +782,7 @@ def update_job_application_status():
 		
 		body = template.render(resumeID = str(form.resume_id.data), jobID = str( form.job_id.data),new_status= str(form.new_status.data) )
 		#send email 
-		emailUtils.sendMail_async('rkanade@gmail.com','Status change notification' , body,'plain' )
+		emailUtils.sendMail_async(session["email_id"],'Status change notification' , body,'plain' )
 
 		_logger.debug("Email sent successfully.")
 
