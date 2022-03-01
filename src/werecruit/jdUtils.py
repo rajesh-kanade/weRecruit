@@ -334,14 +334,17 @@ def get_resumes_associated_with_job(job_id):
 
 # This function returns all the resume records that are not currently 
 # associated with a particular job id
-def get_resumes_not_associated_with_job(job_id,ftsearch):
+def get_resumes_not_associated_with_job(job_id,ftsearch,tenant_id):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 		
 		query = """select *
 					from wr_resumes where id not in 
-					( select resume_id from wr_jd_resumes where jd_id = %s)"""
+					( select resume_id from wr_jd_resumes where jd_id = %s)
+					and recruiter_id in 
+					( select uid from tenant_user_roles where tid = %s)
+				"""
 		
 		if bool(ftsearch):
 			kwrdList = ftsearch.split()
@@ -352,7 +355,7 @@ def get_resumes_not_associated_with_job(job_id,ftsearch):
 		query = query + " order by id desc "
 
 		
-		params = (int(job_id),)
+		params = (int(job_id),int(tenant_id))
 		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
@@ -560,7 +563,7 @@ if __name__ == "__main__":
 
 	logging.basicConfig(level=logging.DEBUG)
 
-	(code,msg,resumeList) = get_resumes_not_associated_with_job(40, 'pune')
+	(code,msg,resumeList) = get_resumes_not_associated_with_job(40, 'pune',1)
 	_logger.debug (code)
 	_logger.debug( msg)
 	_logger.debug( 'Total resumes found is %s', len(resumeList) )

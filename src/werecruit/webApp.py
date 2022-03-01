@@ -467,7 +467,7 @@ def search_non_shortlisted_resumes():
 	_logger.debug('Job ID is %s & search criteria is %s', form.job_id.data, form.ft_search.data)
 	
 	(retCode,msg,resumeList) = jdUtils.get_resumes_not_associated_with_job(form.job_id.data,
-								form.ft_search.data)
+								form.ft_search.data,session.get('tenant_id'))
 	#_logger.debug("ResumeList is %s", resumeList)
 	if ( retCode == jdUtils.RetCodes.success.value):
 		#return render_template('resume/list.html', resumeList = resumeList, form = form )
@@ -649,7 +649,7 @@ def show_shortlist_resumes_page(job_id):
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
 
 	#get all candidates not associated with a job
-	(retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(job_id, None)
+	(retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(job_id, None, session.get('tenant_id'))
 	assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes not associated with job  id {0}. Error code is {1}. Error message is {2}".format(job_id, retCode,msg)
 
 	#get all candidates who are currently associated with the job
