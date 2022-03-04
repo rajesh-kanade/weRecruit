@@ -61,15 +61,16 @@
                     </span>
                   </span>
                   <span class="file-name">
-                    
+                    {{form.client_jd.data}}
+
                   </span>
                 </label>
               </div>
               <script>
-                const fileInput = document.querySelector('#jd-selector input[type=file]');
+                fileInput = document.querySelector('#jd-selector input[type=file]');
                 fileInput.onchange = () => {
                   if (fileInput.files.length > 0) {
-                    const fileName = document.querySelector('#jd-selector .file-name');
+                    fileName = document.querySelector('#jd-selector .file-name');
                     fileName.textContent = fileInput.files[0].name;
                   }
                 }

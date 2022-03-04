@@ -31,16 +31,20 @@
                     </span>
                   </span>
                   <span class="file-name">
-                    
+                    {{form.candidate_resume.data}}
                   </span>
                 </label>
               </div>
               <script>
-                const fileInput = document.querySelector('#resume-selector input[type=file]');
-                fileInput.onchange = () => {
-                  if (fileInput.files.length > 0) {
-                    const fileName = document.querySelector('#resume-selector .file-name');
-                    fileName.textContent = fileInput.files[0].name;
+                resumefileInput = document.querySelector('#resume-selector input[type=file]');
+                resumefileInput.onchange = () => {
+                  if (resumefileInput.files.length > 0) {
+                    //alert('inside file change');
+                    console.log('File selected for upload is : ');
+                    fileName = document.querySelector('#resume-selector .file-name');
+                    fileName.textContent = resumefileInput.files[0].name;
+                    console.log('File selected for upload is : ' + fileName.textContent);
+
                   }
                 }
               </script>
