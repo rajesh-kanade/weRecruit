@@ -19,7 +19,7 @@
                 <td class="has-text-centered {{theme_text_color}}">{{ resume.name }}</td>
                 <td class="has-text-centered {{theme_text_color}}">{{ resume.email }}</td> 
                 <td class="has-text-centered {{theme_text_color}}">{{ resume.phone }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ resume.status }}-{{resume.description}}</td>
+                <td class="has-text-centered {{theme_text_color}}">{{resume.description}}</td>
                 <td class="has-text-centered {{theme_text_color}}">
                   {%if actionTemplate == 'shortlist' %}
                     {% include 'jd/shortlist_actions.html'%}
