@@ -46,7 +46,7 @@ from main contabo machine do `docker exec -it werecruit_prod /bin/bash` to login
 ## stopping weRecruit
 - find running gunicorn processes by running `ps ax|grep gunicorn`.
 - stop gunicorn by running `pkill gunicorn` 
-- find weRecruit scheduler process by running command `ps ax|grep python`. In theory you should see only python process listed ( excluding gunicorn related python processes if any.)
+- find weRecruit scheduler process by running command `ps ax|grep cronjobs.py`. In theory you should see only python process listed ( excluding gunicorn related python processes if any.)
 - To stop weRecruit scheduler note down the pid listed in above step and run `kill <pid>`
 - Confirm it is stopped by vising werecruit website from browser & verify you get a gateway error.
 
