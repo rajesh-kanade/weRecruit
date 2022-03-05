@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
 		schedule.every(1).minutes.do(read_email_job)
 		schedule.every(1).minutes.do(update_job_stats_job)
-		schedule.every(1).minutes.do(parse_resumes_job)
+		#schedule.every(1).minutes.do(parse_resumes_job)
 
 		_logger.info("scheduler started")
 

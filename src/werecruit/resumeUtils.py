@@ -181,18 +181,22 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 		_logger.debug('Resume file name is {0}'.format(fileName))
 		if (fileName is None):
 			file_data = None
+			json_resume = None
 		else:
 			file_data = bytes(open(fileName, "rb").read())
+			(resume_attr_list) = process_single_resume(fileName)
+			json_resume = json.dumps(resume_attr_list, indent=4, sort_keys=False)
+
 
 		if (int(id) == constants.NEW_ENTITY_ID):
 			##insert a record in user table
 			sql = """insert into public.wr_resumes ( resume_filename, name, email, 
-					phone, recruiter_id,resume_content ) 
+					phone, recruiter_id,resume_content , json_resume) 
 					values (%s,%s,%s,
-					%s,%s,%s) returning id """
+					%s,%s,%s,%s) returning id """
 			
 			params = (fileName,candidateName,candidateEmail,
-					candidatePhone,int(recruiterID),file_data)
+					candidatePhone,int(recruiterID),file_data,json_resume)
 
 			_logger.debug ( cursor.mogrify(sql, params))
 			
@@ -223,21 +227,19 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
 			#TODO -> Think of better way to do this
-			# following handles the case where resume was uploaded again ( same one or new one)
-			# By setting resume_json field to NULL, our background scheduler will pick it up for
-			# parsing it again. This way the new uploaded resume will get parsed.
+			# New resume file is uploaded then we will store the parsed json_resume again
 			if fileName != None:
 				sql1 = """update public.wr_resumes set  
-						resume_filename = %s,resume_content = %s,json_resume =%s
+						resume_filename = %s,resume_content = %s,json_resume = %s
 					where id = %s"""
-				params1 = (fileName,file_data,None,
+				params1 = (fileName,file_data,json_resume,
 						int(id))
 				cursor.execute(sql1, params1)
 				assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
-				
-			_logger.debug ("Resume id {0} updated successfully.".format(id) )
+
 		
 			db_con.commit()
+			_logger.debug ("Resume id {0} updated successfully.".format(id) )
 			return (RetCodes.success.value, "Resume id {0} updated successfully.".format(id),id)
 			
 	except Exception as e:
@@ -615,7 +617,7 @@ def populate_json_resumes():
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 		
 		query = """SELECT * FROM wr_resumes 
-				where json_resume is null"""
+				where json_resume is null and resume_content is not null"""
 	
 		#params = (tenantID,)
 		_logger.debug ( cursor.mogrify(query))
@@ -675,7 +677,8 @@ if __name__ == "__main__":
 	
 	#(name,email,phone) = process_single_resume('C:\\Users\\rajesh\\Downloads\\AK.pdf')
 	logging.basicConfig(level=logging.DEBUG)
-	resultData = search_resumes(1,"Pune")
+	#resultData = search_resumes(1,"Pune")
+	resultData = populate_json_resumes()
 	print(resultData)
 
 

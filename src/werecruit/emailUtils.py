@@ -87,9 +87,22 @@ def readEmails():
 						f.write( att.payload)
 						f.close()
 						
-						candidate_name ='Waiting for Resume parser to update.'
-						candidate_email ='Waiting for Resume parser to update.'
-						candidate_phone ='Waiting for Resume parser to update.'
+						(resume_attr_list) = resumeUtils.process_single_resume(file_name)
+						if bool(resume_attr_list['name']):
+							candidate_name = resume_attr_list['name'][0]
+						else:
+							candidate_name = 'Resume parser can not update this field.Manual update required.'
+		
+						if bool(resume_attr_list['phone']):
+							candidate_phone = resume_attr_list['phone'][0]
+						else:
+							candidate_phone = 'Resume parser can not update this field.Manual update required.'
+
+						if bool(resume_attr_list['email']):
+							candidate_email = resume_attr_list['email'][0]
+						else:
+							candidate_email = 'Resume parser can not update this field.Manual update required.'
+
 
 						(retcode,retmsg,resumeId) = resumeUtils.save_resume(constants.NEW_ENTITY_ID, file_name,
 													candidate_name,candidate_email,candidate_phone,user.id)
