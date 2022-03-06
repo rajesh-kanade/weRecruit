@@ -133,6 +133,8 @@ class ResumeForm( FlaskForm):
     candidate_email = StringField('Candidate Email*',validators=[DataRequired(message='Candidate Email can not be blank.')])
     candidate_phone = StringField('Candidate Phone*',validators=[DataRequired(message='Candidate Phone can not be blank.')])
 
+    referrer = HiddenField('Resume ID')
+
     submit = SubmitField('Save')
 
 class ResumeSearchForm( FlaskForm):

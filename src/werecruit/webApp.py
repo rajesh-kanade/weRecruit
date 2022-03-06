@@ -382,6 +382,7 @@ def apply_to_JD():
 								form.candidate_email.data,form.candidate_phone,
 								int(session.get('user_id')))
 		return redirect(url_for("show_home_page"))
+
 	else:
 		return render_template('jd/apply.html', form= form)
 		
@@ -434,7 +435,10 @@ def resume_save():
 
 	if retCode == resumeUtils.RetCodes.success.value:
 		flash (msg, "is-success")
-		return redirect(url_for('show_resume_browser_page'))
+		#return redirect(url_for('show_resume_browser_page'))
+		_logger.debug("Referrer to resume/save was %s", form.referrer.data)
+		return redirect(form.referrer.data)
+
 	else:
 		flash (retCode + ':' + msg,"is-danger")
 		return render_template('resume/edit.html', form= form)	
@@ -512,6 +516,7 @@ def show_resume_edit_page(id):
 	
 	form = ResumeForm()
 	form.id.data = id
+	form.referrer.data = request.referrer
 
 	results = resumeUtils.get(id)
 
