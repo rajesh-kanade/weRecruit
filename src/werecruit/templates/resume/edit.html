@@ -3,14 +3,13 @@
 
 <section class="container is-fullheight">
   <div class = "block">
-    <span class="title has-text-info"> Upload resumes</span><br>
+    <span class="title has-text-info">Upload resumes</span><br>
     <span class="is-size-7 has-text-info">This section allows you to upload resume with basic information about the candidate</span>
   </div>
 
       <div class="columns is-centered">
           <div class="column is-half">
-         
-          <form action = "/resume/save" method="POST" enctype="multipart/form-data">
+          <form  onsubmit ="document.getElementById('spinner').style.display = 'block';document.getElementById('spinner').classList.add('is-loading');return true;" action = "/resume/save" method="POST" enctype="multipart/form-data">
             {% for error in form.submit.errors %}
                 <p><large class="has-text-danger">{{ error }}</large></p>  
             {% endfor %}
@@ -84,6 +83,7 @@
             <div class="field">
               <p class="control">
                 {{ form.submit( class = 'button is-success is-rounded') }}
+                <div id ="spinner" class='button is-primary' style="display:none">Saving...</div>
               </p>      
               {% for error in form.submit.errors %}
               <p><large class="has-text-danger">{{ error }}</large></p>  

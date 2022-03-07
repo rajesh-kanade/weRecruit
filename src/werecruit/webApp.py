@@ -393,6 +393,8 @@ def show_resume_upload_page():
 	form = ResumeForm()
 	
 	form.id.data = constants.NEW_ENTITY_ID
+	form.referrer.data = url_for('show_resume_browser_page') #request.referrer
+		
 
 	return render_template('resume/edit.html', form=form)
 
@@ -557,6 +559,8 @@ def resume_download(id):
 			f.close()			#path = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
 
 			return send_file(resume.resume_filename, as_attachment=True)
+			#return redirect(request.referrer)
+
 
 	except Exception as e:
 			flash (str(e),"is-danger")
