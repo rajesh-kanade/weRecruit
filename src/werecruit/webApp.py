@@ -1,4 +1,5 @@
 
+
 from flask import (
 	Flask,
 	flash,
@@ -201,7 +202,13 @@ def save_JD():
 
 	_logger.debug('inside save JD.')
 
-	form = JDForm()
+	form = JDForm(request.form)
+	
+	'''if request.method == 'POST' and form.max_yrs_of_exp.validate(form) is False:
+		_logger.debug('JD save validation failed')
+		print(form.errors)
+		return render_template('jd/edit.html', form=form)
+	'''
 
 	loggedInUserID = session.get('user_id')
 	_logger.debug('JD id is {0}'.format(form.id.data))
@@ -223,10 +230,11 @@ def save_JD():
 								form.hiring_mgr_name.data,form.hiring_mgr_email.data,form.hiring_mgr_phone.data,
 								form.hr_name.data,form.hr_email.data,form.hr_phone.data,
 								int(form.status.data),
-								form.location.data,form.yrs_of_exp.data,filename,
+								form.location.data,form.min_yrs_of_exp.data,filename,
 								form.primary_skills.data,form.secondary_skills.data,
 								form.ctc_min.data,form.ctc_max.data,form.ctc_currency.data,
-								form.fees_percent.data,form.warranty_in_months.data)
+								form.fees_percent.data,form.warranty_in_months.data,
+								form.max_yrs_of_exp.data)
 
 	if filename is not None and os.path.exists(filename):
   		os.remove(filename)
@@ -237,8 +245,16 @@ def save_JD():
 
 	else:
 		flash (results[0] + ':' +results[1],"is-danger")
-		return redirect(url_for("show_jd_edit_page"))
-	
+		print(results[0],":",results[1])
+		#return redirect(url_for("show_jd_edit_page", id=form.id.data))
+		errorList = list(form.id.errors)
+		errorList.append(results[0] + ':' +results[1])
+		form.id.errors = tuple(errorList)
+		print(form.max_yrs_of_exp.errors)
+		#form.max_yrs_of_exp.errors = tuple(list(form.max_yrs_of_exp.errors).append( 'Error from backend'))
+		#form.max_yrs_of_exp.errors.append()
+		return render_template('jd/edit.html', form=form),409
+		#return redirect
 	
 
 @app.route('/jd/showEditPage/<int:id>', methods = ['GET'])
@@ -289,7 +305,10 @@ def show_jd_edit_page(id):
 		form.hr_phone.data = jd.hr_phone
 
 		form.location.data = jd.location
-		form.yrs_of_exp.data = jd.yrs_of_exp
+		
+		form.min_yrs_of_exp.data = jd.min_yrs_of_exp
+		form.max_yrs_of_exp.data = jd.max_yrs_of_exp
+
 		form.client_jd.data = jd.jd_file_name
 
 		form.primary_skills.data = jd.primary_skills

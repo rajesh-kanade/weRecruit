@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import DecimalField, SelectMultipleField, SelectField, StringField, PasswordField, SubmitField, TextAreaField, HiddenField
-from wtforms.validators import DataRequired, Email,NumberRange
+from wtforms import DecimalField, DecimalRangeField,SelectMultipleField, SelectField, StringField, PasswordField, SubmitField, TextAreaField, HiddenField
+from wtforms.validators import DataRequired, Email,NumberRange, ValidationError
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import IntegerField, DateField
 
@@ -49,8 +49,9 @@ class UserForm(FlaskForm):
     
     submit = SubmitField('Save')
 
+
 class JDForm(FlaskForm):
-    
+
     id = HiddenField('ID' )
 
     title = StringField('Title*', validators=[DataRequired(message='Enter Title*')])
@@ -64,14 +65,20 @@ class JDForm(FlaskForm):
     client_jd = FileField('Client JD File')
 
     location = StringField('Location')
-    yrs_of_exp = DecimalField("Years of Experience")
+
+    min_yrs_of_exp = DecimalField("Minimum years of Experience",validators=[NumberRange(min=0,max=99,message="Min experience needs be in range of 0 to 99")])
+    max_yrs_of_exp = DecimalField("Maximum years of Experience",validators=[NumberRange(min=0,max=99,message="Max experience needs be in range of 0 to 99")])
+
     primary_skills = TextAreaField('Primary Skills')
     secondary_skills = TextAreaField('Secondary Skills')
-    ctc_min = DecimalField("CTC Min Range")
-    ctc_max = DecimalField("CTC Max Range")
+
+    ctc_min = DecimalField("CTC Min Range",validators=[NumberRange(min=0,max=10000000)])
+    ctc_max = DecimalField("CTC Max Range",validators=[NumberRange(min=0,max=10000000)])
+
     ctc_currency = SelectField( "Currency", choices =[('INR', 'INR'),('USD', 'USD')])
-    fees_percent = DecimalField("Fees Percent")
-    warranty_in_months = IntegerField("Warranty in months")
+    
+    fees_percent = DecimalField("Fees Percent",validators=[NumberRange(min=0,max=99)])
+    warranty_in_months = IntegerField("Warranty in months",validators=[NumberRange(min=0,max=12)])
 
     status = SelectField('Status', choices=[(jdUtils.JDStatusCodes.open.value, 'Open'), 
                         (jdUtils.JDStatusCodes.draft.value, 'Draft'), 
@@ -96,6 +103,23 @@ class JDForm(FlaskForm):
 
     
     submit = SubmitField('Save JD')
+
+    def validate_max_yrs_of_exp(self, field):
+        print('inside validate_max_yrs_of_exp')
+
+        if field.data is None:
+            print('max yrs of exp is ', field.data)
+            return None
+
+        if self.min_yrs_of_exp.data is None:
+            print('min yrs of exp is %s', self.min_yrs_of_exp.data)
+            return None
+
+        if field.data < self.min_yrs_of_exp.data:
+            print('raising validation error for max years of experience')
+            raise ValidationError('Max value can not be less then min value.')
+
+
 
 class JDHeaderForm( FlaskForm):
     

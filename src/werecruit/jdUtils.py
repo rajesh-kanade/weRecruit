@@ -38,10 +38,11 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 			hiring_mgr_name= None, hiring_mgr_email=None,hiring_mgr_phone=None,
 			hr_name= None, hr_email=None,hr_phone=None,
 			status=JDStatusCodes.open.value,
-			location=None, yrs_of_exp=None,jd_file_name=None,
+			location=None, min_yrs_of_exp=None,jd_file_name=None,
 			primary_skills=None, secondary_skills=None,
 			ctc_min=None, ctc_max=None,ctc_currency=None,
-			fees_percent=None,warranty_period_in_months=None):
+			fees_percent=None,warranty_period_in_months=None,
+			max_yrs_of_exp=None):
 	
 	_logger.debug('inside save_jd function')
 	db_con = dbUtils.getConnFromPool()
@@ -60,6 +61,9 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 		if not recruiterID:
 			 return(RetCodes.empty_ent_attrs_error.value,"Recruiter ID field is empty or null.", None)
 
+		if bool(max_yrs_of_exp) and bool(min_yrs_of_exp):
+			if ( max_yrs_of_exp < min_yrs_of_exp):
+				return(RetCodes.save_ent_error.value,"Maximum years of experience can not be less then minimum years of experience .", None)
 
 		if open_date is None:
 			open_date = datetime.now(tz=timezone.utc)
@@ -72,16 +76,17 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 
 		if (int(id) == constants.NEW_ENTITY_ID):
 			##insert a record in user table
+			print('creating new JD with id ',id)
 			sql = """insert into public.wr_jds ( title, details, client, 
 					recruiter_id,positions,status,open_date,
 					ip_name_1, ip_emailid_1,ip_phone_1,
 					ip_name_2, ip_emailid_2,ip_phone_2,
 					hiring_mgr_name, hiring_mgr_emailid,hiring_mgr_phone,
 					hr_name,hr_emailid,hr_phone,
-					location,yrs_of_exp,jd_file_name,
+					location,min_yrs_of_exp,jd_file_name,
 					primary_skills, secondary_skills,
 					ctc_min,ctc_max,ctc_currency ,
-					fees_in_percent,warranty_period_in_months,client_jd) 
+					fees_in_percent,warranty_period_in_months,client_jd,max_yrs_of_exp) 
 					values (%s,%s,%s,
 					%s,%s,%s,%s,
 					%s,%s,%s,
@@ -91,7 +96,7 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 					%s,%s,%s,
 					%s,%s,
 					%s,%s,%s,
-					%s,%s,%s) returning id """
+					%s,%s,%s,%s) returning id """
 			
 			params = (title,details,client,
 					recruiterID,int(positions),int(status),open_date,
@@ -99,11 +104,11 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 					ip_name2,ip_email2,ip_phone2,
 					hiring_mgr_name,hiring_mgr_email,hiring_mgr_phone,
 					hr_name,hr_email,hr_phone,
-					location,yrs_of_exp,jd_file_name,
+					location,min_yrs_of_exp,jd_file_name,
 					primary_skills,secondary_skills,
 					ctc_min,ctc_max, ctc_currency,
 					fees_percent,warranty_period_in_months,
-					file_data)
+					file_data,max_yrs_of_exp)
 
 			_logger.debug ( cursor.mogrify(sql, params))
 			
@@ -126,10 +131,10 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 						ip_name_2 = %s, ip_emailid_2 = %s, ip_phone_2 = %s,
 						hiring_mgr_name = %s, hiring_mgr_emailid = %s, hiring_mgr_phone = %s,
 						hr_name = %s, hr_emailid = %s, hr_phone = %s,
-						location=%s,yrs_of_exp =%s,
+						location=%s,min_yrs_of_exp =%s,
 						primary_skills=%s,secondary_skills=%s,
 						ctc_min=%s,ctc_max=%s,ctc_currency=%s,
-						fees_in_percent=%s,warranty_period_in_months=%s
+						fees_in_percent=%s,warranty_period_in_months=%s,max_yrs_of_exp=%s
 					where id = %s"""
 			params = (title,details,client, 
 						recruiterID, int(positions), int(status),
@@ -137,10 +142,10 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 						ip_name2,ip_email2,ip_phone2,
 						hiring_mgr_name, hiring_mgr_email,hiring_mgr_phone,
 						hr_name, hr_email,hr_phone,
-						location,yrs_of_exp,
+						location,min_yrs_of_exp,
 						primary_skills,secondary_skills,
 						ctc_min,ctc_max,ctc_currency,
-						fees_percent,warranty_period_in_months,
+						fees_percent,warranty_period_in_months,max_yrs_of_exp,
 						int(id))
 						
 			_logger.debug ( cursor.mogrify(sql, params))

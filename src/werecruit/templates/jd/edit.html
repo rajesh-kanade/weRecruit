@@ -9,18 +9,14 @@
 
       <div class="columns is-centered">
           <div class="column is-half">
-            {% set messages = get_flashed_messages() %}
-            {% if messages %}   
-                  <div class="notification is-danger">  
-                
-                    {% if messages %}  
-                          {% for message in messages %}  
-                                <p> {{ message }}</p>  
-                          {% endfor %}  
-                    {% endif %}  
-              
-                </div>        
-            {% endif %}  
+
+          {% for field in form.errors %}
+            {% for error in form.errors[field] %}
+              <div class="alert alert-error">
+                <small class="has-text-danger has-text-left">{{ error }}</small>  
+              </div>
+            {% endfor %}
+          {% endfor %}
           <form action = "/jd/save" method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
             {{form.id()}}
@@ -102,10 +98,21 @@
             </div>
 
             <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.yrs_of_exp.label }}</label>
+              <label class="label {{theme_text_color}} has-text-left">{{ form.min_yrs_of_exp.label }}</label>
               <div class="control">
-                {{form.yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
+                {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
               </div>
+            </div>
+
+            
+            <div class="field">
+              <label class="label {{theme_text_color}} has-text-left">{{ form.max_yrs_of_exp.label }}</label>
+              <div class="control">
+                {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
+              </div>
+              {% for error in form.max_yrs_of_exp.errors %}
+                <small class="has-text-danger has-text-left">{{ error }}</small>  
+              {% endfor %}
             </div>
 
             <div class="field">
