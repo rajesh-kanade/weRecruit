@@ -29,6 +29,7 @@ class JDStatusCodes(Enum):
 	open = 0
 	draft = 1
 	close = 2
+	deleted = 3
 
 JD_DEF_POSITIONS = 1
 
@@ -82,7 +83,8 @@ def save_jd(id,title,details,client, recruiterID,positions=JD_DEF_POSITIONS, ope
 
 		if (int(id) == constants.NEW_ENTITY_ID):
 			##insert a record in user table
-			print('creating new JD with id ',id)
+			_logger.debug('creating new JD with id %s ',id)
+
 			sql = """insert into public.wr_jds ( title, details, client, 
 					recruiter_id,positions,status,open_date,
 					ip_name_1, ip_emailid_1,ip_phone_1,
@@ -232,32 +234,6 @@ def save_header(id, title,details,client):
 		if cursor is not None:
 			cursor.close()
 		dbUtils.returnToPool(db_con)
-
-def list_jds_by_recruiter(recruiterID, statusFilter = None):
-	try:
-		db_con = dbUtils.getConnFromPool()
-		cursor = dbUtils.getNamedTupleCursor(db_con)
-		
-		query = """SELECT * FROM wr_jds 
-				where recruiter_id = %s 
-				order by open_date DESC"""
-	
-		params = (recruiterID,)
-		_logger.debug ( cursor.mogrify(query, params))
-		cursor.execute(query,params)
-
-		jdList =cursor.fetchall()
-
-		return(RetCodes.success.value, "JD List successfully fetched from db", jdList)
-
-
-	except Exception as dbe:
-		_logger.error(dbe)
-		return ( RetCodes.server_error, str(dbe), None)
-	
-	finally:
-		cursor.close()
-		dbUtils.returnToPool(db_con)	
 
 def list_jds_by_tenant(tenantID, limit = 1000, statusFilter = None):
 	try:

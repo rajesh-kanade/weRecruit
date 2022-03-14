@@ -245,12 +245,12 @@ def save_JD():
 
 	else:
 		flash (results[0] + ':' +results[1],"is-danger")
-		print(results[0],":",results[1])
+		_logger.debug(results[0]+":"+results[1])
 		#return redirect(url_for("show_jd_edit_page", id=form.id.data))
 		errorList = list(form.id.errors)
 		errorList.append(results[0] + ':' +results[1])
 		form.id.errors = tuple(errorList)
-		print(form.max_yrs_of_exp.errors)
+		_logger.debug(form.max_yrs_of_exp.errors)
 		#form.max_yrs_of_exp.errors = tuple(list(form.max_yrs_of_exp.errors).append( 'Error from backend'))
 		#form.max_yrs_of_exp.errors.append()
 		return render_template('jd/edit.html', form=form),409
