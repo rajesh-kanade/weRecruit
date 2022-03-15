@@ -50,6 +50,10 @@ class ResumeStatusCodes(Enum):
 
 class ApplicationStatusCodes(Enum):
 	shortlisted = 0
+	initial_screen_scheduled = 1
+	initial_screen_cleared =2
+	initial_screen_failed =3
+	initial_screen_failed_noshow =4
 	round1_interview_scheduled = 10
 	round1_interview_cleared = 20
 	round1_interview_failed = 30

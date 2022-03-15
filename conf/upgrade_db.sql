@@ -1,5 +1,20 @@
 
-/* ******** successfully upgrade prod on 14-Feb-2022 *****************
+/* ******** successfully upgrade prod on ?????-March-2022 *****************
+
+ALTER TABLE public.wr_jds
+    ADD COLUMN is_deleted boolean NOT NULL DEFAULT false ;
+
+
+insert into public.application_status_codes(id,description,is_deleted) values (1,'Initial screening scheduled',false);
+insert into public.application_status_codes(id,description,is_deleted) values (2,'Initial screening cleared',false);
+insert into public.application_status_codes(id,description,is_deleted) values (3,'Initial screening failed',false);
+
+
+ *********************************  */
+
+
+
+/* ******** successfully upgrade prod on 14-March-2022 *****************
 ALTER TABLE public.wr_jds
   RENAME COLUMN yrs_of_exp TO min_yrs_of_exp;
 
