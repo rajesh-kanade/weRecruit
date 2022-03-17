@@ -2,10 +2,6 @@
 
 from docker machine do `docker exec -it werecruit_prod /bin/bash` to loginto werecruit container.
 
-To figure out all resumes where we did *not parse resume*, run following your query
-select count(*) from wr_resumes 
-where json_resume is NULL and resume_content is not null
-
 To figure out all *open connections on pg*, run following sql on db
 
 
@@ -17,10 +13,21 @@ To figure out all *open connections on pg*, run following sql on db
 
 
 ## frequently used git commands
-- git pull
-- git status
-- git restore
-- git clone <repo name> . - only done once
+- `git pull`
+- `git status`
+- `git restore`
+- `git clone <repo name>` . - only done once
+
+## frequently used docker commands
+- `docker exec -it werecruit_prod /bin/bash` -> to get shell acess to werecruit_prod container.
+    - To get out the container shell without stopping the container ,  please enter *ctrl+p followed by ctrl+q*
+- `docker ps -a`
+- `docker start werecruit_prod`
+-  `docker pause werecruit_prod`
+- `docker commit werecruit_prod werecruit_image`
+-  `docker images` 
+- `docker unpause werecruit_prod`
+
 
 
 # Prod Notes : weRecruit on Ubuntu
@@ -44,24 +51,27 @@ from main contabo machine do `docker exec -it werecruit_prod /bin/bash` to login
 * if you get permission error please run `chmod +X werecruit_start.sh`. Typically file permissions are lost after you do git pull.
 
 ## stopping weRecruit
-- find running gunicorn processes by running `ps ax|grep gunicorn`.
+- (optional ) find running gunicorn processes by running `ps ax|grep gunicorn`.
 - stop gunicorn by running `pkill gunicorn` 
 - find weRecruit scheduler process by running command `ps ax|grep cronjobs.py`. In theory you should see only python process listed ( excluding gunicorn related python processes if any.)
 - To stop weRecruit scheduler note down the pid listed in above step and run `kill <pid>`
-- Confirm it is stopped by vising werecruit website from browser & verify you get a gateway error.
+- Confirm it is stopped by visiting werecruit website from browser & verify you get a gateway error.
 
-## Maintenance checklist ( TODO -> write script for this )
+## Maintenance checklist 
 - if you want to stop and start werecruit, please follow the steps in [stop](#stopping-weRecruit) and [start](#starting-weRecruit) section respectively.
-- cleanup sessions related folder by 
+
+- Run `wr_maintain.sh` script to clean up *.log & *.out files 
+- cleanup sessions related folder by ( TODO -> automate this step )
     - `cd /etc/werecruit/sessions`
     - `rm *`
-- cleanup werecruit.log file by running following commands 
-    - `cd /etc/werecruit` 
-    - `rm werecruit.log`
+- DB backups ( Need to automate it)
+    - currently backups are being taken by connecting to pg thru pg admin and taking back up on laptop. **Needs a better way**
 
-- DB backups 
-    - Coming soon
+- once in a while container may crash or stop , to restart do following from main contabo machine
+    - run `docker ps -a` command to ensure werecruit_prod is listed.
+    - run `docker start werecruit_prod` command to start the werecruit prod container
 
+- Please note : To come out of werecruit_prod container without stopping it , please enter *ctrl+p followed by ctrl+q*. You will be taken back to the main contabo machine.
 ## Upgrade checklist ( TODO -> write script for this)
 - from terminal login to the werecruit container. For creds contact admin.
 - run  `cd /etc/werecruit` 
@@ -85,8 +95,7 @@ From the main contabo machine run following commands
 3. verify image is created by running `docker images` & ensure the new image is listed.
 3. `docker unpause werecruit_prod`
 
-## How to take Database backup
-**coming soon**
+
 
 
 
