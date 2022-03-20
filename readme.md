@@ -5,20 +5,20 @@ from docker machine do `docker exec -it werecruit_prod /bin/bash` to loginto wer
 To figure out all *open connections on pg*, run following sql on db
 
 
-## frequently used linux commands
+## Frequently used linux commands
 - nano to edit files
 - chmod +x for sh scripts where permissions are lost as we do git pull
 - nohup <command to be executed> &
 - grep ERROR wr_job.log
 
 
-## frequently used git commands
+## Frequently used git commands
 - `git pull`
 - `git status`
 - `git restore`
 - `git clone <repo name>` . - only done once
 
-## frequently used docker commands
+## Frequently used docker commands
 - `docker exec -it werecruit_prod /bin/bash` -> to get shell acess to werecruit_prod container.
     - To get out the container shell without stopping the container ,  please enter *ctrl+p followed by ctrl+q*
 - `docker ps -a`
@@ -32,7 +32,7 @@ To figure out all *open connections on pg*, run following sql on db
 
 # Prod Notes : weRecruit on Ubuntu
 
-from main contabo machine do `docker exec -it werecruit_prod /bin/bash` to login to werecruit container.
+From main contabo machine do `docker exec -it werecruit_prod /bin/bash` to login to werecruit container.
 
 ## First time installation checklist
 * get a docker image based on ubuntu 20 LTS
@@ -88,15 +88,24 @@ from main contabo machine do `docker exec -it werecruit_prod /bin/bash` to login
 - sanity test with test data 
     - test user acct -> rkanade@gmail.com
 
-## How to create an docker image - 
+## How to create an docker image & move to another node - 
 From the main contabo machine run following commands
-1. `docker pause werecruit_prod` ( this is our container name)
-2. `docker commit werecruit_prod werecruit_image`
-3. verify image is created by running `docker images` & ensure the new image is listed.
-3. `docker unpause werecruit_prod`
+- `docker pause werecruit_prod` ( this is our container name)
+- `docker commit werecruit_prod werecruit_image`
+- verify image is created by running `docker images` & ensure the new image is listed.
+- `docker unpause werecruit_prod`.
+- If you want to move the image created above from one node (A) to another ( say B), run following commands
+    - on A `docker save werecruit_image | gzip > werecruit_image.tar.gz`
+    - copy the above tar file from A to B.
+    - on machine B, run `gunzip -c werecruit_image.tar.gz | docker load`
+    - on machine B, for **first time only** you need to run `docker run -d --name=werecruit_prd werecruit_image`.
 
 
 
+
+
+
+how to exporta docker container from one node ( machine ) to another 
 
 
 
