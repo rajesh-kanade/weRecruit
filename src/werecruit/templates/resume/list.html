@@ -49,8 +49,10 @@
                 <td class="has-text-centered {{theme_text_color}}">{{ resume.phone }}</td>
                 <td class="has-text-centered {{theme_text_color}}">
                   <div class ="field is-grouped" data-turbo="false">
-                  <p class="control"><a class="button is-info  is-small" href="/resume/download/{{resume.id}}">Download</a></p>
-                  <p class="control"><a class="button is-info  is-small" href="/resume/showEditPage/{{resume.id}}">Edit</a></p>
+                  <p class="control"><a class="button is-info is-small" title ="Download" onclick="this.classList.add('is-loading');" href="/resume/download/{{resume.id}}"><i class="fa fa-download"></i>
+                  </a></p>
+                  <p class="control"><a class="button  is-info is-small" title ="Edit" href="/resume/showEditPage/{{resume.id}}"><i class="fa fa-edit"></i>
+                  </a></p>
             
                  </div>    
                 </td>       

@@ -29,7 +29,6 @@ class JDStatusCodes(Enum):
 	open = 0
 	draft = 1
 	close = 2
-	deleted = 3
 
 JD_DEF_POSITIONS = 1
 
@@ -235,13 +234,15 @@ def save_header(id, title,details,client):
 			cursor.close()
 		dbUtils.returnToPool(db_con)
 
-def list_jds_by_tenant(tenantID, limit = 1000, statusFilter = None):
+def list_jds_by_tenant(tenantID, statusFilter = None,limit = 1000):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 		
+		
 		query = """SELECT * FROM wr_jds 
-				where recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+				where is_deleted = False and 
+				recruiter_id in ( select uid from tenant_user_roles where tid = %s)
 				order by id DESC limit %s"""
 	
 		params = (tenantID,limit)
@@ -268,9 +269,9 @@ def get(id):
 		
 		query = """SELECT *
 				FROM wr_jds 
-				where id = %s"""
+				where id = %s and is_deleted = %s"""
 	
-		params = (id,)
+		params = (id,False)
 		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 

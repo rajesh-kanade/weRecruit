@@ -45,9 +45,9 @@
           <td class="has-text-centered {{theme_text_color}}">{{ resume.status }}-{{resume.description}}</td>
           <td class="has-text-centered {{theme_text_color}}">
             <div class ="field is-grouped" data-turbo="false">
-              <turbo-frame id="view_resume"><p class="control"><a class="button is-info  is-small" href="/resume/download/{{resume.id}}?src=jd-shortlist-page">View</a></p></turbo-frame>&NonBreakingSpace;
-              <turbo-frame id="shortlist_resume"><p class="control"><a class="button is-info is-small" href="/jd/shortlist/?resume_id={{resume.id}}&job_id={{job_id}}">Shortlist</a></p></turbo-frame>&NonBreakingSpace;
-              <turbo-frame id="edit_resume"><p class="control"><a class="button is-info  is-small" href="/resume/showEditPage/{{resume.id}}">Edit</a></p></turbo-frame>
+              <turbo-frame id="view_resume"><p class="control"><a class="button is-info  is-small" title ="Download" href="/resume/download/{{resume.id}}?src=jd-shortlist-page"><i class="fa fa-download"></i></a></p></turbo-frame>&NonBreakingSpace;
+              <turbo-frame id="shortlist_resume"><p class="control"><a class="button is-info is-small" title ="Shortlist" href="/jd/shortlist/?resume_id={{resume.id}}&job_id={{job_id}}"><i class="fa fa-bookmark"></i></a></p></turbo-frame>&NonBreakingSpace;
+              <turbo-frame id="edit_resume"><p class="control"><a class="button is-info  is-small" title ="Edit" href="/resume/showEditPage/{{resume.id}}"><i class="fa fa-edit"></i></a></p></turbo-frame>
 
             </div>
           </td>       

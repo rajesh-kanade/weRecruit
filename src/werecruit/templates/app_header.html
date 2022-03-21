@@ -9,10 +9,13 @@
     {% if theme == 'DARK' %}
       {% set theme_bg_color = 'has-background-dark' %}
       {% set theme_text_color = 'has-text-grey' %}
+      {% set theme = 'is-dark' %}
     {% else %}  
       {% set theme_bg_color = 'has-background-light' %}
       {% set theme_text_color = 'has-text-dark' %}
-    {% endif %}
+      {% set theme = 'is-light' %}
+
+      {% endif %}
     
    
     <meta charset="utf-8">
