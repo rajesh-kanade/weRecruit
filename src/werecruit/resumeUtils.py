@@ -255,7 +255,7 @@ def save_resume(id, fileName, candidateName,candidateEmail,candidatePhone, recru
 		if cursor is not None:
 			cursor.close()
 		dbUtils.returnToPool(db_con)
-
+'''
 def list_resumes_by_recruiter(recruiterID):
 	try:
 		db_con = dbUtils.getConnFromPool()
@@ -280,6 +280,7 @@ def list_resumes_by_recruiter(recruiterID):
 	finally:
 		cursor.close()
 		dbUtils.returnToPool(db_con)	
+'''
 
 def list_resumes_by_tenant(tenantID):
 	try:
@@ -287,10 +288,11 @@ def list_resumes_by_tenant(tenantID):
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 		
 		query = """SELECT * FROM wr_resumes 
-				where recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
+				where is_deleted = %s and
+				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
 				order by id desc"""
 	
-		params = (tenantID,)
+		params = (False,tenantID)
 		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
@@ -331,10 +333,11 @@ def  search_resumes(tenantID, ftSearch):
 		_logger.debug("Full text search is %s", ft_cond)
 
 		query = """SELECT * FROM wr_resumes 
-				where recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
+				where is_deleted = %s and
+				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
 				and """ + str(ft_cond) + " order by id desc"
 	
-		params = (tenantID,)
+		params = (False,tenantID)
 		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
