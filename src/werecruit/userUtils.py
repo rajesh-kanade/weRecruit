@@ -338,6 +338,40 @@ def list_users(tenant_id):
 		cursor.close()
 		dbUtils.returnToPool(db_con)
 
+def is_tenant_deleted(tid):
+
+	_logger.debug('Checking if tenant %s is deleted', tid)
+
+	try:
+		db_con = dbUtils.getConnFromPool()
+		
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		query = """SELECT * from tenants where id = %s and is_deleted = %s"""
+	
+		data_tuple = (tid,True)
+
+		_logger.debug ( cursor.mogrify(query, data_tuple))
+		cursor.execute(query, data_tuple)
+
+		tList =cursor.fetchall()
+		#_logger.debug ( "user length ",len(userList))
+
+		if (tList is None or len(tList) == 0) :
+			_logger.debug ("Tenant %s  is not deleted.",tid)
+			return False
+		else:
+			_logger.debug ("Tenant %s is deleted. ",tid)
+			return True
+
+	except Exception as dbe:
+		_logger.error(dbe)
+		raise
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
+
 
 def do_SignIn(id, password):
 	
@@ -369,6 +403,9 @@ def do_SignIn(id, password):
 
 			for user in userList:
 				_logger.debug(user)
+				if (is_tenant_deleted (user.tid)):
+					return(RetCodes.sign_in_failed,'Tenant this user belongs to is deleted. Please contact your system administrator', user)
+
 
 			return(RetCodes.success.value, "User List successfully fetched from db", userList[0])
 
@@ -431,7 +468,10 @@ if __name__ == "__main__":
 	load_dotenv(find_dotenv())
 	logging.basicConfig(level=logging.DEBUG)
 
-	(retCode, msg, data ) = save_user(1,constants.NEW_ENTITY_ID,'c1_rec','c1_recruiter@gmail.com','rajesh',2)
-	_logger.debug( retCode)
-	_logger.debug ( msg)
 	
+	'''(retCode, msg, data ) = save_user(1,constants.NEW_ENTITY_ID,'c1_rec','c1_recruiter@gmail.com','rajesh',2)
+	_logger.debug( retCode)
+	_logger.debug ( msg)'''
+
+	resultTuple = do_SignIn('c1_admin@gmail.com','rajesh')
+	print(resultTuple)
