@@ -1,11 +1,34 @@
 {%extends "header.html" %}
 {%block content%}
 
-<section class="hero is-fullheight">
+<section class="hero is-fullheight has-background-grey-lighter">
 
-  <div class="hero-body">
+  <div class="hero-body has-text-centered">
     <div class="container">
-      <div class="columns is-centered">
+      <div class="box">
+        <div class="columns is-centered">
+          <div class="column is-half">
+            <div class="card">
+                <div class="card-image">
+                  <figure class="image">
+                    <img src="/static/login_green_bg.jpg" alt="">
+                  </figure>
+                </div>
+                <div class="card-content is-overlay has-text-left content">
+                  <div class="has-text-white">
+                     <h2 class="heading has-text-white">Welcome to WeRECRUIT</h2>
+                     <p class="sub-heading">
+                      There are many variations of passages of lorem 
+                      ipsum avalable. but the majority have suffered alteration in some form 
+                      ,by injected humour or randomised words which don't look even slightty believable
+                     </p> 
+                      <p class="heading-link">
+                          <a href="#">Features</a>&nbsp; | &nbsp;<a href="#"> Pricing </a>&nbsp;| &nbsp;<a href="#">Release history</a>
+                      </p>
+                  </div>
+               </div>
+            </div>
+          </div>
           <div class="column is-half">
             
             {% set messages = get_flashed_messages(with_categories = true ) %}            
@@ -15,32 +38,41 @@
                 {% endfor %}                  
             {% endif %}
 
-          <form action = "/user/doSignin" method="POST">
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.email.label }}</label>
-              <div class="control has-icons-left has-icons-right">
-                {{ form.email(class='input', placeholder='Enter email') }}
-                <span class="icon is-small is-left">
-                  <i class="fas fa-envelope"></i>
-                </span>
+            <form action = "/user/doSignin" method="POST">
+              <div class="field">
+                <label class="label {{theme_text_color}} has-text-left">{{ form.email.label }}</label>
+                <div class="control has-icons-left has-icons-right">
+                  {{ form.email(class='input', placeholder='Enter email') }}
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-envelope"></i>
+                  </span>
+                </div>
               </div>
-            </div>
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{form.password.label}}</label>
-              <div class="control has-icons-left">
-                {{ form.password(class='input', placeholder='Enter password') }}
-                <span class="icon is-small is-left">
-                  <i class="fas fa-lock"></i>
-                </span>
+              <div class="field">
+                <label class="label {{theme_text_color}} has-text-left">{{form.password.label}}</label>
+                <div class="control has-icons-left">
+                  {{ form.password(class='input', placeholder='Enter password') }}
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                  </span>
+                </div>
               </div>
-            </div>
+              <div class="columns">
+                <div class = "column is-half has-text-left">
+                  <div class="field">
+                    <p class="control">
+                      {{ form.submit( class = 'button is-success') }}
+                    </p>      
+                  </div>
+                </div>
+                <div class = "column is-half is-right">
+                    <p><a href="#">Forgot Password?</a></p>
+                </div>
+              </div>
+              <p class="label"><a href="#"> Create new account</a></p>
 
-            <div class="field">
-              <p class="control">
-                {{ form.submit( class = 'button is-success is-rounded') }}
-              </p>      
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>

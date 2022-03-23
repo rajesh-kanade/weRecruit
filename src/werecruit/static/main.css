@@ -39,3 +39,144 @@ hr.gn-main {
     border-color: transparent;
     color: rgb(255, 255, 255);
   }
+
+  /*as received from codelan */
+  
+  @font-face{
+    font-family: 'Helvetica';
+    src: url('HLM.ttf') format("truetype");
+  }
+  @font-face{
+    font-family: 'Helvetica-13';
+    src: url('helveticaext-no.ttf') format("truetype");
+  }
+  
+
+  body,
+  h2, 
+  .heading,
+  .heading-login{
+    font-family: 'Helvetica', sans-serif;
+  }
+  
+  .heading{
+    font-size: 16px;
+    margin-top: 40px;
+  }
+  
+  .sub-heading{
+    font-size: 14px;
+    margin-top: 20px;
+  }
+  
+  .heading-link{
+    font-size: 14px;
+    margin-top: 30px;
+  }
+  
+  .heading-login{
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+  
+  .card-content{
+    margin-left: 10px;
+    font-size: 16px;
+  }
+  
+  .heading-link a{
+    color: white;
+  }
+  
+   a{
+    color: black;
+  }
+  
+  .heading-login{
+    font-size: 20px;
+    font-style: bold;
+  }
+  
+  input{
+    font-size: 14px;
+  }
+  
+  .button.is-success {
+    background-color: #4ccd3d;
+    border-color: transparent;
+    color: #fff;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  
+  @media screen and (min-width: 1024px) {
+  
+  .box {
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+    color: #4a4a4a;
+    display: block;
+    padding: 2.25rem;
+    max-width: 1100px;
+    margin-left: 90px;
+  }
+  
+  .card {
+    color: #4a4a4a;
+    max-width: 90%;
+    position: relative;
+  }
+  
+  .card-image {
+    display: block;
+    position: relative;
+    max-height: 100px;
+    max-width: 500px;
+  }
+  
+  .card-image:first-child img {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    margin-left: 40px;
+    height: 550px;
+    margin-top: -78px;
+  }
+  
+  .card-content{
+    margin-left: 50px;
+  }
+  
+  .card-content .heading{
+    font-size: 26px;
+    margin-top: 120px;
+  }
+  
+  .card-content .sub-heading{
+    font-size: 14px;
+    margin-top: 20px;
+  }
+  
+  .heading-login{
+  
+    margin-top: 25px;
+    margin-bottom: 25px;
+    font-size: 20px;
+  }
+  
+  input{
+    font-size: 14px;
+  }
+  
+  .heading-link{
+    font-size: 14px;
+    margin-top: 150px;
+  }
+  
+  .is-right{
+    margin-left: 45px;
+    margin-top: 20px;
+    font-size: 14px;
+  }
+  
