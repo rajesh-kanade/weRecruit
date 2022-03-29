@@ -1,5 +1,8 @@
 
-/* ******** successfully upgrade prod on ?????-March-2022 *****************
+/* ******** successfully upgrade prod on 28-March-2022 on contabo2 server ******************
+
+ALTER TABLE public.wr_resumes
+    ADD COLUMN is_deleted boolean NOT NULL DEFAULT false ;
 
 ALTER TABLE public.wr_jds
     ADD COLUMN is_deleted boolean NOT NULL DEFAULT false ;
@@ -10,7 +13,7 @@ insert into public.application_status_codes(id,description,is_deleted) values (2
 insert into public.application_status_codes(id,description,is_deleted) values (3,'Initial screening failed',false);
 
 
- *********************************  */
+ **********************************  */
 
 
 
