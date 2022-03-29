@@ -94,11 +94,12 @@ From the main contabo machine run following commands
 - `docker commit werecruit_prod werecruit_image`
 - verify image is created by running `docker images` & ensure the new image is listed.
 - `docker unpause werecruit_prod`.
-- If you want to move the image created above from one node (A) to another ( say B), run following commands
-    - on A `docker save werecruit_image | gzip > werecruit_image.tar.gz`
-    - copy the above tar file from A to B.
-    - on machine B, run `gunzip -c werecruit_image.tar.gz | docker load`
-    - on machine B, for **first time only** you need to run `docker run -d --name=werecruit_prd werecruit_image`.
+- If you want to move the image created above from one machine (A) to another machine ( say B), run following commands
+    - on machine A `docker save werecruit_image > werecruit_prod.tar`
+    - copy the above tar file from A to B using scp from machine A to B.
+    - on machine B, run `docker load --input werecruit_prod.tar`
+    - on machine B, for **first time only** you need to run `docker run -dit -p 0.0.0.0:8280:5000/tcp --name werecruit_prod werecruit_image`. This will create and start the container.
+    
 
 
 
