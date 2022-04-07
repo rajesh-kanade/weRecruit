@@ -43,29 +43,45 @@ hr.gn-main {
   /*as received from codelan */
   
   @font-face{
-    font-family: 'Helvetica';
-    src: url('HLM.ttf') format("truetype");
-  }
-  @font-face{
-    font-family: 'Helvetica-13';
-    src: url('helveticaext-no.ttf') format("truetype");
+    font-family: 'medium';
+    src: url(Poppins-Medium.ttf) format("truetype");
   }
   
-
+  @font-face{
+    font-family: 'regular';
+    src: url(Poppins-Regular.ttf) format("truetype");
+  }
+  
+  @font-face{
+    font-family: 'semi-bold';
+    src: url(Poppins-SemiBold.ttf) format("truetype");
+  }
+  
   body,
   h2, 
   .heading,
-  .heading-login{
-    font-family: 'Helvetica', sans-serif;
+  .label
+  .{
+    font-family: 'medium', sans-serif;
+  }
+  
+   .heading-login{
+    font-family: 'semi-bold', sans-serif;
+   }
+  
+  button,
+  input,
+  .sub-heading{
+    font-family: 'regular', sans-serif;
   }
   
   .heading{
-    font-size: 16px;
+    font-size: 14px;
     margin-top: 40px;
   }
   
   .sub-heading{
-    font-size: 14px;
+    font-size: 12px;
     margin-top: 20px;
   }
   
@@ -112,6 +128,31 @@ hr.gn-main {
   
   @media screen and (min-width: 1024px) {
   
+  .container {
+    flex-grow: 1;
+    margin: 0 auto;
+    position: relative;
+    width: 70%;   /*width: auto;*/
+  }  
+  
+  .column .container{
+    flex-grow: 1;
+    margin: 0 auto;
+    position: relative;
+    width: 75%;   /*width: auto;*/
+  } 
+  
+  .field .control input{
+    width: 90%;
+  }
+  
+  .heading {
+    text-transform: none;
+    font-size: 26px;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  
   .box {
     background-color: white;
     border-radius: 6px;
@@ -120,20 +161,28 @@ hr.gn-main {
     display: block;
     padding: 2.25rem;
     max-width: 1100px;
-    margin-left: 90px;
+    margin-left: 190px;
+    max-width: 70%;
   }
   
   .card {
+    background-color: transparent;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);*/
     color: #4a4a4a;
-    max-width: 90%;
+    max-width: 100%;
     position: relative;
+    border: none;
+    box-shadow: none;
   }
+  
   
   .card-image {
     display: block;
     position: relative;
     max-height: 100px;
-    max-width: 500px;
+    max-width: 400px;
+    margin-left: 10px;
   }
   
   .card-image:first-child img {
@@ -159,7 +208,6 @@ hr.gn-main {
   }
   
   .heading-login{
-  
     margin-top: 25px;
     margin-bottom: 25px;
     font-size: 20px;
@@ -175,8 +223,17 @@ hr.gn-main {
   }
   
   .is-right{
-    margin-left: 45px;
-    margin-top: 20px;
+    margin-top: 25px;
     font-size: 14px;
   }
   
+  .label{
+    font-size: 14px;
+  }
+  
+  
+  button{
+    font-size: 14px;
+  }
+  
+  }

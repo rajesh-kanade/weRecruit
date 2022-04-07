@@ -24,7 +24,11 @@
                      </p> 
 
                   </div>
+                  <div class="has-text-left content">
+                    <p class="label"><a href="/user/showSignupPage"> Create new account</a></p>
+                  </div>  
                </div>
+
             </div>
           </div>
           <div class="column is-half">
@@ -35,43 +39,44 @@
                   <div class="notification {{ category }}">{{ message }}</div>
                 {% endfor %}                  
             {% endif %}
-
-            <form action = "/user/doSignin" method="POST">
-              <div class="field">
-                <label class="label {{theme_text_color}} has-text-left">{{ form.email.label }}</label>
-                <div class="control has-icons-left has-icons-right">
-                  {{ form.email(class='input', placeholder='Enter email') }}
-                  <span class="icon is-small is-left">
-                    <i class="fas fa-envelope"></i>
-                  </span>
-                </div>
-              </div>
-              <div class="field">
-                <label class="label {{theme_text_color}} has-text-left">{{form.password.label}}</label>
-                <div class="control has-icons-left">
-                  {{ form.password(class='input', placeholder='Enter password') }}
-                  <span class="icon is-small is-left">
-                    <i class="fas fa-lock"></i>
-                  </span>
-                </div>
-              </div>
-              <div class="columns">
-                <div class = "column is-half has-text-left">
-                  <div class="field">
-                    <p class="control">
-                      {{ form.submit( class = 'button is-success') }}
-                    </p>      
+            <div class="container has-text-left">
+              <form action = "/user/doSignin" method="POST">
+                  <!--<img src="{{url_for('static', filename='logo_login.png')}}" alt="Login Logo" > -->
+                <h2 class="heading-login"><b>Login To Your Account</b></h2>
+                <div class="field">
+                  <label class="label {{theme_text_color}} has-text-left">{{ form.email.label }}</label>
+                  <div class="control has-icons-left has-icons-right">
+                    {{ form.email(class='input', placeholder='Enter email') }}
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-envelope"></i>
+                    </span>
                   </div>
                 </div>
-                <!--
-                <div class = "column is-half is-right">
-                    <p><a href="#">Forgot Password?</a></p>
+                <div class="field">
+                  <label class="label {{theme_text_color}} has-text-left">{{form.password.label}}</label>
+                  <div class="control has-icons-left">
+                    {{ form.password(class='input', placeholder='Enter password') }}
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-lock"></i>
+                    </span>
+                  </div>
                 </div>
-                -->
-              </div>
-              <p class="label"><a href="/user/showSignupPage"> Create new account</a></p>
-
-            </form>
+                <div class="columns">
+                  <div class = "column is-half has-text-left">
+                    <div class="field">
+                      <p class="control">
+                        {{ form.submit( class = 'button is-success') }}
+                      </p>      
+                    </div>
+                  </div>
+                  <!--
+                  <div class = "column is-half is-right">
+                      <p><a href="#">Forgot Password?</a></p>
+                  </div>
+                  -->
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
