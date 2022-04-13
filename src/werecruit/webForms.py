@@ -1,5 +1,7 @@
+from email import message
+from click import confirm
 from flask_wtf import FlaskForm
-from wtforms import DecimalField, DecimalRangeField,SelectMultipleField, SelectField, StringField, PasswordField, SubmitField, TextAreaField, HiddenField
+from wtforms import BooleanField,DecimalField, DecimalRangeField,SelectMultipleField, SelectField, StringField, PasswordField, SubmitField, TextAreaField, HiddenField,validators
 from wtforms.validators import DataRequired, Email,NumberRange, ValidationError
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import IntegerField, DateField
@@ -29,8 +31,14 @@ class ResetPasswordForm(FlaskForm):
 
     email = StringField('Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
     current_password = PasswordField('Current Password', validators=[DataRequired('Please enter current password.')])
-    new_password = PasswordField('New Password', validators=[DataRequired('Please enter new password.')])
-
+    new_password = PasswordField('New password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
+    confirm = PasswordField('Confirm New Password',[
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
     submit = SubmitField('Save')
 
 class UserForm(FlaskForm):
@@ -41,7 +49,7 @@ class UserForm(FlaskForm):
     name = StringField( 'Name', validators=[DataRequired(message='Please enter your name')])
     email = StringField('Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
     password = PasswordField('Password', validators=[DataRequired('Please enter password.')])
-
+    
     #role = SelectField('Role', choices=[(int(userUtils.RoleIDs.ADMIN.value), 'Admin'), 
     #                    (int(userUtils.RoleIDs.RECRUITER.value), 'Recruiter')])
     

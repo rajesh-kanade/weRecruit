@@ -1,5 +1,7 @@
 
 import logging
+
+from click import confirm
 import dbUtils
 import constants
 
@@ -424,6 +426,41 @@ def do_SignIn(id, password):
 		_logger.error ("In the exception block.")
 		_logger.error(e)
 		return ( RetCodes.server_error, str(e))
+
+# def check_cur_pass_and_newPass(id, email, cur_password, new_password):
+# 	try:
+# 		new_password = hashit(new_password)
+# 		cur_password = hashit(cur_password)
+# 		try:
+# 			db_con = dbUtils.getConnFromPool()
+# 			cursor = dbUtils.getNamedTupleCursor(db_con)
+			
+# 			query = """SELECT * from users WHERE id =%s and email = %s and password =%s
+# 					"""
+		
+# 			data_tuple = (id, email, cur_password)
+
+# 			_logger.debug ( cursor.mogrify(query, data_tuple))
+# 			u=cursor.execute(query, data_tuple).fetchOne()
+# 			print(u.email)
+
+			
+
+# 		except Exception as dbe:
+# 			_logger.error(dbe)
+# 			db_con.rollback()
+# 			return ( RetCodes.server_error, str(dbe), None)
+		
+# 		finally:
+# 			if 'cursor' in locals() and cursor is not None:
+# 				cursor.close()
+# 			dbUtils.returnToPool(db_con)	
+
+# 	except Exception as e:
+# 		_logger.error ("In the exception block.")
+# 		_logger.error(e)
+# 		return ( RetCodes.server_error, str(e))
+
 
 def do_reset_password(id, email, cur_password, new_password):
 	
