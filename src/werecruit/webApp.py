@@ -1,5 +1,3 @@
-
-
 from flask import (
 	Flask,
 	flash,
@@ -205,7 +203,7 @@ def save_JD():
 	form = JDForm(request.form)
 	
 	'''if request.method == 'POST' and form.max_yrs_of_exp.validate(form) is False:
-		_logger.debug('JD save validation failed')
+		_logger.debug('JD save validation failed') 
 		print(form.errors)
 		return render_template('jd/edit.html', form=form)
 	'''
@@ -237,8 +235,7 @@ def save_JD():
 								form.max_yrs_of_exp.data)
 
 	if filename is not None and os.path.exists(filename):
-  		os.remove(filename)
-
+		os.remove(filename)
 	if (results[0] == jdUtils.RetCodes.success.value):        
 		flash ("Congratulations!!! Job Requistion with title '{0}' successfully created".format(form.title.data), "is-info")
 		return redirect(url_for("show_jd_all_page"))
@@ -452,8 +449,7 @@ def resume_save():
 							form.candidate_email.data,form.candidate_phone.data,int(session.get('user_id')))
 	
 	if filename is not None and os.path.exists(filename):
-  		os.remove(filename)
-
+		os.remove(filename)
 	if retCode == resumeUtils.RetCodes.success.value:
 		flash (msg, "is-success")
 		#return redirect(url_for('show_resume_browser_page'))
@@ -872,7 +868,7 @@ def show_reset_password():
 
 	form.id.data = session["user_id"]
 	form.email.data = session["email_id"]
-
+	# flash("Password Reset Page","is-success")
 	return render_template("user/password_reset.html", form = form)		
 
 @app.route('/user/doResetPassword', methods = ['POST'])
@@ -883,16 +879,37 @@ def do_reset_password():
 
 	form.id.data = session["user_id"]
 	form.email.data = session["email_id"]
+	# print("Form Data : ", form.id.data,form.email.data,form.current_password.data,form.confirm.data,form.new_password.data)
+	# userUtils.check_cur_pass_and_newPass(form.id.data,form.email.data,form.current_password.data,form.new_password.data)
+	if((form.current_password.data == form.new_password.data)):
+		flash('Current password and New password must be different',"is-danger")
+		return redirect(url_for('show_reset_password'))
+
+	elif((form.new_password.data == form.confirm.data)):
+		(retCode,msg, data) = userUtils.do_reset_password(form.id.data, form.email.data,form.current_password.data, form.new_password.data)
+		if (retCode == userUtils.RetCodes.success.value ):
+				session.clear()			
+				# do_signout()
+				flash ("Password reset successfully. Please sign-in again with your new password", "is-success")
+				return redirect(url_for("show_signin_page"))
+		else:
+			flash ("Password reset failed. {0} ".format(msg), "is-danger")
+			return render_template("password_reset.html", form = form)
+
 	
-	(retCode,msg, data) = userUtils.do_reset_password(form.id.data, form.email.data,form.current_password.data, form.new_password.data)
-	if retCode == userUtils.RetCodes.success.value:
-		session.clear()
-		flash ("Password reset successfully. Please sign-in again with your new password", "is-success")
-		return redirect(url_for("show_signin_page"))
-		#do_signout()
+
 	else:
-		flash ("Password reset failed. {0} ".format(msg), "is-danger")
-		return render_template("user/password_reset.html", form = form)		
+		# print("Password Not matched")
+		# flash ("New Password and Confirm Password must be same", "is-danger")
+		flash('New Password and Confirm new password must be same',"is-danger")
+		return redirect(url_for('show_reset_password'))
+		
+
+	
+
+    
+	
+			
 
 
 @app.route('/user/showManageUsersPage', methods = ['GET'])
@@ -1001,5 +1018,5 @@ if __name__ == "__main__":
 	#_logger.addHandler(get_file_handler())
 	print("Effective logging level is :", _logger.getEffectiveLevel())
 
-	app.run()
+	app.run(debug=True)
 	
