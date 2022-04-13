@@ -1,0 +1,416 @@
+@font-face{
+  font-family: 'poppins-medium';
+  src: url(fonts/Poppins-Medium.ttf) format("truetype");
+}
+
+@font-face{
+  font-family: 'regular';
+  src: url(fonts/Poppins-Regular.ttf) format("truetype");
+}
+
+@font-face{
+  font-family: 'semi-bold';
+  src: url(fonts/Poppins-SemiBold.ttf) format("truetype");
+}
+
+body,
+h2, 
+.heading,
+.label,
+.navbar-link,
+.form-group .field .section-title .label,
+.header th{
+  font-family: 'poppins-medium', sans-serif;
+}
+
+.form-group .field .label,
+ .heading-login{
+  font-family: 'semi-bold', sans-serif;
+ }
+
+button,
+input,
+.sub-heading,
+.topbar-title .subtitle,
+.form-group .field .control input,
+.list-unstyled,
+.container .topbar-title .title,
+.job-position .container .card .card-content  .content .label,
+textarea,
+.file,
+.select.is-black select,
+.header th {
+  font-family: 'regular', sans-serif;
+}
+
+.heading{
+	font-size: 14px;
+  margin-top: 40px;
+}
+
+.sub-heading{
+	font-size: 12px;
+  margin-top: 20px;
+}
+
+.heading-link{
+	font-size: 14px;
+	margin-top: 30px;
+}
+
+.heading-login{
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.card-content{
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+.heading-link a{
+	color: white;
+}
+
+ a{
+  color: black;
+}
+
+.heading-login{
+	font-size: 20px;
+	font-style: bold;
+}
+
+input, textarea{
+	font-size: 14px;
+}
+
+.button.is-success {
+  background-color: #4ccd3d;
+  border-color: transparent;
+  color: #fff;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.navbar.has-shadow {
+  box-shadow: 0 3px 0 0 whitesmoke;
+}
+
+.navbar-link {
+  font-size: 14px;
+}
+
+/*new changes*/
+.form-group .field .control input{
+  font-size: 16px;
+  border-color: #c6c6c6;
+}
+
+.select, .select select{ 
+width: 100%;
+}
+
+.input, .textarea, .select select {
+  background-color: white;
+  border-color: #c6c6c6;
+  border-radius: 4px;
+  color: #363636;
+}
+
+.select.is-black select {
+  border-color: #c6c6c6;
+  font-size: 16px;
+}
+select::-ms-expand {
+    border-color: #c6c6c6;
+}
+
+
+hr {
+  background-color: #c6c6c6;
+  border: none;
+  display: block;
+  height: 0.5px;
+  margin: 1.5rem 0;
+}
+
+.job-position {
+  padding: 1rem 0.5rem;
+}
+
+.job-position .container .card {
+  background-color: #d1efd8;
+  color: #4a4a4a;
+  max-width: 100%;
+  position: relative;
+  border: none;
+  box-shadow: none;
+  margin-top: 19px;
+}
+
+.job-position .container .card .card-content{
+  margin-left: 0px;
+}
+
+.field .section-title .label{
+  font-size: 18px;
+  font-style: none;
+}
+
+.topbar-title .title{
+  font-size: 20px;
+  color: #4ccd3d;
+  font-style: none;
+  text-decoration: none;
+  margin-bottom: 30px;
+}
+
+.topbar-title .subtitle{
+  font-size: 14px;
+  color: #2b2b2b;
+}
+
+.application-form{
+  margin-top: 1px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.body-background{
+  background-color: #f6f6f6;
+}
+
+.has-shadow {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.1) inset;
+}
+.has-shadow:before,
+.has-shadow:after{
+  content: '';
+  position: absolute;
+  z-index: -1;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  top: 99%;
+  bottom: 0;
+  left: 0px;
+  right: 0px;
+  border-radius: px;
+  background-color: white;
+}
+
+.file{
+  font-size: 14px;
+  background-color: whitesmoke;
+  border: #c6c6c6;
+}
+
+
+td,
+th {
+  margin-right: 200px;
+}
+
+thead tr{
+  background-color: #fafafa;
+}
+
+table thead tr th{
+  color: #8c8c8c;
+}
+
+.header th {
+  font-size: 12px;
+}
+
+.table-data td{
+  font-size: 14px;
+}
+
+
+.table-height{
+  margin-top: -60px;
+}
+
+.column .job-position{
+  margin-left: -50px;
+}
+@media screen and (min-width: 1024px) {
+
+
+.job-position .container .section {
+  padding: 2rem 0.5rem;
+}
+
+.job-position .container {
+  flex-grow: 1;
+  margin: 0 auto;
+  position: relative;
+  width: auto;   /*width: auto;*/
+}  
+
+
+.container {
+  flex-grow: 1;
+  margin: 0 auto;
+  position: relative;
+  width: 70%;   /*width: auto;*/
+}  
+
+.column .container{
+  flex-grow: 1;
+  margin: 0 auto;
+  position: relative;
+  width: 75%;   /*width: auto;*/
+} 
+
+.field .half .control input{
+  width: 66%;
+}
+
+.field .control input{
+  width: 100%;
+}
+
+.half .control select{ 
+width: 66%;
+}
+
+.heading {
+  text-transform: none;
+  font-size: 26px;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.box {
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+  color: #4a4a4a;
+  display: block;
+  padding: 2.25rem;
+  max-width: 1100px;
+  margin-left: 190px;
+  max-width: 70%;
+}
+
+.card {
+  background-color: transparent;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);*/
+  color: #4a4a4a;
+  max-width: 100%;
+  position: relative;
+  border: none;
+  box-shadow: none;
+}
+
+
+.card-image {
+  display: block;
+  position: relative;
+  max-height: 100px;
+  max-width: 400px;
+  margin-left: 10px;
+}
+
+.card-image:first-child img {
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  margin-left: 40px;
+  height: 550px;
+  margin-top: -78px;
+}
+
+.card-content{
+  margin-left: 50px;
+}
+
+.card-content .heading{
+  font-size: 26px;
+  margin-top: 120px;
+}
+
+.card-content .sub-heading{
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.heading-login{
+  margin-top: 25px;
+  margin-bottom: 25px;
+  font-size: 20px;
+}
+
+input{
+  font-size: 14px;
+}
+
+.heading-link{
+  font-size: 14px;
+  margin-top: 150px;
+}
+
+.is-right{
+  margin-top: 25px;
+  font-size: 14px;
+}
+
+.label{
+  font-size: 14px;
+}
+
+
+button{
+  font-size: 14px;
+}
+
+
+/* new screen */
+
+.job-position {
+  padding: 2rem 0.5rem;
+}
+
+.job-position .container .card {
+  background-color: #d1efd8;
+  color: #4a4a4a;
+  max-width: 100%;
+  position: relative;
+  border: none;
+  box-shadow: none;
+}
+
+.job-position .container .card .card-content{
+  margin-left: 0px;
+}
+
+.form-group .field .label{
+  font-size: 14px;
+}
+
+.field .section-title .label{
+  font-size: 18px;
+  font-style: none;
+  color: #2b2b2b;
+}
+
+.topbar-title .title{
+  font-size: 28px;
+  color: #4ccd3d;
+  margin-bottom: 30px;
+}
+
+.topbar-title .subtitle{
+  font-size: 14px;
+  color: #2b2b2b;
+}
+
+.application-form{
+  margin-top: 1px;
+}
+
+.list-unstyled{
+  font-size: 14px;
+}
+}

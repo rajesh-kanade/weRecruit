@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <link rel="stylesheet" href="bulma/css/bulma.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <nav class="navbar is-white has-shadow">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item">
+          <img src="images/logo_login.png" style="max-height: 70px" class="py-2 px-2">
+        </a>
+        <a class="navbar-burger" id="burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="nav-links">
+        <div class="navbar-end">
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Job Positions
+            </a>
+            <div class="navbar-dropdown">
+              <a class="navbar-item">
+                Sub menu -1
+              </a>
+              <a class="navbar-item">
+                Sub menu -2 
+              </a>
+            </div>
+          </div>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Resumes
+            </a>
+
+            <div class="navbar-dropdown">
+              <a class="navbar-item">
+                Sub menu -1
+              </a>
+              <a class="navbar-item">
+                Sub menu -2 
+              </a>
+            </div>
+          </div> 
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Reports
+            </a>
+
+            <div class="navbar-dropdown">
+              <a class="navbar-item">
+                Sub menu -1
+              </a>
+              <a class="navbar-item">
+                Sub menu -2 
+              </a>
+            </div>
+          </div>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              <img src="images/profile.png"><span style="margin-left:10px"> Jon Doe</span>
+            </a>
+
+            <div class="navbar-dropdown">
+              <a class="navbar-item">
+                Sub menu -1
+              </a>
+              <a class="navbar-item">
+                Sub menu -2 
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+<div class="body-background">
+  <div class="columns">
+    <div class="column is-two-thirds">
+      <div class="job-position"> 
+        <div class="container">
+          <section class="section topbar-title">
+              <h1 class="title">Create/Edit a job position</h1>
+              <h2 class="subtitle">
+                This section allows you to create or edit a job position.
+              </h2>
+          </section>
+          <section class="application-form">
+              <form>
+                  <div class="form-group">
+                    <div class="field">
+                      <label class="label">Title*</label>
+                      <div class="control">
+                        <input class="input" type="text" placeholder="Enter Title">
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label class="label">Client Name*</label>
+                      <div class="control">
+                        <input class="input" type="text" placeholder="Enter Client Name">
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label class="label">Client JD File</label>
+                      <div class="control">
+                      </div>
+                    </div>
+                    <div id="file-js-example" class="file has-name">
+                      <label class="file-label">
+                        <input class="file-input" type="file" name="resume">
+                        <span class="file-cta">
+                          <span class="file-icon">
+                            <i class="fa fa-upload"></i>
+                          </span>
+                          <span class="file-label">
+                            Click to upload (word, pdf only)
+                          </span>
+                        </span>
+                        <span class="file-name">
+                          None
+                        </span>
+                      </label>
+                    </div>
+                    <div class="field">
+                      <label class="label"></label>
+                      <div class="control">
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label class="label">Location</label>
+                      <div class="control">
+                        <div class="select is-black">
+                          <select>
+                            <option>Enter Job location</option>
+                            <option>With options</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="columns">
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Total Position</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="(1-100)">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Status</label>
+                          <div class="control">
+                            <div class="select is-black">
+                              <select>
+                                <option>Open</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label class="label">Primary Skills*</label>
+                      <div class="control">
+                        <textarea class="textarea" placeholder="Enter primary skillset required for the job"></textarea>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <label class="label">Secondary Skills*</label>
+                      <div class="control">
+                        <textarea class="textarea" placeholder="Enter secondary skillset required for the job"></textarea>
+                      </div>
+                    </div>
+                    <div class="columns">
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Minimum Year of experience*</label>
+                          <div class="control">
+                            <div class="select is-black">
+                              <select>
+                                <option selected disabled>Enter Min</option>
+                                <option>1</option>
+                                <option>2</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Maximum Year of experience*</label>
+                          <div class="control">
+                            <div class="select is-black">
+                              <select>
+                                <option selected disabled>Enter Max</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <div class="section-title">
+                        <label class="label">About CTC*</label>
+                      </div>
+                    </div>
+                    <div class="columns">
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Min</label>
+                          <div class="control">
+                            <div class="select is-black">
+                              <select>
+                                <option selected disabled>Min CTC</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Max</label>
+                          <div class="control">
+                            <div class="select is-black">
+                              <select>
+                                <option selected disabled>Max CTC</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Currency</label>
+                          <div class="control">
+                            <div class="select is-black">
+                              <select>
+                                <option>INR</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <div class="section-title">
+                        <label class="label">Interview Panel</label>
+                      </div>
+                    </div>
+                    <div class="columns">
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Name</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Enter Name">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Email</label>
+                          <div class="control">
+                            <input class="input" type="email" placeholder="Enter Email">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Phone</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Enter Phone no">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="columns">
+                      <div class="column">
+                        <div class="field">
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Enter Name">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <div class="control">
+                            <input class="input" type="email" placeholder="Enter Email">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Enter Phone no">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <div class="section-title">
+                        <label class="label">Hiring Manager</label>
+                      </div>
+                    </div>
+                    <div class="columns is-three-quarters">
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Name</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Enter Name">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Email</label>
+                          <div class="control">
+                            <input class="input" type="email" placeholder="Enter Email">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Phone</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Enter Phone no">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="field">
+                      <div class="section-title">
+                        <label class="label">HR</label>
+                      </div>
+                    </div>
+                    <div class="columns is-three-quarters">
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Name</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Enter Name">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Email</label>
+                          <div class="control">
+                            <input class="input" type="email" placeholder="Enter Email">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Phone</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Enter Phone no">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="columns">
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Fee percent</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Enter Fee percent charged for this job">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">Warranty in months</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Enter Warranty in months">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="field">
+                      <div class="control">
+                        <button class="button is-success">Save</button>
+                      </div>
+                    </div>
+                  </div>
+              </form>
+          </section>
+
+        </div>
+      </div>
+    </div>
+    <div class="column is-one-third">
+      <div class="job-position"> 
+        <div class="container">
+          <div class="card">
+            <div class="card-content">
+              <div class="content">
+                <label class="label" style="font-size: 18px;">
+                  Few guidelines
+                </label>
+                <ul class="list-unstyled">
+                  <li>Proper formatting of the text/content of the posting with clear spaces and standard bullets (-) to be used.</li>
+                  <li>No short forms/abbreviations to be used in the text.</li>
+                  <li>No spelling mistakes in the content.</li>
+                  <li>JD should be concise and crisp - to the point.</li>
+                  <li>(*) mark is mandatory.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<script src="script.js"></script>
+</html>
