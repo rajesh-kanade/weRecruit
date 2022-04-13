@@ -2,159 +2,183 @@
 {%block content%}
 
 <section class="container is-fullheight">
-  <div class = "block">
+  <div class="block">
     <span class="title has-text-info">Create/Edit a job position</span><br>
     <span class="is-size-7 has-text-info">This section allows you to create or edit a job position.</span>
   </div>
 
-      <div class="columns is-centered">
-          <div class="column is-half">
+  <div class="columns is-centered">
+    <div class="column is-half">
 
-          {% for field in form.errors %}
-            {% for error in form.errors[field] %}
-              <div class="alert alert-error">
-                <small class="has-text-danger has-text-left">{{ error }}</small>  
-              </div>
-            {% endfor %}
+      {% for field in form.errors %}
+      {% for error in form.errors[field] %}
+      <div class="alert alert-error">
+        <small class="has-text-danger has-text-left">{{ error }}</small>
+      </div>
+      {% endfor %}
+      {% endfor %}
+      <form action="/jd/save" method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        {{form.id()}}
+        <div class="field">
+          <label class="label {{theme_text_color}} has-text-left">{{ form.title.label }}</label>
+          <div class="control">
+            {{form.title(class='input', title ="Enter short & meaning title for this job posting" , placeholder='Enter
+            Title')}}
+          </div>
+        </div>
+
+
+        <div class="field">
+          <label class="label {{theme_text_color}} has-text-left">{{ form.client.label }}</label>
+          <div class="control">
+            {{form.client(class='input', placeholder='Enter Client Name')}}
+          </div>
+        </div>
+
+        <div class="field">
+          <p class="control">
+            {{ form.submit( class = 'button is-success is-rounded') }}
+
+          </p>
+        </div>
+
+        <div class="field">
+          <label class="label {{theme_text_color}} has-text-left">{{ form.client_jd.label }}</label>
+
+          <div id="jd-selector" class="file has-name">
+            <label class="file-label">
+              <input type="file" name="client_jd" class="file-input">
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  click to upload ( word, pdf only)…
+                </span>
+              </span>
+              <span class="file-name">
+                {{form.client_jd.data}}
+
+              </span>
+            </label>
+          </div>
+          <script>
+            fileInput = document.querySelector('#jd-selector input[type=file]');
+            fileInput.onchange = () => {
+              if (fileInput.files.length > 0) {
+                fileName = document.querySelector('#jd-selector .file-name');
+                fileName.textContent = fileInput.files[0].name;
+              }
+            }
+          </script>
+          {% for error in form.client_jd.errors %}
+          <small class="has-text-danger has-text-left">{{ error }}</small>
           {% endfor %}
-          <form action = "/jd/save" method="POST" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            {{form.id()}}
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.title.label }}</label>
-              <div class="control">
-                {{form.title(class='input', title ="Enter short & meaning title for this job posting" , placeholder='Enter Title')}}
-              </div>
-            </div>
-            
+        </div>
 
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.client.label }}</label>
-              <div class="control">
-                {{form.client(class='input', placeholder='Enter Client Name')}}
-              </div>
-            </div>
-            
-            <div class="field">
-              <p class="control">
-                {{ form.submit( class = 'button is-success is-rounded') }}  
+        <div class="field">
+          <label class="label {{theme_text_color}} has-text-left">{{ form.location.label }}</label>
+          <div class="control">
+            {{form.location(class='input', placeholder='Enter the job location.')}}
+          </div>
+        </div>
 
-              </p>      
-            </div>
+        <div class="field">
+          <label class="label {{theme_text_color}} has-text-left">{{ form.total_positions.label }}</label>
+          <div class="control">
+            {{form.total_positions(class='input', placeholder='Enter total number of positions.')}}
+          </div>
+        </div>
 
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.client_jd.label }}</label>
+        <div class="field">
+          <label class="label {{theme_text_color}} has-text-left">{{ form.status.label }}</label>
+          <div class="select is-fullwidth">
+            {{form.status(class='select', placeholder='Enter status')}}
+          </div>
+        </div>
 
-              <div  id="jd-selector" class="file has-name">
-                <label class="file-label">
-                  <input type="file" name="client_jd" class="file-input">
-                  <span class="file-cta">
-                    <span class="file-icon">
-                      <i class="fas fa-upload"></i>
-                    </span>
-                    <span class="file-label">
-                      click to upload ( word, pdf only)…
-                    </span>
-                  </span>
-                  <span class="file-name">
-                    {{form.client_jd.data}}
+        <tr class="has-background-light">
+          <td class="has-text-centered has-text-dark">
 
-                  </span>
-                </label>
-              </div>
-              <script>
-                fileInput = document.querySelector('#jd-selector input[type=file]');
-                fileInput.onchange = () => {
-                  if (fileInput.files.length > 0) {
-                    fileName = document.querySelector('#jd-selector .file-name');
-                    fileName.textContent = fileInput.files[0].name;
-                  }
-                }
-              </script>
-                {% for error in form.client_jd.errors %}
-                    <small class="has-text-danger has-text-left">{{ error }}</small>  
-                {% endfor %}
-            </div>
+            <table>
+              <caption class="{{theme_text_color}}" style="text-align: center; font-weight: bold;">Experience In Years
+              </caption>
+              <tr class="has-background-light ">
+                <td class="has-text-centered has-text-dark">
+                  <div class="field">
+                    <!-- <label class="label {{theme_text_color}} has-text-left">{{ form.min_yrs_of_exp.label }}</label> -->
+                    <label class="has-text-centered {{theme_text_color}} has-text-dark has-text-weight-bold">Min</label>
+                    <div class="control">
+                      {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
+                    </div>
+                  </div>
+                </td>
+                <td class="has-text-centered has-text-dark">
+                  <div class="field">
+                    <!-- <label class="label {{theme_text_color}} has-text-left">{{ form.max_yrs_of_exp.label }}</label> -->
+                    <label class="has-text-centered {{theme_text_color}} has-text-dark has-text-weight-bold">Max</label>
+                    <div class="control">
+                      {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
+                    </div>
+                    {% for error in form.max_yrs_of_exp.errors %}
+                    <small class="has-text-danger has-text-left">{{ error }}</small>
+                    {% endfor %}
+                  </div>
+                </td>
+              </tr>
+            </table>
 
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.location.label }}</label>
-              <div class="control">
-                {{form.location(class='input', placeholder='Enter the job location.')}}
-              </div>
-            </div>
 
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.total_positions.label }}</label>
-              <div class="control">
-                {{form.total_positions(class='input', placeholder='Enter total number of positions.')}}
-              </div>
-            </div>
 
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.status.label }}</label>
-              <div class="select is-fullwidth">
-                {{form.status(class='select', placeholder='Enter status')}}
-              </div>
-            </div>
 
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.min_yrs_of_exp.label }}</label>
-              <div class="control">
-                {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
-              </div>
-            </div>
 
-            
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.max_yrs_of_exp.label }}</label>
-              <div class="control">
-                {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
-              </div>
-              {% for error in form.max_yrs_of_exp.errors %}
-                <small class="has-text-danger has-text-left">{{ error }}</small>  
-              {% endfor %}
-            </div>
 
             <div class="field">
               <label class="label {{theme_text_color}} has-text-left">{{ form.primary_skills.label }}</label>
               <div class="control">
-                {{form.primary_skills(class='textarea', title ="Enter mandatory or must have skillsets.",placeholder='Enter primary skillsets required for the job.')}}
+                {{form.primary_skills(class='textarea', title ="Enter mandatory or must have
+                skillsets.",placeholder='Enter
+                primary skillsets required for the job.')}}
               </div>
             </div>
 
             <div class="field">
               <label class="label {{theme_text_color}} has-text-left">{{ form.secondary_skills.label }}</label>
               <div class="control">
-                {{form.secondary_skills(class='textarea', title ="Enter mandatory or good to have skillsets.",placeholder='Enter secondary skillsets required for the job.')}}
+                {{form.secondary_skills(class='textarea', title ="Enter mandatory or good to have
+                skillsets.",placeholder='Enter secondary skillsets required for the job.')}}
               </div>
             </div>
 
             <table class="table is-bordered is-narrow">
               <caption class="{{theme_text_color}} is-uppercase">about CTC</caption>
               <tbody>
-                  <thead>
-                    <tr class="{{theme_bg_color}}">
-                      <th class="has-text-centered {{theme_text_color}}">Min</th>
-                      <th class="has-text-centered {{theme_text_color}}">Max</th>
-                      <th class="has-text-centered {{theme_text_color}}">Currency</th>
-                    </tr>
-                  </thead>
+                <thead>
+                  <tr class="{{theme_bg_color}}">
+                    <th class="has-text-centered {{theme_text_color}}">Min</th>
+                    <th class="has-text-centered {{theme_text_color}}">Max</th>
+                    <th class="has-text-centered {{theme_text_color}}">Currency</th>
+                  </tr>
+                </thead>
                 <tr class="has-background-light">
-                  <td class="has-text-centered has-text-dark"><div class="control">
-                        {{form.ctc_min(class='input', placeholder='Enter minimum CTC')}}
-                        </div>
-                  </td> 
-                  <td class="has-text-centered has-text-dark"><div class="control">
-                    {{form.ctc_max(class='input', placeholder='Enter maximum CTC')}}
+                  <td class="has-text-centered has-text-dark">
+                    <div class="control">
+                      {{form.ctc_min(class='input', placeholder='Enter minimum CTC')}}
+                    </div>
+                  </td>
+                  <td class="has-text-centered has-text-dark">
+                    <div class="control">
+                      {{form.ctc_max(class='input', placeholder='Enter maximum CTC')}}
                     </div>
                   </td>
                   <td class="has-text-centered has-text-dark">
                     <div class="select is-fullwidth">
                       {{form.ctc_currency(class='select', placeholder='Select currency')}}
                     </div>
-                  </td> 
+                  </td>
                 </tr>
-            </tbody>
+              </tbody>
             </table>
 
             {% include 'jd/team.html'%}
@@ -162,7 +186,8 @@
             <div class="field">
               <label class="label {{theme_text_color}} has-text-left">{{ form.fees_percent.label }}</label>
               <div class="control">
-                {{form.fees_percent(class='input', placeholder='Enter fees percent being charged for this job position.')}}
+                {{form.fees_percent(class='input', placeholder='Enter fees percent being charged for this job
+                position.')}}
               </div>
             </div>
             <div class="field">
@@ -174,14 +199,13 @@
 
             <div class="field">
               <p class="control">
-                {{ form.submit( class = 'button is-success is-rounded') }}  
+                {{ form.submit( class = 'button is-success is-rounded') }}
 
-              </p>      
+              </p>
             </div>
-          </form>
-        </div>
-      </div>
+      </form>
+    </div>
+  </div>
 </section>
 
 {% endblock %}
-

@@ -1001,5 +1001,5 @@ if __name__ == "__main__":
 	#_logger.addHandler(get_file_handler())
 	print("Effective logging level is :", _logger.getEffectiveLevel())
 
-	app.run()
+	app.run(debug=True)
 	
