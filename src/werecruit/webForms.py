@@ -68,9 +68,10 @@ class JDForm(FlaskForm):
 
     min_yrs_of_exp = DecimalField("Minimum years of Experience",validators=[NumberRange(min=0,max=99,message="Min experience needs be in range of 0 to 99")])
     max_yrs_of_exp = DecimalField("Maximum years of Experience",validators=[NumberRange(min=0,max=99,message="Max experience needs be in range of 0 to 99")])
+    
+    primary_skills = TextAreaField('Primary Skills', validators=[DataRequired('Enter mandatory or good to have skillsets.')])
+    secondary_skills = TextAreaField('Secondary Skills', validators=[DataRequired('Enter mandatory or good to have skillsets.')])
 
-    primary_skills = TextAreaField('Primary Skills')
-    secondary_skills = TextAreaField('Secondary Skills')
 
     ctc_min = DecimalField("CTC Min Range",validators=[NumberRange(min=0,max=10000000)])
     ctc_max = DecimalField("CTC Max Range",validators=[NumberRange(min=0,max=10000000)])
