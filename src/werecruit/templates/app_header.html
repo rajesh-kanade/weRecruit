@@ -45,7 +45,7 @@
 <!-- class="{{theme_bg_color}} has-text-centered {{theme_text_color}} is-family-primary" -->
 
 <body>
-  {% set messages = get_flashed_messages(with_categories = true ) %}
+  {# {% set messages = get_flashed_messages(with_categories = true ) %}
 
   <nav class="navbar {{theme_bg_color}} {{them_text_color}} is-fixed-top" role="navigation"
     aria-label="main navigation">
@@ -112,10 +112,10 @@
           </div>
         </div>
 
-        <!-- </div>
+      </div>
 
 
-      <div class="navbar-end"> -->
+      <div class="navbar-end">
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             <span class="{{theme_text_color}} has-text-weight-bold">{{session.user_name}}</span>
@@ -125,10 +125,10 @@
               <span class="{{theme_text_color}}">Reset Password</span>
             </a>
             <!--
-              <a href ="#"class="navbar-item">
-                <span class ="{{theme_text_color}}">Update Profile</span>
-              </a>
-              -->
+                <a href ="#"class="navbar-item">
+                  <span class ="{{theme_text_color}}">Update Profile</span>
+                </a>
+                -->
             {% if session['role_id'] == 1 %}
             <a href="/user/showManageUsersPage" class="navbar-item">
               <span class="{{theme_text_color}}">Manage users</span>
@@ -145,11 +145,11 @@
         </div>
       </div>
     </div>
-  </nav>
+  </nav> #}
 
   <!-- New chagnes dated 14/04/2022 -->
   {% set messages = get_flashed_messages(with_categories = true ) %}
-  <nav class="navbar is-white has-shadow">
+  <nav class="navbar is-white has-shadow " role="navigation" aria-label="main navigation">
     <div class="container">
       <div class="navbar-brand">
         <a class="navbar-item" href="/showHomePage">
@@ -228,14 +228,22 @@
                 Manage users
               </a>
               {% endif %}
+              <a href="/user/doSignout" class="navbar-item">
+                Sign out
+              </a>
             </div>
           </div>
+          {# <div class="navbar-item">
+            <a href="/user/doSignout" class="button is-danger">
+              Sign out
+            </a>
+          </div> #}
         </div>
       </div>
     </div>
   </nav>
-  <hr class="gn-main">
-  </hr>
+  {# <hr class="gn-main">
+  </hr> #}
 
   {% block content %}
   {% endblock %}
