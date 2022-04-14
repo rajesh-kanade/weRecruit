@@ -9,39 +9,39 @@
         <div class="columns is-centered">
           <div class="column is-half">
             <div class="card">
-                <div class="card-image">
-                  <figure class="image">
-                    <img src="/static/login_green_bg.jpg" alt="">
-                  </figure>
-                </div>
-                <div class="card-content is-overlay has-text-left content">
-                  <div class="has-text-white">
-                     <h2 class="heading has-text-white">Welcome to WeRECRUIT</h2>
-                     <p class="sub-heading">
-                      WeRecruit is on a mission to build world's most sophisticated 
-                      ai driven recruitment stack in collaboration with recruiters 
-                      across the globe.
-                     </p> 
+              <div class="card-image">
+                <figure class="image">
+                  <img src="/static/images/login_green_bg.jpg" alt="">
+                </figure>
+              </div>
+              <div class="card-content is-overlay has-text-left content">
+                <div class="has-text-white">
+                  <h2 class="heading has-text-white">Welcome to WeRECRUIT</h2>
+                  <p class="sub-heading">
+                    WeRecruit is on a mission to build world's most sophisticated
+                    ai driven recruitment stack in collaboration with recruiters
+                    across the globe.
+                  </p>
 
-                  </div>
-                  <div class="has-text-left content">
-                    <p class="label"><a href="/user/showSignupPage"> Create new account</a></p>
-                  </div>  
-               </div>
+                </div>
+                <div class="has-text-left content">
+                  <p class="label"><a href="/user/showSignupPage"> Create new account</a></p>
+                </div>
+              </div>
 
             </div>
           </div>
           <div class="column is-half">
-            
-            {% set messages = get_flashed_messages(with_categories = true ) %}            
-            {% if messages %}    
-              {% for category, message in messages %}  
-                  <div class="notification {{ category }}">{{ message }}</div>
-                {% endfor %}                  
+
+            {% set messages = get_flashed_messages(with_categories = true ) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="notification {{ category }}">{{ message }}</div>
+            {% endfor %}
             {% endif %}
             <div class="container has-text-left">
-              <form action = "/user/doSignin" method="POST">
-                  <!--<img src="{{url_for('static', filename='logo_login.png')}}" alt="Login Logo" > -->
+              <form action="/user/doSignin" method="POST">
+                <!--<img src="{{url_for('static', filename='logo_login.png')}}" alt="Login Logo" > -->
                 <h2 class="heading-login"><b>Login To Your Account</b></h2>
                 <div class="field">
                   <label class="label {{theme_text_color}} has-text-left">{{ form.email.label }}</label>
@@ -62,11 +62,11 @@
                   </div>
                 </div>
                 <div class="columns">
-                  <div class = "column is-half has-text-left">
+                  <div class="column is-half has-text-left">
                     <div class="field">
                       <p class="control">
                         {{ form.submit( class = 'button is-success') }}
-                      </p>      
+                      </p>
                     </div>
                   </div>
                   <!--
@@ -85,4 +85,3 @@
 </section>
 
 {% endblock %}
-

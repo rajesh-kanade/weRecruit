@@ -33,16 +33,19 @@
   <link rel="apple-touch-icon" href="icon.png">
   <!-- Place favicon.ico in the root directory -->
 
-  <link rel="stylesheet" href="/static/normalize.css">
-  <link rel="stylesheet" href="/static/bulma.css">
-  <link rel="stylesheet" href="/static/main.css">
+  <link rel="stylesheet" href="/static/css/normalize.css">
+  <link rel="stylesheet" href="/static/css/bulma.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+  <link rel="stylesheet" href="/static/css/main.css">
 
   <meta name="theme-color" content="#fafafa">
 
 </head>
 
-<body class="{{theme_bg_color}} has-text-centered {{theme_text_color}} is-family-primary">
-  {% set messages = get_flashed_messages(with_categories = true ) %}
+<!-- class="{{theme_bg_color}} has-text-centered {{theme_text_color}} is-family-primary" -->
+
+<body>
+  {# {% set messages = get_flashed_messages(with_categories = true ) %}
 
   <nav class="navbar {{theme_bg_color}} {{them_text_color}} is-fixed-top" role="navigation"
     aria-label="main navigation">
@@ -50,7 +53,7 @@
 
       <a class="navbar-item" href="/showHomePage">
 
-        <img src="{{url_for('static', filename='werecruit_logo.png')}}" alt="weRecruit Logo">
+        <img src="{{url_for('static', filename='images/werecruit_logo.png')}}" alt="weRecruit Logo">
       </a>
 
       <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar">
@@ -109,10 +112,10 @@
           </div>
         </div>
 
-        <!-- </div>
+      </div>
 
 
-      <div class="navbar-end"> -->
+      <div class="navbar-end">
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             <span class="{{theme_text_color}} has-text-weight-bold">{{session.user_name}}</span>
@@ -122,10 +125,10 @@
               <span class="{{theme_text_color}}">Reset Password</span>
             </a>
             <!--
-              <a href ="#"class="navbar-item">
-                <span class ="{{theme_text_color}}">Update Profile</span>
-              </a>
-              -->
+                <a href ="#"class="navbar-item">
+                  <span class ="{{theme_text_color}}">Update Profile</span>
+                </a>
+                -->
             {% if session['role_id'] == 1 %}
             <a href="/user/showManageUsersPage" class="navbar-item">
               <span class="{{theme_text_color}}">Manage users</span>
@@ -142,9 +145,105 @@
         </div>
       </div>
     </div>
+  </nav> #}
+
+  <!-- New chagnes dated 14/04/2022 -->
+  {% set messages = get_flashed_messages(with_categories = true ) %}
+  <nav class="navbar is-white has-shadow " role="navigation" aria-label="main navigation">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="/showHomePage">
+          <img src="{{url_for('static', filename='images/werecruit_logo.png')}}" alt="weRecruit Logo"
+            style="max-height: 70px" class="py-2 px-2">
+        </a>
+        <a class="navbar-burger" id="burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="nav-links">
+        <div class="navbar-end">
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Job Positions
+            </a>
+            <div class="navbar-dropdown">
+              <a href="/jd/showCreatePage" class="navbar-item">
+                New position
+              </a>
+              <a href="/jd/showAllPage" class="navbar-item">
+                Browser
+              </a>
+            </div>
+          </div>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Resumes
+            </a>
+
+            <div class="navbar-dropdown">
+              <a href="/resume/showUploadPage" class="navbar-item">
+                Upload
+              </a>
+              <a href="/resume/showUploadPageViaEmail" class="navbar-item">
+                Upload via email
+              </a>
+              <!-- not in updated job_browser -->
+              <a href="/resume/showBrowser" class="navbar-item">
+                Browser
+              </a>
+            </div>
+          </div>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Reports
+            </a>
+
+            <div class="navbar-dropdown">
+              <a href="/reports/showClientWiseSummary" class="navbar-item">
+                Active job positions summary
+              </a>
+              <a href="/reports/showClientWiseJobApplicationStatusSummary" class="navbar-item">
+                Job applications status summary
+              </a>
+              <a href="/reports/showClientWiseRevenueOpportunitySummary" class="navbar-item">
+                Revenue opportunity summary
+              </a>
+            </div>
+          </div>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              <i class="fa fa-user" aria-hidden="true"></i>
+              <!-- <img src="images/profile.png"> -->
+              <span style="margin-left:10px"> {{session.user_name}}</span>
+            </a>
+
+            <div class="navbar-dropdown">
+              <a href="/user/showResetPassword" class="navbar-item">
+                Reset Password
+              </a>
+              {% if session['role_id'] == 1 %}
+              <a href="/user/showManageUsersPage" class="navbar-item">
+                Manage users
+              </a>
+              {% endif %}
+              <a href="/user/doSignout" class="navbar-item">
+                Sign out
+              </a>
+            </div>
+          </div>
+          {# <div class="navbar-item">
+            <a href="/user/doSignout" class="button is-danger">
+              Sign out
+            </a>
+          </div> #}
+        </div>
+      </div>
+    </div>
   </nav>
-  <hr class="gn-main">
-  </hr>
+  {# <hr class="gn-main">
+  </hr> #}
 
   {% block content %}
   {% endblock %}
