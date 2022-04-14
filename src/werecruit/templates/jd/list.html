@@ -1,6 +1,87 @@
 {%extends "app_header.html" %}
 {%block content%}
-<section class ="container is-fullheight">
+<div class="body-background">
+  <div class="job-position">
+    <div class="container">
+      <section class="section topbar-title">
+        <h1 class="title">Job Browser</h1>
+        <h2 class="subtitle">
+          Browse through existing postings & various steps like shortlisting candidates or
+          updating status of each job
+          posting.
+        </h2>
+        {% include '/utils/show_timed_msg.html'%}
+      </section>
+    </div>
+  </div>
+  <div class="job-position table-height">
+    <div class="container">
+      <section class="application-form">
+        <div class="table-container">
+          <table class="table is-fullwidth">
+            {% for jd in jdList %}
+            {%if loop.first %}
+            <thead>
+              <tr class="header">
+                <th style="color: #8c8c8c;">Client<span style="margin-left: 10px;"><i class="fa fa-arrow-up"></i></span>
+                </th>
+                <th style="color: #8c8c8c;">Status <span style="margin-left: 10px;"><i
+                      class="fa fa-arrow-up"></i></span>
+                </th>
+                <th style="color: #8c8c8c;">Title <span style="margin-left: 10px;"><i class="fa fa-arrow-up"></i></span>
+                </th>
+                <th style="color: #8c8c8c;">Open Date <span style="margin-left: 10px;"><i
+                      class="fa fa-arrow-up"></i></span>
+                </th>
+                <th style="color: #8c8c8c;">Hiring Manager <span style="margin-left: 10px;"><i
+                      class="fa fa-arrow-up"></i></span>
+                </th>
+                <th style="color: #8c8c8c;">Actions</th>
+              </tr>
+            </thead>
+            {% endif %}
+            <tbody>
+              <tr class="table-data">
+                <td>{{jd.client}}}</td>
+                {%if jd.status == 0 %}
+                <td>Open</td>
+                {% endif %}
+                {%if jd.status == 1 %}
+                <td>Draft</td>
+                {% endif %}
+                {%if jd.status == 2 %}
+                <td>Closed</td>
+                {% endif %}
+
+                <td>{{jd.title}}}</td>
+                <td>{{ jd.open_date.strftime("%Y-%b-%d") }}</td>
+                <td></td>
+                <td>
+                  <a href="/jd/showShortlistPage/{{jd.id}}"><abbr title="Shortlist candidates"><i
+                        class="fa fa-thumbs-o-up"></i></abbr></a>
+                  <span style="margin-left: 20px;"><a href="/jd/showWorkPage/{{jd.id}}"><abbr
+                        title="View Shortlisted candidates"><i class="fa fa-search"></i></abbr></a></span>
+                  <span style="margin-left: 20px;"><a href="/jd/showSummaryPage/{{jd.id}}"><abbr
+                        title="View Status Summary"><i class="fa fa-file-text"></i></abbr></a></span>
+                  <span style="margin-left: 20px;"><a href="/jd/showEditPage/{{jd.id}}"><abbr title="Edit"><i
+                          class="fa fa-pencil-square-o"></i></abbr></a></span>
+                  <span style="margin-left: 20px;"><a href="/jd/download/{{jd.id}}"><abbr title="Download Client JD"><i
+                          class="fa fa-download"></i></abbr></a></span>
+                </td>
+              </tr>
+              {% else %}
+              <div class="notification is-warning">
+                No JDs found !!!
+              </div>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+{# <section class ="container is-fullheight">
   <div class = "block has-text-left">
     <span class="title has-text-info">Job Browser</span><br>
     <span class="is-size-7 has-text-info">Browse through existing job postings & take various steps like shortlisting candidates or updating status of each job posting.</span>
@@ -11,66 +92,67 @@
 
     <table class="table">
       <!-- Your table content -->
-      <tbody>
-      {% for jd in jdList %}
-        {%if loop.first %}
-          <thead>
-            <tr class="{{theme_bg_color}}">
-              <th class="has-text-centered {{theme_text_color}}">JOB ID</th>
-              <th class="has-text-centered {{theme_text_color}}">CLIENT</th>
-              <th class="has-text-centered {{theme_text_color}}">STATUS</th>
-              <th class="has-text-centered {{theme_text_color}}">TITLE</th>
-              <th class="has-text-centered {{theme_text_color}}">OPEN DATE</th>
-              <th class="has-text-centered {{theme_text_color}}">HIRING MANAGER</th>
-              <th class="has-text-centered {{theme_text_color}}"></th>
-            </tr>
-          </thead>
-        {%endif %}
-        <tr class="{{theme_bg_color}}">
-          <td class="has-text-centered {{theme_text_color}}">{{ jd.id }}</td>
-          <td class="has-text-centered {{theme_text_color}}">{{ jd.client }}</td>
-          {%if jd.status == 0 %}
-            <td class="has-text-centered {{theme_text_color}}">Open</td>
-          {% endif %}
-          {%if jd.status == 1 %}
-              <td class="has-text-centered {{theme_text_color}}">Draft</td>
-          {% endif %}
-          {%if jd.status == 2 %}
-            <td class="has-text-centered {{theme_text_color}}">Closed</td>
-          {% endif %}  
-          <td class="has-text-centered {{theme_text_color}}">{{ jd.title }}</td>
-          <td class="has-text-centered {{theme_text_color}}">{{ jd.open_date.strftime("%Y-%b-%d") }}</td> 
-          <td class="has-text-centered {{theme_text_color}}">{{ jd.hiring_mgr_name }}</td>
-          <td class="has-text-centered {{theme_text_color}}">
-            <div class="dropdown is-hoverable">
-              <div class="dropdown-trigger">
-                <button class="button {{theme}}" aria-haspopup="true" aria-controls="dropdown-menu">
-                  <span></span>
-                  <span class="icon is-small">
-                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                  </span>
-                </button>
-              </div>
-              <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                <div class="dropdown-content">
-                  <a class="dropdown-item" href="/jd/showShortlistPage/{{jd.id}}">Shortlist candidates</a>
-                  <a class="dropdown-item" href="/jd/showWorkPage/{{jd.id}}">View shortlisted candidates</a>
-                  <a class="dropdown-item" href="/jd/showSummaryPage/{{jd.id}}" >View Status Summary</a>
-                  <a class="dropdown-item" href="/jd/showEditPage/{{jd.id}}" >Edit</a>    
-                  <a class="dropdown-item" href="/jd/download/{{jd.id}}" >Download client JD</a>    
-                </div>
-              </div>    
-          </div> 
-          </td>       
-
-        </tr>
-      {% else %}
-        <div class="notification is-warning">
-          No JDs found !!!
+<tbody>
+  {% for jd in jdList %}
+  {%if loop.first %}
+  <thead>
+    <tr class="{{theme_bg_color}}">
+      <th class="has-text-centered {{theme_text_color}}">JOB ID</th>
+      <th class="has-text-centered {{theme_text_color}}">CLIENT</th>
+      <th class="has-text-centered {{theme_text_color}}">STATUS</th>
+      <th class="has-text-centered {{theme_text_color}}">TITLE</th>
+      <th class="has-text-centered {{theme_text_color}}">OPEN DATE</th>
+      <th class="has-text-centered {{theme_text_color}}">HIRING MANAGER</th>
+      <th class="has-text-centered {{theme_text_color}}"></th>
+    </tr>
+  </thead>
+  {%endif %}
+  <tr class="{{theme_bg_color}}">
+    <td class="has-text-centered {{theme_text_color}}">{{ jd.id }}</td>
+    <td class="has-text-centered {{theme_text_color}}">{{ jd.client }}</td>
+    {%if jd.status == 0 %}
+    <td class="has-text-centered {{theme_text_color}}">Open</td>
+    {% endif %}
+    {%if jd.status == 1 %}
+    <td class="has-text-centered {{theme_text_color}}">Draft</td>
+    {% endif %}
+    {%if jd.status == 2 %}
+    <td class="has-text-centered {{theme_text_color}}">Closed</td>
+    {% endif %}
+    <td class="has-text-centered {{theme_text_color}}">{{ jd.title }}</td>
+    <td class="has-text-centered {{theme_text_color}}"> </td>
+    <td class="has-text-centered {{theme_text_color}}">{{ jd.hiring_mgr_name }}</td>
+    <td class="has-text-centered {{theme_text_color}}">
+      <div class="dropdown is-hoverable">
+        <div class="dropdown-trigger">
+          <button class="button {{theme}}" aria-haspopup="true" aria-controls="dropdown-menu">
+            <span></span>
+            <span class="icon is-small">
+              <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+            </span>
+          </button>
         </div>
-      {% endfor %}
-    </tbody>
-    </table>
+        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+          <div class="dropdown-content">
+            <a class="dropdown-item" href="/jd/showShortlistPage/{{jd.id}}">Shortlist candidates</a>
+            <a class="dropdown-item" href="/jd/showWorkPage/{{jd.id}}">View shortlisted candidates</a>
+            <a class="dropdown-item" href="/jd/showSummaryPage/{{jd.id}}">View Status Summary</a>
+            <a class="dropdown-item" href="/jd/showEditPage/{{jd.id}}">Edit</a>
+            <a class="dropdown-item" href="/jd/download/{{jd.id}}">Download client JD</a>
+          </div>
+        </div>
+      </div>
+    </td>
+
+  </tr>
+  {% else %}
+  <div class="notification is-warning">
+    No JDs found !!!
   </div>
-</section>
+  {% endfor %}
+</tbody>
+</table>
+</div>
+
+</section> #}
 {% endblock %}
