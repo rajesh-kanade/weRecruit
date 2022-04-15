@@ -1,12 +1,12 @@
 {%extends "app_header.html" %}
 {%block content%}
 
-<section class="container is-fullheight job-form">
+<section class="container is-fullheight">
   <div class="block">
     <span class="title has-text-info">Create/Edit a job position</span><br>
     <span class="is-size-7 has-text-info">This section allows you to create or edit a job position.</span>
   </div>
-
+<div class="flexx">
   <div class="columns is-centered">
     <div class="column is-half">
 
@@ -36,12 +36,12 @@
           </div>
         </div>
 
-        <div class="field">
+       <!-- <div class="field">
           <p class="control">
             {{ form.submit( class = 'button is-success is-rounded') }}
 
           </p>
-        </div>
+        </div>-->
 
         <div class="field">
           <label class="label {{theme_text_color}} has-text-left">{{ form.client_jd.label }}</label>
@@ -84,7 +84,7 @@
           </div>
         </div>
 
-        <div class="field">
+        <!-- <div class="field">
           <label class="label {{theme_text_color}} has-text-left">{{ form.total_positions.label }}</label>
           <div class="control">
             {{form.total_positions(class='input', placeholder='Enter total number of positions.')}}
@@ -96,116 +96,208 @@
           <div class="select is-fullwidth">
             {{form.status(class='select', placeholder='Enter status')}}
           </div>
-        </div>
-
-        <!-- <tr class="has-background-light">
-          <td class="has-text-centered has-text-dark"> -->
-
-        <table>
-          <caption class="label {{theme_text_color}} has-text-left has-text-dark">Experience In Years
-          </caption>
-          <tr class="has-background-light ">
-            <td class="has-text-centered has-text-dark">
-              <div class="field">
-                <!-- <label class="label {{theme_text_color}} has-text-left">{{ form.min_yrs_of_exp.label }}</label> -->
-                <label class="has-text-centered {{theme_text_color}} has-text-dark has-text-weight-bold">Min</label>
-                <div class="control">
-                  {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
-                </div>
-              </div>
-            </td>
-            <td class="has-text-centered has-text-dark">
-              <div class="field">
-                <!-- <label class="label {{theme_text_color}} has-text-left">{{ form.max_yrs_of_exp.label }}</label> -->
-                <label class="has-text-centered {{theme_text_color}} has-text-dark has-text-weight-bold">Max</label>
-                <div class="control">
-                  {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
-                </div>
-                {% for error in form.max_yrs_of_exp.errors %}
-                <small class="has-text-danger has-text-left">{{ error }}</small>
-                {% endfor %}
-              </div>
-            </td>
-          </tr>
-        </table>
+        </div> -->
 
 
+        <tr class="">
+          <td class="has-text-left has-text-dark">
 
-
-
-
-        <div class="field">
-          <label class="label {{theme_text_color}} has-text-left">{{ form.primary_skills.label }}</label>
-          <div class="control">
-            {{form.primary_skills(class='textarea', title ="Enter mandatory or must have
-            skillsets.",placeholder='Enter
-            primary skillsets required for the job.')}}
-          </div>
-        </div>
-
-        <div class="field">
-          <label class="label {{theme_text_color}} has-text-left">{{ form.secondary_skills.label }}</label>
-          <div class="control">
-            {{form.secondary_skills(class='textarea', title ="Enter mandatory or good to have
-            skillsets.",placeholder='Enter secondary skillsets required for the job.')}}
-          </div>
-        </div>
-
-        <table class="table is-bordered is-narrow">
-          <caption class="{{theme_text_color}} is-uppercase">about CTC</caption>
-          <tbody>
-            <thead>
-              <tr class="{{theme_bg_color}}">
-                <th class="has-text-centered {{theme_text_color}}">Min</th>
-                <th class="has-text-centered {{theme_text_color}}">Max</th>
-                <th class="has-text-centered {{theme_text_color}}">Currency</th>
+            <table>
+              <caption class="has-text-left{{theme_text_color}}" style="text-align: left; font-weight: bold;">Experience In Years
+              </caption> 
+              <tr class=" ">
+                <td class="has-text-left has-text-dark">
+                  <div class="field">
+                    <!-- <label class="label {{theme_text_color}} has-text-left">{{ form.min_yrs_of_exp.label }}</label> -->
+                    <label class="has-text-left {{theme_text_color}} has-text-dark has-text-weight-bold">{{form.total_positions.label}}</label>
+                    <div class="control">
+                      {{form.total_positions(class='input', placeholder='Enter total number of positions')}}
+                    </div>
+                  </div>
+                </td>
+                <td class="has-text-left has-text-dark">
+                  <div class="field">
+                    <!-- <label class="label {{theme_text_color}} has-text-left">{{ form.max_yrs_of_exp.label }}</label> -->
+                    <label class="has-text-left {{theme_text_color}} has-text-dark has-text-weight-bold">{{ form.status.label }}</label>
+                    <div class="select is-fullwidth">
+                      {{form.status(class='select', placeholder='Enter status')}}
+                    </div>
+                    <!-- {% for error in form.max_yrs_of_exp.errors %}
+                    <small class="has-text-danger has-text-left">{{ error }}</small>
+                    {% endfor %} -->
+                  </div>
+                </td>
               </tr>
-            </thead>
-            <tr class="has-background-light">
-              <td class="has-text-centered has-text-dark">
-                <div class="control">
-                  {{form.ctc_min(class='input', placeholder='Enter minimum CTC')}}
-                </div>
-              </td>
-              <td class="has-text-centered has-text-dark">
-                <div class="control">
-                  {{form.ctc_max(class='input', placeholder='Enter maximum CTC')}}
-                </div>
-              </td>
-              <td class="has-text-centered has-text-dark">
-                <div class="select is-fullwidth">
-                  {{form.ctc_currency(class='select', placeholder='Select currency')}}
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            </table>
 
-        {% include 'jd/team.html'%}
 
-        <div class="field">
-          <label class="label {{theme_text_color}} has-text-left">{{ form.fees_percent.label }}</label>
-          <div class="control">
-            {{form.fees_percent(class='input', placeholder='Enter fees percent being charged for this job
-            position.')}}
-          </div>
-        </div>
-        <div class="field">
-          <label class="label {{theme_text_color}} has-text-left">{{ form.warranty_in_months.label }}</label>
-          <div class="control">
-            {{form.warranty_in_months(class='input', placeholder='Enter warranty in months')}}
-          </div>
-        </div>
 
-        <div class="field">
-          <p class="control">
-            {{ form.submit( class = 'button is-success is-rounded') }}
 
-          </p>
-        </div>
+
+
+
+
+        <tr class="">
+          <td class="has-text-left has-text-dark">
+
+            <table>
+              <caption class="{{theme_text_color}}" style="text-align: center; font-weight: bold;">Experience In Years
+              </caption>
+              <tr class=" ">
+                <td class="has-text-left has-text-dark">
+                  <div class="field">
+                    <!-- <label class="label {{theme_text_color}} has-text-left">{{ form.min_yrs_of_exp.label }}</label> -->
+                    <label class="has-text-left {{theme_text_color}} has-text-dark has-text-weight-bold">Min</label>
+                    <div class="control">
+                      {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
+                    </div>
+                  </div>
+                </td>
+                <td class="has-text-left has-text-dark">
+                  <div class="field">
+                    <!-- <label class="label {{theme_text_color}} has-text-left">{{ form.max_yrs_of_exp.label }}</label> -->
+                    <label class="has-text-left {{theme_text_color}} has-text-dark has-text-weight-bold">Max</label>
+                    <div class="control">
+                      {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
+                    </div>
+                    {% for error in form.max_yrs_of_exp.errors %}
+                    <small class="has-text-danger has-text-left">{{ error }}</small>
+                    {% endfor %}
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+
+
+
+
+
+            <div class="field">
+              <label class="label {{theme_text_color}} has-text-left">{{ form.primary_skills.label }}</label>
+              <div class="control">
+                {{form.primary_skills(class='textarea', title ="Enter mandatory or must have
+                skillsets.",placeholder='Enter
+                primary skillsets required for the job.')}}
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="label {{theme_text_color}} has-text-left">{{ form.secondary_skills.label }}</label>
+              <div class="control">
+                {{form.secondary_skills(class='textarea', title ="Enter mandatory or good to have
+                skillsets.",placeholder='Enter secondary skillsets required for the job.')}}
+              </div>
+            </div>
+
+            <table >
+              <caption class="{{theme_text_color}} is-uppercase">about CTC</caption>
+              <tbody>
+                <thead>
+                  <tr class="{{theme_bg_color}}">
+                    <th class="has-text-left {{theme_text_color}}">Min</th>
+                    <th class="has-text-left {{theme_text_color}}">Max</th>
+                    <th class="has-text-left {{theme_text_color}}">Currency</th>
+                  </tr>
+                </thead>
+                <tr class="">
+                  <td class="has-text-left has-text-dark">
+                    <div class="control">
+                      {{form.ctc_min(class='input', placeholder='Enter minimum CTC')}}
+                    </div>
+                  </td>
+                  <td class="has-text-left has-text-dark">
+                    <div class="control">
+                      {{form.ctc_max(class='input', placeholder='Enter maximum CTC')}}
+                    </div>
+                  </td>
+                  <td class="has-text-left has-text-dark">
+                    <div class="select is-fullwidth">
+                      {{form.ctc_currency(class='select', placeholder='Select currency')}}
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            {% include 'jd/team.html'%}
+
+            <!-- <div class="field">
+              <label class="label {{theme_text_color}} has-text-left">{{ form.fees_percent.label }}</label>
+              <div class="control">
+                {{form.fees_percent(class='input', placeholder='Enter fees percent being charged for this job
+                position.')}}
+              </div>
+            </div>
+            <div class="field">
+              <label class="label {{theme_text_color}} has-text-left">{{ form.warranty_in_months.label }}</label>
+              <div class="control">
+                {{form.warranty_in_months(class='input', placeholder='Enter warranty in months')}}
+              </div>
+            </div> -->
+
+            <table>
+              <!-- <caption class="{{theme_text_color}}" style="text-align: center; font-weight: bold;">Experience In Years
+              </caption> -->
+              <tr class="">
+                <td class="has-text-left has-text-dark">
+                  <div class="field">
+                    <!-- <label class="label {{theme_text_color}} has-text-left">{{ form.min_yrs_of_exp.label }}</label> -->
+                    <label class="has-text-left {{theme_text_color}} has-text-dark has-text-weight-bold">{{form.fees_percent.label}}</label>
+                    <div class="control">
+                      {{form.fees_percent(class='input', placeholder='Enter fees percent being charged for this job
+                      position.')}}</div>
+                  </div>
+                </td>
+                
+                <td class="has-text-left has-text-dark">
+                  <div class="field">
+                    <!-- <label class="label {{theme_text_color}} has-text-left">{{ form.max_yrs_of_exp.label }}</label> -->
+                    <label class="has-text-left {{theme_text_color}} has-text-dark has-text-weight-bold">{{  form.warranty_in_months.label}}</label>
+                    <div class="control">
+                      {{form.warranty_in_months(class='input', placeholder='Enter warranty in months')}}
+                    </div>
+                    <!-- {% for error in form.max_yrs_of_exp.errors %}
+                    <small class="has-text-danger has-text-left">{{ error }}</small>
+                    {% endfor %} -->
+                  </div>
+                </td>
+              </tr>
+            </table>
+            
+
+            <div class="field">
+              <p class="control">
+                {{ form.submit( class = 'button is-success') }}
+
+              </p>
+            </div>
       </form>
     </div>
   </div>
-</section>
 
+<div class="column is-one-third">
+  <div class="job-position"> 
+    <div class="container">
+      <div class="card">
+        <div class="card-content">
+          <div class="content">
+            <label class="label" style="font-size: 18px;">
+              Few guidelines
+            </label>
+            <ul class="list-unstyled">
+              <li>Proper formatting of the text/content of the posting with clear spaces and standard bullets (-) to be used.</li>
+              <li>No short forms/abbreviations to be used in the text.</li>
+              <li>No spelling mistakes in the content.</li>
+              <li>JD should be concise and crisp - to the point.</li>
+              <li>(*) mark is mandatory.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</section>
 {% endblock %}

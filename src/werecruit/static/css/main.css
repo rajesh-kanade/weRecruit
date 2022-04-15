@@ -41,7 +41,23 @@ a.is-link:hover,
   color: rgb(255, 255, 255);
 } */
 
+  table,th,td{
+    
+    padding: 10px;
+  
+  }
+  table{
+    border-spacing:15px ;
+  }
+
+
+.columns.is-centered{
+  margin-left: -30%;
+  padding-top: 10px;
+}
 /*as received from codelan */
+
+
 
 @font-face {
   font-family: 'poppins-medium';
@@ -157,7 +173,13 @@ textarea {
 .select select {
   width: 100%;
 }
-
+/* changes */
+.label{
+  text-align: left;   
+}
+.is-uppercase{
+  text-align: left;
+}
 .input,
 .textarea,
 .select select {
@@ -165,6 +187,7 @@ textarea {
   border-color: #c6c6c6;
   border-radius: 4px;
   color: #363636;
+  width: -webkit-fill-available;
 }
 
 .select.is-black select {
@@ -283,7 +306,8 @@ table thead tr th {
 }
 
 .column .job-position {
-  margin-left: -50px;
+  margin-left: 40%;
+  width: max-content;
 }
 
 @media screen and (min-width: 1024px) {
@@ -317,13 +341,25 @@ table thead tr th {
     width: 75%;
     /*width: auto;*/
   }
-
+  .field:not(:last-child) {
+    width: 120%;
+  }
   .field .half .control input {
     width: 66%;
   }
-
+  .flexx{
+    display: flex;
+  }
+  .title:not(:last-child), .subtitle:not(:last-child){
+    padding-top: 10px;
+    margin-right: 5%;
+  }
+  .card{
+    margin-left: 10%;
+  }
   .field .control input {
-    width: 100%;
+    
+    /* width: 100%; */
   }
 
   .half .control select {
@@ -358,6 +394,7 @@ table thead tr th {
     position: relative;
     border: none;
     box-shadow: none;
+    margin-left: -18%;
   }
 
 
@@ -438,6 +475,8 @@ table thead tr th {
 
   .job-position .container .card .card-content {
     margin-left: 0px;
+    display: flex;
+    margin-top: -10%;
   }
 
   .form-group .field .label {

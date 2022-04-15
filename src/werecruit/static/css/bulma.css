@@ -8953,7 +8953,7 @@ a.has-text-black:hover, a.has-text-black:focus {
 }
 
 .has-text-light {
-  color: whitesmoke !important;
+  color:  !important;
 }
 
 a.has-text-light:hover, a.has-text-light:focus {
@@ -8961,7 +8961,7 @@ a.has-text-light:hover, a.has-text-light:focus {
 }
 
 .has-background-light {
-  background-color: whitesmoke !important;
+  background-color: !important;
 }
 
 .has-text-dark {
@@ -9049,7 +9049,8 @@ a.has-text-link-dark:hover, a.has-text-link-dark:focus {
 }
 
 .has-text-info {
-  color: #3e8ed0 !important;
+  color: #4ccd3d !important;
+
 }
 
 a.has-text-info:hover, a.has-text-info:focus {
