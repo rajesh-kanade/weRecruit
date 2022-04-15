@@ -1,111 +1,244 @@
-<div class="card">
+{# <div class="card">
 
-    <div class="card-content {{theme_bg_color}}">  
-        <div >
-            <table >
-              <caption class="has-text-left{{theme_text_color}} is-uppercase">Interview Panel</caption>
-              <br>
-              <tbody>
-                <br>
-                  <thead>
-                    <tr class="{{theme_bg_color}}">
-                      <!-- <th class="has-one-third {{theme_text_color}}">No.</th> -->
-                      <th class="has-one-third{{theme_text_color}}">Name</th>
-                      <th class="has-one-third {{theme_text_color}}">Email</th>
-                      <th class="has-one-third {{theme_text_color}}">Phone</th>
-                    </tr>
-                  </thead>
-                <tr class="">
-                  <!-- <td class="has-one-third {{theme_text_color}}">1\</td> -->
-                  <td class="has-one-third {{theme_text_color}}"><div class="control">
-                        {{form.intv_panel_name_1(class='input', placeholder='Enter Name')}}
-                        </div>
-                  </td> 
-                  <td class="has-one-third {{theme_text_color}}"><div class="control">
-                    {{form.intv_panel_email_1(class='input', placeholder='Enter email')}}
-                    </div>
-                  </td>
-                  <td class="has-one-third {{theme_text_color}}"><div class="control">
-                    {{form.intv_panel_phone_1(class='input', placeholder='Enter phone')}}
-                    </div>
-                  </td> 
-                </tr>
-                <tr>
-                    <!-- <td class="has-one-third {{theme_text_color}}">2</td> -->
-                    <td class="has-one-third {{theme_text_color}}"><div class="control">
-                          {{form.intv_panel_name_2(class='input', placeholder='Enter Name')}}
-                          </div>
-                    </td> 
-                    <td class="has-one-third {{theme_text_color}}"><div class="control">
-                      {{form.intv_panel_email_2(class='input', placeholder='Enter email')}}
-                      </div>
-                    </td>
-                    <td class="has-one-third {{theme_text_color}}"><div class="control">
-                      {{form.intv_panel_phone_2(class='input', placeholder='Enter phone')}}
-                      </div>
-                    </td> 
-                </tr>
+  <div class="card-content {{theme_bg_color}}">
+    <div>
+      <table>
+        <caption class="has-text-left{{theme_text_color}} is-uppercase">Interview Panel</caption>
+        <br>
+        <tbody>
+          <br>
+          <thead>
+            <tr class="{{theme_bg_color}}">
+              <!-- <th class="has-one-third {{theme_text_color}}">No.</th> -->
+              <th class="has-one-third{{theme_text_color}}">Name</th>
+              <th class="has-one-third {{theme_text_color}}">Email</th>
+              <th class="has-one-third {{theme_text_color}}">Phone</th>
+            </tr>
+          </thead>
+          <tr class="">
+            <!-- <td class="has-one-third {{theme_text_color}}">1\</td> -->
+            <td class="has-one-third {{theme_text_color}}">
+              <div class="control">
+                {{form.intv_panel_name_1(class='input', placeholder='Enter Name')}}
+              </div>
+            </td>
+            <td class="has-one-third {{theme_text_color}}">
+              <div class="control">
+                {{form.intv_panel_email_1(class='input', placeholder='Enter email')}}
+              </div>
+            </td>
+            <td class="has-one-third {{theme_text_color}}">
+              <div class="control">
+                {{form.intv_panel_phone_1(class='input', placeholder='Enter phone')}}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <!-- <td class="has-one-third {{theme_text_color}}">2</td> -->
+            <td class="has-one-third {{theme_text_color}}">
+              <div class="control">
+                {{form.intv_panel_name_2(class='input', placeholder='Enter Name')}}
+              </div>
+            </td>
+            <td class="has-one-third {{theme_text_color}}">
+              <div class="control">
+                {{form.intv_panel_email_2(class='input', placeholder='Enter email')}}
+              </div>
+            </td>
+            <td class="has-one-third {{theme_text_color}}">
+              <div class="control">
+                {{form.intv_panel_phone_2(class='input', placeholder='Enter phone')}}
+              </div>
+            </td>
+          </tr>
 
-            </tbody>
-            </table>
-            <table >
-              <caption class="{{theme_text_color}} is-uppercase">Hiring Manager</caption>
-              <br>
-              <tbody>
-                  <thead>
-                    <tr class="{{theme_bg_color}}">
-                      <!-- <th class="has-one-third {{theme_text_color}}">No.</th> -->
-                      <th class="has-one-third {{theme_text_color}}">Name</th>
-                      <th class="has-one-third {{theme_text_color}}">Email</th>
-                      <th class="has-one-third {{theme_text_color}}">Phone</th>
-                    </tr>
-                  </thead>
-                <tr class="">
-                  <!-- <td class="has-one-third has-text-dark">1</td> -->
-                  <td class="has-one-third has-text-dark"><div class="control">
-                        {{form.hiring_mgr_name(class='input', placeholder='Enter Name')}}
-                        </div>
-                  </td> 
-                  <td class="has-one-third has-text-dark"><div class="control">
-                    {{form.hiring_mgr_email(class='input', placeholder='Enter email')}}
-                    </div>
-                  </td>
-                  <td class="has-one-third has-text-dark"><div class="control">
-                    {{form.hiring_mgr_phone(class='input', placeholder='Enter phone')}}
-                    </div>
-                  </td> 
-                </tr>
-            </tbody>
-            </table>
-            <table >
-              <caption class="{{theme_text_color}} is-uppercase">HR</caption>
-              <tbody>
-                  <thead>
-                    <tr class="{{theme_bg_color}}">
-                      <!-- <th class="has-one-third {{theme_text_color}}">No.</th> -->
-                      <th class="has-one-third {{theme_text_color}}">Name</th>
-                      <th class="has-one-third {{theme_text_color}}">Email</th>
-                      <th class="has-one-third {{theme_text_color}}">Phone</th>
-                    </tr>
-                  </thead>
-                <tr class="">
-                  <!-- <td class="has-one-third has-text-dark">1</td> -->
-                  <td class="has-one-third has-text-dark"><div class="control">
-                        {{form.hr_name(class='input', placeholder='Enter Name')}}
-                        </div>
-                  </td> 
-                  <td class="has-one-third has-text-dark"><div class="control">
-                    {{form.hr_email(class='input', placeholder='Enter email')}}
-                    </div>
-                  </td>
-                  <td class="has-one-third has-text-dark"><div class="control">
-                    {{form.hr_phone(class='input', placeholder='Enter phone')}}
-                    </div>
-                  </td> 
-                </tr>
-            </tbody>
-            </table>
-          </div>  
-  
+        </tbody>
+      </table>
+      <table>
+        <caption class="{{theme_text_color}} is-uppercase">Hiring Manager</caption>
+        <br>
+        <tbody>
+          <thead>
+            <tr class="{{theme_bg_color}}">
+              <!-- <th class="has-one-third {{theme_text_color}}">No.</th> -->
+              <th class="has-one-third {{theme_text_color}}">Name</th>
+              <th class="has-one-third {{theme_text_color}}">Email</th>
+              <th class="has-one-third {{theme_text_color}}">Phone</th>
+            </tr>
+          </thead>
+          <tr class="">
+            <!-- <td class="has-one-third has-text-dark">1</td> -->
+            <td class="has-one-third has-text-dark">
+              <div class="control">
+                {{form.hiring_mgr_name(class='input', placeholder='Enter Name')}}
+              </div>
+            </td>
+            <td class="has-one-third has-text-dark">
+              <div class="control">
+                {{form.hiring_mgr_email(class='input', placeholder='Enter email')}}
+              </div>
+            </td>
+            <td class="has-one-third has-text-dark">
+              <div class="control">
+                {{form.hiring_mgr_phone(class='input', placeholder='Enter phone')}}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table>
+        <caption class="{{theme_text_color}} is-uppercase">HR</caption>
+        <tbody>
+          <thead>
+            <tr class="{{theme_bg_color}}">
+              <!-- <th class="has-one-third {{theme_text_color}}">No.</th> -->
+              <th class="has-one-third {{theme_text_color}}">Name</th>
+              <th class="has-one-third {{theme_text_color}}">Email</th>
+              <th class="has-one-third {{theme_text_color}}">Phone</th>
+            </tr>
+          </thead>
+          <tr class="">
+            <!-- <td class="has-one-third has-text-dark">1</td> -->
+            <td class="has-one-third has-text-dark">
+              <div class="control">
+                {{form.hr_name(class='input', placeholder='Enter Name')}}
+              </div>
+            </td>
+            <td class="has-one-third has-text-dark">
+              <div class="control">
+                {{form.hr_email(class='input', placeholder='Enter email')}}
+              </div>
+            </td>
+            <td class="has-one-third has-text-dark">
+              <div class="control">
+                {{form.hr_phone(class='input', placeholder='Enter phone')}}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
+  </div>
+</div> #}
+
+
+<div class="field">
+  <div class="section-title">
+    <label class="label">Interview Panel</label>
+  </div>
 </div>
+<div class="columns">
+  <div class="column">
+    <div class="field">
+      <label class="label">Name</label>
+      <div class="control">
+        {{form.intv_panel_name_1(class='input', placeholder='Enter Name')}}
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="field">
+      <label class="label">Email</label>
+      <div class="control">
+        {{form.intv_panel_email_1(class='input', placeholder='Enter email')}}
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="field">
+      <label class="label">Phone</label>
+      <div class="control">
+        {{form.intv_panel_phone_1(class='input', placeholder='Enter phone')}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="columns">
+  <div class="column">
+    <div class="field">
+      <div class="control">
+        {{form.intv_panel_name_2(class='input', placeholder='Enter Name')}}
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="field">
+      <div class="control">
+        {{form.intv_panel_email_2(class='input', placeholder='Enter email')}}
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="field">
+      <div class="control">
+        {{form.intv_panel_phone_2(class='input', placeholder='Enter phone')}}
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+<div class="field">
+  <div class="section-title">
+    <label class="label">Hiring Manager</label>
+  </div>
+</div>
+<div class="columns is-three-quarters">
+  <div class="column">
+    <div class="field">
+      <label class="label">Name</label>
+      <div class="control">
+        {{form.hiring_mgr_name(class='input', placeholder='Enter Name')}}
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="field">
+      <label class="label">Email</label>
+      <div class="control">
+        {{form.hiring_mgr_email(class='input', placeholder='Enter email')}}
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="field">
+      <label class="label">Phone</label>
+      <div class="control">
+        {{form.hiring_mgr_phone(class='input', placeholder='Enter phone')}}
+      </div>
+    </div>
+  </div>
+</div>
+<hr>
+<div class="field">
+  <div class="section-title">
+    <label class="label">HR</label>
+  </div>
+</div>
+<div class="columns is-three-quarters">
+  <div class="column">
+    <div class="field">
+      <label class="label">Name</label>
+      <div class="control">
+        {{form.hr_name(class='input', placeholder='Enter Name')}}
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="field">
+      <label class="label">Email</label>
+      <div class="control">
+        {{form.hr_email(class='input', placeholder='Enter email')}}
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="field">
+      <label class="label">Phone</label>
+      <div class="control">
+        {{form.hr_phone(class='input', placeholder='Enter phone')}}
+      </div>
+    </div>
+  </div>
+</div>
+<hr>

@@ -1,77 +1,16 @@
-/* hr.gn-main {
-  background-color: #00d1b2;
-  border: none;
-  display: block;
-  height: 1px;
-  margin: 1.5rem 0;
-}
-
-hr.gn-section {
-  background-color: #00d1b2;
-  border: none;
-  display: block;
-  height: 0.5px;
-  margin: 1.5rem 0;
-}
-
-hr.gn-section1 {
-  background-color: #ffffff;
-  border: none;
-  display: block;
-  height: 0.25px;
-  margin: 1.5rem 0;
-}
-
-.is-wisdom {
-  color: #ffe08a !important;
-}
-
-.is-fullheight {
-  min-height: 100vh;
-}
-
-a.is-link {
-  border-color: transparent;
-  color: #fff;
-}
-
-a.is-link:hover,
-.a.is-link.is-hovered {
-  border-color: transparent;
-  color: rgb(255, 255, 255);
-} */
-
-  table,th,td{
-    
-    padding: 10px;
-  
-  }
-  table{
-    border-spacing:15px ;
-  }
-
-
-.columns.is-centered{
-  margin-left: -30%;
-  padding-top: 10px;
-}
-/*as received from codelan */
-
-
-
 @font-face {
   font-family: 'poppins-medium';
-  src: url(Poppins-Medium.ttf) format("truetype");
+  src: url(fonts/Poppins-Medium.ttf) format("truetype");
 }
 
 @font-face {
   font-family: 'regular';
-  src: url(Poppins-Regular.ttf) format("truetype");
+  src: url(fonts/Poppins-Regular.ttf) format("truetype");
 }
 
 @font-face {
   font-family: 'semi-bold';
-  src: url(Poppins-SemiBold.ttf) format("truetype");
+  src: url(fonts/Poppins-SemiBold.ttf) format("truetype");
 }
 
 body,
@@ -173,13 +112,7 @@ textarea {
 .select select {
   width: 100%;
 }
-/* changes */
-.label{
-  text-align: left;   
-}
-.is-uppercase{
-  text-align: left;
-}
+
 .input,
 .textarea,
 .select select {
@@ -187,7 +120,6 @@ textarea {
   border-color: #c6c6c6;
   border-radius: 4px;
   color: #363636;
-  width: -webkit-fill-available;
 }
 
 .select.is-black select {
@@ -306,8 +238,7 @@ table thead tr th {
 }
 
 .column .job-position {
-  margin-left: 40%;
-  width: max-content;
+  margin-left: -50px;
 }
 
 @media screen and (min-width: 1024px) {
@@ -341,25 +272,13 @@ table thead tr th {
     width: 75%;
     /*width: auto;*/
   }
-  .field:not(:last-child) {
-    width: 120%;
-  }
+
   .field .half .control input {
     width: 66%;
   }
-  .flexx{
-    display: flex;
-  }
-  .title:not(:last-child), .subtitle:not(:last-child){
-    padding-top: 10px;
-    margin-right: 5%;
-  }
-  .card{
-    margin-left: 10%;
-  }
+
   .field .control input {
-    
-    /* width: 100%; */
+    width: 100%;
   }
 
   .half .control select {
@@ -394,7 +313,6 @@ table thead tr th {
     position: relative;
     border: none;
     box-shadow: none;
-    margin-left: -18%;
   }
 
 
@@ -475,8 +393,6 @@ table thead tr th {
 
   .job-position .container .card .card-content {
     margin-left: 0px;
-    display: flex;
-    margin-top: -10%;
   }
 
   .form-group .field .label {

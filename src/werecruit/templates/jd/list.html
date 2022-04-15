@@ -23,7 +23,9 @@
             {%if loop.first %}
             <thead>
               <tr class="header">
-                <th style="color: #8c8c8c;">Client<span style="margin-left: 10px;"><i class="fa fa-arrow-up"></i></span>
+                <th style="color: #8c8c8c;">Client<span style="margin-left: 10px;"><a
+                      href="{{url_for('show_jd_all_page', order_by='client')}}"><i
+                        class="fa fa-arrow-up"></i></a></span>
                 </th>
                 <th style="color: #8c8c8c;">Status <span style="margin-left: 10px;"><i
                       class="fa fa-arrow-up"></i></span>
@@ -42,7 +44,7 @@
             {% endif %}
             <tbody>
               <tr class="table-data">
-                <td>{{jd.client}}}</td>
+                <td>{{jd.client}}</td>
                 {%if jd.status == 0 %}
                 <td>Open</td>
                 {% endif %}
@@ -53,9 +55,9 @@
                 <td>Closed</td>
                 {% endif %}
 
-                <td>{{jd.title}}}</td>
+                <td>{{jd.title}}</td>
                 <td>{{ jd.open_date.strftime("%Y-%b-%d") }}</td>
-                <td></td>
+                <td>{{ jd.hiring_mgr_name }}</td>
                 <td>
                   <a href="/jd/showShortlistPage/{{jd.id}}"><abbr title="Shortlist candidates"><i
                         class="fa fa-thumbs-o-up"></i></abbr></a>
