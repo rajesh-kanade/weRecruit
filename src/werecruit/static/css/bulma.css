@@ -2407,8 +2407,11 @@ div.icon-text {
 }
 
 .notification.is-info {
-  background-color: #3e8ed0;
-  color: #fff;
+  background-color:#ccebc2;
+  color: #121212;
+  font-size:12px;
+  margin-top: -10%;
+    margin-left: 10%;
 }
 
 .notification.is-info.is-light {

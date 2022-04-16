@@ -82,7 +82,7 @@
 
             <div class="field">
               <p class="control">
-                {{ form.submit( class = 'button is-success is-rounded') }}
+                {{ form.submit( class = 'button is-success ') }}
                 <div id ="spinner" class='button is-primary' style="display:none">Saving...</div>
               </p>      
               {% for error in form.submit.errors %}
@@ -92,6 +92,8 @@
             </div>            
           </form>
         </div>
+          {%include'resume/show_resume_upload_via_email_page.html' %}
+        
       </div>
 </section>
 

@@ -206,7 +206,7 @@ hr {
 
 .file {
   font-size: 14px;
-  background-color: whitesmoke;
+  /* background-color: whitesmoke; */
   border: #c6c6c6;
 }
 
@@ -423,4 +423,23 @@ table thead tr th {
   .list-unstyled {
     font-size: 14px;
   }
+}
+
+/* button changes */
+.control .button.is-success{
+  width: max-content;
+}
+
+label{
+  font-size: 15px;
+}
+.column.is-half{
+  margin-right: 20%;
+  margin-top: -1%;
+  margin-left: -10%;
+  
+}
+.block:not(:last-child){
+  margin-left: -10%;
+  margin-top: 3%;
 }
