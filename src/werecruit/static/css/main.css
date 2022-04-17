@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/css2?family=Boogaloo&family=Poppins:wght@100;300;400;500&display=swap');
 @font-face {
   font-family: 'poppins-medium';
   src: url(fonts/Poppins-Medium.ttf) format("truetype");
@@ -20,7 +22,7 @@ h2,
 .navbar-link,
 .form-group .field .section-title .label,
 .header th {
-  font-family: 'poppins-medium', sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .form-group .field .label,
@@ -143,7 +145,13 @@ hr {
 .job-position {
   padding: 1rem 0.5rem;
 }
+.reset-password-container{
+  padding : 2rem;
+}
 
+.password-reset {
+  padding: 1rem 0.5rem;
+}
 .job-position .container .card {
   background-color: #d1efd8;
   color: #4a4a4a;
@@ -153,11 +161,22 @@ hr {
   box-shadow: none;
   margin-top: 19px;
 }
-
+.password-reset .container .card {
+  background-color: #d1efd8;
+  color: #4a4a4a;
+  max-width: 100%;
+  position: relative;
+  border: none;
+  box-shadow: none;
+  margin-top: 19px;
+}
 .job-position .container .card .card-content {
   margin-left: 0px;
 }
 
+.password-reset .container .card .card-content {
+  margin-left: 0px;
+}
 .field .section-title .label {
   font-size: 18px;
   font-style: none;
@@ -238,7 +257,16 @@ table thead tr th {
 }
 
 .column .job-position {
-  margin-left: -50px;
+  
+  padding-right: 40px;
+}
+
+.column .password-reset {
+  margin-left: 0px;
+  
+}
+.has-text-left .btn{
+  outline-color: #fff !important;
 }
 
 @media screen and (min-width: 1024px) {
@@ -269,7 +297,7 @@ table thead tr th {
     flex-grow: 1;
     margin: 0 auto;
     position: relative;
-    width: 75%;
+    width: 75%; 
     /*width: auto;*/
   }
 
@@ -277,9 +305,9 @@ table thead tr th {
     width: 66%;
   }
 
-  .field .control input {
+  /* .field .control input {
     width: 100%;
-  }
+  } */
 
   .half .control select {
     width: 66%;
