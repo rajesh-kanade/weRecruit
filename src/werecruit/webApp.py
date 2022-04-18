@@ -195,16 +195,12 @@ def show_jd_create_page():
 @app.route('/jd/showAllPage', methods=['GET'])
 @login_required
 def show_jd_all_page():
+    orderBy = (request.args['order_by'] if len(request.args) > 0 else None)
     results = jdUtils.list_jds_by_tenant(
-        session.get('tenant_id'))
+        session.get('tenant_id'), orderBy=orderBy)
+    # print(orderBy)
     if (results[0] == jdUtils.RetCodes.success.value):
         jdList = results[2]
-        # code for sorting
-        # if len(request.args):
-        #     sortKey = request.args['order_by']
-        #     if sortKey == 'Client':
-        #         jdList.sort(key=lambda x: x[1], reverse=True)
-        # print(jdList[0])
         for jd in jdList:
             _logger.debug(jd.title)
         return render_template('jd/list.html', jdList=jdList, request=request)

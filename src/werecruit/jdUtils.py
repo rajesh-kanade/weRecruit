@@ -234,22 +234,32 @@ def save_header(id, title, details, client):
         dbUtils.returnToPool(db_con)
 
 
-def list_jds_by_tenant(tenantID, statusFilter=None, limit=1000):
+def list_jds_by_tenant(tenantID, orderBy=None, statusFilter=None, limit=1000):
     try:
         db_con = dbUtils.getConnFromPool()
         cursor = dbUtils.getNamedTupleCursor(db_con)
 
-        query = """SELECT * FROM wr_jds 
-				where is_deleted = False and 
-				recruiter_id in ( select uid from tenant_user_roles where tid = %s)
-				order by id DESC limit %s"""
+        query, params = None, None
+        if orderBy == None:
+            query = """SELECT * FROM wr_jds 
+                    where is_deleted = False and 
+                    recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+                    order by id DESC limit %s"""
+            params = (tenantID, limit)
 
-        params = (tenantID, limit)
+        else:
+            query = """SELECT * FROM wr_jds 
+                    where is_deleted = False and 
+                    recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+                    order by {} DESC, id DESC limit %s""".format(orderBy)
+            params = (tenantID, limit)
+
+        # print(cursor.mogrify(query, params))
         _logger.debug(cursor.mogrify(query, params))
         cursor.execute(query, params)
 
         jdList = cursor.fetchall()
-
+        # print(jdList)
         return(RetCodes.success.value, "JD List successfully fetched from db for tenant ID".format(tenantID), jdList)
 
     except Exception as dbe:
