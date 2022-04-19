@@ -234,31 +234,56 @@ def save_header(id, title, details, client):
         dbUtils.returnToPool(db_con)
 
 
-def list_jds_by_tenant(tenantID, orderBy=None, statusFilter=None, limit=1000):
+def list_jds_by_tenant(tenantID, orderBy=None, order=None, statusFilter=None, limit=1000):
     try:
         db_con = dbUtils.getConnFromPool()
         cursor = dbUtils.getNamedTupleCursor(db_con)
 
         query, params = None, None
-        if orderBy == None:
-            query = """SELECT * FROM wr_jds 
-                    where is_deleted = False and 
-                    recruiter_id in ( select uid from tenant_user_roles where tid = %s)
-                    order by id DESC limit %s"""
-            params = (tenantID, limit)
 
+        if not orderBy:
+            query = """SELECT * FROM wr_jds 
+                        where is_deleted = False and 
+                        recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+                        order by id DESC limit %s"""
+        elif orderBy == 'client':
+            query = """SELECT * FROM wr_jds 
+                        where is_deleted = False and 
+                        recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+                        order by client, id DESC limit %s"""
+
+        elif orderBy == 'status':
+            query = """SELECT * FROM wr_jds 
+                        where is_deleted = False and 
+                        recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+                        order by status, id DESC limit %s"""
+
+        elif orderBy == 'title':
+            query = """SELECT * FROM wr_jds 
+                        where is_deleted = False and 
+                        recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+                        order by title, id DESC limit %s"""
+        elif orderBy == 'open_date':
+            query = """SELECT * FROM wr_jds 
+                        where is_deleted = False and 
+                        recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+                        order by open_date, id DESC limit %s"""
         else:
             query = """SELECT * FROM wr_jds 
-                    where is_deleted = False and 
-                    recruiter_id in ( select uid from tenant_user_roles where tid = %s)
-                    order by {} DESC, id DESC limit %s""".format(orderBy)
-            params = (tenantID, limit)
+                        where is_deleted = False and 
+                        recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+                        order by hiring_mgr_name, id DESC limit %s"""
 
-        # print(cursor.mogrify(query, params))
+        params = (tenantID, limit)
+
         _logger.debug(cursor.mogrify(query, params))
+        # print(cursor.mogrify(query, params))
         cursor.execute(query, params)
 
         jdList = cursor.fetchall()
+
+        if order == 'DESC':
+            jdList = jdList[::-1]
         # print(jdList)
         return(RetCodes.success.value, "JD List successfully fetched from db for tenant ID".format(tenantID), jdList)
 

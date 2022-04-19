@@ -18,73 +18,89 @@
     <div class="container">
       <section class="application-form">
         <div class="table-container">
+
           <table class="table is-fullwidth">
+
             {% for jd in jdList %}
             {%if loop.first %}
             <thead>
               <tr class="header">
                 <th style="color: #8c8c8c;">Client<span style="margin-left: 10px;">
-                    <form id="sort_client" action="/jd/showAllPage" style="display: inline;">
+                    <form id="sort_client" action="/jd/showAllPage" style="display: inline;" onsubmit="onclientSubmit">
                       <input type="hidden" name="order_by" value="client">
-                      <script>
-                        function sortByClient() {
-                          document.getElementById("sort_client").submit();
-                        }
-                      </script>
+                      <input type="hidden" name="order" value="{{toggles.client.orderToggle}}">
+                      <!-- {{toggles}} -->
                       <a href="" onclick="sortByClient()">
-                        <i class="fa fa-arrow-up"></i> </a>
+                        <i class="{{toggles.client.arrowToggle}}"></i></a>
                     </form>
+                    <script>
+                      const onclientSubmit = (e) => {
+                        e.preventDefault();
+
+                      }
+                      const sortByClient = (e) => {
+                        document.getElementById("sort_client").submit();
+                      }
+                    </script>
                   </span>
                 </th>
                 <th style="color: #8c8c8c;">Status <span style="margin-left: 10px;">
                     <form id="sort_status" action="/jd/showAllPage" style="display: inline;">
                       <input type="hidden" name="order_by" value="status">
+                      <input type="hidden" name="order" value="{{toggles.status.orderToggle}}">
+
                       <script>
                         function sortByStatus() {
                           document.getElementById("sort_status").submit();
                         }
                       </script>
                       <a href="" onclick="sortByStatus()">
-                        <i class="fa fa-arrow-up"></i> </a>
+                        <i class="{{toggles.status.arrowToggle}}"></i> </a>
                     </form>
                   </span>
                 </th>
                 <th style="color: #8c8c8c;">Title <span style="margin-left: 10px;">
                     <form id="sort_title" action="/jd/showAllPage" style="display: inline;">
                       <input type="hidden" name="order_by" value="title">
+                      <input type="hidden" name="order" value="{{toggles.title.orderToggle}}">
+
                       <script>
                         function sortByTitle() {
                           document.getElementById("sort_title").submit();
                         }
                       </script>
                       <a href="" onclick="sortByTitle()">
-                        <i class="fa fa-arrow-up"></i> </a>
+                        <i class="{{toggles.title.arrowToggle}}"></i> </a>
                     </form>
                   </span>
                 </th>
                 <th style="color: #8c8c8c;">Open Date <span style="margin-left: 10px;">
                     <form id="sort_open_date" action="/jd/showAllPage" style="display: inline;">
                       <input type="hidden" name="order_by" value="open_date">
+                      <input type="hidden" name="order" value="{{toggles.open_date.orderToggle}}">
+
                       <script>
                         function sortByOpenDate() {
                           document.getElementById("sort_open_date").submit();
                         }
                       </script>
                       <a href="" onclick="sortByOpenDate()">
-                        <i class="fa fa-arrow-up"></i> </a>
+                        <i class="{{toggles.open_date.arrowToggle}}"></i> </a>
                     </form>
                   </span>
                 </th>
                 <th style="color: #8c8c8c;">Hiring Manager <span style="margin-left: 10px;">
                     <form id="sort_hiring_manager" action="/jd/showAllPage" style="display: inline;">
                       <input type="hidden" name="order_by" value="hiring_mgr_name">
+                      <input type="hidden" name="order" value="{{toggles.hiring_mgr_name.orderToggle}}">
+
                       <script>
                         function sortByHRManager() {
                           document.getElementById("sort_hiring_manager").submit();
                         }
                       </script>
                       <a href="" onclick="sortByHRManager()">
-                        <i class="fa fa-arrow-up"></i> </a>
+                        <i class="{{toggles.hiring_mgr_name.arrowToggle}}"></i></a>
                     </form>
                   </span>
                 </th>
@@ -128,9 +144,13 @@
               {% endfor %}
             </tbody>
           </table>
+
         </div>
+
       </section>
     </div>
   </div>
+  <div style="width: min-content; margin-left: auto; margin-right: auto;">{{pagination.links}}</div>
+
 </div>
 {% endblock %}
