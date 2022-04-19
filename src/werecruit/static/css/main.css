@@ -236,14 +236,16 @@ table thead tr th {
 .table-height {
   margin-top: -60px;
 }
-
+/* new changes 18 april*/
 .column .job-position {
-  margin-left: -50px;
+  /* margin-left:auto; */
 }
 
 @media screen and (min-width: 1024px) {
 
-
+.section{
+  margin-left: -5px;
+}
   .job-position .container .section {
     padding: 2rem 0.5rem;
   }
@@ -256,7 +258,7 @@ table thead tr th {
     /*width: auto;*/
   }
 
-
+/* new changes 18 april */
   .container {
     flex-grow: 1;
     margin: 0 auto;
@@ -264,6 +266,10 @@ table thead tr th {
     width: 70%;
     /*width: auto;*/
   }
+  .section .container is-fullheight{
+    margin-left: 15%;
+  }
+
 
   .column .container {
     flex-grow: 1;

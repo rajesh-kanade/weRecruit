@@ -111,7 +111,7 @@
                     <div class="field">
                       <label class="label">{{ form.min_yrs_of_exp.label }}*</label>
                       <div class="control">
-                        <div class="select is-black">
+                        <div class="">
                           {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
                         </div>
                       </div>
@@ -121,7 +121,7 @@
                     <div class="field">
                       <label class="label">{{ form.max_yrs_of_exp.label }}*</label>
                       <div class="control">
-                        <div class="select is-black">
+                        <div class="">
                           {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
                         </div>
                         {% for error in form.max_yrs_of_exp.errors %}
