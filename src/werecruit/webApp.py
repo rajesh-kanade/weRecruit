@@ -224,7 +224,7 @@ def show_jd_all_page():
 
         page = request.args.get(get_page_parameter(), type=int, default=1)
         per_page = request.args.get(
-            get_per_page_parameter(), type=int, default=10)
+            get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
         # page, per_page, offset = get_page_args(page_parameter='page',
         #                                        per_page_parameter='per_page')
         offset = (page - 1) * per_page
