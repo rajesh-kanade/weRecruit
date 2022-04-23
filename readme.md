@@ -1,5 +1,7 @@
 # Dev Notes
 
+Test checkin
+
 from docker machine do `docker exec -it werecruit_prod /bin/bash` to loginto werecruit container.
 
 To figure out all *open connections on pg*, run following sql on db
