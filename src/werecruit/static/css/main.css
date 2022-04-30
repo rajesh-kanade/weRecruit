@@ -469,3 +469,70 @@ label {
 .job-list-row th span form {
   display: inline;
 }
+/* .pagination a :not(new){
+  background-color: #4ccd3d;
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  
+} */
+/* .pagination{
+  display: inline-block;
+  margin-left: -30%;
+}*/
+.pagination .left {
+  padding-left: 10%;
+  display: block;
+  border: 1px;
+  background-color: #fff;
+}
+.pagination .right {
+  padding-left: 10%;
+  display: block;
+ 
+  background-color: #4ccd3d;
+} 
+.pagination {
+  margin-left: 75%;
+  display: block;
+  
+}
+.pagination .number{
+  background-color: #f6f6f6;
+  padding: 0;
+  margin: 0%;
+  
+}
+
+.pagination a {
+  color: black;
+  background-color: #fff;
+  float: left;
+  padding: 6px 12px;
+  text-decoration: none;
+   margin: 0 2%; 
+   border: 2px black;
+}
+
+/* .active-job  {
+  margin-left: 5%;
+  margin-top: 5%;
+} */
+
+/* .active-job-head{
+  margin-left: 5%;
+  margin-top: 5%;
+} */
+
+.button-job .button.is-success{
+  margin-top: 3%;
+  margin-left: -10%;
+}
+
+.notification.is-info{
+    margin-top: 5%;
+    margin-left: -8%;
+    margin-right: 3%;
+    margin-bottom: 2%;
+}

@@ -146,18 +146,36 @@
             </tbody>
           </table>
           <!-- pagination code -->
-          <div style="margin-left: 90%;">
+          <!-- <div style="margin-left: 90%;">
             <ul style="display: flex;">
               <div style="flex-direction: row;">
-                <li style="flex: content;"><a>{{pagination.page}} <span class="sr-only">(current)</span></a></li>
-                <li><a>Of {{pagination.total}} <span class="sr-only">(current)</span></a></li>
-                <li><a class="page-link"
+                <div class="pagination" style="flex: content;"><a>{{pagination.page}} <span class="sr-only">(current)</span></a>
+                <a>of {{pagination.total}} <span class="sr-only">(current)</span></a>
+                <a class="left"
                     href="/jd/showAllPage?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
-                    aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a></li>
-                </li>
-                <li><a class="page-link"
+                    aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+                
+                <a class="right"
                     href="/jd/showAllPage?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
-                    aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a></li>
+                    aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+              </div></div> -->
+
+              <div class="pagination">
+                <a>{{pagination.page}} <span class="sr-only">(current)</span></a>
+                <!-- <a style="display: inline-block; width: auto; background-color: #f6f6f6;">of </a> -->
+                <a class="number">of {{pagination.total}} <span class="sr-only">(current)</span></a>
+                <a class="left"
+                    href="/jd/showAllPage?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+                    aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+                
+                <a class="right"
+                    href="/jd/showAllPage?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
+                    aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+                <!-- <a href="#">1</a>
+                <a href="#">2</a>
+               
+                <a href="#">&laquo;</a>
+                <a href="#">&raquo;</a> -->
               </div>
             </ul>
           </div>
