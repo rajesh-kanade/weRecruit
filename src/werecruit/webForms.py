@@ -102,7 +102,7 @@ class JDForm(FlaskForm):
     #     # str1 = ("('%s','#%s')," % (i['name'],i['name']))
     #         list1.append((i['name'],'#'+i['name']))
     #         return list1 
-    
+    b=[]
     a=[]
     for i in range(1,101):
         a.append(i)
