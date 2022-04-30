@@ -28,7 +28,8 @@
                 <div class="field">
                   <label class="label">{{ form.title.label }}</label>
                   <div class="control">
-                    {{form.title(class='input', title ="Enter short & meaning title for this job posting" , placeholder='Enter Title')}}
+                    {{form.title(class='input', title ="Enter short & meaning title for this job posting" ,
+                    placeholder='Enter Title')}}
                   </div>
                 </div>
                 <div class="field">
@@ -97,14 +98,15 @@
                 <div class="field">
                   <label class="label">{{ form.primary_skills.label }}*</label>
                   <div class="control">
-                    {{form.primary_skills(class='textarea', title ="Enter mandatory or must have skillsets.",placeholder='Enter primary skillsets required for the job.')}}
+                    {{form.primary_skills(class='textarea', title ="Enter mandatory or must have
+                    skillsets.",placeholder='Enter primary skillsets required for the job.')}}
                   </div>
                 </div>
                 <div class="field">
                   <label class="label">{{ form.secondary_skills.label }}*</label>
                   <div class="control">
                     {{form.secondary_skills(class='textarea', title ="Enter mandatory or good to have
-                  skillsets.",placeholder='Enter secondary skillsets required for the job.')}} </div>
+                    skillsets.",placeholder='Enter secondary skillsets required for the job.')}} </div>
                 </div>
                 <div class="columns">
                   <div class="column">
@@ -142,7 +144,7 @@
                     <div class="field">
                       <label class="label">Min</label>
                       <div class="control">
-                        <div class="select is-black">
+                        <div class="control is-black">
                           {{form.ctc_min(class='input', placeholder='Enter minimum CTC')}}
 
                         </div>
@@ -153,7 +155,7 @@
                     <div class="field">
                       <label class="label">Max</label>
                       <div class="control">
-                        <div class="select is-black">
+                        <div class="control is-black">
                           {{form.ctc_max(class='input', placeholder='Enter maximum CTC')}}
 
                         </div>
@@ -178,7 +180,8 @@
                     <div class="field">
                       <label class="label">{{form.fees_percent.label}}</label>
                       <div class="control">
-                        {{form.fees_percent(class='input', placeholder='Enter fees percent being charged for this job position.')}}
+                        {{form.fees_percent(class='input', placeholder='Enter fees percent being charged for this job
+                        position.')}}
                       </div>
                     </div>
                   </div>

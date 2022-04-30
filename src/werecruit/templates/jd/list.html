@@ -7,8 +7,7 @@
         <h1 class="title">Job Browser</h1>
         <h2 class="subtitle">
           Browse through existing postings & various steps like shortlisting candidates or
-          updating status of each job
-          posting.
+          updating status of each job posting.
         </h2>
         {% include '/utils/show_timed_msg.html'%}
       </section>
@@ -23,8 +22,10 @@
 
             {% for jd in jdList %}
             {%if loop.first %}
+
             <thead>
               <tr class="header">
+
                 <th style="color: #8c8c8c;">Client<span style="margin-left: 10px;">
                     <form id="sort_client" action="/jd/showAllPage" style="display: inline;" onsubmit="onclientSubmit">
                       <input type="hidden" name="order_by" value="client">
@@ -144,13 +145,27 @@
               {% endfor %}
             </tbody>
           </table>
+          <!-- pagination code -->
+          <div style="margin-left: 90%;">
+            <ul style="display: flex;">
+              <div style="flex-direction: row;">
+                <li style="flex: content;"><a>{{pagination.page}} <span class="sr-only">(current)</span></a></li>
+                <li><a>Of {{pagination.total}} <span class="sr-only">(current)</span></a></li>
+                <li><a class="page-link"
+                    href="/jd/showAllPage?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+                    aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a></li>
+                </li>
+                <li><a class="page-link"
+                    href="/jd/showAllPage?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
+                    aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a></li>
+              </div>
+            </ul>
+          </div>
 
-        </div>
+
 
       </section>
     </div>
   </div>
-  <div style="width: min-content; margin-left: auto; margin-right: auto;">{{pagination.links}}</div>
-
 </div>
 {% endblock %}

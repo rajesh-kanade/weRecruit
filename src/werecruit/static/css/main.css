@@ -90,8 +90,8 @@ textarea {
   background-color: #4ccd3d;
   border-color: transparent;
   color: #fff;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  /* margin-top: 20px;
+  margin-bottom: 20px; */
 }
 
 .navbar.has-shadow {
@@ -236,16 +236,13 @@ table thead tr th {
 .table-height {
   margin-top: -60px;
 }
-/* new changes 18 april*/
-.column .job-position {
-  /* margin-left:auto; */
-}
 
 @media screen and (min-width: 1024px) {
 
-.section{
-  margin-left: -5px;
-}
+  .section {
+    margin-left: -5px;
+  }
+
   .job-position .container .section {
     padding: 2rem 0.5rem;
   }
@@ -258,7 +255,7 @@ table thead tr th {
     /*width: auto;*/
   }
 
-/* new changes 18 april */
+  /* new changes 18 april */
   .container {
     flex-grow: 1;
     margin: 0 auto;
@@ -266,7 +263,8 @@ table thead tr th {
     width: 70%;
     /*width: auto;*/
   }
-  .section .container is-fullheight{
+
+  .section .container is-fullheight {
     margin-left: 15%;
   }
 
@@ -429,23 +427,45 @@ table thead tr th {
   .list-unstyled {
     font-size: 14px;
   }
+
+  #add-user-button {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+
 }
 
 /* button changes */
-.control .button.is-success{
+.control .button.is-success {
   width: max-content;
 }
 
-label{
+label {
   font-size: 15px;
 }
-.column.is-half{
+
+.column.is-half {
   margin-right: 20%;
   margin-top: -1%;
   margin-left: -10%;
-  
+
 }
-.block:not(:last-child){
+
+.block:not(:last-child) {
   margin-left: -10%;
   margin-top: 3%;
+}
+
+/* job-list refers to the job browser page */
+.jd-list-row th {
+  color: #8c8c8c;
+}
+
+.job-list-row th span {
+  margin-left: 10px;
+}
+
+.job-list-row th span form {
+  display: inline;
 }
