@@ -92,6 +92,7 @@ textarea {
   color: #fff;
   margin-top: 20px;
   margin-bottom: 20px;
+  
 }
 
 .navbar.has-shadow {
@@ -122,7 +123,7 @@ textarea {
   color: #363636;
 }
 
-.select.is-black select {
+.select.is-black select,.select {
   border-color: #c6c6c6;
   font-size: 16px;
 }
@@ -448,4 +449,34 @@ label{
 .block:not(:last-child){
   margin-left: -10%;
   margin-top: 3%;
+}
+ .has-text-info {
+  color: #4ccd3d !important;
+}
+.is-size-7{
+  color: #363636 !important;
+}
+.table .is-striped{
+  width: 70% !important;
+}
+.is-halfwidth{
+  width: 60% !important;
+  text-align: left !important;
+}
+html{
+background-color: #f6f6f6 !important;
+}
+
+/* 27 april */
+.block:not(:last-child){
+  margin-top: 5%;
+}
+
+.notification.is-info{
+  margin-left: 7%;
+  margin-right: 5%;
+  margin-top: 2%;
+}
+.columns.is-centered{
+  margin-bottom: 2%;
 }
