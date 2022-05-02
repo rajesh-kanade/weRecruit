@@ -534,6 +534,7 @@ label {
   margin-left: -10%;
 }
 
+<<<<<<< HEAD
 .notification.is-info {
   margin-top: 5%;
   margin-left: -8%;
@@ -566,4 +567,20 @@ label {
     margin-left: 5rem;
   }
 
+=======
+.notification.is-info{
+    margin-top: 5%;
+    margin-left: -8%;
+    margin-right: 3%;
+    margin-bottom: 2%;
+}
+
+.has-text-info{
+  color: #2b2b2b !important;
+  font-size: 14px !important;
+}
+.title{
+  font-size: 24px !important;
+  color: #4ccd3d !important;
+>>>>>>> d7d363dbbbe68e116e65da6ca6e77796d85cd337
 }
