@@ -254,13 +254,11 @@ def show_jd_all_page():
 
         page = request.args.get(get_page_parameter(), type=int, default=1)
         per_page = request.args.get(
-            # get_per_page_parameter(), type=int, default=constants.PAGE_SIZE
-            get_per_page_parameter(),
-            type=int,
-            default=3,
-        )
+            get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
         offset = (page - 1) * per_page
         total = len(jdList)
+        from math import ceil
+        totalPages = ceil(total/per_page)
 
         def getPages(offset=0, per_page=1):
             return jdList[offset: offset + per_page]
@@ -278,7 +276,7 @@ def show_jd_all_page():
             per_page=1,
             pagination=pagination,
             toggles=toggles,
-        )
+            totalPages=totalPages)
     else:
         flash(results[0] + ":" + results[1], "is-danger")
         return render_template("jd/list.html", jdList=None)
@@ -603,7 +601,8 @@ def resume_save():
 def search_resume():
 
     form = ResumeSearchForm()
-
+    # print('search resume triggered')
+    # print(form.data)
     if not bool(form.ft_search.data):
         # return(RetCodes.missing_ent_attrs_error.value, "Search criteria not specified.".format(tenantID), None)
         return redirect(url_for("show_resume_browser_page"))
@@ -611,9 +610,26 @@ def search_resume():
     (retCode, msg, resumeList) = resumeUtils.search_resumes(
         session.get("tenant_id"), form.ft_search.data
     )
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = request.args.get(
+        get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+
+    offset = (page - 1) * per_page
+    total = len(resumeList)
+    from math import ceil
+    totalPages = ceil(total/per_page)
+
+    def getPages(offset=0, per_page=1):
+        return resumeList[offset: offset + per_page]
+
+    pagination_ResumeList = getPages(offset=offset, per_page=per_page)
+    pagination = Pagination(page=page, per_page=per_page, total=total)
 
     if retCode == resumeUtils.RetCodes.success.value:
-        return render_template("resume/list.html", resumeList=resumeList, form=form)
+        return render_template("resume/list.html", resumeList=resumeList, form=form, page=page,
+                               per_page=1,
+                               pagination=pagination,
+                               totalPages=totalPages)
     else:
         flash(retCode + ":" + msg, "is-danger")
         return render_template("resume/list.html", resumeList=None, form=form)
@@ -675,15 +691,37 @@ def show_resume_browser_page():
     results = resumeUtils.list_resumes_by_tenant(
         session.get("tenant_id"), orderBy=orderBy, order=order
     )
+
     form = ResumeSearchForm()
 
     if results[0] == resumeUtils.RetCodes.success.value:
         _logger.debug("success")
         resumeList = results[2]
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        per_page = request.args.get(
+            get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+
+        offset = (page - 1) * per_page
+        total = len(resumeList)
+        from math import ceil
+        totalPages = ceil(total/per_page)
+
+        def getPages(offset=0, per_page=1):
+            return resumeList[offset: offset + per_page]
+
+        pagination_ResumeList = getPages(offset=offset, per_page=per_page)
+        pagination = Pagination(page=page, per_page=per_page, total=total)
         # for resume in resumeList:
         # 	_logger.debug(resume.name)
         return render_template(
-            "resume/list.html", resumeList=resumeList, form=form, toggles=toggles
+            "resume/list.html",
+            resumeList=pagination_ResumeList,
+            form=form,
+            toggles=toggles,
+            page=page,
+            per_page=1,
+            pagination=pagination,
+            totalPages=totalPages
         )
     else:
         flash(results[0] + ":" + results[1], "is-danger")
@@ -1239,8 +1277,9 @@ def do_forgot_password_task():
         emailSubject = 'Password Reset Successfully'
         emailBody = 'As per your request your password has been reset to new password "WeRecruit2022$", now you can login'
         emailContentType = 'plain'
-        emailUtils.sendMail_async(user[2].email, subject=emailSubject,
-                                  body=emailBody, contentType=emailContentType)
+        # use sync
+        emailUtils.sendMail(user[2].email, subject=emailSubject,
+                            body=emailBody, contentType=emailContentType)
         flash('A new password has been sent to your email successfully')
         return redirect(url_for('show_signin_page'))
 
@@ -1276,12 +1315,34 @@ def show_manage_users_page():
             "orderToggle": "DESC" if order == "ASC" else "ASC",
         },
     }
+
     (retCode, msg, userList) = userUtils.list_users(
         session["tenant_id"], orderBy=orderBy, order=order
     )
     assert retCode == userUtils.RetCodes.success.value, msg
 
-    return render_template("user/manage_users.html", userList=userList, toggles=toggles)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = request.args.get(
+        get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+
+    offset = (page - 1) * per_page
+    total = len(userList)
+    from math import ceil
+    totalPages = ceil(total/per_page)
+
+    def getPages(offset=0, per_page=1):
+        return userList[offset: offset + per_page]
+
+    pagination_UserList = getPages(offset=offset, per_page=per_page)
+    pagination = Pagination(page=page, per_page=per_page, total=total)
+
+    return render_template("user/manage_users.html",
+                           userList=pagination_UserList,
+                           toggles=toggles,
+                           page=page,
+                           per_page=1,
+                           pagination=pagination,
+                           totalPages=totalPages)
 
 
 @app.route("/user/showAddPage", methods=["GET"])

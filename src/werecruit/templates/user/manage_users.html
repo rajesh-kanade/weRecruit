@@ -19,14 +19,17 @@
   <div class="job-position table-height">
     <div class="container">
       <section class="application-form">
-        <div class="table-container">
+        <div class="table-container" id="manageUsersTable">
 
           <table class="table is-fullwidth">
             {% for user in userList %}
             {%if loop.first %}
+
             <thead>
               <tr class="header">
-                <th style="color: #8c8c8c;">Name<span style="margin-left: 10px;">
+                <!-- style="color: #8c8c8c;" -->
+                <!-- style="margin-left: 10px;" -->
+                <th id="users-table-row">Name<span>
                     <form id="sort_name" action="/user/showManageUsersPage" style="display: inline;"
                       onsubmit="onclientSubmit">
                       <input type="hidden" name="order_by" value="name">
@@ -46,7 +49,7 @@
                     </script>
                   </span>
                 </th>
-                <th style="color: #8c8c8c;">Email<span style="margin-left: 10px;">
+                <th id="users-table-row">Email<span>
                     <form id="sort_email" action="/user/showManageUsersPage" style="display: inline;"
                       onsubmit="onEmailSubmit">
                       <input type="hidden" name="order_by" value="email">
@@ -66,7 +69,7 @@
                     </script>
                   </span>
                 </th>
-                <th style="color: #8c8c8c;">Status<span style="margin-left: 10px;">
+                <th id="users-table-row">Status<span>
                     <form id="sort_status" action="/user/showManageUsersPage" style="display: inline;">
                       <input type="hidden" name="order_by" value="status">
                       <input type="hidden" name="order" value="{{toggles.status.orderToggle}}">
@@ -81,7 +84,7 @@
                     </form>
                   </span>
                 </th>
-                <th style="color: #8c8c8c;">Actions</th>
+                <th id="users-table-row">Actions</th>
               </tr>
             </thead>
             {% endif %}
@@ -95,10 +98,10 @@
                 {% else %}
                 <td>Closed</td>
                 {% endif %}
-                <td>
+                <td class="table-actions">
                   <abbr title="Edit"><i class="fa fa-pencil-square-o"></i></abbr></a>
-                  <span style="margin-left: 20px;"><a href=""><abbr title="Delete User"><i class="fa fa-trash"
-                          aria-hidden="true"></i>
+                  <!-- style="margin-left: 20px;" -->
+                  <span><a href=""><abbr title="Delete User"><i class="fa fa-trash" aria-hidden="true"></i>
                       </abbr></a></span>
                 </td>
               </tr>
@@ -111,7 +114,27 @@
           </table>
 
         </div>
+        <div class="pagination">
+          {% if totalPages > 1 %}
+          <a class="number">{{pagination.page}} <span class="sr-only">(current)</span></a>
+          <!-- <a style="display: inline-block; width: auto; background-color: #f6f6f6;">of </a> -->
+          <a class="number">of {{ totalPages}} <span class="sr-only">(current)</span></a>
+          {% if pagination.page > 1 %}
+          <a class="left" href="/resume/showBrowser?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+            aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
 
+          {% else %}
+          <a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+          {% endif %}
+
+          {% if pagination.page < totalPages %} <a class="right"
+            href="/resume/showBrowser?page={{pagination.page + 1}}&per_page={{pagination.per_page}}" aria-label="Next">
+            <span>&raquo;</span><span class="sr-only">Next</span></a>
+            {% else %}
+            <a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+            {% endif %}
+            {% endif %}
+        </div>
       </section>
     </div>
   </div>

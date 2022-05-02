@@ -125,7 +125,7 @@
                 <td>{{jd.title}}</td>
                 <td>{{ jd.open_date.strftime("%Y-%b-%d") }}</td>
                 <td>{{ jd.hiring_mgr_name }}</td>
-                <td>
+                <td class="table-actions">
                   <a href="/jd/showShortlistPage/{{jd.id}}"><abbr title="Shortlist candidates"><i
                         class="fa fa-thumbs-o-up"></i></abbr></a>
                   <span style="margin-left: 20px;"><a href="/jd/showWorkPage/{{jd.id}}"><abbr
@@ -145,40 +145,29 @@
               {% endfor %}
             </tbody>
           </table>
-          <!-- pagination code -->
-          <!-- <div style="margin-left: 90%;">
-            <ul style="display: flex;">
-              <div style="flex-direction: row;">
-                <div class="pagination" style="flex: content;"><a>{{pagination.page}} <span class="sr-only">(current)</span></a>
-                <a>of {{pagination.total}} <span class="sr-only">(current)</span></a>
-                <a class="left"
-                    href="/jd/showAllPage?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
-                    aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
-                
-                <a class="right"
-                    href="/jd/showAllPage?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
-                    aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
-              </div></div> -->
+          <div class="pagination">
+            {% if totalPages > 1 %}
+            <a class="number">{{pagination.page}} <span class="sr-only">(current)</span></a>
+            <!-- <a style="display: inline-block; width: auto; background-color: #f6f6f6;">of </a> -->
+            <a class="number">of {{ totalPages}} <span class="sr-only">(current)</span></a>
+            {% if pagination.page > 1 %}
+            <a class="left" href="/jd/showAllPage?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+              aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
 
-              <div class="pagination">
-                <a>{{pagination.page}} <span class="sr-only">(current)</span></a>
-                <!-- <a style="display: inline-block; width: auto; background-color: #f6f6f6;">of </a> -->
-                <a class="number">of {{pagination.total}} <span class="sr-only">(current)</span></a>
-                <a class="left"
-                    href="/jd/showAllPage?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
-                    aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
-                
-                <a class="right"
-                    href="/jd/showAllPage?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
-                    aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
-                <!-- <a href="#">1</a>
-                <a href="#">2</a>
-               
-                <a href="#">&laquo;</a>
-                <a href="#">&raquo;</a> -->
-              </div>
-            </ul>
+            {% else %}
+            <a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+            {% endif %}
+
+            {% if  pagination.page < totalPages  %}
+            <a class="right" href="/jd/showAllPage?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
+              aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+            {% else %}
+            <a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+            {% endif %}
+            {% endif %}
           </div>
+          </ul>
+        </div>
 
 
 
