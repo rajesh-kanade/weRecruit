@@ -2,115 +2,33 @@
 {%block content%}
 {% set messages = get_flashed_messages(with_categories = true ) %}
 
-<section class = "container is-fullheight has-text-centered">
-    <div class="block"><br></div>
-    
-    <div class="block is-size-3" id ="releases">
-      <div class ="card is-size-6">
-
-        <p class="card-header-title has-background-info">
-          March 14th 2022
-        </p>
-        <div class = "card-content has-text-left">
-          <li>Support for min & max years of experience when creating a job position</li>
-          <li>After editing candidate info redirect it to the webpage that invoked the edit instead of default page.</li>
-        </div>      
-      </div>
-
-      <div class ="card is-size-6">
-
-        <p class="card-header-title has-background-info">
-          March 5th 2022
-        </p>
-        <div class = "card-content has-text-left">
-          <li>Resolved search related defects.</li>
-          <li>Resolved Open date for job position not showing correctly.</li>
-          <li>Several minor UI improvements.</li>
-          <li> Resolved defects related to resume parsing. </li>
-        </div>      
-      </div>
-      
-      <div class ="card is-size-6">
-        <p class="card-header-title has-background-info">
-          Feb 27th 2022 Release
-        </p>
-        <div class = "card-content has-text-left">
-          <li>Full text search on resumes.</li>
-          <li>Better error handling while processing emails with resumes attached.</li>
-        </div>      
-      </div>
-
-      <div class ="card is-size-6">
-
-        <p class="card-header-title has-background-info">
-          Dec 31st 2021 Release
-        </p>
-        <div class = "card-content has-text-left">
-          <li>Candidate resumes stored in database instead of file system.</li>
-          <li>Client JDs stored in database instead of file system.</li>
-          <li>Entire resume parsed and stored as json.</li>
-          <li>Resume parser now runs as a background job.</li>
-          <li>Menu bar stays on top all the time.</li>  
-          <li>Create seperate log files for scheduler and webApp.</li>
-        </div>      
-      </div>
-
-      <div class ="card is-size-6">
-        <p class="card-header-title has-background-info">
-          Dec 26th 2021 Release
-        </p>
-        <div class = "card-content has-text-left">
-          <li>Ability to reset password.</li>
-          <li>Ability for administrator to configure additional users with either Admin or Recruiter role.</li>
-          <li>Ability for administrator to delete,deactivate users.</li>   
-          <li>Entire resume parsed and stored as json.</li>
-          <li>Resume parser now runs as a background job.</li>
-          <li>Menu bar stays on top all the time.</li>  
-          <li>Create seperate log files for scheduler and webApp.</li>
-        </div>      
-      </div>
-
-      <div class ="card is-size-6">
-        <p class="card-header-title has-background-info">
-          Dec 10th 2021 release
-        </p>
-        <div class = "card-content has-text-left">
-            <li>Support for additional fields like location, revenue potential, number of positions when creating new job positions.</li>
-            <li>View revenue summary report.</li>
-            <li>Upgrade cloud infrastructure. Docker based deployment with basic CI/CD.</li>
-
-        </div>      
-      </div>
-
-      <div class ="card is-size-6">
-        <p class="card-header-title has-background-info">
-          Nov 23rd 2021 release
-        </p>
-        <div class = "card-content has-text-left">
-          <li>Upload resumes via email. Extract name, phone,email automatically from resumes attached to email.</li>
-          <li>Email notifications on a job status change.</li>
-          <li>View Job summary ( pipeline ) report.</li>
-          <li>Multiple bug fixes in Sign Up / Sign in process.</li>
-        </div>      
-      </div>
-
-      <div class ="card is-size-6">
-        <p class="card-header-title has-background-info">
-          Nov 9th 2021 release
-        </p>
-        <div class = "card-content has-text-left">
-          <li>Create job positions gathering important information like required skills,interview panel, hiring manager, HR manager</li>
-          <li>Create candidate records capturing candidate contact information along with attaching his resumes in pdf or docx format</li>
-          <li>Shortlist candidates for a job position.</li>
-          <li>View job progress summary for a job position.</li>
-          <li>Ability to Update job status.</li>   
-          <li>View Client summary report.</li>  
-        </div>      
-      </div>
-
+<div class="container-release">
+    <div class="card border-dark mt-6 mb-0 ml-1" style="max-width: 100% ">
+            <p class="pt-6 px-6 ml-4" style="color:#4ccd3d ; font-weight:bold ">Release History</p>
+            
+            <div class="row px-6 py-3 mt-6">
+                    {% for history,description in history.items() %}
+  
+                            <div class="col-sm-6 ">
+                                <div class="card border-dark mb-3" id="scroll" style="max-width: 100%;height:250px;background-color:white">
+                                    <div class="card-header"><i class="fa fa-calendar px-2" style="font-size:30px;color:green"></i><span class="pt-1">{{history}}</span></div>
+                                    <div class="card-body text-dark">
+                                    <p class="card-text" style="width:fit-content">
+                                        <ul>
+                                            <li>{{description.split(".",1)[0]}}</li>
+                                            <li>{{description.split(".",2)[1]}}</li>
+                                            <li>{{description.split(".",2)[2]}}</li> 
+                                             
+                                        </ul>
+                                    </p>
+                                    </div>
+                            
+                                </div>
+                            </div>
+                       
+                    {% endfor %}
+            </div>
     </div>
-    <br>
-    
-</section>
+</div>
 
 {% endblock %}

@@ -29,15 +29,15 @@ class ResetPasswordForm(FlaskForm):
 
     id = HiddenField('ID' )
 
-    email = StringField('Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
-    current_password = PasswordField('Current Password', validators=[DataRequired('Please enter current password.')],id="current_password")
-    new_password = PasswordField('New password', [
+    email = StringField('Email*', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
+    current_password = PasswordField('Current Password*', validators=[DataRequired('Please enter current password.')],id="current_password")
+    new_password = PasswordField('New password*', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')],id="new_password")
-    confirm = PasswordField('Confirm New Password',[
+    confirm = PasswordField('Confirm New Password*',[
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')],id="confirm_password")
-    submit = SubmitField('Save')
+    submit = SubmitField('Change Password')
 
 class UserForm(FlaskForm):
 

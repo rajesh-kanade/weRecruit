@@ -75,8 +75,20 @@ def home():
 
 @app.route('/website/show_release_history')
 def show_release_history_page():
-    return render_template('/website/release_history.html')
 
+    def get_histories():
+        dict = {"March 2th 2022":"Support for min & max years of exp when creating a job position.After editing candidate info redirect it to the webpage that invoked the edit.This should be the new page",
+                "March 40th 2022": "Support for min & max years of exp when creating a job position.New line of second release.This should be new line",
+                "March 14th 2022":"Support for min & max years of exp when creating a job position.", 
+                "March 15th 2022":"Support for min & max years of exp when creating a job position.",
+                "March 13th 2022":"Support for min & max years of exp when creating a job position."
+                }
+        return dict
+
+    return render_template('/website/release_history.html',history=get_histories())
+
+
+    
 
 @app.route('/user/showSigninPage')
 def show_signin_page():
@@ -999,6 +1011,9 @@ def do_reset_password():
         return redirect(url_for('show_reset_password'))
 
     if(validate_password(newPassword)):
+        if((form.new_password.data != form.confirm.data)):
+                flash('New Password and Confirm new password must be same',"is-danger")
+                return redirect(url_for('show_reset_password'))
         if((form.new_password.data == form.confirm.data)):
             (retCode, msg, data) = userUtils.do_reset_password(form.id.data,
                                                             form.email.data, form.current_password.data, form.new_password.data)
@@ -1008,9 +1023,7 @@ def do_reset_password():
                 flash(
                     "Password reset successfully. Please sign-in again with your new password", "is-success")
                 return redirect(url_for("show_signin_page"))
-            elif((form.new_password.data != form.confirm.data)):
-                flash('New Password and Confirm new password must be same',"is-danger")
-                return redirect(url_for('show_reset_password'))
+            
             else:
 				# print("Password Not matched")
 				# flash ("New Password and Confirm Password must be same", "is-danger")
@@ -1020,7 +1033,7 @@ def do_reset_password():
     else:
 		# print("Password Not matched")
 		# flash ("New Password and Confirm Password must be same", "is-danger")
-        flash('Password criteria does not match.\nPassword should contain One upper One lower case',"is-danger")
+        flash('Password criteria does not match.',"is-danger")
         return redirect(url_for('show_reset_password'))
 
 

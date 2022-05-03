@@ -7,7 +7,7 @@
     {% include 'jd/header1.html'%}
     <div class = "block has-text-left">
         <span class="title is-size-4 has-text-info">Candidates status summary page</span><br>
-        <span class="is-size-7 has-text-info">This page shows number of candidates at each stages for a job position</span>
+        <span class="is-size-7 has-text-info" id="ss">This page shows number of candidates at each stages for a job position</span>
     </div>
     
     <div class="block">   
@@ -32,8 +32,32 @@
                 <td class="has-text-centered {{theme_text_color}}">{{ ss.count }}</td>
               </tr>
             {% else %}
-              <div class="notification is-warning">
-                No status summary found for this job. !!!
+              <div class="block has-text-left">
+                <div class="table-container has-text-centered">
+                  <table class="table is-striped">
+                    <tbody>
+                      <thead>
+                        <tr class="{{theme_bg_color}}">
+                          <td class="has-text-left {{theme_text_color}}">Status Description<i class="fa fa-arrow-up"></i></td>
+                          <td class="has-text-left {{theme_text_color}}">Candidate Count<i class="fa fa-arrow-up"></i></td>
+                          
+      
+                      </tr>
+                      <tr class="{{theme_bg_color}}">
+                        
+                        <th class="has-text-left {{theme_text_color}}">Shortlisted</th>
+                        <th class="has-text-left">2</th>
+                      </tr>
+                      <tr class="{{theme_bg_color}}">
+                        
+                        <th class="has-text-left {{theme_text_color}}">Hiring Manager Interview Sceduled</th>
+                        <th class="has-text-left">1</th>
+                      </tr>
+                      </thead>
+                    </tbody>
+                  </table>
+               </div>
+                <!--No status summary found for this job. !!! -->
               </div>
             {% endfor %}
           </tbody>
@@ -41,10 +65,9 @@
         </div>  
     </div>
 
-    <a class="button is-success is-rounded" onclick="window.print();">Print</a>
+    <a class="button is-success is-squared" onclick="window.print();">Print</a>
     <!--<a class="button is-success is-rounded" href="/">Email</a> -->
 
 </section>
 
 {% endblock %}
-

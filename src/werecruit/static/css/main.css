@@ -104,6 +104,69 @@ textarea {
   font-size: 14px;
 }
 
+/* reset password changes*/
+
+.column.is-half.is-centered {
+  padding: inherit;
+  padding-right: 0px;
+  padding-left: 0px;
+  display: flex;
+  flex-direction: column-reverse;
+  
+}
+/* .col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
+  position: relative; 
+  width: 0px;
+  padding-left: 15px;
+  /* padding-right: 15px; */
+  
+.container-release{
+  background-color:rgb(244, 243, 243);
+}
+
+.field .label .control .input{
+  text-align: left !important;
+  padding-left: 0px;
+  
+}
+
+.label:not(:last-child) {
+  margin-bottom: 0px !important;
+}
+
+/* .has-text-white {
+  line-height: 1.3;
+} */
+.reset-form .field .control .input{
+  padding-left: 10px;
+}
+
+.container .row .inputs{
+  width:100%;
+  margin-bottom: 0%;
+}
+.row .reset-columns .sub-title{
+  color: #2b2b2b;
+}
+
+.col, .col-1, .col-10, .col-11, .col-12, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-auto, .col-lg, .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-auto, .col-md, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-auto, .col-sm, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-auto, .col-xl, .col-xl-1, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-auto {
+  position: relative;
+  width: 98vw;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+/*release history changes*/
+.card .card-header .card-body{
+  display: flex;
+  
+  padding-left: 20px;
+}
+.card-body {
+  padding: 2%;
+}
+#scroll {
+  overflow-y: auto !important;
+}
 /*new changes*/
 .form-group .field .control input {
   font-size: 16px;
@@ -146,12 +209,62 @@ hr {
   padding: 1rem 0.5rem;
 }
 .reset-password-container{
-  padding : 2rem;
+  padding : 0rem;
 }
 
 .password-reset {
-  padding: 1rem 0.5rem;
+  padding-top: 50px;
 }
+/*reset password form*/
+
+.reset-columns .field .control .input{
+  position: relative;
+  text-align: left;
+  border: 0;
+  margin-top: 0px;
+  outline: none;
+  padding-left: 10px;
+  
+} 
+#flash-message{
+  position: relative;
+  /* width: -webkit-fit-content;
+  width: -moz-fit-content; */
+  width: fit-content;
+  text-align: left;
+
+  
+}
+.reset-columns .field .control{
+  
+  display: flex;
+  align-items: center;
+  border: 1px solid black ; 
+  border-radius: 3px;
+  width: 100%;
+}
+
+.control .has-icons-left{
+  padding-right: 50px;
+}
+
+.row {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+label{
+  
+  margin-bottom: 0px;
+}
+.reset-columns i {
+  margin: 0 10px;
+  color: #aaa;
+}
+.column .password_criteria{
+  padding-left: 30px;
+}
+
 .job-position .container .card {
   background-color: #d1efd8;
   color: #4a4a4a;
@@ -168,7 +281,7 @@ hr {
   position: relative;
   border: none;
   box-shadow: none;
-  margin-top: 19px;
+  /* margin-top: 19px; */
 }
 .job-position .container .card .card-content {
   margin-left: 0px;
@@ -219,7 +332,7 @@ hr {
   bottom: 0;
   left: 0px;
   right: 0px;
-  border-radius: px;
+  border-radius: 0px;
   background-color: white;
 }
 

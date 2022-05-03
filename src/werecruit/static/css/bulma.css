@@ -3270,28 +3270,6 @@ a.tag:hover {
   text-align: center;
   vertical-align: top;
 }
-/*reset password form*/
-
-.reset-columns .field .control .input{
-  text-align: left;
-  border: 0;
-  outline: none;
-}
-.reset-columns .field .control{
-  
-  display: flex;
-  align-items: center;
-  border: 2px solid #aaa ; 
-  border-radius: 3px;
-}
-
-.reset-columns i {
-  margin: 0 10px;
-  color: #aaa;
-}
-.column .password_criteria{
-  padding-left: 30px;
-}
 
 /* Bulma Form */
 .input, .textarea, .select select {
