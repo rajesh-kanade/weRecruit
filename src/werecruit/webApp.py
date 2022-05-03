@@ -38,6 +38,8 @@ from dotenv import load_dotenv, find_dotenv
 import logging
 from logging.handlers import TimedRotatingFileHandler
 
+from flask_paginate import Pagination, get_page_parameter, get_per_page_parameter
+
 load_dotenv(find_dotenv())
 logging.basicConfig(filename=constants.LOG_FILENAME_WEB, format=constants.LOG_FORMAT,
                     level=int(os.environ.get("LOG_LEVEL", 20)))
@@ -246,19 +248,50 @@ def show_jd_create_page():
 @app.route('/jd/showAllPage', methods=['GET'])
 @login_required
 def show_jd_all_page():
+    orderBy = request.args.get('order_by', None)
+    order = request.args.get('order', None)
+
+    toggles = {'client': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'client' and order == 'ASC') else 'fa fa-arrow-up',
+                          'orderToggle': 'DESC' if order == 'ASC' else 'ASC'},
+               'status': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'status' and order == 'ASC') else 'fa fa-arrow-up',
+                          'orderToggle': 'DESC' if order == 'ASC' else 'ASC'},
+
+               'title': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'title' and order == 'ASC') else 'fa fa-arrow-up',
+                         'orderToggle': 'DESC' if order == 'ASC' else 'ASC'},
+               'open_date': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'open_date' and order == 'ASC') else 'fa fa-arrow-up',
+                             'orderToggle': 'DESC' if order == 'ASC' else 'ASC'},
+               'hiring_mgr_name': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'hiring_mgr_name' and order == 'ASC') else 'fa fa-arrow-up',
+                                   'orderToggle': 'DESC' if order == 'ASC' else 'ASC'}
+               }
+
+    # 1 for up 0 for down
+    # 1 for ASC 0 for DESC
+
     results = jdUtils.list_jds_by_tenant(
-        session.get('tenant_id'))
+        session.get('tenant_id'), orderBy=orderBy, order=order)
+    # print(orderBy)
     if (results[0] == jdUtils.RetCodes.success.value):
         jdList = results[2]
-        # code for sorting
-        # if len(request.args):
-        #     sortKey = request.args['order_by']
-        #     if sortKey == 'Client':
-        #         jdList.sort(key=lambda x: x[1], reverse=True)
-        # print(jdList[0])
+
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        per_page = request.args.get(
+            get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+        # page, per_page, offset = get_page_args(page_parameter='page',
+        #                                        per_page_parameter='per_page')
+        offset = (page - 1) * per_page
+        total = len(jdList)
+
+        def getPages(offset=0, per_page=1):
+            return jdList[offset: offset + per_page]
+        pagination_JDList = getPages(offset=offset, per_page=per_page)
+        # print(offset, per_page, page)
+        pagination = Pagination(page=page, per_page=per_page, total=total,
+                                css_framework='bootstrap4')
+        pagination = Pagination(
+            page=page, per_page=per_page,   total=total, css_framework='bootstrap4')
         for jd in jdList:
             _logger.debug(jd.title)
-        return render_template('jd/list.html', jdList=jdList, request=request)
+        return render_template('jd/list.html', jdList=pagination_JDList, request=request, page=page, per_page=1, pagination=pagination, toggles=toggles)
     else:
         flash(results[0] + ':' + results[1], "is-danger")
         return render_template('jd/list.html', jdList=None)

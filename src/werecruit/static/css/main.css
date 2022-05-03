@@ -338,7 +338,7 @@ label{
 
 .file {
   font-size: 14px;
-  background-color: whitesmoke;
+  /* background-color: whitesmoke; */
   border: #c6c6c6;
 }
 
@@ -368,8 +368,9 @@ table thead tr th {
 .table-height {
   margin-top: -60px;
 }
-
+/* new changes 18 april*/
 .column .job-position {
+<<<<<<< HEAD
   
   padding-right: 40px;
 }
@@ -380,11 +381,16 @@ table thead tr th {
 }
 .has-text-left .btn{
   outline-color: #fff !important;
+=======
+  /* margin-left:auto; */
+>>>>>>> 3532790c27852633764fa6af01a4fe3354f25a6a
 }
 
 @media screen and (min-width: 1024px) {
 
-
+.section{
+  margin-left: -5px;
+}
   .job-position .container .section {
     padding: 2rem 0.5rem;
   }
@@ -397,7 +403,7 @@ table thead tr th {
     /*width: auto;*/
   }
 
-
+/* new changes 18 april */
   .container {
     flex-grow: 1;
     margin: 0 auto;
@@ -405,6 +411,10 @@ table thead tr th {
     width: 70%;
     /*width: auto;*/
   }
+  .section .container is-fullheight{
+    margin-left: 15%;
+  }
+
 
   .column .container {
     flex-grow: 1;
@@ -564,4 +574,23 @@ table thead tr th {
   .list-unstyled {
     font-size: 14px;
   }
+}
+
+/* button changes */
+.control .button.is-success{
+  width: max-content;
+}
+
+label{
+  font-size: 15px;
+}
+.column.is-half{
+  margin-right: 20%;
+  margin-top: -1%;
+  margin-left: -10%;
+  
+}
+.block:not(:last-child){
+  margin-left: -10%;
+  margin-top: 3%;
 }
