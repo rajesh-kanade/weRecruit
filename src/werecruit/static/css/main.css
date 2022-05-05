@@ -543,5 +543,91 @@ label {
 }
 .title{
   font-size: 24px !important;
-  color: #4ccd3d !important;
+  color:#4ccd3d !important;
+}
+
+html{
+  background-color: #f6f6f6;
+}
+/* 
+.info{
+  background-color: #4ccd3d;
+  margin-left: -13%;
+ margin-right: -6%;
+ padding-bottom: 2%;
+ width: 103%;
+}
+.info .block:not(:last-child){
+  margin-left: 3% !important;
+  padding-top: 2%;
+  margin-top: 0% !important;
+} */
+/*  .container {
+  margin-left: 10% !important;
+} */
+/*  
+.is-block{
+  margin-left: -10%;
+ 
+} */
+
+
+.button.is-info {
+  background-color:#fff; 
+  border-color: #222;
+   color:#222;
+   padding-left: 33%;
+   padding-right: 33%;
+}
+
+.has-text-dark{
+  color: #222 !important;
+}
+
+.heading{
+  color: #fff !important;
+}
+
+/* .level-item{
+  display: block;
+  margin-left: 5%;
+}
+.level{
+  justify-content: left;
+  width: 60%;
+} */
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.job-details .title{
+  color: white;
+}
+
+.level .level-item{
+  padding-left: 8vw;
+  color: white;
+  display: block;
+  /* margin-left: 5%; */
+}
+.level .level-item .heading .sub-heading{
+  color: white;
+  
+}
+.container-status {
+  max-width: 50%;
+}
+td {
+  width:0.1%;
+  
+  } 
+
+.jd-details{
+  display: flex;
+  justify-content: flex-start;
+  
 }

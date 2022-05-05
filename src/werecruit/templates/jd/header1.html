@@ -1,37 +1,97 @@
-<div class = "block has-text-left">
-    <span class="title is-size-4 has-text-info">Job Description Details</span>
+{# <div class="info">
+<div style = "background-color: #4ccd3d !important;"class = "block has-text-left">
+    <span style ="color: white !important;" class="title is-size-4 has-text-info">Job Description Details</span>
 </div>
 <nav class="level">
-    <div class="level-item has-text-centered">
-      <div>
+    <!-- <div class="level-item has-text-left">
+       <div>
         <p class="heading">ID</p>
         <p class="{{theme_text_color}}">{{jd.id}}</p>
-      </div>
-    </div>
-    <div class="level-item has-text-centered">
-      <div>
+      </div> 
+    </div> -->
+    <div class="level-item has-text-left">
+      <div style="margin-left: 0% !important;">
         <p class="heading">Title</p>
         <p class="{{theme_text_color}}">{{jd.title}}</p>
       </div>
     </div>
-    <div class="level-item has-text-centered">
-      <div>
+    <div class="level-item has-text-left">
+      <div style="margin-left: 0% !important;">
         <p class="heading">Client</p>
         <p class="{{theme_text_color}}">{{jd.client}}</p>
       </div>
     </div>
-    <div class="level-item has-text-centered">
+    <div class="level-item has-text-left">
         <div>
           <p class="heading">Open Date</p>
-          <p class="{{theme_text_color}}">{{jd.open_date.strftime('%Y-%m-%d %H:%M')}}</p>
+          <p class="{{theme_text_color}}">{{jd.open_date.strftime('%Y-%B-%d ')}}</p>
         </div>
     </div>
-    <div class="level-item has-text-centered">
+    <div class="level-item has-text-left">
         <div>
           <p class="heading">Status</p>
-          <p class="{{theme_text_color}}">{{jd.status}}</p>
+          <p class="{{theme_text_color}}">
+            {% if jd.status == 0 %}
+            Open
+            {% elif jd.status == 1%}
+            Draft
+            {% else %}
+            Close
+            {% endif %}
+          </p>
         </div>
     </div>
   </nav>
-<hr class="gn-section1">
 
+</div> #}
+<!-- <hr class="gn-section1"> -->
+
+
+
+<div class="job-details pt-3 " style="background-color:#4ccd3d ">
+  <div class = "block has-text-left ml-4" style="padding-left:6rem">
+    <span style="color:#fff !important" class="title is-size-3 ">Job Description Details</span>
+  </div>
+</div>
+<div class="jd-details pb-3" style="background-color:#4ccd3d">
+  <nav class="level">
+    <div class="level-item" >
+      <div>
+        <p class="heading is-size-7">Title</p>
+        <p class="sub-head is-size-4">{{jd.title}}</p>
+      </div>
+    </div>
+    <div class="level-item">
+      <div>
+        <p class="heading is-size-7">Client</p>
+        <p class="sub-head is-size-4">{{jd.client}}</p>
+      </div>
+    </div>
+    <div class="level-item">
+        <div>
+          <p class="heading is-size-7">Open Date</p>
+          <p class="sub-head is-size-5">{{jd.open_date.strftime('%Y-%B-%d ')}}</p>
+        </div>
+    </div>
+    <div class="level-item" >
+      {% if jd.status == 0 %}
+        <div>
+          <p class="heading is-size-7">Status</p>
+          <p class="sub-head is-size-4" value="status">Open</p>
+        </div>
+      {% endif %}
+      {% if jd.status == 1 %}
+        <div>
+          <p class="heading is-size-7">Status</p>
+          <p class="sub-head is-size-4" value="status">Draft</p>
+        </div>
+      {% endif %}
+      {% if jd.status == 2 %}
+        <div>
+          <p class="heading is-size-7">Status</p>
+          <p class="sub-head is-size-4" value="status">Closed</p>
+        </div>
+      {% endif %}
+    </div>
+  </nav>
+</div>

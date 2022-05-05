@@ -1,5 +1,5 @@
-{# <div class="block">
-  <table class="table is-striped">
+ <div class="block">
+  <table  style="margin-left:10%"class="table is-fullwidth">
     <tbody>
       {% for resume in resumeList %}
       {%if loop.first %}
@@ -37,82 +37,4 @@
       {% endfor %}
     </tbody>
   </table>
-</div> #}
-
-{# <div class="body-background is-half">
-  <div class="job-position">
-    <div class="container">
-      <section class="section topbar-title">
-        <h1 class="title">Manage Users</h1>
-        <h2 class="subtitle">
-          This section allows tenant administrator to add / delete users to his tenant.
-        </h2>
-        {% include '/utils/show_timed_msg.html'%}
-        <button class="button is-success" id="add-user-button">Add User</button>
-      </section>
-
-
-    </div>
-  </div>
-  <div class="job-position table-height">
-    <div class="container">
-      <section class="application-form">
-        <div class="table-container">
-
-          <table class="table is-fullwidth">
-            {% for user in userList %}
-            {%if loop.first %}
-            <thead>
-              <tr class="header">
-                <th style="color: #8c8c8c;">Client<span style="margin-left: 10px;">
-
-                    <i class="fa fa-arrow-up"></i>
-
-                  </span>
-                </th>
-                <th style="color: #8c8c8c;">Email<span style="margin-left: 10px;">
-
-                    <i class="fa fa-arrow-up"></i>
-
-                  </span>
-                  </span>
-                </th>
-                <th style="color: #8c8c8c;">Status<span style="margin-left: 10px;">
-
-                    <i class="fa fa-arrow-up"></i>
-
-                  </span>
-                </th>
-                <th style="color: #8c8c8c;">Actions</th>
-              </tr>
-            </thead>
-            {% endif %}
-            <tbody>
-              <tr class="table-data">
-                <td>{{user.name}}</td>
-
-                <td>{{user.email}}</td>
-                {% if user.status == 1 %}
-                <td>Active</td>
-                {% else %}
-                <td>Closed</td>
-                {% endif %}
-                <td>
-                  <abbr title="Edit"><i class="fa fa-pencil-square-o"></i></abbr></a>
-                  <span style="margin-left: 20px;"><a href=""><abbr title="Download Client JD"><i
-                          class="fa fa-download"></i></abbr></a></span>
-                </td>
-              </tr>
-              {% else %}
-              <div class="notification is-warning">
-                No JDs found !!!
-              </div>
-              {% endfor %}
-            </tbody>
-          </table>
-
-        </div>
-
-      </section>
-    </div>
-  </div> #}
+</div> 

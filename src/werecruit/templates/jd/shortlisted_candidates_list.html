@@ -1,16 +1,18 @@
 {%extends "app_header.html" %}
 {%block content%}
-
-<section class="container is-fullheight">
+{% include 'jd/header1.html'%}
+<section  style ="margin-left: -1%; padding-right: -20% !important;" class="container is-fullheight">
   {% include '/utils/show_timed_msg.html' %}
 
-    {% include 'jd/header1.html'%}
-    <div class = "block has-text-left">
-        <span class="title is-size-4 has-text-info">Shortlisted resumes</span><br>
+
+    <div  style ="margin-left:10%;"class = "block has-text-left">
+        <span class="title is-size-4 has-text-info">Shortlisted Candidates</span><br>
         <span class="is-size-7 has-text-info">Details of shortlisted applicants for this job. You can update the progress for each applicant periodically.</span>
     </div>
-    <div class = "block has-text-left"> 
+    <!-- <div class="is-block"> -->
+    <div style ="margin-left:10%;" class = "block has-text-left"> 
         <div class="dropdown is-hoverable">
+         
             <div class="dropdown-trigger">
               <button class="button is-info" aria-haspopup="true" aria-controls="dropdown-menu">
                 <span>Filter based on status</span>
@@ -19,6 +21,7 @@
                 </span>
               </button>
             </div>
+            <!--</div> -->
             <div class="dropdown-menu" id="dropdown-menu" role="menu">
               <div class="dropdown-content">
                 <a href="#" class="dropdown-item is-active">
