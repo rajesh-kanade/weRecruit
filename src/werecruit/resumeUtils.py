@@ -463,7 +463,7 @@ def list_application_status_codes():
         cursor.execute(
             query,
         )
-
+        newlist=['Initial Screening']
         appStatusCodesList = cursor.fetchall()
 
         return (

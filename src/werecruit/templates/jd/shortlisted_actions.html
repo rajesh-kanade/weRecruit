@@ -5,8 +5,8 @@
     <p class="control"><a class="button is-info is-small" href="/jd/showJobAppUpdatePage?resume_id={{resume.id}}&job_id={{jd.id}}">Message Candidate</a></p> 
     -->
 
-    <div class = "block has-text-left"> 
-        <div class="dropdown is-hoverable">
+    <div class = "block has-text-center"> 
+        <!-- <div class="dropdown is-hoverable">
             <div class="dropdown-trigger">
               <button class="button {{theme}}" aria-haspopup="true" aria-controls="dropdown-menu">
                 <span></span>
@@ -19,16 +19,21 @@
               <div class="dropdown-content">
                 <a href="/resume/download/{{resume.id}}" class="dropdown-item">
                     View Resume
+                    
                 </a> 
-                <a href="/jd/showJobAppUpdatePage?resume_id={{resume.id}}&job_id={{jd.id}}" class="dropdown-item">
+                <button href="/jd/showJobAppUpdatePage?resume_id={{resume.id}}&job_id={{jd.id}}" class="dropdown-item">
                     Update Status
-                </a>
+                </button>
                 <!--
                 <a href="#" class="dropdown-item">
                     Schedule Interviews
                 </a>
                 -->
+                <a href="/resume/download/{{resume.id}}" ><abbr
+                  title="View Resume"><i class="fa fa-pencil-square-o"></i></abbr></a></span>
+                  <a href="/jd/showJobAppUpdatePage?resume_id={{resume.id}}&job_id={{jd.id}}"><abbr
+                    title="Update Status"><i class="fa fa-search"></i></abbr></a></span>
               </div>
             </div>    
-        </div>
+        </div> 
     </div>

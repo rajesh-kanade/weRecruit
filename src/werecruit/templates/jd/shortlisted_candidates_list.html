@@ -5,7 +5,7 @@
   {% include '/utils/show_timed_msg.html' %}
 
 
-    <div  style ="margin-left:10%;"class = "block has-text-left">
+    {# <div  style ="margin-left:10%;"class = "block has-text-left">
         <span class="title is-size-4 has-text-info">Shortlisted Candidates</span><br>
         <span class="is-size-7 has-text-info">Details of shortlisted applicants for this job. You can update the progress for each applicant periodically.</span>
     </div>
@@ -21,7 +21,7 @@
                 </span>
               </button>
             </div>
-            <!--</div> -->
+          
             <div class="dropdown-menu" id="dropdown-menu" role="menu">
               <div class="dropdown-content">
                 <a href="#" class="dropdown-item is-active">
@@ -30,7 +30,17 @@
                 <hr class="dropdown-divider"> 
                 {% for asc in appStatusCodesList %}
                 <a href="#" class="dropdown-item">
-                  {{asc.description}}
+                  {% if asc.description[0]=="I" %}
+                    Initial_Screening
+                   <div style ="margin-left:10%;" class = "block has-text-left">
+      <select id="parent_select"><option>----</option></select>
+      <select id="child_select"></select>
+    </div> 
+                  
+                  {% else %}
+                   {{asc.description}}
+                  {% endif %}
+                     
                 </a>
               {% else %}
                 <div class="notification is-warning">
@@ -41,7 +51,46 @@
               </div>
             </div>
         </div>    
+    </div> #}
+
+    <div style ="margin-left:10%;" class = "block has-text-left">
+      <select id="parent_select"><option>----</option></select>
+      <select id="child_select"></select>
     </div>
+    
+    <script language="javascript" type="text/javascript">  
+    var mList = {
+      Shortlisted:[],
+      Initial_Screening:['Scheduled', 'Cleared', 'Failed'],
+      Round_1:['Scheduled', 'Rejected', 'Passed', 'No Show'],
+      Round_2:['Scheduled', 'Rejected', 'Passed', 'No Show'],
+      Hiring_Manager:['Scheduled', 'Rejected', 'Passed', 'No Show'],
+      HR:['Scheduled', 'Rejected', 'Passed', 'No Show']
+      
+      //  Chocolates: ['Bournville', 'Snickers', 'Twix', 'Ferrero Rocher', 'Dark Chocolate', 'Milk chocolate', 'White chocolate', 'Gianduja chocolate'],
+      // Vegetables :  ['Broccoli', 'Cabbage', 'Carrot', 'Cauliflower'],
+      // Icecreams :  ['Black Raspberry', 'Frozen pudding', 'Neapolitan', 'Strawberry', 'Vanilla', 'Chokecherry', 'Frozen yogurt', 'Booza', 'Frozen yogurt', 'Ice milk'],
+      // Mobiles :  ['Apple iPhone', 'Samsung Galaxy', 'Realme', 'Huawei', 'OnePlus', 'Asus ROG', 'Xiaomi', 'Vivo']
+    };
+    
+    el_parent = document.getElementById("parent_select");
+    el_child = document.getElementById("child_select");
+    
+    for (key in mList) {
+      el_parent.innerHTML = el_parent.innerHTML + '<option>'+ key +'</option>';
+    }
+    
+    el_parent.addEventListener('change', function populate_child(e){
+      el_child.innerHTML = '';
+      itm = e.target.value;
+      if(itm in mList){
+          for (i = 0; i < mList[itm].length; i++) {
+            el_child.innerHTML = el_child.innerHTML + '<option>'+ mList[itm][i] +'</option>';
+          }
+      }
+    });
+    
+    </script>
 
     {% include '/resume/browser.html'%}
     

@@ -1,5 +1,5 @@
- <div class="block">
-  <table  style="margin-left:10%"class="table is-fullwidth">
+ <div style="padding-left:10%;" class="block">
+  <table  style="overflow-y:scroll ;height: 100px ;"class="table is-fullwidth">
     <tbody>
       {% for resume in resumeList %}
       {%if loop.first %}
@@ -10,7 +10,7 @@
           <th class="has-text-centered {{theme_text_color}}">EMAIL</th>
           <th class="has-text-centered {{theme_text_color}}">PHONE</th>
           <th class="has-text-centered {{theme_text_color}}">STATUS</th>
-          <th class="has-text-centered {{theme_text_color}}"></th>
+          <th class="has-text-centered {{theme_text_color}}">Actions</th>
         </tr>
       </thead>
       {%endif %}
