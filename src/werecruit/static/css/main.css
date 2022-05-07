@@ -469,6 +469,7 @@ label {
 .job-list-row th span form {
   display: inline;
 }
+
 /* .pagination a :not(new){
   background-color: #4ccd3d;
   color: black;
@@ -487,22 +488,25 @@ label {
   border: 1px;
   background-color: #fff;
 }
+
 .pagination .right {
   padding-left: 10%;
   display: block;
- 
+
   background-color: #4ccd3d;
-} 
+}
+
 .pagination {
   margin-left: 75%;
   display: block;
-  
+
 }
-.pagination .number{
+
+.pagination .number {
   background-color: #f6f6f6;
   padding: 0;
   margin: 0%;
-  
+
 }
 
 .pagination a {
@@ -511,8 +515,8 @@ label {
   float: left;
   padding: 6px 12px;
   text-decoration: none;
-   margin: 0 2%; 
-   border: 2px black;
+  margin: 0 2%;
+  border: 2px black;
 }
 
 /* .active-job  {
@@ -525,18 +529,63 @@ label {
   margin-top: 5%;
 } */
 
-.button-job .button.is-success{
+.button-job .button.is-success {
   margin-top: 3%;
   margin-left: -10%;
 }
 
-.notification.is-info{
+.notification.is-info {
+  margin-top: 5%;
+  margin-left: -8%;
+  margin-right: 3%;
+  margin-bottom: 2%;
+}
+
+#users-table-row {
+  color: #8c8c8c;
+}
+
+#users-table-row span {
+  margin-left: 5%;
+}
+
+.table-actions span {
+  margin-left: 15%;
+}
+
+@media only screen and (min-width: 1200px) {
+
+  #resumeListTable,
+  #manageUsersTable {
+    width: 70%;
+  }
+
+  .add-user-section {
+    padding: 3rem 1.5rem;
+    width: 50%;
+    margin-left: 5rem;
+  }
+
+  .notification.is-info {
     margin-top: 5%;
     margin-left: -8%;
     margin-right: 3%;
     margin-bottom: 2%;
+  }
+
+  .has-text-info {
+    color: #2b2b2b !important;
+    font-size: 14px !important;
+  }
+
+  .title {
+    font-size: 24px !important;
+    color: #4ccd3d !important;
+  }
+
 }
 
+<<<<<<< HEAD
 .has-text-info{
   color: #2b2b2b !important;
   font-size: 14px !important;
@@ -630,4 +679,8 @@ td {
   display: flex;
   justify-content: flex-start;
   
+=======
+#expiring_msg {
+  padding: 0% 0% 0% 0%;
+>>>>>>> 13fb1acb6da97442dc443e9d348005f495aa757f
 }
