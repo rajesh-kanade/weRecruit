@@ -1011,6 +1011,28 @@ def do_reset_password():
         return redirect(url_for('show_reset_password'))
 
 
+@app.route('/user/forgotPassword', methods=['POST'])
+def do_forgot_password():
+    email = request.form.get('email')
+    user = userUtils.get_user_by_email(email)
+    if not user[2]:
+        flash(
+            'This email is not registerd with us, try again with a different email', "is-danger")
+        return redirect(url_for('show_signin_page'))
+    else:
+        new_password = 'WeRecruit2022$'
+        userUtils.do_forgot_password(
+            user[2].id, user[2].email, user[2].password, new_password)
+        emailSubject = 'Password Reset Successfully'
+        emailBody = render_template('user/forgot_password.html')
+        emailContentType = 'html'
+        emailUtils.sendMail(user[2].email, subject=emailSubject,
+                            body=emailBody, contentType=emailContentType)
+
+        flash('A new password has been sent to your email successfully', "is-success")
+        return redirect(url_for('show_signin_page'))
+
+
 @app.route('/user/showManageUsersPage', methods=['GET'])
 @login_required
 def show_manage_users_page():
