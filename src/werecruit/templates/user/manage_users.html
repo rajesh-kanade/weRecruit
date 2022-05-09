@@ -1,72 +1,143 @@
 {%extends "/app_header.html" %}
 {%block content%}
 
-<section class="container is-fullheight">
-    <div class = "block has-text-left">
-        <span class="title has-text-info">Manage Users</span><br>
-        <span class="is-size-7 has-text-info">This section allows tenant administrator to add / delete users to his tenant.</span>
-    </div>
-    <div class="block has-text-left">
-        <a class="button is-success is-rounded" href="/user/showAddPage">Add user</a>
-    </div>    
-
-    <div class="block">  
+<div class="body-background is-half">
+  <div class="job-position">
+    <div class="container">
+      <section class="section topbar-title">
+        <h1 class="title">Manage Users</h1>
+        <h2 class="subtitle">
+          This section allows tenant administrator to add / delete users to his tenant.
+        </h2>
         {% include '/utils/show_timed_msg.html'%}
- 
-        <table class="table is-striped">
-          <tbody>
-          {% for user in userList %}
-            {%if loop.first %}
-              <thead>
-                <tr class="{{theme_bg_color}}">
-                  <th class="has-text-centered {{theme_text_color}}">ID</th>
-                  <th class="has-text-centered {{theme_text_color}}">NAME</th>
-                  <th class="has-text-centered {{theme_text_color}}">EMAIL</th>
-                  <th class="has-text-centered {{theme_text_color}}">STATUS</th>  
-                  <th class="has-text-centered {{theme_text_color}}"></th>
-                </tr>
-              </thead>
-            {%endif %}
-            <tr class="{{theme_bg_color}}">
-              <td class="has-text-centered {{theme_text_color}}">{{ user.id }}</td>
-              <td class="has-text-centered {{theme_text_color}}">{{ user.name }}</td>
-              <td class="has-text-centered {{theme_text_color}}">{{ user.email }}</td> 
-              <td class="has-text-centered {{theme_text_color}}">{{ user.status }}</td>
-              <td class="has-text-centered {{theme_text_color}}">
-                <div class = "block has-text-left"> 
-                    <div class="dropdown is-hoverable">
-                        <div class="dropdown-trigger">
-                          <button class="button is-info" aria-haspopup="true" aria-controls="dropdown-menu">
-                            <span>Actions</span>
-                            <span class="icon is-small">
-                              <i class="fas fa-angle-down" aria-hidden="true"></i>
-                            </span>
-                          </button>
-                        </div>
-                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                          <div class="dropdown-content">
-                            <a href="/user/showEditPage/{{user.id}}" class="dropdown-item">
-                                Edit
-                            </a> 
-                            <a href="/user/showDeletePage/{{user.id}}" class="dropdown-item">
-                                Delete
-                            </a>
-                          </div>
-                        </div>    
-                    </div>
-                </div>
-              </td>       
-            </tr>
-          {% else %}
-            <div class="notification is-warning">
-              No users found !!!
-            </div>
-          {% endfor %}
-          </tbody>
-        </table>
+        <a href="/user/showAddPage"><button class="button is-success" id="add-user-button">Add User</button></a>
+      </section>
+
+
     </div>
+  </div>
+  <div class="job-position table-height">
+    <div class="container">
+      <section class="application-form">
+        <div class="table-container" id="manageUsersTable">
 
-</section>
+          <table class="table is-fullwidth">
+            {% for user in userList %}
+            {%if loop.first %}
 
+            <thead>
+              <tr class="header">
+                <th style="color: #8c8c8c;">Name<span style="margin-left: 10px;">
+                    <form id=" sort_name" action="/user/showManageUsersPage" style="display: inline;"
+                      onsubmit="onclientSubmit">
+                      <input type="hidden" name="order_by" value="name">
+                      <input type="hidden" name="order" value="{{toggles.name.orderToggle}}">
+                      <!-- {{toggles}} -->
+                      <a href="" onclick="sortByName()">
+                        <i class="{{toggles.name.arrowToggle}}"></i></a>
+                    </form>
+                    <script>
+                      const onNameSubmit = (e) => {
+                        e.preventDefault();
+
+                      }
+                      const sortByName = (e) => {
+                        document.getElementById("sort_name").submit();
+                      }
+                    </script>
+                  </span>
+                </th>
+                <th style="color: #8c8c8c;">Email<span style="margin-left: 10px;">
+                    <form id=" sort_email" action="/user/showManageUsersPage" style="display: inline;"
+                      onsubmit="onEmailSubmit">
+                      <input type="hidden" name="order_by" value="email">
+                      <input type="hidden" name="order" value="{{toggles.email.orderToggle}}">
+                      <!-- {{toggles}} -->
+                      <a href="" onclick="sortByEmail()">
+                        <i class="{{toggles.email.arrowToggle}}"></i></a>
+                    </form>
+                    <script>
+                      const onEmailSubmit = (e) => {
+                        e.preventDefault();
+
+                      }
+                      const sortByEmail = (e) => {
+                        document.getElementById("sort_email").submit();
+                      }
+                    </script>
+                  </span>
+                </th>
+                <th style="color: #8c8c8c;">Status<span style="margin-left: 10px;">
+                    <form id=" sort_status" action="/user/showManageUsersPage" style="display: inline;">
+                      <input type="hidden" name="order_by" value="status">
+                      <input type="hidden" name="order" value="{{toggles.status.orderToggle}}">
+
+                      <script>
+                        function sortByStatus() {
+                          document.getElementById("sort_status").submit();
+                        }
+                      </script>
+                      <a href="" onclick="sortByStatus()">
+                        <i class="{{toggles.status.arrowToggle}}"></i> </a>
+                    </form>
+                  </span>
+                </th>
+                <th style="color: #8c8c8c;">Actions</th>
+              </tr>
+            </thead>
+            {% endif %}
+            <tbody>
+              <tr class="table-data">
+                <td>{{user.name}}</td>
+
+                <td>{{user.email}}</td>
+                {% if user.status == 1 %}
+                <td>Active</td>
+                {% else %}
+                <td>Closed</td>
+                {% endif %}
+                <td class="table-actions">
+                  <abbr title="Edit"><i class="fa fa-pencil-square-o"></i></abbr></a>
+                  <!-- style="margin-left: 20px;" -->
+                  <span style="margin-left: 10px;"><a href=""><abbr title=" Delete User"><i class="fa fa-trash"
+                          aria-hidden="true"></i>
+                      </abbr></a></span>
+                </td>
+              </tr>
+              {% else %}
+              <div class="notification is-warning">
+                No Users found !!!
+              </div>
+              {% endfor %}
+            </tbody>
+          </table>
+
+        </div>
+        <div class="pagination">
+          {% if totalPages > 1 %}
+          <a class="number">{{pagination.page}} <span class="sr-only">(current)</span></a>
+          <!-- <a style="display: inline-block; width: auto; background-color: #f6f6f6;">of </a> -->
+          <a class="number">of {{ totalPages}} <span class="sr-only">(current)</span></a>
+          {% if pagination.page > 1 %}
+          <a class="left" href="/resume/showBrowser?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+            aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+
+          {% else %}
+          <a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+          {% endif %}
+
+          {% if pagination.page < totalPages %} <a class="right"
+            href="/resume/showBrowser?page={{pagination.page + 1}}&per_page={{pagination.per_page}}" aria-label="Next">
+            <span>&raquo;</span><span class="sr-only">Next</span></a>
+            {% else %}
+            <a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+            {% endif %}
+            {% endif %}
+        </div>
+      </section>
+    </div>
+  </div>
+
+
+</div>
 {% endblock %}
-
