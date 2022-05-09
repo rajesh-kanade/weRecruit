@@ -457,6 +457,9 @@ table thead tr th {
     width: auto;
     /*width: auto;*/
   }
+  /* .button.is-success{
+    padding-left: 5px;
+  } */
 
 /* new changes 18 april */
   .container {
@@ -569,6 +572,7 @@ table thead tr th {
   }
 
   .is-right {
+    padding-top: 1vw;
     margin-top: 25px;
     font-size: 14px;
   }
@@ -640,7 +644,7 @@ table thead tr th {
 label{
   font-size: 15px;
 }
-.column.is-half{
+.column{
   margin-right: 20%;
   margin-top: -1%;
   margin-left: -10%;
@@ -655,12 +659,23 @@ label{
 /* .has-background-grey-lighter{
   margin-top: 4rem !important;
 } */
+p.control {
+  padding-left: 2rem;
+}
+
 @media screen and (max-width: 768px) {
 
   .column.is-half{
     margin-right: 1px;
     margin-left: 1px;
     
+  }
+  
+  p.control {
+    padding-left: 1rem;
+  }
+  a{
+    padding-left: 1rem;
   }
   .column.is-half {
     
@@ -685,11 +700,20 @@ label{
   .content p{
     font-size: 0.8rem;
   }
+  /* .content-btn {
+  padding-top: 6.7vw;
+} */
   .column{
     padding: 0rem;
   }
+  .content-btn {
+    padding-top: 10%;
+  }
+  
   .card-content{
     padding-left: 1px;
+    padding-top: 1px;
+    padding: 0px;
     font-size: xx-large;
   }
   
@@ -702,5 +726,5 @@ label{
   margin-left: 3rem;
 }
 .content-btn {
-  padding-top: 6.7vw;
+  padding-top: 25%;
 }
