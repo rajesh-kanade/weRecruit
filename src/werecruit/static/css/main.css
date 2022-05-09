@@ -90,8 +90,8 @@ textarea {
   background-color: #4ccd3d;
   border-color: transparent;
   color: #fff;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  /* margin-top: 20px;
+  margin-bottom: 20px; */
 }
 
 .navbar.has-shadow {
