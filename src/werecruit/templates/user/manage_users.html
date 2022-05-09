@@ -28,7 +28,7 @@
             <thead>
               <tr class="header">
                 <th style="color: #8c8c8c;">Name<span style="margin-left: 10px;">
-                    <form id=" sort_name" action="/user/showManageUsersPage" style="display: inline;"
+                    <form id="sort_name" action="/user/showManageUsersPage" style="display: inline;"
                       onsubmit="onclientSubmit">
                       <input type="hidden" name="order_by" value="name">
                       <input type="hidden" name="order" value="{{toggles.name.orderToggle}}">
@@ -37,10 +37,6 @@
                         <i class="{{toggles.name.arrowToggle}}"></i></a>
                     </form>
                     <script>
-                      const onNameSubmit = (e) => {
-                        e.preventDefault();
-
-                      }
                       const sortByName = (e) => {
                         document.getElementById("sort_name").submit();
                       }
@@ -48,7 +44,7 @@
                   </span>
                 </th>
                 <th style="color: #8c8c8c;">Email<span style="margin-left: 10px;">
-                    <form id=" sort_email" action="/user/showManageUsersPage" style="display: inline;"
+                    <form id="sort_email" action="/user/showManageUsersPage" style="display: inline;"
                       onsubmit="onEmailSubmit">
                       <input type="hidden" name="order_by" value="email">
                       <input type="hidden" name="order" value="{{toggles.email.orderToggle}}">
@@ -57,10 +53,6 @@
                         <i class="{{toggles.email.arrowToggle}}"></i></a>
                     </form>
                     <script>
-                      const onEmailSubmit = (e) => {
-                        e.preventDefault();
-
-                      }
                       const sortByEmail = (e) => {
                         document.getElementById("sort_email").submit();
                       }
@@ -68,10 +60,9 @@
                   </span>
                 </th>
                 <th style="color: #8c8c8c;">Status<span style="margin-left: 10px;">
-                    <form id=" sort_status" action="/user/showManageUsersPage" style="display: inline;">
+                    <form id="sort_status" action="/user/showManageUsersPage" style="display: inline;">
                       <input type="hidden" name="order_by" value="status">
                       <input type="hidden" name="order" value="{{toggles.status.orderToggle}}">
-
                       <script>
                         function sortByStatus() {
                           document.getElementById("sort_status").submit();
@@ -89,7 +80,6 @@
             <tbody>
               <tr class="table-data">
                 <td>{{user.name}}</td>
-
                 <td>{{user.email}}</td>
                 {% if user.status == 1 %}
                 <td>Active</td>
