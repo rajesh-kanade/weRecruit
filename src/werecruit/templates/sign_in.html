@@ -16,7 +16,7 @@
               </div>
               <div class="card-content is-overlay has-text-left content">
                 <div class="has-text-white">
-                  <h2 class="heading has-text-white">Welcome to WeRECRUIT</h2>
+                  <h2 class="heading has-text-white ml-6">Welcome to WeRECRUIT</h2>
                   <p class="sub-heading">
                     WeRecruit is on a mission to build world's most sophisticated
                     ai driven recruitment stack in collaboration with recruiters
@@ -24,8 +24,8 @@
                   </p>
 
                 </div>
-                <div class="has-text-left content" style="padding-top:40px">
-                  <button type="button" class="btn btn-outline-light" onclick="window.location.href='/user/showSignupPage'" >Create new account</a></button>
+                <div class="has-text-left content-btn" >
+                  <button type="button" class="btn btn-outline-light ml-6" onclick="window.location.href='/user/showSignupPage'" >Create new account</a></button>
                   
                 </div>
               </div>
@@ -42,7 +42,7 @@
             {% endif %}
             <div class="container has-text-left">
               <form action="/user/doSignin" method="POST">
-                <img src="{{url_for('static', filename='images/werecruit_logo.png')}}" alt="Login Logo" > 
+                <img src="{{url_for('static', filename='images/werecruit_logo.png')}}" alt="Login Logo"> 
                 <h2 class="heading-login"><b>Login To Your Account</b></h2>
                 <div class="field">
                   <label class="label {{theme_text_color}} has-text-left">{{ form.email.label }}</label>
@@ -62,7 +62,7 @@
                     </span>
                   </div>
                 </div>
-                <div class="columns">
+                <div class="columns ml-4 ">
                   <div class="column is-half has-text-left">
                     <div class="field">
                       <p class="control">
@@ -71,7 +71,7 @@
                     </div>
                   </div>
                   
-                  <div class = "column is-half is-right">
+                  <div class = "column is-half is-right mt-4">
                       <p><a href="#">Forgot Password?</a></p>
                   </div>
                  

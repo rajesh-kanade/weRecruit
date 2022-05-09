@@ -1,32 +1,47 @@
-<div class = "block has-text-left">
-  <span class="title is-size-4 has-text-info">Job Description Details</span>
+<div class="job-details pt-5 ">
+  <div class = "block-title has-text-left ml-4">
+    <span class="title is-size-3 ">Job Description Details</span>
+  </div>
 </div>
-
-<nav class="level">
-  <div class="level-item has-text-centered">
-    <div>
-      <p class="heading">Title</p>
-      <p class="{{theme_text_color}}">{{jd.title}}</p>
-    </div>
-  </div>
-  <div class="level-item has-text-centered">
-    <div>
-      <p class="heading">Client</p>
-      <p class="{{theme_text_color}}">{{jd.client}}</p>
-    </div>
-  </div>
-  <div class="level-item has-text-centered">
+<div class="jd-details pb-3" style="background-color:#4ccd3d">
+  <nav class="level">
+    <div class="level-item" >
       <div>
-        <p class="heading">Open Date</p>
-        <p class="{{theme_text_color}}">{{jd.open_date.strftime('%Y-%m-%d %H:%M')}}</p>
+        <p class="heading is-size-7">Title</p>
+        <p class="sub-head is-size-4">{{jd.title}}</p>
       </div>
-  </div>
-  <div class="level-item has-text-centered">
+    </div>
+    <div class="level-item">
       <div>
-        <p class="heading">Status</p>
-        <p class="{{theme_text_color}}">{{jd.status}}</p>
+        <p class="heading is-size-7">Client</p>
+        <p class="sub-head is-size-4">{{jd.client}}</p>
       </div>
-  </div>
-</nav>
-
-<hr class="gn-section1">
+    </div>
+    <div class="level-item">
+        <div>
+          <p class="heading is-size-7">Open Date</p>
+          <p class="sub-head is-size-5">{{jd.open_date.strftime('%Y-%B-%d ')}}</p>
+        </div>
+    </div>
+    <div class="level-item" >
+      {% if jd.status == 0 %}
+        <div>
+          <p class="heading is-size-7">Status</p>
+          <p class="sub-head is-size-4" value="status">Open</p>
+        </div>
+      {% endif %}
+      {% if jd.status == 1 %}
+        <div>
+          <p class="heading is-size-7">Status</p>
+          <p class="sub-head is-size-4" value="status">Draft</p>
+        </div>
+      {% endif %}
+      {% if jd.status == 2 %}
+        <div>
+          <p class="heading is-size-7">Status</p>
+          <p class="sub-head is-size-4" value="status">Closed</p>
+        </div>
+      {% endif %}
+    </div>
+  </nav>
+</div>

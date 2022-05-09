@@ -1,73 +1,70 @@
+<div  class="status-div">  
 {%extends "app_header.html" %}
 {%block content%}
 
-<section class="container is-fullheight">
-
-    {% include 'utils/show_modal_msg.html'%}
-    {% include 'jd/header1.html'%}
-    <div class = "block has-text-left">
-        <span class="title is-size-4 has-text-info">Candidates status summary page</span><br>
-        <span class="is-size-7 has-text-info" id="ss">This page shows number of candidates at each stages for a job position</span>
-    </div>
-    
-    <div class="block">   
-        <div class="table-container has-text-centered">
-          <table class="table is-striped">
-            <tbody>
-            {% for ss in statusSummary %}
-              {%if loop.first %}
-
-                <thead>
-                  <tr class="{{theme_bg_color}}">
-                    <th class="has-text-centered {{theme_text_color}}">STATUS CODE</th>
-                    <th class="has-text-centered {{theme_text_color}}">STATUS DESCRIPTION</th>
-                    <th class="has-text-centered {{theme_text_color}}">CANDIDATES COUNT</th>
-
-                </tr>
-                </thead>
-              {%endif %}
-              <tr class="{{theme_bg_color}}">
-                <td class="has-text-centered {{theme_text_color}}">{{ ss.status }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ ss.description }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ ss.count }}</td>
-              </tr>
-            {% else %}
-              <div class="block has-text-left">
-                <div class="table-container has-text-centered">
-                  <table class="table is-striped">
-                    <tbody>
-                      <thead>
-                        <tr class="{{theme_bg_color}}">
-                          <td class="has-text-left {{theme_text_color}}">Status Description<i class="fa fa-arrow-up"></i></td>
-                          <td class="has-text-left {{theme_text_color}}">Candidate Count<i class="fa fa-arrow-up"></i></td>
-                          
+  {% include 'jd/header1.html'%}
+  <section class="container">
+      {% include 'utils/show_modal_msg.html'%}
       
-                      </tr>
-                      <tr class="{{theme_bg_color}}">
-                        
-                        <th class="has-text-left {{theme_text_color}}">Shortlisted</th>
-                        <th class="has-text-left">2</th>
-                      </tr>
-                      <tr class="{{theme_bg_color}}">
-                        
-                        <th class="has-text-left {{theme_text_color}}">Hiring Manager Interview Sceduled</th>
-                        <th class="has-text-left">1</th>
-                      </tr>
-                      </thead>
-                    </tbody>
-                  </table>
-               </div>
-                <!--No status summary found for this job. !!! -->
-              </div>
-            {% endfor %}
-          </tbody>
-          </table>
-        </div>  
+      <div class = "block has-text-left ml-3">
+          <span class="title is-size-4 has-text-info ">Candidates Status Summary Page</span><br>
+          <span class="is-size-7" style="color:black" >This page shows number of candidates at each stages for a job position</span>
+      </div>
+      <div class="container-status">
+      <div class="block ml-3">   
+          <div class="table has-text-centered">
+          <!----> <table class="table " >
+              <tbody>
+              {% for ss in statusSummary %}
+                {%if loop.first %}
+
+                  <thead>
+                    <tr class="{{theme_bg_color}}">
+                      <th class="has-text-centered {{theme_text_color}}">STATUS CODE</th>
+                      <th class="has-text-centered {{theme_text_color}}">STATUS</th>
+                      <th class="has-text-centered {{theme_text_color}}">COUNT</th>
+
+                  </tr>
+                  </thead>
+                {%endif %}
+                <tr class="{{theme_bg_color}}">
+                  <td class="has-text-centered {{theme_text_color}}">{{ ss.status }}</td>
+                  <td class="has-text-centered {{theme_text_color}}">{{ ss.description }}</td>
+                  <td class="has-text-centered {{theme_text_color}}">{{ ss.count }}</td>
+                </tr>
+              {% else %}
+                    <table class="table">
+                      <tbody>
+                        <thead>
+                          <tr class="header {{theme_bg_color}}">
+                            <td class="has-text-left {{theme_text_color}}">Status</td>
+                            <td class="has-text-left {{theme_text_color}}">Count</td>
+                            
+        
+                          </tr>
+                        <tr class="{{theme_bg_color}}">
+                          
+                          <th class="has-text-left {{theme_text_color}}">Shortlisted</th>
+                          <th class="has-text-left">2</th>
+                        </tr>
+                        <tr class="{{theme_bg_color}}">
+                          
+                          <th class="has-text-left {{theme_text_color}}">Hiring Manager Interview Sceduled</th>
+                          <th class="has-text-left">1</th>
+                        </tr>
+                        </thead>
+                      </tbody>
+                    </table>
+                
+              {% endfor %}
+            </tbody>
+            </table>
+          </div>  
+      </div>
+    
+      <a class="button is-success is-squared ml-3" onclick="window.print();">Print</a>
+      <!--<a class="button is-success is-rounded" href="/">Email</a> -->
     </div>
-
-    <a class="button is-success is-squared" onclick="window.print();">Print</a>
-    <!--<a class="button is-success is-rounded" href="/">Email</a> -->
-
-</section>
-
+  </section>
+</div>
 {% endblock %}
