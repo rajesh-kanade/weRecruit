@@ -1,15 +1,15 @@
 @font-face {
-  font-family: 'poppins-medium';
+  font-family: "poppins-medium";
   src: url(fonts/Poppins-Medium.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'regular';
+  font-family: "regular";
   src: url(fonts/Poppins-Regular.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'semi-bold';
+  font-family: "semi-bold";
   src: url(fonts/Poppins-SemiBold.ttf) format("truetype");
 }
 
@@ -20,12 +20,12 @@ h2,
 .navbar-link,
 .form-group .field .section-title .label,
 .header th {
-  font-family: 'poppins-medium', sans-serif;
+  font-family: "poppins-medium", sans-serif;
 }
 
 .form-group .field .label,
 .heading-login {
-  font-family: 'semi-bold', sans-serif;
+  font-family: "semi-bold", sans-serif;
 }
 
 button,
@@ -40,7 +40,7 @@ textarea,
 .file,
 .select.is-black select,
 .header th {
-  font-family: 'regular', sans-serif;
+  font-family: "regular", sans-serif;
 }
 
 .heading {
@@ -131,7 +131,6 @@ select::-ms-expand {
   border-color: #c6c6c6;
 }
 
-
 hr {
   background-color: #c6c6c6;
   border: none;
@@ -192,7 +191,7 @@ hr {
 
 .has-shadow:before,
 .has-shadow:after {
-  content: '';
+  content: "";
   position: absolute;
   z-index: -1;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
@@ -209,7 +208,6 @@ hr {
   /* background-color: whitesmoke; */
   border: #c6c6c6;
 }
-
 
 td,
 th {
@@ -232,7 +230,6 @@ table thead tr th {
   font-size: 14px;
 }
 
-
 .table-height {
   margin-top: -60px;
 }
@@ -242,10 +239,9 @@ table thead tr th {
 }
 
 @media screen and (min-width: 1024px) {
-
-.section{
-  margin-left: -5px;
-}
+  .section {
+    margin-left: -5px;
+  }
   .job-position .container .section {
     padding: 2rem 0.5rem;
   }
@@ -258,7 +254,7 @@ table thead tr th {
     /*width: auto;*/
   }
 
-/* new changes 18 april */
+  /* new changes 18 april */
   .container {
     flex-grow: 1;
     margin: 0 auto;
@@ -266,10 +262,9 @@ table thead tr th {
     width: 70%;
     /*width: auto;*/
   }
-  .section .container is-fullheight{
+  .section .container is-fullheight {
     margin-left: 15%;
   }
-
 
   .column .container {
     flex-grow: 1;
@@ -301,7 +296,8 @@ table thead tr th {
   .box {
     background-color: white;
     border-radius: 6px;
-    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
+      0 0px 0 1px rgba(10, 10, 10, 0.02);
     color: #4a4a4a;
     display: block;
     padding: 2.25rem;
@@ -313,14 +309,14 @@ table thead tr th {
   .card {
     background-color: transparent;
     border-radius: 0.25rem;
-    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
+      0 0px 0 1px rgba(10, 10, 10, 0.02);
     color: #4a4a4a;
     max-width: 100%;
     position: relative;
     border: none;
     box-shadow: none;
   }
-
 
   .card-image {
     display: block;
@@ -376,11 +372,9 @@ table thead tr th {
     font-size: 14px;
   }
 
-
   button {
     font-size: 14px;
   }
-
 
   /* new screen */
 
@@ -432,20 +426,24 @@ table thead tr th {
 }
 
 /* button changes */
-.control .button.is-success{
+.control .button.is-success {
   width: max-content;
 }
 
-label{
+label {
   font-size: 15px;
 }
-.column.is-half{
+.column.is-half {
   margin-right: 20%;
   margin-top: -1%;
   margin-left: -10%;
-  
 }
-.block:not(:last-child){
+.block:not(:last-child) {
   margin-left: -10%;
   margin-top: 3%;
+}
+
+#jd_browser_messages div .notification {
+  margin-top: 0%;
+  margin-left: 0%;
 }
