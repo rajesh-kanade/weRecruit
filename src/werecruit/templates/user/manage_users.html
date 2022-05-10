@@ -9,7 +9,9 @@
         <h2 class="subtitle">
           This section allows tenant administrator to add / delete users to his tenant.
         </h2>
-        {% include '/utils/show_timed_msg.html'%}
+        <div id="manageUsersPageMessages">
+          {% include '/utils/show_timed_msg.html'%}
+        </div>
         <a href="/user/showAddPage"><button class="button is-success" id="add-user-button">Add User</button></a>
       </section>
 
@@ -27,9 +29,8 @@
 
             <thead>
               <tr class="header">
-                <th style="color: #8c8c8c;">Name<span style="margin-left: 10px;">
-                    <form id="sort_name" action="/user/showManageUsersPage" style="display: inline;"
-                      onsubmit="onclientSubmit">
+                <th>Name<span>
+                    <form id="sort_name" action="/user/showManageUsersPage" onsubmit="onclientSubmit">
                       <input type="hidden" name="order_by" value="name">
                       <input type="hidden" name="order" value="{{toggles.name.orderToggle}}">
                       <!-- {{toggles}} -->
@@ -43,9 +44,8 @@
                     </script>
                   </span>
                 </th>
-                <th style="color: #8c8c8c;">Email<span style="margin-left: 10px;">
-                    <form id="sort_email" action="/user/showManageUsersPage" style="display: inline;"
-                      onsubmit="onEmailSubmit">
+                <th>Email<span>
+                    <form id="sort_email" action="/user/showManageUsersPage" onsubmit="onEmailSubmit">
                       <input type="hidden" name="order_by" value="email">
                       <input type="hidden" name="order" value="{{toggles.email.orderToggle}}">
                       <!-- {{toggles}} -->
@@ -59,8 +59,8 @@
                     </script>
                   </span>
                 </th>
-                <th style="color: #8c8c8c;">Status<span style="margin-left: 10px;">
-                    <form id="sort_status" action="/user/showManageUsersPage" style="display: inline;">
+                <th>Status<span>
+                    <form id="sort_status" action="/user/showManageUsersPage">
                       <input type="hidden" name="order_by" value="status">
                       <input type="hidden" name="order" value="{{toggles.status.orderToggle}}">
                       <script>
@@ -73,7 +73,7 @@
                     </form>
                   </span>
                 </th>
-                <th style="color: #8c8c8c;">Actions</th>
+                <th>Actions</th>
               </tr>
             </thead>
             {% endif %}
@@ -87,9 +87,9 @@
                 <td>Closed</td>
                 {% endif %}
                 <td class="table-actions">
-                  <abbr title="Edit"><i class="fa fa-pencil-square-o"></i></abbr></a>
-                  <!-- style="margin-left: 20px;" -->
-                  <span style="margin-left: 10px;"><a href=""><abbr title=" Delete User"><i class="fa fa-trash"
+                  <a href="/user/showEditPage/{{user.id}}"><abbr title="Edit"><i
+                        class="fa fa-pencil-square-o"></i></abbr></a>
+                  <span><a href="/user/showDeletePage/{{user.id}}"><abbr title=" Delete User"><i class="fa fa-trash"
                           aria-hidden="true"></i>
                       </abbr></a></span>
                 </td>
@@ -102,28 +102,30 @@
             </tbody>
           </table>
 
-        </div>
-        <div class="pagination">
-          {% if totalPages > 1 %}
-          <a class="number">{{pagination.page}} <span class="sr-only">(current)</span></a>
-          <!-- <a style="display: inline-block; width: auto; background-color: #f6f6f6;">of </a> -->
-          <a class="number">of {{ totalPages}} <span class="sr-only">(current)</span></a>
-          {% if pagination.page > 1 %}
-          <a class="left" href="/resume/showBrowser?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
-            aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+          <div class="pagination">
+            {% if totalPages > 1 %}
+            <a class="number">{{pagination.page}} <span class="sr-only">(current)</span></a>
+            <a class="number">of {{ totalPages}} <span class="sr-only">(current)</span></a>
+            {% if pagination.page > 1 %}
+            <a class="left"
+              href="/user/showManageUsersPage?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+              aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
 
-          {% else %}
-          <a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
-          {% endif %}
-
-          {% if pagination.page < totalPages %} <a class="right"
-            href="/resume/showBrowser?page={{pagination.page + 1}}&per_page={{pagination.per_page}}" aria-label="Next">
-            <span>&raquo;</span><span class="sr-only">Next</span></a>
             {% else %}
-            <a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+            <a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
             {% endif %}
-            {% endif %}
+
+            {% if pagination.page < totalPages %} <a class="right"
+              href="/user/showManageUsersPage?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
+              aria-label="Next">
+              <span>&raquo;</span><span class="sr-only">Next</span></a>
+              {% else %}
+              <a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+              {% endif %}
+              {% endif %}
+          </div>
         </div>
+
       </section>
     </div>
   </div>
