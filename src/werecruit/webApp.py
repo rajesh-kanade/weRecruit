@@ -1020,7 +1020,7 @@ def do_forgot_password():
             'This email is not registerd with us, try again with a different email', "is-danger")
         return redirect(url_for('show_signin_page'))
     else:
-        new_password = 'WeRecruit2022$'
+        new_password = os.environ.get('TEMP_FORGOT_PASSWORD')
         userUtils.do_forgot_password(
             user[2].id, user[2].email, user[2].password, new_password)
         emailSubject = 'Password Reset Successfully'
