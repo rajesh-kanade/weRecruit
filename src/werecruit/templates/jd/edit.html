@@ -28,7 +28,8 @@
                 <div class="field">
                   <label class="label">{{ form.title.label }}</label>
                   <div class="control">
-                    {{form.title(class='input', title ="Enter short & meaning title for this job posting" , placeholder='Enter Title')}}
+                    {{form.title(class='input', title ="Enter short & meaning title for this job posting" ,
+                    placeholder='Enter Title')}}
                   </div>
                 </div>
                 <div class="field">
@@ -50,7 +51,7 @@
                         <i class="fa fa-upload"></i>
                       </span>
                       <span class="file-label">
-                        Click to upload (word, pdf only)
+                        Click To Upload (word, pdf only)
                       </span>
                     </span>
                     <span class="file-name">
@@ -70,7 +71,7 @@
                   <label class="label">{{ form.location.label }}</label>
                   <div class="control">
                     <div class="select is-black">
-                      {{form.location(class='input', placeholder='Enter the job location.')}}
+                      {{form.location(class='input', placeholder='Enter The Job Location.')}}
                     </div>
                   </div>
                 </div>
@@ -79,7 +80,7 @@
                     <div class="field">
                       <label class="label">{{form.total_positions.label}}</label>
                       <div class="control">
-                        {{form.total_positions(class='input', placeholder='Enter total number of positions')}}
+                        {{form.total_positions(class='input', placeholder='Enter Total Number Of Positions')}}
                       </div>
                     </div>
                   </div>
@@ -88,7 +89,7 @@
                       <label class="label">{{form.status.label }}</label>
                       <div class="control">
                         <div class="select is-black">
-                          {{form.status(class='select', placeholder='Enter status')}}
+                          {{form.status(class='select', placeholder='Enter Status')}}
                         </div>
                       </div>
                     </div>
@@ -97,22 +98,23 @@
                 <div class="field">
                   <label class="label">{{ form.primary_skills.label }}*</label>
                   <div class="control">
-                    {{form.primary_skills(class='textarea', title ="Enter mandatory or must have skillsets.",placeholder='Enter primary skillsets required for the job.')}}
+                    {{form.primary_skills(class='textarea', title ="Enter mandatory or must have
+                    skillsets.",placeholder='Enter Primary Skillsets Required for the Job.')}}
                   </div>
                 </div>
                 <div class="field">
                   <label class="label">{{ form.secondary_skills.label }}*</label>
                   <div class="control">
                     {{form.secondary_skills(class='textarea', title ="Enter mandatory or good to have
-                  skillsets.",placeholder='Enter secondary skillsets required for the job.')}} </div>
+                    skillsets.",placeholder='Enter Secondary Skillsets Required for the Job.')}} </div>
                 </div>
                 <div class="columns">
                   <div class="column">
                     <div class="field">
                       <label class="label">{{ form.min_yrs_of_exp.label }}*</label>
                       <div class="control">
-                        <div class="">
-                          {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
+                        <div class="select is-black">
+                          {{form.min_yrs_of_exp(class='select', placeholder='Enter minimum years of experience')}}
                         </div>
                       </div>
                     </div>
@@ -121,8 +123,8 @@
                     <div class="field">
                       <label class="label">{{ form.max_yrs_of_exp.label }}*</label>
                       <div class="control">
-                        <div class="">
-                          {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
+                        <div class="select is-black">
+                          {{form.max_yrs_of_exp(class='select', placeholder='Enter maximum years of experience')}}
                         </div>
                         {% for error in form.max_yrs_of_exp.errors %}
                         <small class="has-text-danger has-text-left">{{ error }}</small>
@@ -142,8 +144,8 @@
                     <div class="field">
                       <label class="label">Min</label>
                       <div class="control">
-                        <div class="select is-black">
-                          {{form.ctc_min(class='input', placeholder='Enter minimum CTC')}}
+                        <div class="control is-black">
+                          {{form.ctc_min(class='input', placeholder='Min CTC')}}
 
                         </div>
                       </div>
@@ -153,8 +155,8 @@
                     <div class="field">
                       <label class="label">Max</label>
                       <div class="control">
-                        <div class="select is-black">
-                          {{form.ctc_max(class='input', placeholder='Enter maximum CTC')}}
+                        <div class="control is-black">
+                          {{form.ctc_max(class='input', placeholder='Max CTC')}}
 
                         </div>
                       </div>
@@ -165,7 +167,7 @@
                       <label class="label">Currency</label>
                       <div class="control">
                         <div class="select is-black">
-                          {{form.ctc_currency(class='select', placeholder='Select currency')}}
+                          {{form.ctc_currency(class='select', placeholder='Select Currency')}}
                         </div>
                       </div>
                     </div>
@@ -178,7 +180,7 @@
                     <div class="field">
                       <label class="label">{{form.fees_percent.label}}</label>
                       <div class="control">
-                        {{form.fees_percent(class='input', placeholder='Enter fees percent being charged for this job position.')}}
+                        {{form.fees_percent(class='input', placeholder='Enter Fees Percent.')}}
                       </div>
                     </div>
                   </div>
@@ -186,7 +188,7 @@
                     <div class="field">
                       <label class="label">{{form.warranty_in_months.label}}</label>
                       <div class="control">
-                        {{form.warranty_in_months(class='input', placeholder='Enter warranty in months')}}
+                        {{form.warranty_in_months(class='input', placeholder='Enter Warranty In Months')}}
                       </div>
                     </div>
                   </div>

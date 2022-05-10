@@ -1,10 +1,10 @@
 {%extends "app_header.html" %}
 {%block content%}
-
+{% include 'jd/header1.html'%}
 <section class="container is-fullheight">
     <turbo-frame id ="header">
       {% include 'utils/show_modal_msg.html'%}
-      {% include 'jd/header1.html'%}
+
       <div class = "block has-text-left">
           <span class="title is-size-4 has-text-info">Shortlist Resumes</span><br>
           <span class="is-size-7 has-text-info">Search existing resumes and shortlist them for a job.</span>
