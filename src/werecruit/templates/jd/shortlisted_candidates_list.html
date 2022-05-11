@@ -1,33 +1,34 @@
 {%extends "app_header.html" %}
 {%block content%}
+{% include 'jd/header1.html'%}
 
-<section class="container is-fullheight">
+<section  style ="margin-left: -1%; padding-right: -20% !important;" class="container is-fullheight">
   {% include '/utils/show_timed_msg.html' %}
 
-    {% include 'jd/header1.html'%}
-    <div class = "block has-text-left">
-        <span class="title is-size-4 has-text-info">Shortlisted resumes</span><br>
+
+     <div  style ="margin-left:10%;"class = "block has-text-left">
+        <span class="title is-size-4 has-text-info">Shortlisted Candidates</span><br>
         <span class="is-size-7 has-text-info">Details of shortlisted applicants for this job. You can update the progress for each applicant periodically.</span>
     </div>
-    <div class = "block has-text-left"> 
+    <!-- <div class="is-block"> -->
+    {#<div style ="margin-left:10%; " class = "block has-text-left"> 
         <div class="dropdown is-hoverable">
+         
             <div class="dropdown-trigger">
               <button class="button is-info" aria-haspopup="true" aria-controls="dropdown-menu">
-                <span>Filter based on status</span>
+                <span>Category</span>
                 <span class="icon is-small">
                   <i class="fas fa-angle-down" aria-hidden="true"></i>
                 </span>
               </button>
             </div>
+          
             <div class="dropdown-menu" id="dropdown-menu" role="menu">
-              <div class="dropdown-content">
-                <a href="#" class="dropdown-item is-active">
-                    All
-                </a>   
-                <hr class="dropdown-divider"> 
-                {% for asc in appStatusCodesList %}
+              <div class="dropdown-content">  
+             
+                {% for asc in newappStatusCodesList %}
                 <a href="#" class="dropdown-item">
-                  {{asc.description}}
+                   {{asc.description}}
                 </a>
               {% else %}
                 <div class="notification is-warning">
@@ -37,8 +38,257 @@
     
               </div>
             </div>
-        </div>    
+            
+        </div>   
+
+      <div style="margin-left: 20%" class="dropdown is-hoverable">
+       
+          <div class="dropdown-trigger">
+            <button class="button is-info" aria-haspopup="true" aria-controls="dropdown-menu">
+              <span>Sub-Category</span>
+              <span class="icon is-small">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        
+          <div class="dropdown-menu" id="dropdown-menu" role="menu">
+            <div class="dropdown-content">  
+              {% for asc in newappStatusCodesList %}
+              <a href="#" class="dropdown-item">
+                 {{asc.detail_description}}
+              </a>
+            {% else %}
+              <div class="notification is-warning">
+                No application status codes found !!!
+              </div>
+            {% endfor %}
+  
+            </div>
+          </div>
+          
+      </div>    
+  </div> #}
+
+
+
+  <div class="menu-bar">
+  <ul>
+  <li >
+    <b><label for="new-button">Status</label></b>
+    <button class="new-button" aria-haspopup="true" aria-controls="dropdown-menu">
+      <span>All</span>
+      <span class="icon is-small">
+        <i class="fas fa-angle-down" aria-hidden="true"></i>
+      </span>
+    </button>
+  <div class="sub-menu-1">
+    <ul>
+      {% for status_category in application_status_codes_category %}
+      <li class="hover-me"><a href="#">{{status_category.category}} </a><i class="fa fa-angle-right"></i>
+        <div class="sub-menu-2">
+          <ul>
+            {% for status_sub_category in application_status_codes_sub_category[status_category.category] %}
+              <li><a href="#">{{status_sub_category}} </a></li>
+            {% endfor %}
+          </ul>
+      </li>
+      {% endfor %}
+      <!-- <li><a href="#">Shortlisted</a></li>
+      <li class="hover-me"><a href="#">Initial Screening</a><i class="fa fa-angle-right"></i>
+        <div class="sub-menu-2">
+          <ul>
+            <li><a href="#">Scheduled</a></li>
+            <li><a href="#">Cleared</a></li>
+            <li><a href="#">Failed</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="hover-me"><a href="#">Round #1</a><i class="fa fa-angle-right"></i>
+        <div class="sub-menu-2">
+          <ul>
+            <li><a href="#">Scheduled</a></li>
+            <li><a href="#">Rejected</a></li>
+            <li><a href="#">Pass</a></li>
+            <li><a href="#">No</a></li>
+            <li><a href="#">Show</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="hover-me"><a href="#">Round #2</a><i class="fa fa-angle-right"></i>
+        <div class="sub-menu-2">
+          <ul>
+            <li><a href="#">Scheduled</a></li>
+            <li><a href="#">Rejected</a></li>
+            <li><a href="#">Pass</a></li>
+            <li><a href="#">No</a></li>
+            <li><a href="#">Show</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="hover-me"><a href="#">Hiring Manager</a><i class="fa fa-angle-right"></i>
+        <div class="sub-menu-2">
+          <ul>
+            <li><a href="#">Scheduled</a></li>
+            <li><a href="#">Rejected</a></li>
+            <li><a href="#">Pass</a></li>
+            <li><a href="#">No</a></li>
+            <li><a href="#">Show</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="hover-me"><a href="#">HR</a><i class="fa fa-angle-right"></i>
+        <div class="sub-menu-2">
+          <ul>
+            <li><a href="#">Scheduled</a></li>
+            <li><a href="#">Rejected</a></li>
+            <li><a href="#">Pass</a></li>
+            <li><a href="#">No</a></li>
+            <li><a href="#">Show</a></li>
+            
+          </ul>
+        </div>
+      </li>
+      <li class="hover-me"><a href="#">Offer</a><i class="fa fa-angle-right"></i>
+        <div class="sub-menu-2">
+          <ul>
+            <li><a href="#">Pending with HR</a></li>
+            <li><a href="#">Released to Candidate</a></li>
+            <li><a href="#">Accepted by Candidate</a></li>
+          </ul>
+        </div>
+      </li>
+      <li class="hover-me"><a href="#">Onboarding</a><i class="fa fa-angle-right"></i>
+        <div class="sub-menu-2">
+          <ul>
+            <li><a href="#">Done</a></li>
+            <li><a href="#">No</a></li>
+            <li><a href="#">Show</a></li>
+          </ul>
+        </div>
+      </li>
+    </li>
+    </ul> -->
+  </div>
+  </ul></div>
+
+
+
+
+
+{# <div class="no-col">
+  <div class="columns">
+    <div class="column">
+      <div class="field">
+        <label class="label">hello</label>
+        <div class="select">
+          
+        </div>
+      </div>
     </div>
+    <div class="column">
+      <div class="field">
+        <label class="label">hello</label>
+        <div class="control">
+          <div class="select ">
+            <select>
+              <option>INR</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div> #}
+
+    {# <div class="field">
+                  <label class="label">{{ form.location.label }}</label>
+                  <div class="control">
+                    <div class="select is-black">
+                      {{form.location(class='input', placeholder='Enter the job location.')}}
+                    </div>
+                  </div>
+                </div> #}
+
+     {# <div style ="margin-left:10%;" class = "block has-text-left">
+      <select >
+       {% for asc in newappStatusCodesList %}
+                        <a href="#"></a>
+                        {{asc.description}}
+                        {% endfor %}</select>
+      <select >
+       {% for asc in newappStatusCodesList %}
+                        <a href="#"></a>
+                        {{asc.description}}
+                        {% endfor %}</select>
+    </div> #}
+
+
+    {# <div class="columns">
+                  <div class="column">
+                    <div class="field">
+                      <label class="label">Category</label>
+                      <div class="select is-black">
+                        {% for asc in newappStatusCodesList %}
+                        <a href="#"></a>
+                        {{asc.description}}
+                        {% endfor %}
+                        
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="field">
+                      <label class="label">Sub-Category</label>
+                      <div class="control">
+                        <div class="select is-black">
+                           {% for asc in newappStatusCodesList %}
+                        <a href="#"></a>
+                        {{asc.detail_description}}
+                        {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> #}
+
+
+                <!-- <select id="parent_select">
+                  <option>----</option>
+              </select>
+              <select id="child_select"></select>            
+    
+   <script language="javascript" type="text/javascript">  
+    var mList = {
+      //  Shortlisted:[],
+      // Initial_Screening:['Scheduled', 'Cleared', 'Failed'],
+      // Round_1:['Scheduled', 'Rejected', 'Passed', 'No Show'],
+      // Round_2:['Scheduled', 'Rejected', 'Passed', 'No Show'],
+      // Hiring_Manager:['Scheduled', 'Rejected', 'Passed', 'No Show'],
+      // HR:['Scheduled', 'Rejected', 'Passed', 'No Show'] 
+      
+    
+    
+    
+    };
+    
+    el_parent = document.getElementById("parent_select");
+    el_child = document.getElementById("child_select");
+    
+    for (key in mList) {
+      el_parent.innerHTML = el_parent.innerHTML + '<option>'+ key +'</option>';
+    }
+    
+    el_parent.addEventListener('change', function populate_child(e){
+      el_child.innerHTML = '';
+      itm = e.target.value;
+      if(itm in mList){
+          for (i = 0; i < mList[itm].length; i++) {
+            el_child.innerHTML = el_child.innerHTML + '<option>'+ mList[itm][i] +'</option>';
+          }
+      }
+    });
+     -->
+    </script>
 
     {% include '/resume/browser.html'%}
     
