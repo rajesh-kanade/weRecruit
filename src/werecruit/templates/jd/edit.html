@@ -66,11 +66,33 @@
                   <div class="control">
                   </div>
                 </div>
-                <div class="field">
+                {# <!-- <div class="field">
                   <label class="label">{{ form.location.label }}</label>
                   <div class="control">
                     <div class="select is-black">
                       {{form.location(class='input', placeholder='Enter the job location.')}}
+                    </div>
+                  </div>
+                </div> --> #}
+                <div class="columns">
+                  <div class="column">
+                    <div class="field">
+                      <label class="label">{{form.country.label}}</label>
+                      <div class="control">
+                        <div class="select is-black">
+                          {{form.country(class='select', placeholder='Enter country')}}
+                        </div>                      
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="field">
+                      <label class="label">{{form.city.label }}</label>
+                      <div class="control">
+                        <div class="select is-black">
+                          {{form.city(class='select', placeholder='Enter city')}}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

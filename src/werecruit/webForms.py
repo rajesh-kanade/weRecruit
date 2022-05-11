@@ -72,7 +72,9 @@ class JDForm(FlaskForm):
     client = StringField('Client Name*', validators=[DataRequired('Enter Client Name')])
     client_jd = FileField('Client JD File')
 
-    location = StringField('Location')
+    # location = StringField('Location')
+    country = SelectField('Country')
+    city = SelectField('City')
 
     min_yrs_of_exp = DecimalField("Minimum years of Experience",validators=[DataRequired(NumberRange(min=0,max=99,message="Min experience needs be in range of 0 to 99"))])
     max_yrs_of_exp = DecimalField("Maximum years of Experience",validators=[DataRequired(NumberRange(min=0,max=99,message="Max experience needs be in range of 0 to 99"))])

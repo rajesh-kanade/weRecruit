@@ -586,7 +586,57 @@ def update_job_stats():
         # if db_con in locals() and db_con is not None:
         dbUtils.returnToPool(db_con)
 
+def get_country_names():
+    try:
+        db_con = dbUtils.getConnFromPool()
+        cursor = dbUtils.getNamedTupleCursor(db_con)
 
+        query = """SELECT name
+				FROM country_code
+				ORDER BY name"""
+
+        params = ()
+        _logger.debug(cursor.mogrify(query, params))
+        cursor.execute(query, params)
+
+        country_names = cursor.fetchall()
+
+        return(RetCodes.success.value, "Country names successfully fetched from database", country_names)
+
+    except Exception as dbe:
+        _logger.error(dbe)
+        return (RetCodes.server_error, str(dbe), None)
+
+    finally:
+        cursor.close()
+        dbUtils.returnToPool(db_con)
+        
+
+def get_city_names():
+    try:
+        db_con = dbUtils.getConnFromPool()
+        cursor = dbUtils.getNamedTupleCursor(db_con)
+
+        query = """SELECT city
+				FROM india_cities
+				ORDER BY population DESC LIMIT 50
+                """
+
+        params = ()
+        _logger.debug(cursor.mogrify(query, params))
+        cursor.execute(query, params)
+
+        city_names = cursor.fetchall()
+
+        return(RetCodes.success.value, "Country names successfully fetched from database", city_names)
+
+    except Exception as dbe:
+        _logger.error(dbe)
+        return (RetCodes.server_error, str(dbe), None)
+
+    finally:
+        cursor.close()
+        dbUtils.returnToPool(db_con)
 # main entry point
 if __name__ == "__main__":
 

@@ -191,6 +191,12 @@ def show_jd_create_page():
     form.total_positions.data = jdUtils.JD_DEF_POSITIONS
     form.status.data = jdUtils.JDStatusCodes.open.value
 
+    countryNames = [record.name for record in jdUtils.get_country_names()[2]] 
+    cityNames = [record.city for record in jdUtils.get_city_names()[2]]
+
+    countryNames.insert(0,'India')
+    form.country.choices = countryNames
+    form.city.choices = cityNames
     return render_template('jd/edit.html', form=form)
 
 
