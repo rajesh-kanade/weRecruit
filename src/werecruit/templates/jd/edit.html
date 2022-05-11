@@ -28,8 +28,7 @@
                 <div class="field">
                   <label class="label">{{ form.title.label }}</label>
                   <div class="control">
-                    {{form.title(class='input', title ="Enter short & meaning title for this job posting" ,
-                    placeholder='Enter Title')}}
+                    {{form.title(class='input', title ="Enter short & meaning title for this job posting" , placeholder='Enter Title')}}
                   </div>
                 </div>
                 <div class="field">
@@ -51,7 +50,7 @@
                         <i class="fa fa-upload"></i>
                       </span>
                       <span class="file-label">
-                        Click To Upload (word, pdf only)
+                        Click to upload (word, pdf only)
                       </span>
                     </span>
                     <span class="file-name">
@@ -71,16 +70,63 @@
                   <label class="label">{{ form.location.label }}</label>
                   <div class="control">
                     <div class="select is-black">
-                      {{form.location(class='input', placeholder='Enter The Job Location.')}}
+                      {{form.location(class='select', placeholder='Enter the job location.')}}
                     </div>
                   </div>
                 </div>
+
+               
+                    <!-- <div class="notification is-warning">
+                      No client wise summary data. !!!
+                    </div> -->
+                <hr>
+                    <div class="field">
+                      <div class="section-title">
+                        <label class="label">About Location</label>
+                      </div>
+                    </div>
+                    <div class="columns">
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">ISO Country code</label>
+                          <div class="control">
+                            <div class="select is-black">
+                              {{form.country_iso_code(class='select', placeholder='Country ISO Code')}}
+    
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">ISO Country name</label>
+                          <div class="control">
+                            <div class="select is-black">
+                              {{form.country_iso_name(class='select', placeholder='Country ISO Name')}}
+    
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="column">
+                        <div class="field">
+                          <label class="label">City Name</label>
+                          <div class="control">
+                            <div class="select is-black">
+                              {{form.location(class='select', placeholder='Enter the job location.')}}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+
                 <div class="columns">
                   <div class="column">
                     <div class="field">
                       <label class="label">{{form.total_positions.label}}</label>
                       <div class="control">
-                        {{form.total_positions(class='input', placeholder='Enter Total Number Of Positions')}}
+                        {{form.total_positions(class='input', placeholder='Enter total number of positions')}}
                       </div>
                     </div>
                   </div>
@@ -89,7 +135,7 @@
                       <label class="label">{{form.status.label }}</label>
                       <div class="control">
                         <div class="select is-black">
-                          {{form.status(class='select', placeholder='Enter Status')}}
+                          {{form.status(class='select', placeholder='Enter status')}}
                         </div>
                       </div>
                     </div>
@@ -98,23 +144,32 @@
                 <div class="field">
                   <label class="label">{{ form.primary_skills.label }}*</label>
                   <div class="control">
-                    {{form.primary_skills(class='textarea', title ="Enter mandatory or must have
-                    skillsets.",placeholder='Enter Primary Skillsets Required for the Job.')}}
+                    {{form.primary_skills(class='textarea', title ="Enter mandatory or must have skillsets.",placeholder='Enter primary skillsets required for the job.')}}
                   </div>
                 </div>
                 <div class="field">
                   <label class="label">{{ form.secondary_skills.label }}*</label>
                   <div class="control">
                     {{form.secondary_skills(class='textarea', title ="Enter mandatory or good to have
-                    skillsets.",placeholder='Enter Secondary Skillsets Required for the Job.')}} </div>
+                  skillsets.",placeholder='Enter secondary skillsets required for the job.')}} </div>
                 </div>
                 <div class="columns">
+                  <!-- <div class="column">
+                    <div class="field">
+                      <label class="label">{{ form.min_yrs_of_exp.label }}*</label>
+                      <div class="">
+                        <div class="select">
+                          {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
                   <div class="column">
                     <div class="field">
                       <label class="label">{{ form.min_yrs_of_exp.label }}*</label>
                       <div class="control">
                         <div class="select is-black">
-                          {{form.min_yrs_of_exp(class='select', placeholder='Enter minimum years of experience')}}
+                            {{form.min_yrs_of_exp(class='select', placeholder='Enter minimum years of experience')}}
                         </div>
                       </div>
                     </div>
@@ -142,10 +197,10 @@
                 <div class="columns">
                   <div class="column">
                     <div class="field">
-                      <label class="label">Min</label>
+                      <label class="label">{{form.ctc_min.label}}*</label>
                       <div class="control">
-                        <div class="control is-black">
-                          {{form.ctc_min(class='input', placeholder='Min CTC')}}
+                        <div class="">
+                          {{form.ctc_min(class='input', placeholder='Enter minimum CTC')}}
 
                         </div>
                       </div>
@@ -153,10 +208,10 @@
                   </div>
                   <div class="column">
                     <div class="field">
-                      <label class="label">Max</label>
+                      <label class="label">{{form.ctc_max.label}}*</label>
                       <div class="control">
-                        <div class="control is-black">
-                          {{form.ctc_max(class='input', placeholder='Max CTC')}}
+                        <div class="">
+                          {{form.ctc_max(class='input', placeholder='Enter maximum CTC')}}
 
                         </div>
                       </div>
@@ -167,7 +222,7 @@
                       <label class="label">Currency</label>
                       <div class="control">
                         <div class="select is-black">
-                          {{form.ctc_currency(class='select', placeholder='Select Currency')}}
+                          {{form.ctc_currency(class='select', placeholder='Select currency')}}
                         </div>
                       </div>
                     </div>
@@ -180,7 +235,7 @@
                     <div class="field">
                       <label class="label">{{form.fees_percent.label}}</label>
                       <div class="control">
-                        {{form.fees_percent(class='input', placeholder='Enter Fees Percent.')}}
+                        {{form.fees_percent(class='input', placeholder='Enter fees percent being charged for this job position.')}}
                       </div>
                     </div>
                   </div>
@@ -188,7 +243,7 @@
                     <div class="field">
                       <label class="label">{{form.warranty_in_months.label}}</label>
                       <div class="control">
-                        {{form.warranty_in_months(class='input', placeholder='Enter Warranty In Months')}}
+                        {{form.warranty_in_months(class='input', placeholder='Enter warranty in months')}}
                       </div>
                     </div>
                   </div>

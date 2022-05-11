@@ -1,17 +1,17 @@
 {%extends "app_header.html" %}
 {%block content%}
 
-<section style = " margin-left: 10%;"class="container is-fullheight">
-
+<section style="margin-left: 10%;" class="container is-fullheight">
+ 
     {% include 'utils/show_modal_msg.html'%}
     <div class = "block has-text-left">
-        <span class="title is-size-4 has-text-info">Active job positions summary</span><br>
+        <span  style="font-size: 30px !important;"class="title is-size-4 has-text-info">Active job positions summary</span><br>
         <span class="is-size-7 has-text-info">This report shows number of active job positions for each client.</span>
     </div>
     
     <div class="block">   
         <div class="table-container has-text-centered">
-          <table  style = "width: 60%; "class="table is-fullwidth">
+          <table class="table is-halfwidth">
             <tbody>
             {% for cs in clientSummary %}
               {%if loop.first %}
@@ -19,7 +19,7 @@
                 <thead>
                   <tr class="{{theme_bg_color}}">
                     <th class="has-text-left {{theme_text_color}}">CLIENT</th>
-                    <th class="has-text-centered {{theme_text_color}}"> COUNT</th>
+                    <th class="has-text-centered {{theme_text_color}}">COUNT</th>
 
                 </tr>
                 </thead>
@@ -37,10 +37,10 @@
           </table>
         </div>  
     </div>
-    <div class="button-job">
-    <a class="button is-success " onclick="window.print();">Print</a>
+
+    <a style='margin-left: -10%;'    class="button is-success " onclick="window.print();">Print</a>
     <!--<a class="button is-success is-rounded" href="/">Email</a> -->
-      </div>
+
 </section>
 
 {% endblock %}
