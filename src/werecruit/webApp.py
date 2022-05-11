@@ -1022,7 +1022,7 @@ def do_forgot_password():
     else:
         new_password = os.environ.get('TEMP_FORGOT_PASSWORD')
         userUtils.do_forgot_password(
-            user[2].id, user[2].email, user[2].password, new_password)
+            user[2].id, user[2].email, new_password)
         emailSubject = 'Password Reset Successfully'
         emailBody = render_template('user/forgot_password.html')
         emailContentType = 'html'

@@ -500,20 +500,17 @@ def do_reset_password(id, email, cur_password, new_password):
         return (RetCodes.server_error, str(e))
 
 
-def do_forgot_password(id, email, cur_password, new_password):
+def do_forgot_password(id, email, new_password):
     try:
         new_password = hashit(new_password)
-        # we are directly using the hashed cur_password from user record
-        # so need to hash it again
-        # cur_password = hashit(cur_password)
         try:
             db_con = dbUtils.getConnFromPool()
             cursor = dbUtils.getNamedTupleCursor(db_con)
 
             query = """UPDATE users set password =%s 
-					WHERE id =%s and email = %s and password =%s"""
+					WHERE id =%s and email = %s"""
 
-            data_tuple = (new_password, id, email, cur_password)
+            data_tuple = (new_password, id, email)
 
             _logger.debug(cursor.mogrify(query, data_tuple))
             cursor.execute(query, data_tuple)
