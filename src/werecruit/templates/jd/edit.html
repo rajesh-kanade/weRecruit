@@ -70,57 +70,10 @@
                   <label class="label">{{ form.location.label }}</label>
                   <div class="control">
                     <div class="select is-black">
-                      {{form.location(class='select', placeholder='Enter the job location.')}}
+                      {{form.location(class='input', placeholder='Enter the job location.')}}
                     </div>
                   </div>
                 </div>
-
-               
-                    <!-- <div class="notification is-warning">
-                      No client wise summary data. !!!
-                    </div> -->
-                <hr>
-                    <div class="field">
-                      <div class="section-title">
-                        <label class="label">About Location</label>
-                      </div>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <div class="field">
-                          <label class="label">ISO Country code</label>
-                          <div class="control">
-                            <div class="select is-black">
-                              {{form.country_iso_code(class='select', placeholder='Country ISO Code')}}
-    
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="field">
-                          <label class="label">ISO Country name</label>
-                          <div class="control">
-                            <div class="select is-black">
-                              {{form.country_iso_name(class='select', placeholder='Country ISO Name')}}
-    
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="field">
-                          <label class="label">City Name</label>
-                          <div class="control">
-                            <div class="select is-black">
-                              {{form.location(class='select', placeholder='Enter the job location.')}}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <hr>
-
                 <div class="columns">
                   <div class="column">
                     <div class="field">
@@ -154,22 +107,12 @@
                   skillsets.",placeholder='Enter secondary skillsets required for the job.')}} </div>
                 </div>
                 <div class="columns">
-                  <!-- <div class="column">
-                    <div class="field">
-                      <label class="label">{{ form.min_yrs_of_exp.label }}*</label>
-                      <div class="">
-                        <div class="select">
-                          {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
-                        </div>
-                      </div>
-                    </div>
-                  </div> -->
                   <div class="column">
                     <div class="field">
                       <label class="label">{{ form.min_yrs_of_exp.label }}*</label>
                       <div class="control">
-                        <div class="select is-black">
-                            {{form.min_yrs_of_exp(class='select', placeholder='Enter minimum years of experience')}}
+                        <div class="">
+                          {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
                         </div>
                       </div>
                     </div>
@@ -178,8 +121,8 @@
                     <div class="field">
                       <label class="label">{{ form.max_yrs_of_exp.label }}*</label>
                       <div class="control">
-                        <div class="select is-black">
-                          {{form.max_yrs_of_exp(class='select', placeholder='Enter maximum years of experience')}}
+                        <div class="">
+                          {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
                         </div>
                         {% for error in form.max_yrs_of_exp.errors %}
                         <small class="has-text-danger has-text-left">{{ error }}</small>
@@ -197,9 +140,9 @@
                 <div class="columns">
                   <div class="column">
                     <div class="field">
-                      <label class="label">{{form.ctc_min.label}}*</label>
+                      <label class="label">Min</label>
                       <div class="control">
-                        <div class="">
+                        <div class="select is-black">
                           {{form.ctc_min(class='input', placeholder='Enter minimum CTC')}}
 
                         </div>
@@ -208,9 +151,9 @@
                   </div>
                   <div class="column">
                     <div class="field">
-                      <label class="label">{{form.ctc_max.label}}*</label>
+                      <label class="label">Max</label>
                       <div class="control">
-                        <div class="">
+                        <div class="select is-black">
                           {{form.ctc_max(class='input', placeholder='Enter maximum CTC')}}
 
                         </div>

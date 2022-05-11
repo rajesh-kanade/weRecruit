@@ -191,8 +191,6 @@ def show_jd_create_page():
     form.total_positions.data = jdUtils.JD_DEF_POSITIONS
     form.status.data = jdUtils.JDStatusCodes.open.value
 
-    # show_location= jdUtils.location()
-
     return render_template('jd/edit.html', form=form)
 
 
@@ -711,62 +709,29 @@ def show_resume_shortlist_page():
 '''
 
 
-
-@app.route("/jd/showWorkPage/<int:id>", methods=["GET"])
+@app.route('/jd/showWorkPage/<int:id>', methods=['GET'])
 @login_required
 def show_shortlisted_candidates_page(id):
 
-    _logger.debug("inside work on resumes page for JD ID {0} ".format(id))
+    _logger.debug('inside work on resumes page for JD ID {0} '.format(id))
 
     (retCode, msg, jd) = jdUtils.get(id)
-    assert (
-        retCode == jdUtils.RetCodes.success.value
-    ), "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(
-        id, retCode, msg
-    )
+    assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(
+        id, retCode, msg)
 
     (retCode, msg, appStatusCodesList) = resumeUtils.list_application_status_codes()
-    assert (
-        retCode == resumeUtils.RetCodes.success.value
-    ), "Failed to fetch application status codes. Error code is {0}. Error message is {1}".format(
-        retCode, msg
-    )
-    (retCode, msg, application_status_codes_category) = resumeUtils.list_application_status_codes_category()
-    assert (
-        retCode == resumeUtils.RetCodes.success.value
-    ), "Failed to fetch  new application status codes. Error code is {0}. Error message is {1}".format(
-        retCode, msg
-    )
+    assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch application status codes. Error code is {0}. Error message is {1}".format(
+        retCode, msg)
 
-
-    
-    sub_category = {}
-    for record in application_status_codes_category:
-        (retCode, msg, application_status_codes_sub_category) = resumeUtils.list_application_status_codes_sub_category(record.category)
-        assert (
-            retCode == resumeUtils.RetCodes.success.value
-        ), "Failed to fetch  new application status codes. Error code is {0}. Error message is {1}".format(
-            retCode, msg
-        )
-        sub_category[record.category] = [i.sub_category for i in application_status_codes_sub_category]
     (retCode, msg, resumeList) = jdUtils.get_resumes_associated_with_job(id)
-    assert (
-        retCode == jdUtils.RetCodes.success.value
-    ), "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(
-        id, retCode, msg
-    )
+    assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(
+        id, retCode, msg)
 
     searchForm = ResumeSearchForm()
 
-    return render_template(
-        "jd/shortlisted_candidates_list.html",
-        jd=jd,
-        resumeList=resumeList,
-        actionTemplate="work",
-        application_status_codes_category=application_status_codes_category,
-        application_status_codes_sub_category=sub_category,
-        searchForm=searchForm,
-    )
+    return render_template('jd/shortlisted_candidates_list.html', jd=jd,
+                           resumeList=resumeList, actionTemplate="work",
+                           appStatusCodesList=appStatusCodesList, searchForm=searchForm)
 
 # This shows all the resumes / candidates not yet associated with a specific job id
 
@@ -964,20 +929,6 @@ def show_job_summary_page(job_id):
     return render_template("jd/show_status_summary_page.html", jd=jd, statusSummary=jobStatusSummary)
 
 # /reports/showClientWiseSummary
-
-# 29 april location
-# @app.route('/jd/showCreatepage/', methods=['GET'])
-# @login_required
-# def show_location():
-
-
-#     # get the summary
-#     # (retCode, msg, location_city) = jdUtils.location(city)
-#     # assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch location {0)".format(id)
-
-
-#     return render_template("jd/showCreatepage.html",  location_status=location_city)
-
 
 
 @app.route('/reports/showClientWiseSummary', methods=['GET'])
