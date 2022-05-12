@@ -282,45 +282,31 @@ def list_resumes_by_recruiter(recruiterID):
 		dbUtils.returnToPool(db_con)	
 '''
 
-
-def list_resumes_by_tenant(tenantID, orderBy=None, order=None):
-    try:
-        db_con = dbUtils.getConnFromPool()
-        cursor = dbUtils.getNamedTupleCursor(db_con)
-
-        q1 = """SELECT * FROM wr_resumes
+def list_resumes_by_tenant(tenantID):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		
+		query = """SELECT * FROM wr_resumes 
 				where is_deleted = %s and
-				recruiter_id in ( select uid from tenant_user_roles where tid = %s) order by """
-        q2 = """ """
-        q3 = """ id desc """
-        query, params = None, None
-        if orderBy == "name":
-            q2 = """ name, """
-        query = q1 + q2 + q3
-        params = (False, tenantID)
-        _logger.debug(cursor.mogrify(query, params))
-        cursor.execute(query, params)
+				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
+				order by id desc"""
+	
+		params = (False,tenantID)
+		_logger.debug ( cursor.mogrify(query, params))
+		cursor.execute(query,params)
 
-        resumeList = cursor.fetchall()
-        if order == "DESC":
-            resumeList = resumeList[::-1]
+		resumeList =cursor.fetchall()
 
-        return (
-            RetCodes.success.value,
-            "Resume List successfully fetched from db for tenant ID {0}".format(
-                tenantID
-            ),
-            resumeList,
-        )
+		return(RetCodes.success.value, "Resume List successfully fetched from db for tenant ID {0}".format(tenantID), resumeList)
 
-    except Exception as dbe:
-        _logger.error(dbe)
-        return (RetCodes.server_error, str(dbe), None)
-
-    finally:
-        cursor.close()
-        dbUtils.returnToPool(db_con)
-
+	except Exception as dbe:
+		_logger.error(dbe)
+		return ( RetCodes.server_error, str(dbe), None)
+	
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)	
 
 def  search_resumes(tenantID, ftSearch):
 	try:
