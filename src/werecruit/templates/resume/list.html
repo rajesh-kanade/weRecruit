@@ -1,71 +1,124 @@
 {%extends "app_header.html" %}
 {%block content%}
-<section class="container is-fullheight">
 
-  {% include 'utils/show_modal_msg.html'%}
+<div class="body-background is-half">
+  <div class="job-position">
+    <div class="container">
+      <section class="section topbar-title">
+        <h1 class="title">Resume Browser</h1>
+        <h2 class="subtitle">
+          Search and Browse through the resumes you uploaded.
+        </h2>
+        {% include '/utils/show_timed_msg.html'%}
+      </section>
 
-    <div class = "block has-text-left">
-      <span class="title has-text-info">Resume Browser</span><br>
-      <span class="is-size-7 has-text-info">Search and Browse through the resumes you uploaded.
-      </span>
     </div>
-    
-    <div class="block">   
-      <turbo-frame id="show_resumeList">
-      <form action = "/resume/search" method="POST" enctype="multipart/form-data">
-        <div class="field">
-
-          <div class="field has-addons">
-            <div class="control">
-              {{form.ft_search(class='input', placeholder="Search resumes")}}
-            </div>
-            <div class="control">
-              {{ form.submit( class = 'button is-info is-rounded') }}
+    <div class="container">
+      <section class="section">
+        <form action="/resume/search" method="POST">
+          <div class="field">
+            <div class="field has-addons">
+              <div class="control">
+                {{form.ft_search(class='input', placeholder="Search resumes")}}
+              </div>
+              <div class="control">
+                {{ form.submit( class = 'button is-success') }}
+              </div>
             </div>
           </div>
+        </form>
+      </section>
 
-        </div>  
-      </form>  
+    </div>
+  </div>
 
-        <div class="table-container has-text-centered">
-          <table class="table is-striped">
-            <tbody>
+
+
+  <div class="job-position table-height">
+    <div class="container">
+      <section class="application-form">
+        <div class="table-container" id="resumeListTable">
+          <table class="table is-fullwidth">
             {% for resume in resumeList %}
-              {%if loop.first %}
-                <thead>
-                  <tr class="{{theme_bg_color}}">
-                    <th class="has-text-centered {{theme_text_color}}">ID</th>
-                    <th class="has-text-centered {{theme_text_color}}">NAME</th>
-                    <th class="has-text-centered {{theme_text_color}}">EMAIL</th>
-                    <th class="has-text-centered {{theme_text_color}}">PHONE</th>
-                    <th class="has-text-centered {{theme_text_color}}">ACTIONS</th>
-                  </tr>
-                </thead>
-              {%endif %}
-              <tr class="{{theme_bg_color}}">
-                <td class="has-text-centered {{theme_text_color}}">{{ resume.id }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ resume.name }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ resume.email }}</td> 
-                <td class="has-text-centered {{theme_text_color}}">{{ resume.phone }}</td>
-                <td class="has-text-centered {{theme_text_color}}">
-                  <div class ="field is-grouped" data-turbo="false">
-                  <p class="control"><a class="button is-info is-small" title ="Download" onclick="this.classList.add('is-loading');" href="/resume/download/{{resume.id}}"><i class="fa fa-download"></i>
-                  </a></p>
-                  <p class="control"><a class="button  is-info is-small" title ="Edit" href="/resume/showEditPage/{{resume.id}}"><i class="fa fa-edit"></i>
-                  </a></p>
-            
-                 </div>    
-                </td>       
+            {%if loop.first %}
+            <thead>
+              <tr class="header">
+                <th style="color: #8c8c8c;">Name<span style="margin-left: 5%;">
+                    <form id="sort_name" action="/resume/showBrowser" style="display: inline;">
+                      <input type="hidden" name="order_by" value="name">
+                      <input type="hidden" name="order" value="{{toggles.name.orderToggle}}">
+                      <!-- {{toggles}} -->
+                      <a href="" onclick="sortByName()">
+                        <i class="{{toggles.name.arrowToggle}}"></i></a>
+                    </form>
+                    <script>
+                      const sortByName = (e) => {
+                        document.getElementById("sort_name").submit();
+                      }
+                    </script>
+                  </span>
+                </th>
+                <th style="color: #8c8c8c;">Email<span style="margin-left: 5%;">
+
+                    <!-- <i class="fa fa-arrow-up"></i> -->
+
+                  </span>
+                  </span>
+                </th>
+                <th style="color: #8c8c8c;">Phone<span style="margin-left: 5%;">
+
+                    <!-- <i class="fa fa-arrow-up"></i> -->
+
+                  </span>
+                </th>
+                <th style="color: #8c8c8c;">Actions</th>
               </tr>
-            {% else %}
+            </thead>
+            {% endif %}
+            <tbody>
+              <tr class="table-data">
+                <td>{{resume.name}}</td>
+
+                <td>{{resume.email}}</td>
+                <td>{{resume.phone}}</td>
+                <td class="table-actions">
+                  <abbr title="Edit"><i class="fa fa-pencil-square-o"></i></abbr></a>
+                  <span style="margin-left: 10%;"><a href=""><abbr title="Download Resume"><i
+                          class="fa fa-download"></i></abbr></a></span>
+                </td>
+              </tr>
+              {% else %}
               <div class="notification is-warning">
                 No Resumes found !!!
               </div>
-            {% endfor %}
-          </tbody>
+              {% endfor %}
+            </tbody>
           </table>
-        </div>  
-      </turbo-frame>
+
+        </div>
+        <div class="pagination">
+          {% if totalPages > 1 %}
+          <a class="number">{{pagination.page}} <span class="sr-only">(current)</span></a>
+          <!-- <a style="display: inline-block; width: auto; background-color: #f6f6f6;">of </a> -->
+          <a class="number">of {{ totalPages}} <span class="sr-only">(current)</span></a>
+          {% if pagination.page > 1 %}
+          <a class="left" href="/resume/showBrowser?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+            aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+
+          {% else %}
+          <a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+          {% endif %}
+
+          {% if pagination.page < totalPages %} <a class="right"
+            href="/resume/showBrowser?page={{pagination.page + 1}}&per_page={{pagination.per_page}}" aria-label="Next">
+            <span>&raquo;</span><span class="sr-only">Next</span></a>
+            {% else %}
+            <a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+            {% endif %}
+            {% endif %}
+        </div>
+      </section>
     </div>
-</section>
+  </div>
+</div>
 {% endblock %}

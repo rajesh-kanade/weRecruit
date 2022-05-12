@@ -87,7 +87,8 @@ def do_signUp(user_attrs):
         password = hashit(password)
 
         # insert a record in user table
-        sql = """insert into users ( email, name, status, password,is_deleted) 
+        sql = """insert into users ( email, name, status, password,is_deleted)
+
 				values (%s,%s, %s,%s,%s) returning id """
         params = (email, name, status, password, False)
         _logger.debug(cursor.mogrify(sql, params))
@@ -100,8 +101,8 @@ def do_signUp(user_attrs):
         _logger.debug("user id created is {0}".format(uid))
 
         # insert a record into tenant
-        sql = """insert into tenants ( name,status,is_deleted) 
-			values (%s,%s, %s) returning id """
+        sql = """insert into tenants ( name,status,is_deleted)
+			  values (%s,%s, %s) returning id """
         params = (tname, 0, False)
         _logger.debug(cursor.mogrify(sql, params))
 
@@ -112,8 +113,8 @@ def do_signUp(user_attrs):
         _logger.debug("Tenant id created is", tid)
 
         # insert a record into tenant users table with isadmin field set to true
-        sql = """insert into tenant_user_roles ( tid,uid,rid) 
-			values (%s,%s, %s)  """
+        sql = """insert into tenant_user_roles ( tid,uid,rid)
+			  values (%s,%s, %s)  """
         params = (tid, uid, 1)
         _logger.debug(cursor.mogrify(sql, params))
 
@@ -162,8 +163,8 @@ def save_user(tenantID, userID, name, email, password, roleID):
 
         if int(userID) == constants.NEW_ENTITY_ID:
             # insert a record in user table
-            sql = """insert into users ( email, name, password,is_deleted,status) 
-				values (%s,%s, %s,%s,%s) returning id """
+            sql = """insert into users ( email, name, password,is_deleted,status)
+				    values (%s,%s, %s,%s,%s) returning id """
             params = (email, name, password, False, Status.active.value)
             _logger.debug(cursor.mogrify(sql, params))
 
@@ -174,8 +175,8 @@ def save_user(tenantID, userID, name, email, password, roleID):
             userID = result[0]
             _logger.debug("user id created is {0}".format(userID))
 
-            sql = """insert into tenant_user_roles ( tid,uid,rid) 
-				values (%s,%s, %s)  """
+            sql = """insert into tenant_user_roles ( tid,uid,rid)
+				    values (%s,%s, %s)  """
             params = (tenantID, userID, roleID)
             _logger.debug(cursor.mogrify(sql, params))
 
@@ -224,7 +225,7 @@ def get(id):
 
         query = """SELECT *,
 				(select rid from tenant_user_roles where uid = %s )
-				FROM users 
+				FROM users
 				where id = %s"""
 
         params = (id, id)
@@ -310,34 +311,51 @@ def get_user_by_email(email):
         dbUtils.returnToPool(db_con)
 
 
-def list_users(tenant_id):
-
+def list_users(tenant_id, orderBy=None, order=None):
     try:
 
         db_con = dbUtils.getConnFromPool()
         cursor = dbUtils.getNamedTupleCursor(db_con)
 
-        sql = """SELECT * FROM users WHERE is_deleted = %s and
-				id in (select uid from tenant_user_roles where tid =%s)
-				order by id"""
+        query, params = None, None
+        q1 = """SELECT * FROM users WHERE is_deleted = %s and
+						id in (select uid from tenant_user_roles where tid =%s)
+						order by """
+        q2 = """"""
+        q3 = """ id"""
+        query, params = None, None
+
+        if orderBy == "client":
+            q2 = """ client, """
+        elif orderBy == "status":
+            q2 = """ status, """
+        elif orderBy == "title":
+            q2 = """ title, """
+        elif orderBy == "open_date":
+            q2 = """ open_date, """
+
+        query = q1 + q2 + q3
         params = (False, tenant_id)
 
-        _logger.debug(sql)
-        _logger.debug(cursor.mogrify(sql, params))
+        _logger.debug(query)
+        _logger.debug(cursor.mogrify(query, params))
 
-        cursor.execute(sql, params)
+        cursor.execute(query, params)
 
         userList = cursor.fetchall()
-
+        if order == "DESC":
+            userList = userList[::-1]
         for user in userList:
             _logger.debug(user)
 
-        return(RetCodes.success.value, "User List successfully fetched from db", userList)
-
+        return (
+            RetCodes.success.value,
+            "User List successfully fetched from db",
+            userList,
+        )
     except Exception as e:
         _logger.error(e)
-        return(RetCodes.server_error.value, str(e), None)
-
+        return (RetCodes.server_error.value, str(e), None)
     finally:
         cursor.close()
         dbUtils.returnToPool(db_con)
@@ -360,7 +378,7 @@ def is_tenant_deleted(tid):
         cursor.execute(query, data_tuple)
 
         tList = cursor.fetchall()
-        #_logger.debug ( "user length ",len(userList))
+        # _logger.debug ( "user length ",len(userList))
 
         if (tList is None or len(tList) == 0):
             _logger.debug("Tenant %s  is not deleted.", tid)
@@ -368,7 +386,6 @@ def is_tenant_deleted(tid):
         else:
             _logger.debug("Tenant %s is deleted. ", tid)
             return True
-
     except Exception as dbe:
         _logger.error(dbe)
         raise
@@ -399,7 +416,7 @@ def do_SignIn(id, password):
             cursor.execute(query, data_tuple)
 
             userList = cursor.fetchall()
-            #_logger.debug ( "user length ",len(userList))
+            # _logger.debug ( "user length ",len(userList))
 
             if (userList is None or len(userList) != 1):
                 return (RetCodes.sign_in_failed,
