@@ -69,11 +69,10 @@
                       </p>
                     </div>
                   </div>
-                  <!--
-                  <div class = "column is-half is-right">
-                      <p><a href="#">Forgot Password?</a></p>
+
+                  <div class="column is-half is-right">
+                    <p><a href="#" onclick="forgotPassword()">Forgot Password?</a></p>
                   </div>
-                  -->
                 </div>
               </form>
             </div>
@@ -82,6 +81,16 @@
       </div>
     </div>
   </div>
+  <script>
+    const forgotPassword = (e) => {
+      document.getElementById("forgotPasswordEmail").value = document.getElementById('email').value
+      // alert(document.getElementById("forgotPasswordEmail").value);
+      document.getElementById("forgotpwdform").submit();
+    }
+  </script>
+  <form id="forgotpwdform" action="/user/forgotPassword" method="POST" style="display: none;">
+    <input id="forgotPasswordEmail" type="hidden" name="email">
+  </form>
 </section>
 
 {% endblock %}
