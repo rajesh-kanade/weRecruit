@@ -90,8 +90,8 @@ textarea {
   background-color: #4ccd3d;
   border-color: transparent;
   color: #fff;
-  /* margin-top: 20px;
-  margin-bottom: 20px; */
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .navbar.has-shadow {
@@ -234,9 +234,9 @@ table thead tr th {
   margin-top: -60px;
 }
 /* new changes 18 april*/
-/* .column .job-position {
-  margin-left:auto;
-} */
+.column .job-position {
+  /* margin-left:auto; */
+}
 
 @media screen and (min-width: 1024px) {
   .section {
@@ -423,12 +423,6 @@ table thead tr th {
   .list-unstyled {
     font-size: 14px;
   }
-  #manageUsersTable {
-    width: 70%;
-  }
-  #addUserPage {
-    width: 50%;
-  }
 }
 
 /* button changes */
@@ -448,77 +442,6 @@ label {
   margin-left: -10%;
   margin-top: 3%;
 }
-
-#manageUsersTable table thead tr th {
-  color: #8c8c8c;
-}
-
-#manageUsersTable table thead tr th span {
-  margin-left: 5%;
-}
-#manageUsersTable table tbody tr td span {
-  margin-left: 10%;
-}
-
-#sort_name,
-#sort_email,
-#sort_status {
-  display: inline;
-}
-
-/* #resumeBrowserPage .job-position,
-#resumeBrowserPage section {
-  padding-top: 0.5rem;
-  padding-bottom: 2rem;
-}
-
-#resumeBrowserMessages .notification {
-  margin-top: 0%;
-  margin-left: 0%;
-}
-
-#resumeSearchBar {
-  margin-top: -5%;
-} */
-
-.pagination .left {
-  padding-left: 10%;
-  display: block;
-  border: 1px;
-  background-color: #fff;
-}
-
-.pagination .right {
-  padding-left: 10%;
-  display: block;
-
-  background-color: #4ccd3d;
-}
-
-.pagination {
-  margin-left: 73%;
-  display: block;
-}
-
-.pagination .number {
-  background-color: #f6f6f6;
-  padding: 0;
-  margin: 0%;
-}
-
-.pagination a {
-  color: black;
-  background-color: #fff;
-  float: left;
-  padding: 6px 12px;
-  text-decoration: none;
-  margin: 0 2%;
-  border: 2px black;
-}
-
-#manageUsersPageMessages .notification {
-  margin-top: 0%;
-  margin-bottom: 1%;
 
 #jd_browser_messages div .notification {
   margin-top: 0%;
