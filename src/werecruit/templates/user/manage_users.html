@@ -20,7 +20,7 @@
   </div>
   <div class="job-position table-height">
     <div class="container">
-      <section class="application-form">
+      <section class="section">
         <div class="table-container" id="manageUsersTable">
 
           <table class="table is-fullwidth">
@@ -44,11 +44,11 @@
                     </script>
                   </span>
                 </th>
-                <th>Email<span>
+                <th>Email
+                  <!-- <span>
                     <form id="sort_email" action="/user/showManageUsersPage" onsubmit="onEmailSubmit">
                       <input type="hidden" name="order_by" value="email">
                       <input type="hidden" name="order" value="{{toggles.email.orderToggle}}">
-                      <!-- {{toggles}} -->
                       <a href="" onclick="sortByEmail()">
                         <i class="{{toggles.email.arrowToggle}}"></i></a>
                     </form>
@@ -57,7 +57,7 @@
                         document.getElementById("sort_email").submit();
                       }
                     </script>
-                  </span>
+                  </span> -->
                 </th>
                 <th>Status<span>
                     <form id="sort_status" action="/user/showManageUsersPage">
@@ -79,14 +79,14 @@
             {% endif %}
             <tbody>
               <tr class="table-data">
-                <td>{{user.name}}</td>
-                <td>{{user.email}}</td>
+                <td id="nameColumn">{{user.name}}</td>
+                <td id="emailColumn">{{user.email}}</td>
                 {% if user.status == 1 %}
-                <td>Active</td>
+                <td id="statusColumn">Active</td>
                 {% else %}
-                <td>Closed</td>
+                <td id="statusColumn">Closed</td>
                 {% endif %}
-                <td class="table-actions">
+                <td class="table-actions" id="actionColumn">
                   <a href="/user/showEditPage/{{user.id}}"><abbr title="Edit"><i
                         class="fa fa-pencil-square-o"></i></abbr></a>
                   <span><a href="/user/showDeletePage/{{user.id}}"><abbr title=" Delete User"><i class="fa fa-trash"

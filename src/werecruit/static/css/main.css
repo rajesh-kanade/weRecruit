@@ -189,8 +189,8 @@ hr {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.1) inset;
 }
 
-.has-shadow:before,
-.has-shadow:after {
+/* .has-shadow:before, */
+/* .has-shadow:after {
   content: "";
   position: absolute;
   z-index: -1;
@@ -199,7 +199,19 @@ hr {
   bottom: 0;
   left: 0px;
   right: 0px;
-  border-radius: px;
+  border-radius: 5px;
+  background-color: white;
+} */
+.has-shadow:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  box-shadow: 0 0 10px rgb(0 0 0 / 80%);
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  /* border-radius: 5px; */
   background-color: white;
 }
 
@@ -233,6 +245,7 @@ table thead tr th {
 .table-height {
   margin-top: -60px;
 }
+
 /* new changes 18 april*/
 /* .column .job-position {
   margin-left:auto;
@@ -242,8 +255,9 @@ table thead tr th {
   .section {
     margin-left: -5px;
   }
+
   .job-position .container .section {
-    padding: 2rem 0.5rem;
+    padding: 1rem 0.5rem;
   }
 
   .job-position .container {
@@ -262,6 +276,7 @@ table thead tr th {
     width: 70%;
     /*width: auto;*/
   }
+
   .section .container is-fullheight {
     margin-left: 15%;
   }
@@ -423,9 +438,11 @@ table thead tr th {
   .list-unstyled {
     font-size: 14px;
   }
+
   #manageUsersTable {
-    width: 70%;
+    width: 55%;
   }
+
   #addUserPage {
     width: 50%;
   }
@@ -439,25 +456,34 @@ table thead tr th {
 label {
   font-size: 15px;
 }
+
 .column.is-half {
   margin-right: 20%;
   margin-top: -1%;
   margin-left: -10%;
 }
+
 .block:not(:last-child) {
   margin-left: -10%;
   margin-top: 3%;
 }
 
-#manageUsersTable table thead tr th {
+#manageUsersTable table thead tr th,
+#manageUsersTable table thead tr th span form a i {
   color: #8c8c8c;
 }
 
 #manageUsersTable table thead tr th span {
-  margin-left: 5%;
+  margin-left: 10px;
 }
+
 #manageUsersTable table tbody tr td span {
-  margin-left: 10%;
+  margin-left: 10px;
+}
+
+#managerUserTable .table-actions {
+  font-size: 21px;
+  padding: 0.3rem 0.15em;
 }
 
 #sort_name,
@@ -520,4 +546,36 @@ label {
   margin-top: 0%;
   margin-bottom: 1%;
   margin-left: 0%;
+}
+
+#add-user-button {
+  padding: 1% 5%;
+  border-radius: 2px;
+}
+
+.section {
+  padding: 1rem 0.5rem;
+}
+
+.table thead th,
+.table tbody tr {
+  vertical-align: bottom;
+  border-bottom: 2px solid #f6f6f6;
+  border-bottom-width: 2px;
+}
+
+#nameColumn {
+  width: 35%;
+}
+
+#emailColumn {
+  width: 40%;
+}
+
+#statusColumn {
+  width: 15%;
+}
+
+#actionColumn {
+  width: 10%;
 }
