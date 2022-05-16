@@ -37,35 +37,44 @@
                     {{form.client(class='input', placeholder='Enter Client Name')}}
                   </div>
                 </div>
+
+
                 <div class="field">
-                  <label class="label">{{ form.client_jd.label }}</label>
-                  <div class="control">
-                  </div>
-                </div>
-                <div id="file-js-example" class="file has-name">
-                  <label class="file-label">
-                    <input class="file-input" type="file" name="resume">
-                    <span class="file-cta">
-                      <span class="file-icon">
-                        <i class="fa fa-upload"></i>
+                  <label class="label has-text-left">{{ form.client_jd.label }}</label>
+
+                  <div  id="jd-selector" class="file has-name">
+                    <label class="file-label">
+                      <input type="file" name="client_jd" class="file-input">
+                      <span class="file-cta">
+                        <span class="file-icon">
+                          <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                          Select JD File ( docx, pdf only)…
+                        </span>
                       </span>
-                      <span class="file-label">
-                        Click to upload (word, pdf only)
+                      <span class="file-name">
+                        {{form.client_jd.data}}
                       </span>
-                    </span>
-                    <span class="file-name">
-                      {{form.client_jd.data}}
-                    </span>
-                  </label>
-                </div>
-                {% for error in form.client_jd.errors %}
-                <small class="has-text-danger has-text-left">{{ error }}</small>
-                {% endfor %}
-                <div class="field">
-                  <label class="label"></label>
-                  <div class="control">
+                    </label>
                   </div>
+                  <script>
+                    jdFileInput = document.querySelector('#jd-selector input[type=file]');
+                    jdFileInput.onchange = () => {
+                      if (jdFileInput.files.length > 0) {
+                        fileName = document.querySelector('#jd-selector .file-name');
+                        fileName.textContent = jdFileInput.files[0].name;
+                        console.log('File selected for upload is : ' + fileName.textContent);
+                      }
+                    }
+                  </script>
+    
+                  {% for error in form.client_jd.errors %}
+                    <small class="has-text-danger has-text-left">{{ error }}</small>
+                  {% endfor %}
+
                 </div>
+                
                 <div class="field">
                   <label class="label">{{ form.location.label }}</label>
                   <div class="control">
