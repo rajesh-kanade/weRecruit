@@ -474,11 +474,11 @@ label {
 }
 
 #manageUsersTable table thead tr th span {
-  margin-left: 10px;
+  margin-left: 1rem;
 }
 
 #manageUsersTable table tbody tr td span {
-  margin-left: 10px;
+  margin-left: 0.5rem;
 }
 
 #managerUserTable .table-actions {
@@ -507,39 +507,39 @@ label {
   margin-top: -5%;
 } */
 
+.pagination {
+  padding: 0%;
+}
+
 .pagination .left {
-  padding-left: 10%;
-  display: block;
-  border: 1px;
   background-color: #fff;
 }
 
 .pagination .right {
-  padding-left: 10%;
-  display: block;
-
   background-color: #4ccd3d;
 }
 
-.pagination {
-  margin-left: 73%;
-  display: block;
+.pagination div {
+  padding-left: 0.4rem;
 }
 
-.pagination .number {
-  background-color: #f6f6f6;
-  padding: 0;
-  margin: 0%;
+.pagination div a {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
-.pagination a {
-  color: black;
-  background-color: #fff;
-  float: left;
-  padding: 6px 12px;
-  text-decoration: none;
-  margin: 0 2%;
-  border: 2px black;
+.pagination .left,
+.pagination .right {
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+}
+
+.pagination .currentPage {
+  border: rgb(129, 128, 128) solid 1px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 #manageUsersPageMessages .notification {
@@ -582,4 +582,8 @@ label {
 
 #actionColumn {
   width: 10%;
+}
+
+#actionColumn i {
+  font-size: large;
 }

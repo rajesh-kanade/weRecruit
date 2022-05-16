@@ -102,33 +102,36 @@
             </tbody>
           </table>
 
-          <div class="pagination">
+          <div class="is-flex is-flex-direction-row is-justify-content-flex-end container pagination">
             {% if totalPages > 1 %}
-            <a class="number">{{pagination.page}} <span class="sr-only">(current)</span></a>
-            <a class="number">of {{ totalPages}} <span class="sr-only">(current)</span></a>
+            <div class="currentPage"><a>{{pagination.page}} <span class="sr-only">(current)</span></a></div>
+            <div class="totalPages"><a>Of {{ totalPages}} <span class="sr-only">(current)</span></a></div>
             {% if pagination.page > 1 %}
-            <a class="left"
-              href="/user/showManageUsersPage?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
-              aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+            <div><a class="left"
+                href="/user/showManageUsersPage?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+                aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a></div>
 
             {% else %}
-            <a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+            <div><a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+            </div>
             {% endif %}
 
-            {% if pagination.page < totalPages %} <a class="right"
-              href="/user/showManageUsersPage?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
-              aria-label="Next">
-              <span>&raquo;</span><span class="sr-only">Next</span></a>
-              {% else %}
-              <a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
-              {% endif %}
-              {% endif %}
+            {% if pagination.page < totalPages %} <div><a class="right"
+                href="/user/showManageUsersPage?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
+                aria-label="Next">
+                <span>&raquo;</span><span class="sr-only">Next</span></a>
           </div>
+          {% else %}
+          <div><a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+          </div>
+          {% endif %}
+          {% endif %}
         </div>
-
-      </section>
     </div>
+
+    </section>
   </div>
+</div>
 
 
 </div>
