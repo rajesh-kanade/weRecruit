@@ -44,6 +44,11 @@ textarea,
 .header th {
   font-family: 'regular', sans-serif;
 }
+*{ color-adjust: exact;  
+  -webkit-print-color-adjust: exact; 
+  print-color-adjust: exact; 
+  
+}
 
 .heading {
   font-size: 14px;
@@ -64,11 +69,16 @@ textarea,
   margin-top: 25px;
   margin-bottom: 25px;
 }
-
-.card-content {
-  /* margin-left: 10px; */
-  font-size: 16px;
+.level-item .sub-head{
+  margin-top: -10px;
+  margin-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
 }
+
+/* .card-content {
+  
+  font-size: 16px;
+} */
 
 .heading-link a {
   color: white;
@@ -111,6 +121,10 @@ textarea {
   color: white;
   
 }
+.is-size-7{
+  font-family: 'Poppins', sans-serif;
+}
+
 .header .has-text-left{
   font-weight: bold;
 }
@@ -118,11 +132,18 @@ textarea {
   font-weight: normal;
 }
 .status-div{
-  background-color: #f6f6f6;
-  height:100%;
+  background-color:#f3f4f6;
+  height:100vh;
 }
 .block-title .title{
   padding-left:6rem;
+  padding-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 28pt;
+}
+.title{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
 }
 
 .level .level-item{
@@ -132,6 +153,7 @@ textarea {
 }
 .level .level-item .heading .sub-heading{
   color: white;
+  font-family: 'Poppins', sans-serif;
   
 }
 .container-status {
@@ -142,10 +164,41 @@ textarea {
   display: block;
   text-align: left !important;
 }
+.status-div .container{
+  background-color: #f3f4f6;
+}
+.print-btn
+{
+    display: block;
+    color:#f3f4f6;
+}
 td {
   width:1%;
-  } 
+  background-color: rgba(250,250,250,255);
+} 
+th{
+  background-color: #ffffff;
+}
+.table thead td{
+  vertical-align: bottom;
+  border-bottom: 4px solid #f3f4f6;
+  border-width: 0 0 2px !important;
+}
+.table thead th{
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 550;
+}
+.header .has-text-left{
+  font-size: 16px;
+  letter-spacing: 0.8px;
+  font-weight: 600;
+  color:#9f9f9f;
+}
 
+.button{
+  color: white;
+}
 .jd-details{
   display: flex;
   justify-content: flex-start;
@@ -181,6 +234,7 @@ td {
   text-align: left !important;
   padding-left: 0px;
   
+  
 }
 
 .label:not(:last-child) {
@@ -192,6 +246,7 @@ td {
 } */
 .reset-form .field .control .input{
   padding-left: 10px;
+  width: 7rem;
 }
 
 .container .row .inputs{
@@ -270,7 +325,18 @@ hr {
   padding-top: 50px;
 }
 /*reset password form*/
-
+a{
+  
+    font-size: 12.5px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color:gray;
+    
+  
+}
+.forgot p{
+  margin-left: -1.7rem;
+}
 .reset-columns .field .control .input{
   position: relative;
   text-align: left;
@@ -310,7 +376,7 @@ hr {
 
 label{
   
-  margin-bottom: 0px;
+  margin-bottom: 2px;
 }
 .reset-columns i {
   margin: 0 10px;
@@ -344,6 +410,7 @@ label{
 
 .password-reset .container .card .card-content {
   margin-left: 0px;
+  padding: 2rem;
 }
 .field .section-title .label {
   font-size: 18px;
@@ -425,7 +492,6 @@ table thead tr th {
 }
 /* new changes 18 april*/
 .column .job-position {
-<<<<<<< HEAD
   
   padding-right: 40px;
 }
@@ -436,19 +502,42 @@ table thead tr th {
 }
 .has-text-left .btn{
   outline-color: #fff !important;
-=======
-  /* margin-left:auto; */
->>>>>>> 3532790c27852633764fa6af01a4fe3354f25a6a
 }
+/* @media screen and (max-width:330px) {
+  .content h2{
+    font-size: 0.5rem;
+  }
+  .content p{
+    font-size: 0.3rem;
+  }
+  
+} */
+.has-background-grey-lighter {
+  background-color: #f6f6f6 !important;
+}
+.card-image:first-child img{
+  box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 30%), 0 0px 0 1px rgb(10 10 10 / 2%);
+}
+
+
 
 @media screen and (min-width: 1024px) {
-
-.section{
-  margin-left: -5px;
+  .card-image:first-child img {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    margin-left: 74px;
+    height: 522px;
+    width: 550px;
+    margin-top: -50px;
 }
+
+  .section{
+    margin-left: -5px;
+  }
   .job-position .container .section {
     padding: 2rem 0.5rem;
   }
+  
 
   .job-position .container {
     flex-grow: 1;
@@ -494,12 +583,6 @@ table thead tr th {
     width: 66%;
   }
 
-  .heading {
-    text-transform: none;
-    font-size: 26px;
-    letter-spacing: 1px;
-    margin-bottom: 5px;
-  }
 
   .box {
     background-color: white;
@@ -515,7 +598,7 @@ table thead tr th {
 
   .card {
     background-color: transparent;
-    border-radius: 0.25rem;
+    /* border-radius: 0.25rem; */
     box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
     color: #4a4a4a;
     max-width: 100%;
@@ -529,31 +612,33 @@ table thead tr th {
     display: block;
     position: relative;
     max-height: 100px;
-    max-width: 400px;
-    margin-left: 10px;
+    max-width: 430px;
+    margin-left: 5px;
   }
 
   .card-image:first-child img {
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
-    margin-left: 80px;
-    height: 550px;
-    width: 550px;
-    margin-top: -78px;
+    margin-left: 2.7rem;
+    height: 500px;
+    width: 560px;
+    border-radius: 1px;
+    
   }
 
   .card-content {
-    margin-left: 50px;
+    margin-left: 10px;
   }
 
   .card-content .heading {
-    font-size: 26px;
-    margin-top: 0px;
+    font-size: 23px;
+    margin-top: -15px;
   }
 
   .card-content .sub-heading {
     font-size: 14px;
     margin-top: 20px;
+    
   }
 
   .heading-login {
@@ -641,13 +726,29 @@ table thead tr th {
   width: max-content;
 }
 
-label{
+.label-signin {
+  font-size: 16px;
+  letter-spacing: 1.2px;
+  font-weight: 600;
+  color: gray;
+}
+.sigin-input .input{
+  font-size: 15px;
+  letter-spacing: 1.2px;
+  font-weight: 600;
+  color:#dbdbdb;
+  height: 3rem;
+}
+.control.has-icons-left .icon, 
+.control.has-icons-right .icon{
+  top:0.3rem;
+}
+.label{
   font-size: 15px;
 }
-.column{
-  margin-right: 20%;
-  margin-top: -1%;
-  margin-left: -10%;
+.column .job-position{
+
+  padding-left: 50px;
   
 }
 .block:not(:last-child){
@@ -656,19 +757,49 @@ label{
 }
 
 /*Sigin page changes 7/5/2022*/
-/* .has-background-grey-lighter{
-  margin-top: 4rem !important;
-} */
-p.control {
-  padding-left: 2rem;
+.content-btn{
+  padding-top: 8rem;
+}
+.field:not(:last-child){
+  margin-bottom: 1.4rem;
+}
+.signIn .column{
+  padding-left: 1rem;
+  margin-right: 3rem;
+
+}
+.box{
+  padding: 0px;
+}
+.has-background-grey-lighter{
+  /* padding-top: 8rem !important; */
+  max-width: 100%;
 }
 
-@media screen and (max-width: 768px) {
+/* @media screen and (min-width:768px) and (max-width:1406px){
+  .has-background-grey-lighter{
+    padding-top: 10rem !important;
+    
+  }
+  
+} */
+
+
+@media screen and (max-width: 768px)  {
 
   .column.is-half{
     margin-right: 1px;
     margin-left: 1px;
+    margin-top: -3%;
     
+  }
+  .content-btn{
+    padding-top: 1rem;
+  }
+  
+  .hero-body .column{
+    padding-right: 0rem;
+    /* padding-left: -7rem; */
   }
   
   p.control {
@@ -677,28 +808,18 @@ p.control {
   a{
     padding-left: 1rem;
   }
-  .column.is-half {
-    
-    margin-top: -3%;
-    
-  }
+
   .container{
     margin-top: 3rem;
     padding-left: 0px;
     padding-right: 0px;
   }
-  /* .heading{
-    margin-left: 0rem;
-  } */
-  .sub-heading{
-    margin-left: 0rem;
-    
-  }
+  
   .content h2{
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
   .content p{
-    font-size: 0.8rem;
+    font-size: 0.6rem;
   }
   /* .content-btn {
   padding-top: 6.7vw;
@@ -706,25 +827,159 @@ p.control {
   .column{
     padding: 0rem;
   }
-  .content-btn {
-    padding-top: 10%;
+  /* .content-btn {
+    padding-top: 5rem;
+  } */
+  .heading{
+    font-size: large;
   }
+  /* .card-image{
+    padding-top: 1rem;
+  } */
   
   .card-content{
     padding-left: 1px;
     padding-top: 1px;
     padding: 0px;
-    font-size: xx-large;
+    font-size: small;
   }
   
     
+}
+
+
+@media screen and (min-width:340px) and (max-width:769px){
+  .has-background-grey-lighter{
+    padding-top: 3rem !important;
   }
+  .content h2{
+    font-size: 1.5rem;
+  }
+  /* .content p{
+    font-size: 1rem;
+  } */
+  
+}
+@media screen and (min-width:769px) {
+  .content h2{
+    font-size: 1.2rem;
+  }
+  .content p{
+    font-size: 0.8rem;
+  }
+}
+@media screen and (min-width:820px) and (max-width:1019px) {
+  .heading{
+    margin-top: 0px;
+  }
+  .hero-body .column {
+    padding-right: 0px;
+    
+}
+  .content h2{
+    font-size: 0.8rem;
+  }
+  /* .content-btn{
+    padding-top: 12% !important;
+  } */
+  .card-content{
+    padding: 1rem;
+  }
+  
+}
+@media screen and (min-width:820px) and (max-width:991px)  {
+  .hero-body{
+    padding-top: 20rem;
+  }
+  .card-image {
+    display: block;
+    position: relative;
+    max-height: 100px;
+    max-width: 430px;
+    margin-left: 5px;
+  }
+  .container{
+    max-width: 810px;
+  }
+
+  .card-image:first-child img {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    margin-left: 8px;
+    height: 470px;
+    width: 590px;
+    margin-top: -60px;
+  }
+}
+@media screen and (min-width:992px) and (max-width:1024px) {
+  
+  .hero-body{
+    padding-top: 20rem;
+  }
+  .card-content{
+    padding: 0rem;
+  }
+  .card-image {
+    display: block;
+    position: relative;
+    max-height: 100px;
+    max-width: 430px;
+    margin-left: 5px;
+  }
+
+  .card-image:first-child img {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    margin-left: 8px;
+    height: 470px;
+    width: 560px;
+    margin-top: -60px;
+  }
+  
+    
+ 
+}
+@media screen and (min-width:1407px) {
+  .has-background-grey-lighter{
+    padding-top: 10rem !important;
+    
+  }
+  .card-image{
+    height: 490px;
+  }
+  
+}
+@media screen and (min-width:1024px) and (max-width:1408px) {
+  .box {
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 0.5em 1em -0.125em rgb(10 10 10 / 10%), 0 0px 0 1px rgb(10 10 10 / 2%);
+    color: #4a4a4a;
+    display: block;
+    padding: 2.25rem;
+    max-width: 100px;
+    margin-left: 90px;
+    max-width: 100% !important;
+}
+  .container{
+    padding-left: 0px;
+    
+  }
+  .hero-body{
+    padding-top: 20rem;
+  }
+    
+}
+
+.hero-body .column{
+  
+  padding-left: -7rem;
+}
+
 .heading{
-  margin-top: 2rem;
+  margin-top: 1rem;
+  font-size: larger;
 }
 .sub-heading{
   margin-left: 3rem;
-}
-.content-btn {
-  padding-top: 25%;
 }

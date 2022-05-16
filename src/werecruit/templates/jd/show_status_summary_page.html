@@ -13,7 +13,7 @@
       <div class="container-status">
       <div class="block ml-3">   
           <div class="table has-text-centered">
-          <!----> <table class="table " >
+          <!----> <table class="table">
               <tbody>
               {% for ss in statusSummary %}
                 {%if loop.first %}
@@ -36,9 +36,9 @@
                     <table class="table">
                       <tbody>
                         <thead>
-                          <tr class="header {{theme_bg_color}}">
-                            <td class="has-text-left {{theme_text_color}}">Status</td>
-                            <td class="has-text-left {{theme_text_color}}">Count</td>
+                          <tr class="header">
+                            <td class="has-text-left ">Status</td>
+                            <td class="has-text-left ">Count</td>
                             
         
                           </tr>
@@ -62,9 +62,23 @@
           </div>  
       </div>
     
-      <a class="button is-success is-squared ml-3" onclick="window.print();">Print</a>
+      <a class="button is-success is-squared ml-3" id="printpagebutton" onclick="printpage()"><span class="print-btn">Print<span></a>
       <!--<a class="button is-success is-rounded" href="/">Email</a> -->
     </div>
   </section>
-</div>
+
+<script type="text/javascript">
+  function printpage() {
+      //Get the print button and put it into a variable
+      var printButton = document.getElementById("printpagebutton");
+      //Set the print button visibility to 'hidden' 
+      printButton.style.visibility = 'hidden';
+      //Print the page content
+      window.print()
+      //Set the print button to 'visible' again 
+      //[Delete this line if you want it to stay hidden after printing]
+      printButton.style.visibility = 'visible';
+  }
+</script>
 {% endblock %}
+</div>
