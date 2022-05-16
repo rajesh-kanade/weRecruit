@@ -1,15 +1,15 @@
 @font-face {
-  font-family: 'poppins-medium';
+  font-family: "poppins-medium";
   src: url(fonts/Poppins-Medium.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'regular';
+  font-family: "regular";
   src: url(fonts/Poppins-Regular.ttf) format("truetype");
 }
 
 @font-face {
-  font-family: 'semi-bold';
+  font-family: "semi-bold";
   src: url(fonts/Poppins-SemiBold.ttf) format("truetype");
 }
 
@@ -20,12 +20,12 @@ h2,
 .navbar-link,
 .form-group .field .section-title .label,
 .header th {
-  font-family: 'poppins-medium', sans-serif;
+  font-family: "poppins-medium", sans-serif;
 }
 
 .form-group .field .label,
 .heading-login {
-  font-family: 'semi-bold', sans-serif;
+  font-family: "semi-bold", sans-serif;
 }
 
 button,
@@ -40,7 +40,7 @@ textarea,
 .file,
 .select.is-black select,
 .header th {
-  font-family: 'regular', sans-serif;
+  font-family: "regular", sans-serif;
 }
 
 .heading {
@@ -90,8 +90,8 @@ textarea {
   background-color: #4ccd3d;
   border-color: transparent;
   color: #fff;
-  /* margin-top: 20px;
-  margin-bottom: 20px; */
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .navbar.has-shadow {
@@ -130,7 +130,6 @@ textarea {
 select::-ms-expand {
   border-color: #c6c6c6;
 }
-
 
 hr {
   background-color: #c6c6c6;
@@ -192,7 +191,7 @@ hr {
 
 .has-shadow:before,
 .has-shadow:after {
-  content: '';
+  content: "";
   position: absolute;
   z-index: -1;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
@@ -209,7 +208,6 @@ hr {
   /* background-color: whitesmoke; */
   border: #c6c6c6;
 }
-
 
 td,
 th {
@@ -232,17 +230,18 @@ table thead tr th {
   font-size: 14px;
 }
 
-
 .table-height {
   margin-top: -60px;
 }
+/* new changes 18 april*/
+.column .job-position {
+  /* margin-left:auto; */
+}
 
 @media screen and (min-width: 1024px) {
-
   .section {
     margin-left: -5px;
   }
-
   .job-position .container .section {
     padding: 2rem 0.5rem;
   }
@@ -263,11 +262,9 @@ table thead tr th {
     width: 70%;
     /*width: auto;*/
   }
-
   .section .container is-fullheight {
     margin-left: 15%;
   }
-
 
   .column .container {
     flex-grow: 1;
@@ -299,7 +296,8 @@ table thead tr th {
   .box {
     background-color: white;
     border-radius: 6px;
-    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
+      0 0px 0 1px rgba(10, 10, 10, 0.02);
     color: #4a4a4a;
     display: block;
     padding: 2.25rem;
@@ -311,14 +309,14 @@ table thead tr th {
   .card {
     background-color: transparent;
     border-radius: 0.25rem;
-    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
+      0 0px 0 1px rgba(10, 10, 10, 0.02);
     color: #4a4a4a;
     max-width: 100%;
     position: relative;
     border: none;
     box-shadow: none;
   }
-
 
   .card-image {
     display: block;
@@ -374,11 +372,9 @@ table thead tr th {
     font-size: 14px;
   }
 
-
   button {
     font-size: 14px;
   }
-
 
   /* new screen */
 
@@ -427,13 +423,6 @@ table thead tr th {
   .list-unstyled {
     font-size: 14px;
   }
-
-  #add-user-button {
-    padding-left: 5%;
-    padding-right: 5%;
-  }
-
-
 }
 
 /* button changes */
@@ -444,127 +433,20 @@ table thead tr th {
 label {
   font-size: 15px;
 }
-
 .column.is-half {
   margin-right: 20%;
   margin-top: -1%;
   margin-left: -10%;
-
 }
-
 .block:not(:last-child) {
   margin-left: -10%;
   margin-top: 3%;
 }
 
-/* job-list refers to the job browser page */
-.jd-list-row th {
-  color: #8c8c8c;
+#jd_browser_messages div .notification {
+  margin-top: 0%;
+  margin-left: 0%;
 }
-
-.job-list-row th span {
-  margin-left: 10px;
-}
-
-.job-list-row th span form {
-  display: inline;
-}
-
-/* .pagination a :not(new){
-  background-color: #4ccd3d;
-  color: black;
-  float: left;
-  padding: 8px 16px;
-  text-decoration: none;
-  
-} */
-/* .pagination{
-  display: inline-block;
-  margin-left: -30%;
-}*/
-.pagination .left {
-  padding-left: 10%;
-  display: block;
-  border: 1px;
-  background-color: #fff;
-}
-
-.pagination .right {
-  padding-left: 10%;
-  display: block;
-
-  background-color: #4ccd3d;
-}
-
-.pagination {
-  margin-left: 75%;
-  display: block;
-
-}
-
-.pagination .number {
-  background-color: #f6f6f6;
-  padding: 0;
-  margin: 0%;
-
-}
-
-.pagination a {
-  color: black;
-  background-color: #fff;
-  float: left;
-  padding: 6px 12px;
-  text-decoration: none;
-  margin: 0 2%;
-  border: 2px black;
-}
-
-/* .active-job  {
-  margin-left: 5%;
-  margin-top: 5%;
-} */
-
-/* .active-job-head{
-  margin-left: 5%;
-  margin-top: 5%;
-} */
-
-.button-job .button.is-success {
-  margin-top: 3%;
-  margin-left: -10%;
-}
-
-.notification.is-info {
-  margin-top: 5%;
-  margin-left: -8%;
-  margin-right: 3%;
-  margin-bottom: 2%;
-}
-
-#users-table-row {
-  color: #8c8c8c;
-}
-
-#users-table-row span {
-  margin-left: 5%;
-}
-
-.table-actions span {
-  margin-left: 15%;
-}
-
-@media only screen and (min-width: 1200px) {
-
-  #resumeListTable,
-  #manageUsersTable {
-    width: 70%;
-  }
-
-  .add-user-section {
-    padding: 3rem 1.5rem;
-    width: 50%;
-    margin-left: 5rem;
-  }
 
   .notification.is-info {
     margin-top: 5%;
@@ -583,42 +465,19 @@ label {
     color: #4ccd3d !important;
   }
 
-}
-
-.has-text-info{
-  color: #2b2b2b !important;
-  font-size: 14px !important;
-}
-.title{
-  font-size: 24px !important;
-  color:#4ccd3d !important;
-}
 
 html{
   background-color: #f6f6f6;
 }
-/* 
-.info{
-  background-color: #4ccd3d;
-  margin-left: -13%;
- margin-right: -6%;
- padding-bottom: 2%;
- width: 103%;
-}
-.info .block:not(:last-child){
-  margin-left: 3% !important;
-  padding-top: 2%;
-  margin-top: 0% !important;
-} */
-/*  .container {
-  margin-left: 10% !important;
-} */
-/*  
-.is-block{
-  margin-left: -10%;
- 
-} */
 
+
+.shortlist-candidates-list .container {
+  margin-left: -1%;
+   padding-right: -20% !important;
+  } 
+ .shortlist-candidates-list .block{
+   margin-left: 10%;
+ } 
 
 .button.is-info {
   background-color:#fff; 
@@ -636,21 +495,6 @@ html{
   color: #fff !important;
 }
 
-/* .level-item{
-  display: block;
-  margin-left: 5%;
-}
-.level{
-  justify-content: left;
-  width: 60%;
-} */
-
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
 
 .job-details .title{
   color: white;
@@ -766,4 +610,16 @@ td {
   width: 108.5%;
   padding-block: 3%;
   display: flex;
+  border: 1px solid grey;
+}
+.block{
+  overflow: auto;
+}
+.header1 {
+  background-color: #4ccd3d !important;
+  color: #fff;
+}
+.header1 .job-details .block .title{
+  color: #fff !important;
+  padding-left: 6%;
 }
