@@ -88,6 +88,7 @@ def do_signUp(user_attrs):
 
         # insert a record in user table
         sql = """insert into users ( email, name, status, password,is_deleted)
+
 				values (%s,%s, %s,%s,%s) returning id """
         params = (email, name, status, password, False)
         _logger.debug(cursor.mogrify(sql, params))
@@ -101,7 +102,7 @@ def do_signUp(user_attrs):
 
         # insert a record into tenant
         sql = """insert into tenants ( name,status,is_deleted)
-			values (%s,%s, %s) returning id """
+			  values (%s,%s, %s) returning id """
         params = (tname, 0, False)
         _logger.debug(cursor.mogrify(sql, params))
 
@@ -113,7 +114,7 @@ def do_signUp(user_attrs):
 
         # insert a record into tenant users table with isadmin field set to true
         sql = """insert into tenant_user_roles ( tid,uid,rid)
-			values (%s,%s, %s)  """
+			  values (%s,%s, %s)  """
         params = (tid, uid, 1)
         _logger.debug(cursor.mogrify(sql, params))
 
@@ -163,7 +164,7 @@ def save_user(tenantID, userID, name, email, password, roleID):
         if int(userID) == constants.NEW_ENTITY_ID:
             # insert a record in user table
             sql = """insert into users ( email, name, password,is_deleted,status)
-				values (%s,%s, %s,%s,%s) returning id """
+				    values (%s,%s, %s,%s,%s) returning id """
             params = (email, name, password, False, Status.active.value)
             _logger.debug(cursor.mogrify(sql, params))
 
@@ -175,7 +176,7 @@ def save_user(tenantID, userID, name, email, password, roleID):
             _logger.debug("user id created is {0}".format(userID))
 
             sql = """insert into tenant_user_roles ( tid,uid,rid)
-				values (%s,%s, %s)  """
+				    values (%s,%s, %s)  """
             params = (tenantID, userID, roleID)
             _logger.debug(cursor.mogrify(sql, params))
 
@@ -385,7 +386,6 @@ def is_tenant_deleted(tid):
         else:
             _logger.debug("Tenant %s is deleted. ", tid)
             return True
-
     except Exception as dbe:
         _logger.error(dbe)
         raise
@@ -492,6 +492,42 @@ def do_reset_password(id, email, cur_password, new_password):
 					WHERE id =%s and email = %s and password =%s"""
 
             data_tuple = (new_password, id, email, cur_password)
+
+            _logger.debug(cursor.mogrify(query, data_tuple))
+            cursor.execute(query, data_tuple)
+
+            assert cursor.rowcount == 1, "Failed to find user record. Please contact support"
+
+            db_con.commit()
+            return(RetCodes.success.value, "Password reset successfully.", id)
+
+        except Exception as dbe:
+            _logger.error(dbe)
+            db_con.rollback()
+            return (RetCodes.server_error, str(dbe), None)
+
+        finally:
+            if 'cursor' in locals() and cursor is not None:
+                cursor.close()
+            dbUtils.returnToPool(db_con)
+
+    except Exception as e:
+        _logger.error("In the exception block.")
+        _logger.error(e)
+        return (RetCodes.server_error, str(e))
+
+
+def do_forgot_password(id, email, new_password):
+    try:
+        new_password = hashit(new_password)
+        try:
+            db_con = dbUtils.getConnFromPool()
+            cursor = dbUtils.getNamedTupleCursor(db_con)
+
+            query = """UPDATE users set password =%s 
+					WHERE id =%s and email = %s"""
+
+            data_tuple = (new_password, id, email)
 
             _logger.debug(cursor.mogrify(query, data_tuple))
             cursor.execute(query, data_tuple)
