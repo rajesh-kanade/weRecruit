@@ -63,7 +63,6 @@ fa = FontAwesome(app)
 """def cleanup(sender, **extra):
 	_logger.debug('inside Tearing down cleanup  function')
 	session.close()
-
 from flask import appcontext_tearing_down
 appcontext_tearing_down.connect(cleanup, app)"""
 
@@ -190,8 +189,6 @@ def show_jd_create_page():
     form.id.data = constants.NEW_ENTITY_ID
     form.total_positions.data = jdUtils.JD_DEF_POSITIONS
     form.status.data = jdUtils.JDStatusCodes.open.value
-
-    # show_location= jdUtils.location()
 
     return render_template('jd/edit.html', form=form)
 
@@ -524,24 +521,43 @@ def resume_save():
         return render_template('resume/edit.html', form=form)
 
 
-@app.route('/resume/search', methods=['POST'])
+@app.route("/resume/search", methods=["POST"])
 @login_required
 def search_resume():
 
     form = ResumeSearchForm()
-
+    # print('search resume triggered')
+    # print(form.data)
     if not bool(form.ft_search.data):
         # return(RetCodes.missing_ent_attrs_error.value, "Search criteria not specified.".format(tenantID), None)
-        return redirect(url_for('show_resume_browser_page'))
+        return redirect(url_for("show_resume_browser_page"))
 
-    (retCode, msg, resumeList) = resumeUtils.search_resumes(session.get('tenant_id'),
-                                                            form.ft_search.data)
+    (retCode, msg, resumeList) = resumeUtils.search_resumes(
+        session.get("tenant_id"), form.ft_search.data
+    )
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = request.args.get(
+        get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
 
-    if (retCode == resumeUtils.RetCodes.success.value):
-        return render_template('resume/list.html', resumeList=resumeList, form=form)
+    offset = (page - 1) * per_page
+    total = len(resumeList)
+    from math import ceil
+    totalPages = ceil(total/per_page)
+
+    def getPages(offset=0, per_page=1):
+        return resumeList[offset: offset + per_page]
+
+    pagination_ResumeList = getPages(offset=offset, per_page=per_page)
+    pagination = Pagination(page=page, per_page=per_page, total=total)
+
+    if retCode == resumeUtils.RetCodes.success.value:
+        return render_template("resume/list.html", resumeList=resumeList, form=form, page=page,
+                               per_page=1,
+                               pagination=pagination,
+                               totalPages=totalPages)
     else:
-        flash(retCode + ':' + msg, "is-danger")
-        return render_template('resume/list.html', resumeList=None, form=form)
+        flash(retCode + ":" + msg, "is-danger")
+        return render_template("resume/list.html", resumeList=None, form=form)
 
 
 @app.route('/jd/searchNonShortlistedResumes', methods=['POST'])
@@ -574,21 +590,58 @@ def search_non_shortlisted_resumes():
         return render_template('jd/non_shortlisted_candidates_list.html', resumeList=resumeList, job_id=form.job_id.data, searchForm=form)
 
 
-@app.route('/resume/showBrowser', methods=['GET'])
+@app.route("/resume/showBrowser", methods=["GET"])
 @login_required
 def show_resume_browser_page():
-    results = resumeUtils.list_resumes_by_tenant(session.get('tenant_id'))
+
+    orderBy = request.args.get("order_by", None)
+    order = request.args.get("order", None)
+    toggles = {
+        "name": {
+            "arrowToggle": "fa fa-arrow-down"
+            if (orderBy == "name" and order == "ASC")
+            else "fa fa-arrow-up",
+            "orderToggle": "DESC" if order == "ASC" else "ASC",
+        }
+    }
+    results = resumeUtils.list_resumes_by_tenant(
+        session.get("tenant_id"), orderBy=orderBy, order=order
+    )
+
     form = ResumeSearchForm()
 
-    if (results[0] == resumeUtils.RetCodes.success.value):
-        _logger.debug('success')
+    if results[0] == resumeUtils.RetCodes.success.value:
+        _logger.debug("success")
         resumeList = results[2]
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        per_page = request.args.get(
+            get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+
+        offset = (page - 1) * per_page
+        total = len(resumeList)
+        from math import ceil
+        totalPages = ceil(total/per_page)
+
+        def getPages(offset=0, per_page=1):
+            return resumeList[offset: offset + per_page]
+
+        pagination_ResumeList = getPages(offset=offset, per_page=per_page)
+        pagination = Pagination(page=page, per_page=per_page, total=total)
         # for resume in resumeList:
-        #	_logger.debug(resume.name)
-        return render_template('resume/list.html', resumeList=resumeList, form=form)
+        # 	_logger.debug(resume.name)
+        return render_template(
+            "resume/list.html",
+            resumeList=pagination_ResumeList,
+            form=form,
+            toggles=toggles,
+            page=page,
+            per_page=1,
+            pagination=pagination,
+            totalPages=totalPages
+        )
     else:
-        flash(results[0] + ':' + results[1], "is-danger")
-        return render_template('resume/list.html', resumeList=None)
+        flash(results[0] + ":" + results[1], "is-danger")
+        return render_template("resume/list.html", resumeList=None, toggles=toggles)
 
 
 @app.route('/resume/showEditPage/<int:id>', methods=['GET'])
@@ -682,19 +735,14 @@ def jd_download(id):
 @app.route('/resume/showshortlistpage', methods = ['GET'])
 @login_required
 def show_resume_shortlist_page():
-
 	try:
 		_logger.debug('inside shortlist resume page for  ID {0} '.format(id))
-
 		assert request.args.get('id'), "Resume ID request parameter not found."
 		assert request.args.get('name'), "Candidate Name request parameter not found."
-
 		form = ResumeShortlistForm()
 		form.id.data = request.args.get('id')
 		form.candidate_name.data = request.args.get('name')
-
 		results = jdUtils.list_jds_by_tenant(session.get('tenant_id'))
-
 		if (results[0] == jdUtils.RetCodes.success.value): 
 			jdList = results[2]    
 			for jd in jdList:
@@ -932,20 +980,6 @@ def show_job_summary_page(job_id):
 
 # /reports/showClientWiseSummary
 
-# 29 april location
-# @app.route('/jd/showCreatepage/', methods=['GET'])
-# @login_required
-# def show_location():
-
-
-#     # get the summary
-#     # (retCode, msg, location_city) = jdUtils.location(city)
-#     # assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch location {0)".format(id)
-
-
-#     return render_template("jd/showCreatepage.html",  location_status=location_city)
-
-
 
 @app.route('/reports/showClientWiseSummary', methods=['GET'])
 @login_required
@@ -1025,6 +1059,28 @@ def do_reset_password():
         # flash ("New Password and Confirm Password must be same", "is-danger")
         flash('New Password and Confirm new password must be same', "is-danger")
         return redirect(url_for('show_reset_password'))
+
+
+@app.route('/user/forgotPassword', methods=['POST'])
+def do_forgot_password():
+    email = request.form.get('email')
+    user = userUtils.get_user_by_email(email)
+    if not user[2]:
+        flash(
+            'This email is not registerd with us, try again with a different email', "is-danger")
+        return redirect(url_for('show_signin_page'))
+    else:
+        new_password = os.environ.get('TEMP_FORGOT_PASSWORD')
+        userUtils.do_forgot_password(
+            user[2].id, user[2].email, new_password)
+        emailSubject = 'Password Reset Successfully'
+        emailBody = render_template('user/forgot_password.html')
+        emailContentType = 'html'
+        emailUtils.sendMail(user[2].email, subject=emailSubject,
+                            body=emailBody, contentType=emailContentType)
+
+        flash('A new password has been sent to your email successfully', "is-success")
+        return redirect(url_for('show_signin_page'))
 
 
 @app.route('/user/showManageUsersPage', methods=['GET'])

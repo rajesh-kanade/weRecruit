@@ -1,4 +1,3 @@
-
 from datetime import timezone
 from enum import Enum
 from datetime import datetime
@@ -30,38 +29,8 @@ class JDStatusCodes(Enum):
     draft = 1
     close = 2
 
-class opt():
-    a=[]
-    for i in range(1,101):
-        a.append(i) 
-
-
-# class opt(Enum):
-#     def func():
-#         a=[]
-#         for i in range(1,100):
-#             a.append(i)
-#         return a    
-#     values= func()
-
-# def get_channels_list(slack_token):
-#     sc = SlackClient(slack_token)
-#     a = sc.api_call('channels.list',
-#                     exclude_archived=1,
-#                     exclude_members=1,)
-
-#     a = json.dumps(a)
-#     a = json.loads(a)
-
-#     list1 = []
-#     for i in a['channels']:
-#     # str1 = ("('%s','#%s')," % (i['name'],i['name']))
-#         list1.append((i['name'],'#'+i['name']))
-#         return list1 
-    
 
 JD_DEF_POSITIONS = 1
-
 
 
 def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS, open_date=None,
@@ -94,12 +63,12 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
             return(RetCodes.empty_ent_attrs_error.value, "Recruiter ID field is empty or null.", None)
 
         if (max_yrs_of_exp is not None and min_yrs_of_exp is not None):
-            if (max_yrs_of_exp <= min_yrs_of_exp):
-                return(RetCodes.save_ent_error.value, "Maximum years of experience can not be less than or equal to minimum years of experience .", None)
+            if (max_yrs_of_exp < min_yrs_of_exp):
+                return(RetCodes.save_ent_error.value, "Maximum years of experience can not be less then minimum years of experience .", None)
 
         if (ctc_max is not None and ctc_min is not None):
-            if (ctc_max <= ctc_min):
-                return(RetCodes.save_ent_error.value, "Maximum CTC can not be less than or equal to minimum CTC .", None)
+            if (ctc_max < ctc_min):
+                return(RetCodes.save_ent_error.value, "Maximum CTC can not be less then minimum CTC .", None)
 
         if open_date is None:
             open_date = datetime.now(tz=timezone.utc)
@@ -543,30 +512,6 @@ def get_job_status_summary(job_id):
         cursor.close()
         dbUtils.returnToPool(db_con)
 
-def location():
-    try:
-        db_con = dbUtils.getConnFromPool()
-        cursor = dbUtils.getNamedTupleCursor(db_con)
-
-        query = """ select city from city_names
-                    order by id
-                    """
-        # params = (city)
-        # _logger.debug(cursor.mogrify(query, params))
-        cursor.execute(query)
-
-        jd_city = cursor.fetchall()
-        return jd_city
-        # return(RetCodes.success.value, "Location {0}  fetched successfully.".format(city),jd_city)
-
-    
-    except Exception as dbe:
-        _logger.error(dbe)
-        return (RetCodes.server_error, str(dbe), None)
-
-    finally:
-        cursor.close()
-        dbUtils.returnToPool(db_con)  
 
 def update_job_stats():
     # get all active jobs across tenants
