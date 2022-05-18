@@ -7,6 +7,7 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import IntegerField, DateField
 
 import jdUtils
+# from slackclient import SlackClient
 
 
 class SignUpForm(FlaskForm):
@@ -72,17 +73,49 @@ class JDForm(FlaskForm):
     client = StringField('Client Name*', validators=[DataRequired('Enter Client Name')])
     client_jd = FileField('Client JD File')
 
-    location = StringField('Location')
 
-    min_yrs_of_exp = DecimalField("Minimum years of Experience",validators=[DataRequired(NumberRange(min=0,max=99,message="Min experience needs be in range of 0 to 99"))])
-    max_yrs_of_exp = DecimalField("Maximum years of Experience",validators=[DataRequired(NumberRange(min=0,max=99,message="Max experience needs be in range of 0 to 99"))])
+    country_iso_code= SelectField() 
+    country_iso_name=SelectField()
+    # location = SelectField('Location', choices=['Mumbai','Delhi','Bengaluru','Kolkata',
+    #                         'Chennai','Ahmedabad','Hyderabad','Pune','Surat','Kanpur','Jaipur',
+    #                         'Navi Mumbai','Lucknow','Nagpur','Indore','Patna','Bhopal'
+    #                         ,'Ludhiana','Tirunelveli','Agra','Vadodara'
+    #                         ,'Gorakhpur','Nashik','Pimpri','Kalyan'
+    #                         ,'Thane','Meerut','Nowrangapur','Faridabad'
+    #                         ,'Ghaziabad','Dombivli','Rajkot','Varanasi','Amritsar',
+    #                         'Allahabad','Visakhapatnam','Teni','Jabalpur','Haora','Aurangabad','Shivaji Nagar',
+    #                         'Solapur','Srinagar','Chandigarh','Coimbatore','Jodhpur','Madurai',
+    #                         'Guwahati','Gwalior','Vijayawada','Mysore','Ranchi','Hubli'])
+    location = SelectField('Location',choices=[])
+
+    # def get_channels_list(slack_token):
+    #     sc = SlackClient(slack_token)
+    #     a = sc.api_call('channels.list',
+    #                     exclude_archived=1,
+    #                     exclude_members=1,)
+
+    #     a = json.dumps(a)
+    #     a = json.loads(a)
+
+    #     list1 = []
+    #     for i in a['channels']:
+    #     # str1 = ("('%s','#%s')," % (i['name'],i['name']))
+    #         list1.append((i['name'],'#'+i['name']))
+    #         return list1 
+    b=[]
+    a=[]
+    for i in range(1,101):
+        a.append(i)
+
+    min_yrs_of_exp = SelectField("Minimum years of Experience",choices=a,default=0,validators=[DataRequired()])
+    max_yrs_of_exp = SelectField("Maximum years of Experience",choices=a,default=0,validators=[DataRequired(NumberRange(min=0,max=99,message="Min experience needs be in range of 0 to 99"))])
     
     primary_skills = TextAreaField('Primary Skills', validators=[DataRequired('Enter mandatory or good to have skillsets.')])
     secondary_skills = TextAreaField('Secondary Skills', validators=[DataRequired('Enter mandatory or good to have skillsets.')])
 
 
-    ctc_min = DecimalField("CTC Min Range",validators=[DataRequired(NumberRange(min=0,max=10000000))])
-    ctc_max = DecimalField("CTC Max Range",validators=[DataRequired(NumberRange(min=0,max=10000000))])
+    ctc_min = DecimalField("CTC Min Range",validators=[DataRequired()])
+    ctc_max = DecimalField("CTC Max Range",validators=[DataRequired()])
 
     ctc_currency = SelectField( "Currency", choices =[('INR', 'INR'),('USD', 'USD')])
     

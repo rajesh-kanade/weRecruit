@@ -90,8 +90,9 @@ textarea {
   background-color: #4ccd3d;
   border-color: transparent;
   color: #fff;
-  /* margin-top: 20px;
-  margin-bottom: 20px; */
+  margin-top: 20px;
+  margin-bottom: 20px;
+  
 }
 
 .navbar.has-shadow {
@@ -122,7 +123,7 @@ textarea {
   color: #363636;
 }
 
-.select.is-black select {
+.select.is-black select,.select {
   border-color: #c6c6c6;
   font-size: 16px;
 }
@@ -470,149 +471,33 @@ label {
   margin-left: -10%;
   margin-top: 3%;
 }
-
-#manageUsersTable table thead tr th,
-#manageUsersTable table thead tr th span form a i {
-  color: #8c8c8c;
-}
-
-#manageUsersTable table thead tr th span {
-  margin-left: 1rem;
-}
-
-#manageUsersTable table tbody tr td span {
-  margin-left: 0.5rem;
-}
-
-#managerUserTable .table-actions {
-  font-size: 21px;
-  padding: 0.3rem 0.15em;
-#resumeListTable table thead tr th {
-  color: #8c8c8c;
-}
-
-#resumeListTable table thead tr th span {
-  margin-left: 5%;
-}
-#resumeListTable table tbody tr td span {
-  margin-left: 10%;
-}
-
-#sort_name {
-  display: inline;
-}
-
-#resumeBrowserPage .job-position,
-#resumeBrowserPage section {
-  padding-top: 0.5rem;
-  padding-bottom: 2rem;
-}
-
-#resumeBrowserMessages .notification {
-  margin-top: 0%;
-  margin-left: 0%;
-}
-
-#resumeSearchBar {
-  margin-top: -5%;
-}
-
-.pagination {
-  padding: 0%;
-}
-
-.pagination .left {
-  background-color: #fff;
-}
-
-.pagination .right {
-  background-color: #4ccd3d;
-}
-
-.pagination div {
-  padding-left: 0.4rem;
-}
-
-.pagination div a {
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-.pagination .left,
-.pagination .right {
-  padding-left: 0.7rem;
-  padding-right: 0.7rem;
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
-}
-
-.pagination .currentPage {
-  border: rgb(129, 128, 128) solid 1px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-#manageUsersPageMessages .notification {
-  margin-top: 0%;
-  margin-bottom: 1%;
-}
-
-#jd_browser_messages div .notification {
-  margin-top: 0%;
-  margin-left: 0%;
-}
-
-#add-user-button {
-  padding: 1% 5%;
-  border-radius: 2px;
-}
-
-.section {
-  padding: 1rem 0.5rem;
-}
-
-.table thead th,
-.table tbody tr {
-  vertical-align: bottom;
-  border-bottom: 2px solid #f6f6f6;
-  border-bottom-width: 2px;
-}
-
-#nameColumn {
-  width: 35%;
-}
-
-#emailColumn {
-  width: 40%;
-}
-
-#statusColumn {
-  width: 15%;
-}
-
-#actionColumn {
-  width: 10%;
-}
-
-#actionColumn i {
-  font-size: large;
-}
-.revenue .container{
-  margin-left: 10% !important;
-}
-
-.revenue .table{
-  width: 70%;
-}
-.button-revenue{
-  margin-left: -10%;
-}
-.button-revenue .button.is-success{
-  color: #fff;
+ .has-text-info {
+  color: #4ccd3d !important;
 }
 .is-size-7{
-  color: #222 !important;
+  color: #363636 !important;
 }
-body{
-  background-color: #f6f6f6 ;
+.table .is-striped{
+  width: 70% !important;
+}
+.is-halfwidth{
+  width: 60% !important;
+  text-align: left !important;
+}
+html{
+background-color: #f6f6f6 !important;
+}
+
+/* 27 april */
+.block:not(:last-child){
+  margin-top: 5%;
+}
+
+.notification.is-info{
+  margin-left: 7%;
+  margin-right: 5%;
+  margin-top: 2%;
+}
+.columns.is-centered{
+  margin-bottom: 2%;
 }

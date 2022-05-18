@@ -191,6 +191,8 @@ def show_jd_create_page():
     form.total_positions.data = jdUtils.JD_DEF_POSITIONS
     form.status.data = jdUtils.JDStatusCodes.open.value
 
+    # show_location= jdUtils.location()
+
     return render_template('jd/edit.html', form=form)
 
 
@@ -929,6 +931,20 @@ def show_job_summary_page(job_id):
     return render_template("jd/show_status_summary_page.html", jd=jd, statusSummary=jobStatusSummary)
 
 # /reports/showClientWiseSummary
+
+# 29 april location
+# @app.route('/jd/showCreatepage/', methods=['GET'])
+# @login_required
+# def show_location():
+
+
+#     # get the summary
+#     # (retCode, msg, location_city) = jdUtils.location(city)
+#     # assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch location {0)".format(id)
+
+
+#     return render_template("jd/showCreatepage.html",  location_status=location_city)
+
 
 
 @app.route('/reports/showClientWiseSummary', methods=['GET'])
