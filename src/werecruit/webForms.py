@@ -92,7 +92,7 @@ class JDForm(FlaskForm):
     ctc_currency = SelectField( "Currency", choices =[('INR', 'INR'),('USD', 'USD')])
     
     fees_percent = DecimalField("Fees Percent",validators=[NumberRange(min=0,max=99)])
-    warranty_in_months = IntegerField("Warranty in months",validators=[NumberRange(min=0,max=12)])
+    warranty_in_months = IntegerField("Warranty in Months",validators=[NumberRange(min=0,max=12)])
 
     status = SelectField('Status', choices=[(jdUtils.JDStatusCodes.open.value, 'Open'), 
                         (jdUtils.JDStatusCodes.draft.value, 'Draft'), 
