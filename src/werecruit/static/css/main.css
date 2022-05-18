@@ -597,7 +597,7 @@ label {
 #actionColumn i {
   font-size: large;
 }
- .revenue .container{
+.revenue .container{
   margin-left: 10% !important;
 }
 
@@ -615,4 +615,4 @@ label {
 }
 body{
   background-color: #f6f6f6 ;
-} 
+}
