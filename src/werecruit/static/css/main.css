@@ -489,7 +489,6 @@ label {
   font-size: 21px;
   padding: 0.3rem 0.15em;
 }
-
 #resumeListTable table thead tr th {
   color: #8c8c8c;
 }
@@ -602,6 +601,110 @@ label {
 #actionColumn i {
   font-size: large;
 }
+
+
+
+/* status summary page */
+.job-details{
+  background-color:#4ccd3d
+}
+.job-details .title{
+  color: white;
+  
+}
+.status-div{
+  background-color:#f3f4f6;
+  height:100vh;
+}
+.status-div .container{
+  background-color: #f3f4f6;
+  margin-left: 5vw;
+}
+.block-title .title{
+  padding-left:6rem;
+  padding-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 28pt;
+}
+.is-size-7{
+  font-family: 'Poppins', sans-serif;
+}
+.title{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
+.container-status {
+  
+  max-width: 50%;
+}
+.table thead td{
+  vertical-align: bottom;
+  border-bottom: 4px solid #f3f4f6;
+  border-width: 0 0 2px !important;
+  color:gray;
+}
+.table thead th{
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 550;
+}
+.table{
+  background-color: #f6f6f6 !important;
+}
+.print-btn
+{
+    display: block;
+    color:#f3f4f6;
+}
+td {
+  width:1%;
+  background-color: rgba(250,250,250,255);
+} 
+th{
+  background-color: #ffffff;
+}
+.title{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
+
+.level .level-item{
+  display: block;
+  padding-left: 8vw;
+  color: white;
+}
+.level .level-item .heading .sub-heading{
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  
+}
+.level-item .sub-head{
+  margin-top: -10px;
+  margin-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+.jd-details{
+  display: flex;
+  justify-content: flex-start;
+  background-color:#4ccd3d;
+}
+@media (max-width: 767px){
+  .container-status{
+    max-width: 100%;
+  }
+  .block-title .title{
+    padding-left:0rem;
+  }
+  
+}
+.heading{
+  margin-top: 1rem;
+  font-size: larger;
+}
+.sub-heading{
+  margin-left: 3rem;
+}
+=======
 .revenue .container{
   margin-left: 10% !important;
 }
@@ -626,3 +729,4 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
