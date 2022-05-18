@@ -446,6 +446,9 @@ table thead tr th {
   #addUserPage {
     width: 50%;
   }
+  #resumeListTable {
+    width: 70%;
+  }
 }
 
 /* button changes */
@@ -484,15 +487,22 @@ label {
 #managerUserTable .table-actions {
   font-size: 21px;
   padding: 0.3rem 0.15em;
+#resumeListTable table thead tr th {
+  color: #8c8c8c;
 }
 
-#sort_name,
-#sort_email,
-#sort_status {
+#resumeListTable table thead tr th span {
+  margin-left: 5%;
+}
+#resumeListTable table tbody tr td span {
+  margin-left: 10%;
+}
+
+#sort_name {
   display: inline;
 }
 
-/* #resumeBrowserPage .job-position,
+#resumeBrowserPage .job-position,
 #resumeBrowserPage section {
   padding-top: 0.5rem;
   padding-bottom: 2rem;
@@ -505,7 +515,7 @@ label {
 
 #resumeSearchBar {
   margin-top: -5%;
-} */
+}
 
 .pagination {
   padding: 0%;

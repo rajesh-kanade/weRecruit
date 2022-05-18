@@ -591,9 +591,10 @@ def search_non_shortlisted_resumes():
         return render_template('jd/non_shortlisted_candidates_list.html', resumeList=resumeList, job_id=form.job_id.data, searchForm=form)
 
 
-@app.route('/resume/showBrowser', methods=['GET'])
+@app.route("/resume/showBrowser", methods=["GET"])
 @login_required
 def show_resume_browser_page():
+
     orderBy = request.args.get("order_by", None)
     order = request.args.get("order", None)
     toggles = {
@@ -627,8 +628,8 @@ def show_resume_browser_page():
 
         pagination_ResumeList = getPages(offset=offset, per_page=per_page)
         pagination = Pagination(page=page, per_page=per_page, total=total)
-        for resume in resumeList:
-            _logger.debug(resume.name)
+        # for resume in resumeList:
+        # 	_logger.debug(resume.name)
         return render_template(
             "resume/list.html",
             resumeList=pagination_ResumeList,
@@ -1097,57 +1098,10 @@ def show_manage_users_page():
     #form.id.data = session["user_id"]
     #form.email.data = session["email_id"]
 
-    orderBy = request.args.get("order_by", None)
-    order = request.args.get("order", None)
-
-    toggles = {
-        "name": {
-            "arrowToggle": "fa fa-arrow-down"
-            if (orderBy == "name" and order == "ASC")
-            else "fa fa-arrow-up",
-            "orderToggle": "DESC" if order == "ASC" else "ASC",
-        },
-        "status": {
-            "arrowToggle": "fa fa-arrow-down"
-            if (orderBy == "status" and order == "ASC")
-            else "fa fa-arrow-up",
-            "orderToggle": "DESC" if order == "ASC" else "ASC",
-        },
-        "email": {
-            "arrowToggle": "fa fa-arrow-down"
-            if (orderBy == "email" and order == "ASC")
-            else "fa fa-arrow-up",
-            "orderToggle": "DESC" if order == "ASC" else "ASC",
-        },
-    }
-
-    (retCode, msg, userList) = userUtils.list_users(
-        session["tenant_id"], orderBy=orderBy, order=order
-    )
+    (retCode, msg, userList) = userUtils.list_users(session["tenant_id"])
     assert retCode == userUtils.RetCodes.success.value, msg
 
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    per_page = request.args.get(
-        get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
-
-    offset = (page - 1) * per_page
-    total = len(userList)
-    from math import ceil
-    totalPages = ceil(total/per_page)
-
-    def getPages(offset=0, per_page=1):
-        return userList[offset: offset + per_page]
-
-    pagination_UserList = getPages(offset=offset, per_page=per_page)
-    pagination = Pagination(page=page, per_page=per_page, total=total)
-
-    return render_template("user/manage_users.html",
-                           userList=pagination_UserList,
-                           toggles=toggles,
-                           page=page,
-                           per_page=1,
-                           pagination=pagination,
-                           totalPages=totalPages)
+    return render_template("user/manage_users.html", userList=userList)
 
 
 @app.route('/user/showAddPage', methods=['GET'])

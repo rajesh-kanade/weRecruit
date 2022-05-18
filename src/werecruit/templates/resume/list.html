@@ -1,7 +1,7 @@
 {%extends "app_header.html" %}
 {%block content%}
 
-<div class="body-background is-half">
+<div class="body-background is-half" id="resumeBrowserPage">
   <div class="job-position">
     <div class="container">
       <section class="section topbar-title">
@@ -9,12 +9,15 @@
         <h2 class="subtitle">
           Search and Browse through the resumes you uploaded.
         </h2>
-        {% include '/utils/show_timed_msg.html'%}
+        <div id="resumeBrowserMessages">{% include '/utils/show_timed_msg.html'%}</div>
       </section>
 
     </div>
+  </div>
+  <div class="job-position">
     <div class="container">
-      <section class="section">
+      <!-- enctype="multipart/form-data" -->
+      <section class="section" id="resumeSearchBar">
         <form action="/resume/search" method="POST">
           <div class="field">
             <div class="field has-addons">
@@ -33,92 +36,93 @@
   </div>
 
 
+  <turbo-frame id="show_resumeList">
+    <div class="job-position table-height">
+      <div class="container">
+        <section class="application-form">
+          <div class="table-container" id="resumeListTable">
+            <table class="table is-fullwidth">
+              {% for resume in resumeList %}
+              {%if loop.first %}
+              <thead>
+                <tr class="header">
+                  <th>Name<span>
+                      <form id="sort_name" action="/resume/showBrowser">
+                        <input type="hidden" name="order_by" value="name">
+                        <input type="hidden" name="order" value="{{toggles.name.orderToggle}}">
+                        <!-- {{toggles}} -->
+                        <a href="" onclick="sortByName()">
+                          <i class="{{toggles.name.arrowToggle}}"></i></a>
+                      </form>
+                      <script>
+                        const sortByName = (e) => {
+                          document.getElementById("sort_name").submit();
+                        }
+                      </script>
+                    </span>
+                  </th>
+                  <th>Email<span>
 
-  <div class="job-position table-height">
-    <div class="container">
-      <section class="application-form">
-        <div class="table-container" id="resumeListTable">
-          <table class="table is-fullwidth">
-            {% for resume in resumeList %}
-            {%if loop.first %}
-            <thead>
-              <tr class="header">
-                <th style="color: #8c8c8c;">Name<span style="margin-left: 5%;">
-                    <form id="sort_name" action="/resume/showBrowser" style="display: inline;">
-                      <input type="hidden" name="order_by" value="name">
-                      <input type="hidden" name="order" value="{{toggles.name.orderToggle}}">
-                      <!-- {{toggles}} -->
-                      <a href="" onclick="sortByName()">
-                        <i class="{{toggles.name.arrowToggle}}"></i></a>
-                    </form>
-                    <script>
-                      const sortByName = (e) => {
-                        document.getElementById("sort_name").submit();
-                      }
-                    </script>
-                  </span>
-                </th>
-                <th style="color: #8c8c8c;">Email<span style="margin-left: 5%;">
+                      <!-- <i class="fa fa-arrow-up"></i> -->
 
-                    <!-- <i class="fa fa-arrow-up"></i> -->
+                    </span>
+                    </span>
+                  </th>
+                  <th>Phone<span>
 
-                  </span>
-                  </span>
-                </th>
-                <th style="color: #8c8c8c;">Phone<span style="margin-left: 5%;">
+                      <!-- <i class="fa fa-arrow-up"></i> -->
 
-                    <!-- <i class="fa fa-arrow-up"></i> -->
+                    </span>
+                  </th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              {% endif %}
+              <tbody>
+                <tr class="table-data">
+                  <td>{{resume.name}}</td>
+                  <td>{{resume.email}}</td>
+                  <td>{{resume.phone}}</td>
+                  <td class="table-actions" data-turbo="false">
+                    <a href="/resume/showEditPage/{{resume.id}}"><abbr title="Edit"><i
+                          class="fa fa-pencil-square-o"></i></abbr></a>
+                    <span><a href="/resume/download/{{resume.id}}" onclick="this.classList.add('is-loading');"><abbr
+                          title="Download Resume"><i class="fa fa-download"></i></abbr></a></span>
+                  </td>
+                </tr>
+                {% else %}
+                <div class="notification is-warning">
+                  No Resumes found !!!
+                </div>
+                {% endfor %}
+              </tbody>
+            </table>
+            <div class="pagination">
+              {% if totalPages > 1 %}
+              <a class="number">{{pagination.page}} <span class="sr-only">(current)</span></a>
+              <a class="number">of {{ totalPages}} <span class="sr-only">(current)</span></a>
+              {% if pagination.page > 1 %}
+              <a class="left" href="/resume/showBrowser?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+                aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
 
-                  </span>
-                </th>
-                <th style="color: #8c8c8c;">Actions</th>
-              </tr>
-            </thead>
-            {% endif %}
-            <tbody>
-              <tr class="table-data">
-                <td>{{resume.name}}</td>
-
-                <td>{{resume.email}}</td>
-                <td>{{resume.phone}}</td>
-                <td class="table-actions">
-                  <abbr title="Edit"><i class="fa fa-pencil-square-o"></i></abbr></a>
-                  <span style="margin-left: 10%;"><a href=""><abbr title="Download Resume"><i
-                          class="fa fa-download"></i></abbr></a></span>
-                </td>
-              </tr>
               {% else %}
-              <div class="notification is-warning">
-                No Resumes found !!!
-              </div>
-              {% endfor %}
-            </tbody>
-          </table>
+              <a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+              {% endif %}
 
-        </div>
-        <div class="pagination">
-          {% if totalPages > 1 %}
-          <a class="number">{{pagination.page}} <span class="sr-only">(current)</span></a>
-          <!-- <a style="display: inline-block; width: auto; background-color: #f6f6f6;">of </a> -->
-          <a class="number">of {{ totalPages}} <span class="sr-only">(current)</span></a>
-          {% if pagination.page > 1 %}
-          <a class="left" href="/resume/showBrowser?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
-            aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+              {% if pagination.page < totalPages %} <a class="right"
+                href="/resume/showBrowser?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
+                aria-label="Next">
+                <span>&raquo;</span><span class="sr-only">Next</span></a>
+                {% else %}
+                <a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+                {% endif %}
+                {% endif %}
+            </div>
+          </div>
 
-          {% else %}
-          <a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
-          {% endif %}
-
-          {% if pagination.page < totalPages %} <a class="right"
-            href="/resume/showBrowser?page={{pagination.page + 1}}&per_page={{pagination.per_page}}" aria-label="Next">
-            <span>&raquo;</span><span class="sr-only">Next</span></a>
-            {% else %}
-            <a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
-            {% endif %}
-            {% endif %}
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
-  </div>
+  </turbo-frame>
 </div>
 {% endblock %}
