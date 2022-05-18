@@ -446,6 +446,7 @@ table thead tr th {
   #addUserPage {
     width: 50%;
   }
+
   #resumeListTable {
     width: 70%;
   }
@@ -487,6 +488,8 @@ label {
 #managerUserTable .table-actions {
   font-size: 21px;
   padding: 0.3rem 0.15em;
+}
+
 #resumeListTable table thead tr th {
   color: #8c8c8c;
 }
@@ -494,11 +497,13 @@ label {
 #resumeListTable table thead tr th span {
   margin-left: 5%;
 }
+
 #resumeListTable table tbody tr td span {
   margin-left: 10%;
 }
 
-#sort_name {
+#sort_name,
+#sort_status {
   display: inline;
 }
 
