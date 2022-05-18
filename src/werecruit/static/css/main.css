@@ -446,6 +446,7 @@ table thead tr th {
   #addUserPage {
     width: 50%;
   }
+
   #resumeListTable {
     width: 70%;
   }
@@ -496,11 +497,13 @@ label {
 #resumeListTable table thead tr th span {
   margin-left: 5%;
 }
+
 #resumeListTable table tbody tr td span {
   margin-left: 10%;
 }
 
-#sort_name {
+#sort_name,
+#sort_status {
   display: inline;
 }
 
@@ -599,6 +602,27 @@ label {
 #actionColumn i {
   font-size: large;
 }
+
+.revenue .container{
+  margin-left: 10% !important;
+}
+
+.revenue .table{
+  width: 70%;
+}
+.button-revenue{
+  margin-left: -10%;
+}
+.button-revenue .button.is-success{
+  color: #fff;
+}
+.is-size-7{
+  color: #222 !important;
+}
+body{
+  background-color: #f6f6f6 ;
+} 
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
