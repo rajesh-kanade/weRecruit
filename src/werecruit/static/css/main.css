@@ -511,3 +511,7 @@ label {
   margin: 0 2%;
   border: 2px black;
 }
+#jd_browser_messages div .notification {
+  margin-top: 0%;
+  margin-left: 0%;
+}

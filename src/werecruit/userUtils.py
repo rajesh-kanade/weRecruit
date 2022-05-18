@@ -192,6 +192,7 @@ def save_user(tenantID, userID, name, email, password, roleID):
             params = (name, email, password, userID)
             _logger.debug(cursor.mogrify(sql, params))
 
+
             cursor.execute(sql, params)
             assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
@@ -290,6 +291,7 @@ def get_user_by_email(email):
         sql = """SELECT * FROM users WHERE is_deleted = %s and email =%s"""
 
         params = (False, email)
+
 
         _logger.debug(sql)
         _logger.debug(cursor.mogrify(sql, params))
@@ -474,6 +476,42 @@ def do_reset_password(id, email, cur_password, new_password):
 					WHERE id =%s and email = %s and password =%s"""
 
             data_tuple = (new_password, id, email, cur_password)
+
+            _logger.debug(cursor.mogrify(query, data_tuple))
+            cursor.execute(query, data_tuple)
+
+            assert cursor.rowcount == 1, "Failed to find user record. Please contact support"
+
+            db_con.commit()
+            return(RetCodes.success.value, "Password reset successfully.", id)
+
+        except Exception as dbe:
+            _logger.error(dbe)
+            db_con.rollback()
+            return (RetCodes.server_error, str(dbe), None)
+
+        finally:
+            if 'cursor' in locals() and cursor is not None:
+                cursor.close()
+            dbUtils.returnToPool(db_con)
+
+    except Exception as e:
+        _logger.error("In the exception block.")
+        _logger.error(e)
+        return (RetCodes.server_error, str(e))
+
+
+def do_forgot_password(id, email, new_password):
+    try:
+        new_password = hashit(new_password)
+        try:
+            db_con = dbUtils.getConnFromPool()
+            cursor = dbUtils.getNamedTupleCursor(db_con)
+
+            query = """UPDATE users set password =%s 
+					WHERE id =%s and email = %s"""
+
+            data_tuple = (new_password, id, email)
 
             _logger.debug(cursor.mogrify(query, data_tuple))
             cursor.execute(query, data_tuple)
