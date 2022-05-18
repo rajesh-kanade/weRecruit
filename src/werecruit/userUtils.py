@@ -192,6 +192,7 @@ def save_user(tenantID, userID, name, email, password, roleID):
             params = (name, email, password, userID)
             _logger.debug(cursor.mogrify(sql, params))
 
+
             cursor.execute(sql, params)
             assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
@@ -291,6 +292,7 @@ def get_user_by_email(email):
 
         params = (False, email)
 
+
         _logger.debug(sql)
         _logger.debug(cursor.mogrify(sql, params))
 
@@ -311,7 +313,6 @@ def get_user_by_email(email):
 
 
 def list_users(tenant_id):
-
     try:
 
         db_con = dbUtils.getConnFromPool()
