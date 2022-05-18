@@ -620,9 +620,4 @@ label {
 }
 body{
   background-color: #f6f6f6 ;
-} 
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
 }
