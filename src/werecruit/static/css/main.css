@@ -602,7 +602,6 @@ label {
 #actionColumn i {
   font-size: large;
 }
-
 .revenue .container{
   margin-left: 10% !important;
 }
@@ -622,7 +621,6 @@ label {
 body{
   background-color: #f6f6f6 ;
 } 
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
