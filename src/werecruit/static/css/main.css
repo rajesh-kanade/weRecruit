@@ -486,7 +486,7 @@ label {
 
 #managerUserTable .table-actions {
   font-size: 21px;
-  padding: 0.3rem 0.15em;
+  padding: 0.3rem 0.15em;}
 #resumeListTable table thead tr th {
   color: #8c8c8c;
 }
@@ -596,4 +596,9 @@ label {
 
 #actionColumn i {
   font-size: large;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
