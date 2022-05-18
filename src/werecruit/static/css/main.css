@@ -602,3 +602,22 @@ label {
 #actionColumn i {
   font-size: large;
 }
+.revenue .container{
+  margin-left: 10% !important;
+}
+
+.revenue .table{
+  width: 70%;
+}
+.button-revenue{
+  margin-left: -10%;
+}
+.button-revenue .button.is-success{
+  color: #fff;
+}
+.is-size-7{
+  color: #222 !important;
+}
+body{
+  background-color: #f6f6f6 ;
+} 
