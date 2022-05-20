@@ -446,6 +446,7 @@ table thead tr th {
   #addUserPage {
     width: 50%;
   }
+
   #resumeListTable {
     width: 70%;
   }
@@ -487,6 +488,8 @@ label {
 #managerUserTable .table-actions {
   font-size: 21px;
   padding: 0.3rem 0.15em;
+}
+
 #resumeListTable table thead tr th {
   color: #8c8c8c;
 }
@@ -556,7 +559,6 @@ label {
   margin-top: 0%;
   margin-bottom: 1%;
 }
-
 #jd_browser_messages div .notification {
   margin-top: 0%;
   margin-left: 0%;
@@ -597,3 +599,76 @@ label {
 #actionColumn i {
   font-size: large;
 }
+
+/* .menu-bar {
+  text-align: center;
+  margin-left: 6%;
+} */
+
+.menu-bar ul li {
+  width: 200px;
+  margin-top: 1rem;
+  /* margin-left: 1rem; */
+  /* padding: 10px;
+  margin-left: 3%; */
+}
+
+.menu-bar .fa {
+  margin-right: 8px;
+}
+
+.sub-menu-1 {
+  display: none;
+  margin-left: 0px;
+  margin-right: -3%;
+}
+
+.menu-bar ul li:hover .sub-menu-1 {
+  display: block;
+  position: absolute;
+  background: #fff;
+}
+
+.menu-bar ul li:hover .sub-menu-1 ul {
+  display: block;
+  margin: 10px;
+}
+
+.menu-bar ul li:hover .sub-menu-1 ul li {
+  width: 165px;
+  padding: 10px;
+  padding-left: 5px;
+  border-bottom: 1px dotted #fff;
+  background: transparent;
+  text-align: left;
+}
+
+.menu-bar ul li:hover .sub-menu-1 ul li:last-child {
+  border-bottom: none;
+}
+
+
+.fa-angle-right {
+  float: right;
+}
+
+.menu-bar .fa-angle-down {
+  text-align: right;
+}
+
+.sub-menu-2 {
+  display: none;
+}
+
+.hover-me:hover .sub-menu-2 {
+  position: absolute;
+  display: block;
+  margin-top: -40px;
+  margin-left: 150px;
+  background: #fff;
+}
+
+.menu-bar label {
+  padding-right: 135px !important;
+}
+

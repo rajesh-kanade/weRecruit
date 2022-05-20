@@ -1,41 +1,119 @@
-    <div class="block">  
-          <table class="table is-striped">
-            <tbody>
+{# <div class="block">
+  <table class="table is-striped">
+    <tbody>
+      {% for resume in resumeList %}
+      {%if loop.first %}
+      <thead>
+        <tr class="{{theme_bg_color}}">
+          <!-- <th class="has-text-centered {{theme_text_color}}">RESUME ID</th> -->
+          <th class="has-text-centered {{theme_text_color}}">NAME</th>
+          <th class="has-text-centered {{theme_text_color}}">EMAIL</th>
+          <th class="has-text-centered {{theme_text_color}}">PHONE</th>
+          <th class="has-text-centered {{theme_text_color}}">STATUS</th>
+          <th class="has-text-centered {{theme_text_color}}"></th>
+        </tr>
+      </thead>
+      {%endif %}
+      <tr class="{{theme_bg_color}}">
+        <!-- <td class="has-text-centered {{theme_text_color}}">{{ resume.id }}</td> -->
+        <td class="has-text-centered {{theme_text_color}}">{{ resume.name }}</td>
+        <td class="has-text-centered {{theme_text_color}}">{{ resume.email }}</td>
+        <td class="has-text-centered {{theme_text_color}}">{{ resume.phone }}</td>
+        <td class="has-text-centered {{theme_text_color}}">{{resume.description}}</td>
+        <td class="has-text-centered {{theme_text_color}}">
+          {%if actionTemplate == 'shortlist' %}
+          {% include 'jd/shortlist_actions.html'%}
+          {%endif %}
+          {%if actionTemplate == 'work' %}
+          {% include 'jd/shortlisted_actions.html'%}
+          {%endif %}
+
+        </td>
+      </tr>
+      {% else %}
+      <div class="notification is-warning">
+        No Resumes found !!!
+      </div>
+      {% endfor %}
+    </tbody>
+  </table>
+</div> #}
+<div class="body-background is-half">
+  <div class="job-position table-height">
+    <div class="container">
+      <section class="section">
+        <div class="table-container">
+          <table class="table is-fullwidth">
             {% for resume in resumeList %}
-              {%if loop.first %}
-                <thead>
-                  <tr class="{{theme_bg_color}}">
-                    <!-- <th class="has-text-centered {{theme_text_color}}">RESUME ID</th> -->
-                    <th class="has-text-centered {{theme_text_color}}">NAME</th>
-                    <th class="has-text-centered {{theme_text_color}}">EMAIL</th>
-                    <th class="has-text-centered {{theme_text_color}}">PHONE</th>
-                    <th class="has-text-centered {{theme_text_color}}">STATUS</th>
-                    <th class="has-text-centered {{theme_text_color}}"></th>
-                  </tr>
-                </thead>
-              {%endif %}
-              <tr class="{{theme_bg_color}}">
-                <!-- <td class="has-text-centered {{theme_text_color}}">{{ resume.id }}</td> -->
-                <td class="has-text-centered {{theme_text_color}}">{{ resume.name }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ resume.email }}</td> 
-                <td class="has-text-centered {{theme_text_color}}">{{ resume.phone }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{resume.description}}</td>
-                <td class="has-text-centered {{theme_text_color}}">
-                  {%if actionTemplate == 'shortlist' %}
-                    {% include 'jd/shortlist_actions.html'%}
-                  {%endif %}
-                  {%if actionTemplate == 'work' %}
-                    {% include 'jd/shortlisted_actions.html'%}
-                  {%endif %}
+            {%if loop.first %}
+            <thead>
+              <tr class="header">
+                <th>Name
+                </th>
+                <th>Email
 
-                </td>       
+                </th>
+                <th>Phone
+                </th>
+                <th>Status</th>
+              <th>Actions</th>
               </tr>
-            {% else %}
+            </thead>
+            {% endif %}
+            <tbody>
+              <tr class="table-data">
+                <td id="nameColumn">{{resume.name}}</td>
+                <td id="emailColumn">{{resume.email}}</td>
+                <td>{{resume.phone}}</td>
+                <td>{{resume.status}}</td>
+                <td class="table-actions" id="actionColumn">
+                {%if actionTemplate == 'shortlist' %}
+          {% include 'jd/shortlist_actions.html'%}
+          {%endif %}
+          {%if actionTemplate == 'work' %}
+          {% include 'jd/shortlisted_actions.html'%}
+          {%endif %}
+                  {# <!-- <a href="/user/showEditPage/{{user.id}}"><abbr title="Edit"><i
+                        class="fa fa-pencil-square-o"></i></abbr></a>
+                  <span><a href="/user/showDeletePage/{{user.id}}"><abbr title=" Delete User"><i class="fa fa-trash"
+                          aria-hidden="true"></i>
+                      </abbr></a></span> --> #}
+                </td>
+              </tr>
+              {% else %}
               <div class="notification is-warning">
-                No Resumes found !!!
+                No Users found !!!
               </div>
-            {% endfor %}
-          </tbody>
-        </table>
-    </div>
+              {% endfor %}
+            </tbody>
+          </table>
 
+            {# <!-- <div class="is-flex is-flex-direction-row is-justify-content-flex-end container pagination">
+              {% if totalPages > 1 %}
+              <div class="currentPage"><a>{{pagination.page}} <span class="sr-only">(current)</span></a></div>
+              <div class="totalPages"><a>Of {{ totalPages}} <span class="sr-only">(current)</span></a></div>
+              {% if pagination.page > 1 %}
+              <div><a class="left"
+                  href="/user/showManageUsersPage?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+                  aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a></div>
+
+              {% else %}
+              <div><a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+              </div>
+              {% endif %}
+
+              {% if pagination.page < totalPages %} <div><a class="right"
+                  href="/user/showManageUsersPage?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
+                  aria-label="Next">
+                  <span>&raquo;</span><span class="sr-only">Next</span></a>
+            </div>
+            {% else %}
+            <div><a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+            </div>
+            {% endif %}
+            {% endif %}
+          </div> --> #}
+        </div>
+
+      </section>
+    </div>

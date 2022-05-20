@@ -44,3 +44,62 @@ insert into public.application_status_codes(id,description,is_deleted) values (3
 
 
 /* ******** end upgrade prod on 28-March-2022 on contabo2 server *******************/
+
+-- application status codes category and subcategory tables introduced
+
+CREATE TABLE IF NOT EXISTS public.resume_application_status_codes_category
+(
+    id smallint NOT NULL,
+    description VARCHAR NOT NULL,
+    is_deleted BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT resume_application_status_codes_category_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS public.resume_application_status_codes_sub_category
+(
+    id smallint NOT NULL,
+    description character varying COLLATE pg_catalog."default" NOT NULL,
+    category_id smallint,
+    CONSTRAINT resume_application_status_codes_sub_category_pkey PRIMARY KEY (id),
+    CONSTRAINT category_id FOREIGN KEY (category_id)
+        REFERENCES public.resume_application_status_codes_category (id)
+);
+
+INSERT INTO public.resume_application_status_codes_category(id,description)
+VALUES (1,'Resume'),
+    (2,'Initial Screening'),
+    (3,'Round 1'),
+    (4,'Round 2'),
+    (5,'Hiring Manager'),
+    (6,'HR'),
+    (7,'Offer'),
+    (8,'Onboarding');
+
+INSERT INTO public.resume_application_status_codes_sub_category(id,description,category_id)
+VALUES (0,'Shortlisted',1),
+    (1,'Scheduled',2),
+    (2,'Cleared',2),
+    (3,'Failed',2),
+    (10,'Scheduled',3),
+    (20,'Cleared',3),
+    (30,'Failed',3),
+    (31,'No Show',3),
+    (40,'Scheduled',4),
+    (50,'Cleared',4),
+    (60,'Failed',4),
+    (61,'No Show',4),
+    (70,'Scheduled',5),
+    (80,'Cleared',5),
+    (90,'Failed',5),
+    (91,'No Show',5),
+    (100,'Scheduled',6),
+    (110,'Cleared',6),
+    (120,'Failed',6),
+    (121,'No Show',6),
+    (130,'Pending with HR',7),
+    (140,'Released to candidate',7),
+    (150,'Accepted by candidate',7),
+    (160,'Done',8),
+    (170,'No Show',8);
+
+-- changes end here dated 18/05/2022
