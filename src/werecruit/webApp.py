@@ -252,7 +252,8 @@ def save_JD():
 
     _logger.debug('inside save JD.')
 
-    form = JDForm(request.form)
+    #form = JDForm(request.form)
+    form = JDForm()
 
     '''if request.method == 'POST' and form.max_yrs_of_exp.validate(form) is False:
 		_logger.debug('JD save validation failed') 
@@ -272,6 +273,8 @@ def save_JD():
         f.close()
     else:
         filename = None
+
+    _logger.debug('JD filename is {0}'.format(filename))
 
     results = jdUtils.save_jd(form.id.data, form.title.data, form.details.data,
                               form.client.data, int(loggedInUserID), int(
