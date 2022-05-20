@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @font-face {
   font-family: "poppins-medium";
   src: url(fonts/Poppins-Medium.ttf) format("truetype");
@@ -43,6 +44,11 @@ textarea,
   font-family: "regular", sans-serif;
 }
 
+*{ 
+  color-adjust: exact;  
+  -webkit-print-color-adjust: exact; 
+  print-color-adjust: exact; 
+}
 .heading {
   font-size: 14px;
   margin-top: 40px;
@@ -273,7 +279,7 @@ table thead tr th {
     flex-grow: 1;
     margin: 0 auto;
     position: relative;
-    width: 70%;
+    width: 75%;
     /*width: auto;*/
   }
 
@@ -285,7 +291,7 @@ table thead tr th {
     flex-grow: 1;
     margin: 0 auto;
     position: relative;
-    width: 75%;
+    width: 100%;
     /*width: auto;*/
   }
 
@@ -704,29 +710,124 @@ th{
 .sub-heading{
   margin-left: 3rem;
 }
-=======
-.revenue .container{
-  margin-left: 10% !important;
+
+/* reset-password feature */
+
+.flash{
+  padding-right:50px ; 
+  padding-top:20px;
 }
 
-.revenue .table{
-  width: 70%;
+.row{
+  position:relative ; 
+  padding-top:10px;
+  margin-right: 0px;
+  margin-left:-100px ;
 }
-.button-revenue{
-  margin-left: -10%;
+.container .row .inputs{
+  width:100%;
+  margin-bottom: 0%;
 }
-.button-revenue .button.is-success{
-  color: #fff;
+.reset-password-container{
+  padding : 0rem;
+  margin-left: 160px;
 }
 .is-size-7{
-  color: #222 !important;
+  font-family: 'Poppins', sans-serif;
 }
-body{
-  background-color: #f6f6f6 ;
-}
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+.reset-columns .field .control .input{
+  position: relative;
+  text-align: left;
+  border:#ffffff;
+  margin-top: 0px;
+  padding-left: 10px;
+  
+} 
+.reset-columns i {
+  margin: 0 10px;
+  color: #aaa;
 }
 
+.reset-columns .field .control{
+  
+  display: flex;
+  align-items: center;
+  border: 1px solid black ; 
+  border-radius: 3px;
+  width: 100%;
+  
+}
+label{
+  margin-bottom: 2px;
+}
+.label{
+  font-size: 15px;
+}
+.field .label .control .input{
+  text-align: left !important;
+  padding-left: 0px;
+}
+
+.label:not(:last-child) {
+  margin-bottom: 0px !important;
+}
+.password-reset .container .card {
+  background-color: #d1efd8;
+  color: #4a4a4a;
+  max-width: 100%;
+  position: relative;
+  border: none;
+  box-shadow: none;
+  /* margin-top: 19px; */
+}
+.password-reset .container .card .card-content {
+  margin-left: 0px;
+  padding: 2rem;
+}
+
+.column{
+  margin-left: 30px;
+}
+/* .reset-columns{
+  margin-left: -20px;
+} */
+@media screen and (min-width: 769px){
+  .row .column.is-half, .row .column.is-half-tablet {
+    flex: none;
+    width: 75%;
+    margin-left: -20px;
+}
+}
+
+@media screen and (max-width:1004px) {
+  .password-reset .container .card .card-content {
+    margin-left: 0px;
+    padding: 1rem;
+  }
+  .card-content {
+    margin-left: 10px;
+    font-size: 10px;
+  }
+  .column {
+    margin-left: 0px;
+}
+  .column {
+    margin-left: 0px;
+  }
+  .row{
+    position:relative ; 
+    padding-top:10px;
+    margin-right: 0px;
+    margin-left:-170px ;
+  }
+
+  .column {
+    display: block;
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 90%;
+    padding: 0.75rem;
+  }
+
+}

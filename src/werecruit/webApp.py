@@ -116,6 +116,33 @@ def show_signup_page():
     form = SignUpForm()
     return render_template('sign_up.html', form=form)
 
+def validate_password(password):
+        Capi_alpha = 0
+        small_alpha = 0
+        num = 0
+        Spe_char = ['@', '#', '%', '&', '?']
+        Spe_count = 0
+        valid = False
+        for i in password:
+            if(ord(i) >= 65 and ord(i) <= 90):
+                Capi_alpha += 1
+            elif(i in Spe_char):
+                Spe_count += 1
+            elif(ord(i) >= 48 and ord(i) <= 57):
+                num += 1
+            elif(ord(i) >= 97 and ord(i) <= 122):
+                small_alpha += 1
+            else:
+                pass
+
+        if(len(password) >= 8):
+            if(Capi_alpha > 0):
+                if(small_alpha > 0):
+                    if(Spe_count > 0):
+                        if(num > 0):
+                            valid = True
+
+        return valid
 
 @app.route('/user/signUp',  methods=['POST'])
 def sign_up():
@@ -130,17 +157,21 @@ def sign_up():
     userAttrs['status'] = userUtils.Status.active.value
     userAttrs['tname'] = form.company_name.data
 
-    results = userUtils.do_signUp(userAttrs)
 
-    if (results[0] == userUtils.RetCodes.success.value):
-        flash("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(
-            form.name.data), "is-info")
-        #form.success = True
-        # return render_template('sign_in.html', form = SignInForm())
-        return redirect(url_for("show_signin_page"))
+    password = request.form["password"]
+    if(validate_password(password)):
+        results = userUtils.do_signUp(userAttrs)
+        if (results[0] == userUtils.RetCodes.success.value):
+            flash("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(
+                form.name.data), "is-info")
+        
+            return redirect(url_for("show_signin_page"))
+        else:
+            flash(results[0] + ':' + results[1], "is-danger")
+            return redirect(url_for("show_signup_page"))
     else:
-        flash(results[0] + ':' + results[1], "is-danger")
-        return redirect(url_for("show_signup_page"))
+        flash("Password criteria does not match.Password should contain  ","is-danger")
+        return render_template('sign_up.html', form = form)
 
 
 def login_required(func):
@@ -1036,35 +1067,43 @@ def show_reset_password():
 @app.route('/user/doResetPassword', methods=['POST'])
 @login_required
 def do_reset_password():
-
+    
     form = ResetPasswordForm()
 
     form.id.data = session["user_id"]
     form.email.data = session["email_id"]
+    userPass = userUtils.check_cur_pass_and_newPass(form.id.data , form.email.data , form.current_password.data , form.new_password.data)
     # print("Form Data : ", form.id.data,form.email.data,form.current_password.data,form.confirm.data,form.new_password.data)
     # userUtils.check_cur_pass_and_newPass(form.id.data,form.email.data,form.current_password.data,form.new_password.data)
+    
+        
     if((form.current_password.data == form.new_password.data)):
         flash('Current password and New password must be different', "is-danger")
         return redirect(url_for('show_reset_password'))
 
-    elif((form.new_password.data == form.confirm.data)):
-        (retCode, msg, data) = userUtils.do_reset_password(form.id.data,
-                                                           form.email.data, form.current_password.data, form.new_password.data)
-        if (retCode == userUtils.RetCodes.success.value):
-            session.clear()
-            # do_signout()
-            flash(
-                "Password reset successfully. Please sign-in again with your new password", "is-success")
-            return redirect(url_for("show_signin_page"))
-        else:
-            flash("Password reset failed. {0} ".format(msg), "is-danger")
-            return render_template("password_reset.html", form=form)
-
+    if(validate_password(form.new_password.data)):
+        if((form.new_password.data == form.confirm.data)):
+            (retCode, msg, data) = userUtils.do_reset_password(form.id.data,
+                                                                form.email.data, form.current_password.data, form.new_password.data)
+            if (retCode == userUtils.RetCodes.success.value):
+                session.clear()
+                    # do_signout()
+                flash(
+                        "Password reset successfully. Please sign-in again with your new password", "is-success")
+                return redirect(url_for("show_signin_page"))
+            
+            else:
+                flash("Password reset failed. {0} ".format(msg), "is-danger")
+                return redirect(url_for('show_reset_password'))
+    
+        elif((form.new_password.data != form.confirm.data)):
+                flash('New Password and Confirm new password must be same',"is-danger")
+                return redirect(url_for('show_reset_password'))
     else:
-        # print("Password Not matched")
-        # flash ("New Password and Confirm Password must be same", "is-danger")
-        flash('New Password and Confirm new password must be same', "is-danger")
-        return redirect(url_for('show_reset_password'))
+		# print("Password Not matched")
+		# flash ("New Password and Confirm Password must be same", "is-danger")
+        flash('Password criteria does not match.\nPassword should contain One upper One lower case',"is-danger")
+        return redirect(url_for('show_reset_password'))   
 
 
 @app.route('/user/forgotPassword', methods=['POST'])
