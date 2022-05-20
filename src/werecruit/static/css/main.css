@@ -50,6 +50,7 @@ textarea,
 
 .sub-heading {
   font-size: 12px;
+  font-family: "poppins-medium", sans-serif;
   margin-top: 20px;
 }
 
@@ -251,15 +252,64 @@ table thead tr th {
   margin-left:auto;
 } */
 
-@media screen and (min-width: 1024px) {
+
+
+/* button changes */
+.control .button.is-success {
+  width: max-content;
+  margin-left: 2rem;
+}
+
+label {
+  font-size: 15px;
+}
+
+.block:not(:last-child) {
+  margin-left: -10%;
+  margin-top: 3%;
+}
+
+#jd_browser_messages div .notification {
+  margin-top: 0%;
+  margin-left: 0%;
+}
+
+/* Sign in page */
+.forgot{
+  margin-left: -30px;
+  margin-right: 10px;
+  margin-top: 1rem;
+}
+@media screen and (min-width: 1408px) {
+  .card-content .has-text-white{
+    margin-left: 3rem;
+    margin-right: -10rem;
+    margin-top: -10rem;
+  }
+  .column.is-half {
+    margin-right: 20%;
+    margin-top: -1%;
+    margin-left: -10%;
+  }
   .section {
     margin-left: -5px;
+  }
+
+  .login-button .content{
+    margin-left: 8rem;
+    margin-top: 30%;
+  }
+  img{
+    max-width: 110% !important;
+  }
+  .image img{
+    max-width: 110% !important;
+    width: 110%;
   }
 
   .job-position .container .section {
     padding: 1rem 0.5rem;
   }
-
   .job-position .container {
     flex-grow: 1;
     margin: 0 auto;
@@ -267,21 +317,8 @@ table thead tr th {
     width: auto;
     /*width: auto;*/
   }
-
   /* new changes 18 april */
   .container {
-    flex-grow: 1;
-    margin: 0 auto;
-    position: relative;
-    width: 70%;
-    /*width: auto;*/
-  }
-
-  .section .container is-fullheight {
-    margin-left: 15%;
-  }
-
-  .column .container {
     flex-grow: 1;
     margin: 0 auto;
     position: relative;
@@ -289,25 +326,32 @@ table thead tr th {
     /*width: auto;*/
   }
 
+  .section .container is-fullheight {
+    margin-left: 15%;
+  }
+  .column .container {
+    flex-grow: 1;
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+    margin-left: 6rem;
+    /*width: auto;*/
+  }
   .field .half .control input {
     width: 66%;
   }
-
   .field .control input {
-    width: 100%;
+    width: 90%;
   }
-
   .half .control select {
     width: 66%;
   }
-
   .heading {
     text-transform: none;
     font-size: 26px;
     letter-spacing: 1px;
     margin-bottom: 5px;
   }
-
   .box {
     background-color: white;
     border-radius: 6px;
@@ -318,9 +362,8 @@ table thead tr th {
     padding: 2.25rem;
     max-width: 1100px;
     margin-left: 190px;
-    max-width: 70%;
+    max-width: 60%;
   }
-
   .card {
     background-color: transparent;
     border-radius: 0.25rem;
@@ -332,71 +375,62 @@ table thead tr th {
     border: none;
     box-shadow: none;
   }
-
   .card-image {
     display: block;
+
     position: relative;
     max-height: 100px;
     max-width: 400px;
     margin-left: 10px;
   }
-
   .card-image:first-child img {
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
-    margin-left: 40px;
-    height: 550px;
-    margin-top: -78px;
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
+      0 0px 0 1px rgba(10, 10, 10, 0.02);
+      color: #4a4a4a;
+    margin-left: 9vw;
+    height: 500px;
+    margin-top: -64px;
   }
-
   .card-content {
     margin-left: 50px;
+    margin-top: 5rem;
   }
-
   .card-content .heading {
     font-size: 26px;
     margin-top: 120px;
   }
-
   .card-content .sub-heading {
     font-size: 14px;
-    margin-top: 20px;
+    margin-top: 30px;
+    margin-left: 3rem;
   }
-
   .heading-login {
     margin-top: 25px;
     margin-bottom: 25px;
-    font-size: 20px;
+    font-size: 20px;  
   }
-
   input {
     font-size: 14px;
   }
-
   .heading-link {
     font-size: 14px;
     margin-top: 150px;
   }
-
   .is-right {
     margin-top: 25px;
     font-size: 14px;
   }
-
   .label {
     font-size: 14px;
   }
-
   button {
     font-size: 14px;
   }
-
-  /* new screen */
-
   .job-position {
     padding: 2rem 0.5rem;
   }
-
   .job-position .container .card {
     background-color: #d1efd8;
     color: #4a4a4a;
@@ -405,36 +439,29 @@ table thead tr th {
     border: none;
     box-shadow: none;
   }
-
   .job-position .container .card .card-content {
     margin-left: 0px;
   }
-
   .form-group .field .label {
     font-size: 14px;
   }
-
   .field .section-title .label {
     font-size: 18px;
     font-style: none;
     color: #2b2b2b;
   }
-
   .topbar-title .title {
     font-size: 28px;
     color: #4ccd3d;
     margin-bottom: 30px;
   }
-
   .topbar-title .subtitle {
     font-size: 14px;
     color: #2b2b2b;
   }
-
   .application-form {
     margin-top: 1px;
   }
-
   .list-unstyled {
     font-size: 14px;
   }
@@ -452,14 +479,153 @@ table thead tr th {
   }
 }
 
-/* button changes */
-.control .button.is-success {
-  width: max-content;
+@media screen and (min-width:1271px) and (max-width:1409px) {
+  .card-content .has-text-white{
+    margin-left: 12%;
+    margin-right: -10rem;
+    margin-top: -10rem;
+  }
+  .column.is-half {
+    margin-right: 20%;
+    margin-top: -1%;
+    margin-left: -5%;
+  }
+  .section {
+    margin-left: -5px;
+  }
+  .login-button .content{
+    margin-left: 5rem;
+    margin-top: 17vh;
+    padding-bottom: 5vh;
+  }
+  .control .button.is-success {
+    width: max-content;
+    margin-left: 1.3rem;
+  }
+  .image{
+    margin-left: 2rem;
+  }
+  img{
+    max-width: 100% !important;
+  }
+  .image img{
+    max-width: 120% !important;
+    width: 120%;
+  }
+  .container {
+    flex-grow: 1;
+    margin: 0 auto;
+    position: relative;
+    margin-left: 2rem;
+    /*width: auto;*/
+  }
+  .container:not(.is-max-desktop):not(.is-max-widescreen) {
+    max-width: 100%;
+  }
+  .column .container {
+    flex-grow: 1;
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+    margin-left: 6rem;
+    /*width: auto;*/
+  }
+  .field .half .control input {
+    width: 66%;
+  }
+  .field .control input {
+    width: 90%;
+  }
+  .half .control select {
+    width: 66%;
+  }
+  .heading {
+    text-transform: none;
+    font-size: 26px;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  .box {
+    width: 100%;
+    display: block;
+    padding: 2.25rem;
+    margin-left: 250px;
+    max-width: 70%;
+  }
+
+  .card {
+    background-color: transparent;
+    border-radius: 0.25rem;
+    max-width: 100%;
+    position: relative;
+    border: none;
+    box-shadow: none;
+  }
+  .card-image {
+    display: block;
+    position: relative;
+    max-height: 100px;
+    max-width: 400px;
+    margin-left: 10px;
+  }
+  .card-image:first-child img {
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    margin-left: 9vw;
+    height: 500px;
+    margin-top: -64px;
+  }
+  .card-content {
+    margin-left: 80px;
+    margin-top: 5rem;
+  }
+  .card-content .heading {
+    font-size: 26px;
+    margin-top: 120px;
+  }
+  .card-content .sub-heading {
+    font-size: 14px;
+    margin-top: 30px;
+    margin-left: 3rem;
+  }
+  .heading-login {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    font-size: 20px;
+  }
 }
 
-label {
-  font-size: 15px;
+@media screen and (min-width:1018px)and (max-width:1271px) {
+  .container{
+    margin-top: 2rem;
+  }
+  #half-col{
+    padding-top: 3rem;
+  }
+  .control .button.is-success {
+    width: max-content;
+    margin-left: 0px;
+  }
+  .login-button{
+    margin-top:35% ;
+  }
+  .sub-heading{
+    font-size: 15px;
+  }
 }
+
+@media screen and (min-width:898px) and (max-width:1018px) {
+  .login-button{
+    margin-top:30% ;
+  }
+  .control .button.is-success {
+    width: max-content;
+    margin-left: 0px;
+}
+#half-col{
+  padding-top: 3rem;
+}
+
 
 .column.is-half {
   margin-right: 20%;
@@ -470,6 +636,125 @@ label {
 .block:not(:last-child) {
   margin-left: -10%;
   margin-top: 3%;
+
+}
+@media screen and (min-width:807px) and (max-width:898px) {
+  .login-button{
+    margin-top:22% ;
+  }
+  .control .button.is-success {
+    width: max-content;
+    margin-left: 0px;
+}
+  .forgot{
+    margin-left: -10px;
+    margin-right: 4px;
+  }
+}
+@media screen and (max-width:807px) {
+  .control .button.is-success {
+    width: max-content;
+    margin-left: 0px;
+}
+}
+@media screen and (min-width:531px) and (max-width:768px) {
+  .container {
+    flex-grow: 1;
+    margin: 0 auto;
+    position: relative;
+    width: auto;
+    padding-top: 2rem;
+  }
+  .login-button{
+    margin-top:22% ;
+  }
+  .hero-body .heading{
+    font-size: 35px;
+  }
+  .hero-body .sub-heading{
+    font-size: 18px;
+  }
+  .forgot {
+    margin-top: -5rem !important;
+    margin-left: 15rem;
+  }
+  .box {
+    display: block;
+    padding: 1.25rem;
+    padding-bottom: 50px;
+  }
+}
+@media screen and (min-width:491px) and (max-width:531px) {
+  .forgot {
+    margin-top: -5rem !important;
+    margin-left: 15rem;
+}
+.container {
+  flex-grow: 1;
+  margin: 0 auto;
+  position: relative;
+  width: auto;
+  padding-top: 1rem;
+}
+.login-button{
+  
+  margin-top:14% ;
+}
+.hero-body .heading{
+  font-size: 35px;
+}
+.hero-body .sub-heading{
+  font-size: 18px;
+}
+}
+@media screen and (min-width:393px) and (max-width:491px) {
+  .container {
+    flex-grow: 1;
+    margin: 0 auto;
+    position: relative;
+    width: auto;
+    padding-top: 1rem;
+  }
+  .login-button{
+  
+    margin-top:10% ;
+  }
+  .hero-body .heading{
+    font-size: 25px;
+  }
+  .hero-body .sub-heading{
+    font-size: 13px;
+  }
+  .hero-body {
+    flex-grow: 1;
+    flex-shrink: 0;
+    padding-left: 1rem ;
+}
+.forgot {
+  margin-top: -5rem !important;
+  margin-left: 15rem;
+}
+}
+@media screen and (max-width:394px) {
+  .container {
+    flex-grow: 1;
+    margin: 0 auto;
+    position: relative;
+    width: auto;
+    padding-top: 1rem;
+    padding-right: 1rem;
+  }
+  .login-button{
+  
+    margin-top:4% ;
+  }
+  .forgot {
+    margin-top: -5rem !important;
+    margin-left: 15rem;
+  }
+  html{
+    background-color: #dbdbdb;
+  }
 }
 
 #manageUsersTable table thead tr th,
@@ -704,7 +989,7 @@ th{
 .sub-heading{
   margin-left: 3rem;
 }
-=======
+
 .revenue .container{
   margin-left: 10% !important;
 }
@@ -729,4 +1014,5 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 
