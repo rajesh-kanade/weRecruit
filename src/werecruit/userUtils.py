@@ -310,34 +310,51 @@ def get_user_by_email(email):
         dbUtils.returnToPool(db_con)
 
 
-def list_users(tenant_id):
-
+def list_users(tenant_id, orderBy=None, order=None):
     try:
 
         db_con = dbUtils.getConnFromPool()
         cursor = dbUtils.getNamedTupleCursor(db_con)
 
-        sql = """SELECT * FROM users WHERE is_deleted = %s and
-				id in (select uid from tenant_user_roles where tid =%s)
-				order by id"""
+        query, params = None, None
+        q1 = """SELECT * FROM users WHERE is_deleted = %s and
+						id in (select uid from tenant_user_roles where tid =%s)
+						order by """
+        q2 = """"""
+        q3 = """ id"""
+        query, params = None, None
+
+        if orderBy == "client":
+            q2 = """ client, """
+        elif orderBy == "status":
+            q2 = """ status, """
+        elif orderBy == "title":
+            q2 = """ title, """
+        elif orderBy == "open_date":
+            q2 = """ open_date, """
+
+        query = q1 + q2 + q3
         params = (False, tenant_id)
 
-        _logger.debug(sql)
-        _logger.debug(cursor.mogrify(sql, params))
+        _logger.debug(query)
+        _logger.debug(cursor.mogrify(query, params))
 
-        cursor.execute(sql, params)
+        cursor.execute(query, params)
 
         userList = cursor.fetchall()
-
+        if order == "DESC":
+            userList = userList[::-1]
         for user in userList:
             _logger.debug(user)
 
-        return(RetCodes.success.value, "User List successfully fetched from db", userList)
-
+        return (
+            RetCodes.success.value,
+            "User List successfully fetched from db",
+            userList,
+        )
     except Exception as e:
         _logger.error(e)
-        return(RetCodes.server_error.value, str(e), None)
-
+        return (RetCodes.server_error.value, str(e), None)
     finally:
         cursor.close()
         dbUtils.returnToPool(db_con)

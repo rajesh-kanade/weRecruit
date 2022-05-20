@@ -91,8 +91,8 @@ textarea {
   background-color: #4ccd3d;
   border-color: transparent;
   color: #fff;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  /* margin-top: 20px;
+  margin-bottom: 20px; */
 }
 
 .navbar.has-shadow {
@@ -190,8 +190,8 @@ hr {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.1) inset;
 }
 
-.has-shadow:before,
-.has-shadow:after {
+/* .has-shadow:before, */
+/* .has-shadow:after {
   content: "";
   position: absolute;
   z-index: -1;
@@ -200,7 +200,19 @@ hr {
   bottom: 0;
   left: 0px;
   right: 0px;
-  border-radius: px;
+  border-radius: 5px;
+  background-color: white;
+} */
+.has-shadow:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  box-shadow: 0 0 10px rgb(0 0 0 / 80%);
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  /* border-radius: 5px; */
   background-color: white;
 }
 
@@ -234,10 +246,11 @@ table thead tr th {
 .table-height {
   margin-top: -60px;
 }
+
 /* new changes 18 april*/
-.column .job-position {
-  /* margin-left:auto; */
-}
+/* .column .job-position {
+  margin-left:auto;
+} */
 
 
 
@@ -281,6 +294,7 @@ label {
   .section {
     margin-left: -5px;
   }
+
   .login-button .content{
     margin-left: 8rem;
     margin-top: 30%;
@@ -292,8 +306,9 @@ label {
     max-width: 110% !important;
     width: 110%;
   }
+
   .job-position .container .section {
-    padding: 2rem 0.5rem;
+    padding: 1rem 0.5rem;
   }
   .job-position .container {
     flex-grow: 1;
@@ -310,6 +325,7 @@ label {
     width: 75%;
     /*width: auto;*/
   }
+
   .section .container is-fullheight {
     margin-left: 15%;
   }
@@ -449,6 +465,18 @@ label {
   .list-unstyled {
     font-size: 14px;
   }
+
+  #manageUsersTable {
+    width: 55%;
+  }
+
+  #addUserPage {
+    width: 50%;
+  }
+
+  #resumeListTable {
+    width: 70%;
+  }
 }
 
 @media screen and (min-width:1271px) and (max-width:1409px) {
@@ -585,6 +613,7 @@ label {
     font-size: 15px;
   }
 }
+
 @media screen and (min-width:898px) and (max-width:1018px) {
   .login-button{
     margin-top:30% ;
@@ -596,6 +625,18 @@ label {
 #half-col{
   padding-top: 3rem;
 }
+
+
+.column.is-half {
+  margin-right: 20%;
+  margin-top: -1%;
+  margin-left: -10%;
+}
+
+.block:not(:last-child) {
+  margin-left: -10%;
+  margin-top: 3%;
+
 }
 @media screen and (min-width:807px) and (max-width:898px) {
   .login-button{
@@ -633,16 +674,15 @@ label {
   .hero-body .sub-heading{
     font-size: 18px;
   }
-
   .forgot {
     margin-top: -5rem !important;
     margin-left: 15rem;
-}
-.box {
-  display: block;
-  padding: 1.25rem;
-  padding-bottom: 50px;
-}
+  }
+  .box {
+    display: block;
+    padding: 1.25rem;
+    padding-bottom: 50px;
+  }
 }
 @media screen and (min-width:491px) and (max-width:531px) {
   .forgot {
@@ -716,3 +756,263 @@ label {
     background-color: #dbdbdb;
   }
 }
+
+#manageUsersTable table thead tr th,
+#manageUsersTable table thead tr th span form a i {
+  color: #8c8c8c;
+}
+
+#manageUsersTable table thead tr th span {
+  margin-left: 1rem;
+}
+
+#manageUsersTable table tbody tr td span {
+  margin-left: 0.5rem;
+}
+
+#managerUserTable .table-actions {
+  font-size: 21px;
+  padding: 0.3rem 0.15em;
+}
+#resumeListTable table thead tr th {
+  color: #8c8c8c;
+}
+
+#resumeListTable table thead tr th span {
+  margin-left: 5%;
+}
+
+#resumeListTable table tbody tr td span {
+  margin-left: 10%;
+}
+
+#sort_name,
+#sort_status {
+  display: inline;
+}
+
+#resumeBrowserPage .job-position,
+#resumeBrowserPage section {
+  padding-top: 0.5rem;
+  padding-bottom: 2rem;
+}
+
+#resumeBrowserMessages .notification {
+  margin-top: 0%;
+  margin-left: 0%;
+}
+
+#resumeSearchBar {
+  margin-top: -5%;
+}
+
+.pagination {
+  padding: 0%;
+}
+
+.pagination .left {
+  background-color: #fff;
+}
+
+.pagination .right {
+  background-color: #4ccd3d;
+}
+
+.pagination div {
+  padding-left: 0.4rem;
+}
+
+.pagination div a {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.pagination .left,
+.pagination .right {
+  padding-left: 0.7rem;
+  padding-right: 0.7rem;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+}
+
+.pagination .currentPage {
+  border: rgb(129, 128, 128) solid 1px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#manageUsersPageMessages .notification {
+  margin-top: 0%;
+  margin-bottom: 1%;
+}
+
+#jd_browser_messages div .notification {
+  margin-top: 0%;
+  margin-left: 0%;
+}
+
+#add-user-button {
+  padding: 1% 5%;
+  border-radius: 2px;
+}
+
+.section {
+  padding: 1rem 0.5rem;
+}
+
+.table thead th,
+.table tbody tr {
+  vertical-align: bottom;
+  border-bottom: 2px solid #f6f6f6;
+  border-bottom-width: 2px;
+}
+
+#nameColumn {
+  width: 35%;
+}
+
+#emailColumn {
+  width: 40%;
+}
+
+#statusColumn {
+  width: 15%;
+}
+
+#actionColumn {
+  width: 10%;
+}
+
+#actionColumn i {
+  font-size: large;
+}
+
+
+
+/* status summary page */
+.job-details{
+  background-color:#4ccd3d
+}
+.job-details .title{
+  color: white;
+  
+}
+.status-div{
+  background-color:#f3f4f6;
+  height:100vh;
+}
+.status-div .container{
+  background-color: #f3f4f6;
+  margin-left: 5vw;
+}
+.block-title .title{
+  padding-left:6rem;
+  padding-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 28pt;
+}
+.is-size-7{
+  font-family: 'Poppins', sans-serif;
+}
+.title{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
+.container-status {
+  
+  max-width: 50%;
+}
+.table thead td{
+  vertical-align: bottom;
+  border-bottom: 4px solid #f3f4f6;
+  border-width: 0 0 2px !important;
+  color:gray;
+}
+.table thead th{
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 550;
+}
+.table{
+  background-color: #f6f6f6 !important;
+}
+.print-btn
+{
+    display: block;
+    color:#f3f4f6;
+}
+td {
+  width:1%;
+  background-color: rgba(250,250,250,255);
+} 
+th{
+  background-color: #ffffff;
+}
+.title{
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
+
+.level .level-item{
+  display: block;
+  padding-left: 8vw;
+  color: white;
+}
+.level .level-item .heading .sub-heading{
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  
+}
+.level-item .sub-head{
+  margin-top: -10px;
+  margin-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+.jd-details{
+  display: flex;
+  justify-content: flex-start;
+  background-color:#4ccd3d;
+}
+@media (max-width: 767px){
+  .container-status{
+    max-width: 100%;
+  }
+  .block-title .title{
+    padding-left:0rem;
+  }
+  
+}
+.heading{
+  margin-top: 1rem;
+  font-size: larger;
+}
+.sub-heading{
+  margin-left: 3rem;
+}
+
+.revenue .container{
+  margin-left: 10% !important;
+}
+
+.revenue .table{
+  width: 70%;
+}
+.button-revenue{
+  margin-left: -10%;
+}
+.button-revenue .button.is-success{
+  color: #fff;
+}
+.is-size-7{
+  color: #222 !important;
+}
+body{
+  background-color: #f6f6f6 ;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+

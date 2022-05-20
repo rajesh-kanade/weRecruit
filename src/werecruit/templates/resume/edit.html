@@ -9,7 +9,10 @@
 
       <div class="columns is-centered">
           <div class="column is-half">
-          <form  onsubmit ="document.getElementById('spinner').style.display = 'block';document.getElementById('spinner').classList.add('is-loading');return true;" action = "/resume/save" method="POST" enctype="multipart/form-data">
+  
+          <form  action = "/resume/save" method="POST" enctype="multipart/form-data">
+            {% include '/utils/show_msg.html'%}
+
             {% for error in form.submit.errors %}
                 <p><large class="has-text-danger">{{ error }}</large></p>  
             {% endfor %}
@@ -83,7 +86,6 @@
             <div class="field">
               <p class="control">
                 {{ form.submit( class = 'button is-success ') }}
-                <div id ="spinner" class='button is-primary' style="display:none">Saving...</div>
               </p>      
               {% for error in form.submit.errors %}
               <p><large class="has-text-danger">{{ error }}</large></p>  
