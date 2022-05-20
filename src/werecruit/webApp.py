@@ -518,8 +518,9 @@ def resume_save():
         return redirect(form.referrer.data)
 
     else:
-        flash(retCode + ':' + msg, "is-danger")
-        return render_template('resume/edit.html', form=form)
+        flash(retCode + ':' + msg, "is-danger")   
+        _logger.error("Server side validation error occured while saving. Error was as %s", msg)
+        return render_template('resume/edit.html', form=form),409
 
 
 @app.route("/resume/search", methods=["POST"])
