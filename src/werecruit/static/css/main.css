@@ -515,6 +515,9 @@ label {
   display: inline;
 }
 
+#sort_name i {
+  color: #8c8c8c;
+}
 #resumeBrowserPage .job-position,
 #resumeBrowserPage section {
   padding-top: 0.5rem;
@@ -714,6 +717,7 @@ th{
   margin-left: 3rem;
 }
 
+
 /* reset-password feature */
 .reset-head{
   padding-bottom: 2rem;
@@ -725,6 +729,10 @@ th{
   -ms-flex: 0 0 50%;
   flex: 0 0 50%;
   max-width: 50%;
+
+.revenue .container{
+  margin-left: 10% !important;
+
 }
 
 .row .label{

@@ -213,7 +213,7 @@ def do_signout():
 	return redirect(url_for('/'))'''
 
 
-@app.route('/jd/showCreatePage', methods=['GET'])
+@app.route('/jd/showCreatePage', methods=['GET', 'POST'])
 @login_required
 def show_jd_create_page():
     form = JDForm()
@@ -222,8 +222,24 @@ def show_jd_create_page():
     form.total_positions.data = jdUtils.JD_DEF_POSITIONS
     form.status.data = jdUtils.JDStatusCodes.open.value
 
-    return render_template('jd/edit.html', form=form)
+    countryNames = None
+    try:
+        countryRecords = jdUtils.get_country_names()
+        if countryRecords:
+            countryNames = [record.name for record in countryRecords[2]] 
+    except:
+        countryNames = ['India']
 
+    try:
+        cityRecords = jdUtils.get_city_names(1) #only Indian Cities To Be Populated
+        if cityRecords:
+            cityNames = cityRecords[2] 
+    except:
+        cityNames = ['Pune', 'Bangalore']
+    form.country.choices = countryNames
+    form.city.choices = [(record.id, record.name) for record in cityNames]
+
+    return render_template('jd/edit.html', form=form)
 
 @app.route('/jd/showAllPage', methods=['GET'])
 @login_required
@@ -283,7 +299,7 @@ def save_JD():
 
     _logger.debug('inside save JD.')
 
-    form = JDForm(request.form)
+    form = JDForm()
 
     '''if request.method == 'POST' and form.max_yrs_of_exp.validate(form) is False:
 		_logger.debug('JD save validation failed') 
@@ -304,6 +320,8 @@ def save_JD():
     else:
         filename = None
 
+    _logger.debug('JD filename is {0}'.format(filename))
+
     results = jdUtils.save_jd(form.id.data, form.title.data, form.details.data,
                               form.client.data, int(loggedInUserID), int(
                                   form.total_positions.data), form.open_date.data,
@@ -312,7 +330,7 @@ def save_JD():
                               form.hiring_mgr_name.data, form.hiring_mgr_email.data, form.hiring_mgr_phone.data,
                               form.hr_name.data, form.hr_email.data, form.hr_phone.data,
                               int(form.status.data),
-                              form.location.data, form.min_yrs_of_exp.data, filename,
+                              form.city.data, form.min_yrs_of_exp.data, filename,
                               form.primary_skills.data, form.secondary_skills.data,
                               form.ctc_min.data, form.ctc_max.data, form.ctc_currency.data,
                               form.fees_percent.data, form.warranty_in_months.data,
@@ -361,6 +379,31 @@ def show_jd_edit_page(id):
 
         jd = results[2]
 
+        
+        form.city.data = jd.city_id
+        print(jd.city_id)
+        countryNames = None
+        try:
+            countryRecords = jdUtils.get_country_names()
+            if countryRecords:
+                countryNames = [(record.id, record.name) for record in countryRecords[2]] 
+        except:
+            countryNames = [('1','India')]
+
+        try:
+            cityRecords = jdUtils.get_city_names(1) #only Indian Cities To Be Populated
+            if cityRecords:
+                cityNames = cityRecords[2] 
+        except:
+            cityNames = ['Pune', 'Bangalore']
+        
+        form.country.choices = countryNames
+        form.city.choices = [(record.id, record.name) for record in cityNames]
+        form.country.default = 'US'
+        form.city.default = jd.city_id
+
+        form.process()    # works
+
         form.id.data = jd.id
         form.title.data = jd.title
         form.details.data = jd.details
@@ -385,8 +428,6 @@ def show_jd_edit_page(id):
         form.hr_name.data = jd.hr_name
         form.hr_email.data = jd.hr_emailid
         form.hr_phone.data = jd.hr_phone
-
-        form.location.data = jd.location
 
         form.min_yrs_of_exp.data = jd.min_yrs_of_exp
         form.max_yrs_of_exp.data = jd.max_yrs_of_exp
@@ -549,8 +590,9 @@ def resume_save():
         return redirect(form.referrer.data)
 
     else:
-        flash(retCode + ':' + msg, "is-danger")
-        return render_template('resume/edit.html', form=form)
+        flash(retCode + ':' + msg, "is-danger")   
+        _logger.error("Server side validation error occured while saving. Error was as %s", msg)
+        return render_template('resume/edit.html', form=form),415
 
 
 @app.route("/resume/search", methods=["POST"])
@@ -631,7 +673,7 @@ def show_resume_browser_page():
     toggles = {
         "name": {
             "arrowToggle": "fa fa-arrow-down"
-            if (orderBy == "name" and order == "ASC")
+            if (orderBy == "name" and order == "DESC")
             else "fa fa-arrow-up",
             "orderToggle": "DESC" if order == "ASC" else "ASC",
         }

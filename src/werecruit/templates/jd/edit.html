@@ -1,22 +1,22 @@
 {%extends "app_header.html" %}
 {%block content%}
 
-{# changes 15/04 9:00 PM #}
-<div class="body-background">
-  <div class="columns">
-    <div class="column is-two-thirds">
-      <div class="job-position">
-        <div class="container">
-          <section class="section topbar-title">
-            <h1 class="title">Create/Edit a job position</h1>
-            <h2 class="subtitle">
-              This section allows you to create or edit a job position.
-            </h2>
-          </section>
-          {% for field in form.errors %}
-          {% for error in form.errors[field] %}
-          <div class="alert alert-error">
-            <small class="has-text-danger has-text-left">{{ error }}</small>
+  <div class="body-background">
+    <div class="columns">
+      <div class="column is-two-thirds">
+        <div class="job-position">
+          <div class="container">
+            <section class="section topbar-title">
+              <h1 class="title">Create/Edit a job position</h1>
+              <h2 class="subtitle">
+                This section allows you to create or edit a job position.
+              </h2>
+            </section>
+            {% for field in form.errors %}
+            {% for error in form.errors[field] %}
+            <div class="alert alert-error">
+              <small class="has-text-danger has-text-left">{{ error }}</small>
+            </div>
           </div>
           {% endfor %}
           {% endfor %}
@@ -75,11 +75,25 @@
 
                 </div>
                 
-                <div class="field">
-                  <label class="label">{{ form.location.label }}</label>
-                  <div class="control">
-                    <div class="select is-black">
-                      {{form.location(class='input', placeholder='Enter the Job location.')}}
+                <div class="columns">
+                  <div class="column">
+                    <div class="field">
+                      <label class="label">{{form.country.label}}</label>
+                      <div class="control">
+                        <div class="select is-black">
+                          {{form.country(class='select', placeholder='Enter country')}}
+                        </div>                      
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="field">
+                      <label class="label">{{form.city.label }}</label>
+                      <div class="control">
+                        <div class="select is-black">
+                          {{form.city(class=  'select', placeholder='Enter city', id='cityField')}}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -208,27 +222,27 @@
               </div>
             </form>
           </section>
-
+        </div>
         </div>
       </div>
-    </div>
-    <div class="column is-one-third">
-      <div class="job-position">
-        <div class="container">
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <label class="label" style="font-size: 18px;">
-                  Few guidelines
-                </label>
-                <ul class="list-unstyled">
-                  <li>Proper formatting of the text/content of the posting with clear spaces and standard bullets (-) to
-                    be used.</li>
-                  <li>No short forms/abbreviations to be used in the text.</li>
-                  <li>No spelling mistakes in the content.</li>
-                  <li>JD should be concise and crisp - to the point.</li>
-                  <li>(*) mark is mandatory.</li>
-                </ul>
+      <div class="column is-one-third">
+        <div class="job-position">
+          <div class="container">
+            <div class="card">
+              <div class="card-content">
+                <div class="content">
+                  <label class="label" style="font-size: 18px;">
+                    Few guidelines
+                  </label>
+                  <ul class="list-unstyled">
+                    <li>Proper formatting of the text/content of the posting with clear spaces and standard bullets (-) to
+                      be used.</li>
+                    <li>No short forms/abbreviations to be used in the text.</li>
+                    <li>No spelling mistakes in the content.</li>
+                    <li>JD should be concise and crisp - to the point.</li>
+                    <li>(*) mark is mandatory.</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -236,5 +250,4 @@
       </div>
     </div>
   </div>
-</div>
 {% endblock %}

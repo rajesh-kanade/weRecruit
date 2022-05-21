@@ -299,7 +299,7 @@ def list_resumes_by_tenant(tenantID, orderBy=None, order=None):
 				where is_deleted = %s and
 				recruiter_id in ( select uid from tenant_user_roles where tid = %s) order by """
         q2 = """ """
-        q3 = """ id desc """
+        q3 = """ name ASC """
         query, params = None, None
         if orderBy == "name":
             q2 = """ name, """
