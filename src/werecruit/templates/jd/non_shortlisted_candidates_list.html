@@ -1,4 +1,3 @@
-<turbo-frame id = 'show_non_shortlisted_resumeList'> 
 <div class="block">  
   <form action = "/jd/searchNonShortlistedResumes" method="POST" enctype="multipart/form-data" data-turbo-frame="_self">
     <div class="control">
@@ -11,39 +10,41 @@
           {{searchForm.ft_search(class='input', placeholder="Search resumes")}}
         </div>
         <div class="control">
-          {{ searchForm.submit( class = 'button is-info is-rounded') }}
+          {{ searchForm.submit( class = 'button is-info ') }}
         </div>
       </div>
     </div>  
   </form>
 
-    <table class="table is-striped">
+  <div class="table-container">
+    <table id="shortlist-candidate"class="table is-fullwidth">
       <tbody>
-      {% for resume in resumeList %}
+      {% for resume in allresumeList %}
         {%if loop.first %}
           <thead>
             <tr class="{{theme_bg_color}}">
-              <th class="has-text-centered {{theme_text_color}}">RESUME ID</th>
-              <th class="has-text-centered {{theme_text_color}}">NAME</th>
-              <th class="has-text-centered {{theme_text_color}}">EMAIL</th>
-              <th class="has-text-centered {{theme_text_color}}">PHONE</th>
-              <th class="has-text-centered {{theme_text_color}}">STATUS</th>
-              <th class="has-text-centered {{theme_text_color}}"></th>
+              <!-- <th class="has-text-centered {{theme_text_color}}">RESUME ID</th> -->
+              <th class="has-text-centered {{theme_text_color}}">Name</th>
+              <th class="has-text-centered {{theme_text_color}}">Email</th>
+              <th class="has-text-centered {{theme_text_color}}">Phone</th>
+              <th class="has-text-centered {{theme_text_color}}">Status</th>
+              <th class="has-text-left {{theme_text_color}}">Action</th>
             </tr>
           </thead>
         {%endif %}
         <tr class="{{theme_bg_color}}">
-          <td class="has-text-centered {{theme_text_color}}">{{ resume.id }}</td>
+          <!-- <td class="has-text-centered {{theme_text_color}}">{{ resume.id }}</td> -->
           <td class="has-text-centered {{theme_text_color}}">{{ resume.name }}</td>
           <td class="has-text-centered {{theme_text_color}}">{{ resume.email }}</td> 
           <td class="has-text-centered {{theme_text_color}}">{{ resume.phone }}</td>
           <td class="has-text-centered {{theme_text_color}}">{{ resume.status }}-{{resume.description}}</td>
-          <td class="has-text-centered {{theme_text_color}}">
+          <td class="has-text-left {{theme_text_color}}">
             <div class ="field is-grouped" data-turbo="false">
-              <turbo-frame id="view_resume"><p class="control"><a class="button is-info  is-small" title ="Download" href="/resume/download/{{resume.id}}?src=jd-shortlist-page"><i class="fa fa-download"></i></a></p></turbo-frame>&NonBreakingSpace;
-              <turbo-frame id="shortlist_resume"><p class="control"><a class="button is-info is-small" title ="Shortlist" href="/jd/shortlist/?resume_id={{resume.id}}&job_id={{job_id}}"><i class="fa fa-bookmark"></i></a></p></turbo-frame>&NonBreakingSpace;
-              <turbo-frame id="edit_resume"><p class="control"><a class="button is-info  is-small" title ="Edit" href="/resume/showEditPage/{{resume.id}}"><i class="fa fa-edit"></i></a></p></turbo-frame>
-
+              <a title="shortlist"  href="/jd/shortlist/?resume_id={{resume.id}}&job_id={{job_id}}"><i class="fa fa-bookmark"></i></abbr></a>
+          <span ><a title="show summary page" href="/jd/showSummaryPage/{{jd.id}}">
+     <i class="fa fa-edit"></i></a></span>
+               <span ></span><a title="download" href="/resume/download/{{resume.id}}?src=jd-shortlist-page"><i
+                  class="fa fa-download"></i></a></span>
             </div>
           </td>       
         </tr>
@@ -54,5 +55,34 @@
       {% endfor %}
     </tbody>
   </table>
-</div>  
-</turbo-frame>
+  
+
+  <div class="is-flex is-flex-direction-row is-justify-content-flex-end container pagination">
+    {% if all_resume_total_pages > 1 %}
+    <div class="currentPage"><a>{{all_resume_pagination .page}} <span class="sr-only">(current)</span></a></div>
+    <div class="totalPages"><a>Of {{ all_resume_total_pages}} <span class="sr-only">(current)</span></a></div>
+    {% if all_resume_pagination .page > 1 %}
+    <div><a class="left"
+        href="?page={{all_resume_pagination .page - 1}}&per_page={{all_resume_pagination .per_page}}"
+        aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a></div>
+
+    {% else %}
+    <div><a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+    </div>
+    {% endif %}
+
+    {% if all_resume_pagination .page < all_resume_total_pages %}
+     <div><a class="right"
+        href="?page={{all_resume_pagination .page + 1}}&per_page={{all_resume_pagination .per_page}}"
+        aria-label="Next">
+        <span>&raquo;</span><span class="sr-only">Next</span></a>
+  </div>
+  {% else %}
+  <div><a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+  </div>
+  {% endif %}
+  {% endif %}
+</div>
+</div>
+  </div>
+

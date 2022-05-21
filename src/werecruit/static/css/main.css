@@ -735,7 +735,7 @@ th{
   -ms-flex: 0 0 50%;
   flex: 0 0 50%;
   max-width: 50%;
-
+}
 .revenue .container{
   margin-left: 10% !important;
 
@@ -838,7 +838,7 @@ label{
 }
 .reset-container{
   display: flex;
-  flex-direction: ;
+
 }
 
 .reset-columns{
@@ -879,4 +879,142 @@ label{
     padding: 0.75rem;
   }
 
+}
+
+.tile.is-ancestor {
+  display: flex;
+  flex-wrap: wrap;
+ 
+  margin: 50px auto;
+  padding: 25px;
+}
+.tile.is-ancestor .turbo input[type="radio"] {
+  display: none;
+}
+.tile.is-ancestor .turbo label {
+  padding: 25px;
+  background: #e2e2e2;
+  font-weight: bold;
+}
+
+.tile.is-ancestor .turbo .tile.is-child {
+  width: 100%;
+  padding: 20px;
+  background: #fff;
+  order: 1;
+  display: none;
+}
+.tile.is-ancestor .turbo .tile.is-child h2 {
+  font-size: 3em;
+}
+
+.tile.is-ancestor .turbo input[type='radio']:checked + label + .tile.is-child {
+  display: block;
+}
+
+.tile.is-ancestor .turbo input[type="radio"]:checked + label {
+  background: #fff;
+}
+
+
+
+.mytabs {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 50px auto;
+  /* padding: 25px; */
+
+  /* border: 1px solid black; */
+}
+.mytabs input[type="radio"] {
+  display: none;
+}
+.mytabs label {
+  padding: 25px;
+  background: #4ccd3d;
+  font-weight: bold;
+  width: 30%;
+  margin-bottom: 0%;
+  margin-right: 2%;
+}
+
+.mytabs .tab {
+  width: 100%;
+  padding: 20px;
+  background: #fff;
+  order: 1;
+  display: none;
+}
+.mytabs .tab h2 {
+  font-size: 3em;
+}
+
+.mytabs input[type='radio']:checked + label + .tab {
+  display: block;
+}
+
+.mytabs input[type="radio"]:checked + label {
+  background: #fff;}
+
+.block{
+  overflow: auto;
+}
+
+
+.shortlist .container {
+  width: 100%;
+  } 
+  
+
+.tab .tile.is-child{
+  max-width: 100% !important;
+  /* margin-left: 0px; */
+  box-shadow: none;
+
+}
+.field.has-addons .control:not(:last-child) {
+  margin-right: -1px;
+  width: 35%;
+  margin-bottom: 2%;
+}
+.field.is-grouped .button.is-info{
+  background-color: #fff;
+  color: #222;
+}
+.field.has-addons .button.is-info{
+  background-color: #4ccd3d;
+}
+body{
+  background-color: #f6f6f6 !important;
+}
+
+.level .level-item{
+  display: block;
+  padding-left: 8vw;
+  color: white;
+}
+.level .level-item .heading .sub-heading{
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  
+}
+.level-item .sub-head{
+  margin-top: -10px;
+  margin-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+.jd-details{
+  display: flex;
+  justify-content: flex-start;
+  background-color:#4ccd3d;
+}
+.field.is-grouped span{
+  margin-left:20px ;
+}
+table th{
+  background-color: #f3f4f6 !important;
+  border: 2px solid #fff;
+}
+.is-fullwidth{
+  border: 2px solid #f6f6f6;
 }

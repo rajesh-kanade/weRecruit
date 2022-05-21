@@ -63,7 +63,6 @@ fa = FontAwesome(app)
 """def cleanup(sender, **extra):
 	_logger.debug('inside Tearing down cleanup  function')
 	session.close()
-
 from flask import appcontext_tearing_down
 appcontext_tearing_down.connect(cleanup, app)"""
 
@@ -807,19 +806,14 @@ def jd_download(id):
 @app.route('/resume/showshortlistpage', methods = ['GET'])
 @login_required
 def show_resume_shortlist_page():
-
 	try:
 		_logger.debug('inside shortlist resume page for  ID {0} '.format(id))
-
 		assert request.args.get('id'), "Resume ID request parameter not found."
 		assert request.args.get('name'), "Candidate Name request parameter not found."
-
 		form = ResumeShortlistForm()
 		form.id.data = request.args.get('id')
 		form.candidate_name.data = request.args.get('name')
-
 		results = jdUtils.list_jds_by_tenant(session.get('tenant_id'))
-
 		if (results[0] == jdUtils.RetCodes.success.value): 
 			jdList = results[2]    
 			for jd in jdList:
@@ -879,6 +873,10 @@ def show_shortlist_resumes_page(job_id):
         job_id, None, session.get('tenant_id'))
     assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes not associated with job  id {0}. Error code is {1}. Error message is {2}".format(
         job_id, retCode, msg)
+    (retCode, msg, allresumeList) = jdUtils.get_resumes_not_associated_with_job(
+        job_id, None, session.get('tenant_id'))
+    assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes not associated with job  id {0}. Error code is {1}. Error message is {2}".format(
+        job_id, retCode, msg)    
 
     # get all candidates who are currently associated with the job
     (retCode, msg, shortlistedList) = jdUtils.get_resumes_associated_with_job(job_id)
@@ -888,11 +886,36 @@ def show_shortlist_resumes_page(job_id):
     searchForm = ResumeSearchForm()
     searchForm.job_id.data = job_id
     # searchForm.source.data = "jd_shorlist_resumes_page"  #set the source field of search box
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = request.args.get(
+        get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
 
-    return render_template('/jd/shortlist.html', jd=jd, job_id=jd.id,
-                           resumeList=resumeList,
-                           shortlistedList=shortlistedList, actionTemplate="shortlist",
-                           searchForm=searchForm)
+    offset = (page - 1) * per_page
+    allresume_total = len(resumeList)
+    shortlisted_resume_total=len(shortlistedList)
+    from math import ceil
+    all_resume_total_pages = ceil(allresume_total/per_page)
+    shortlisted_resume_total_pages = ceil(shortlisted_resume_total/per_page)
+
+    def getResumePages(offset=0, per_page=1):
+        return allresumeList[offset: offset + per_page]
+    def getShortlistedResumePages(offset=0, per_page=1):
+        return shortlistedList[offset: offset + per_page]    
+    pagination_ResumeList = getResumePages(offset=offset, per_page=per_page)
+    pagination_shortlistedList=getShortlistedResumePages(offset=offset, per_page=per_page)
+    all_resume_pagination = Pagination(page=page, per_page=per_page, total=allresume_total)
+    shortlisted_resume_pagination = Pagination(page=page, per_page=per_page, total=shortlisted_resume_total)
+    return render_template('/jd/shortlisting_wrapper.html', jd=jd, job_id=jd.id,
+                            allresumeList=pagination_ResumeList,
+                            shortlistedList=pagination_shortlistedList, actionTemplate="shortlist",
+                            searchForm=searchForm,
+                            page=page,
+                            per_page=1,
+                            all_resume_pagination=all_resume_pagination,
+                            shortlisted_resume_pagination=shortlisted_resume_pagination,
+                            all_resume_total_pages=all_resume_total_pages,
+                            shortlisted_resume_total_pages=shortlisted_resume_total_pages)
+
 
 
 # @app.errorhandler(500)
