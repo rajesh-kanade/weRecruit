@@ -40,7 +40,7 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
             hiring_mgr_name=None, hiring_mgr_email=None, hiring_mgr_phone=None,
             hr_name=None, hr_email=None, hr_phone=None,
             status=JDStatusCodes.open.value,
-            location=None, min_yrs_of_exp=None, jd_file_name=None,
+            city_id=None, min_yrs_of_exp=None, jd_file_name=None,
             primary_skills=None, secondary_skills=None,
             ctc_min=None, ctc_max=None, ctc_currency=None,
             fees_percent=None, warranty_period_in_months=None,
@@ -90,7 +90,7 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 					ip_name_2, ip_emailid_2,ip_phone_2,
 					hiring_mgr_name, hiring_mgr_emailid,hiring_mgr_phone,
 					hr_name,hr_emailid,hr_phone,
-					location,min_yrs_of_exp,jd_file_name,
+					city_id,min_yrs_of_exp,jd_file_name,
 					primary_skills, secondary_skills,
 					ctc_min,ctc_max,ctc_currency ,
 					fees_in_percent,warranty_period_in_months,client_jd,max_yrs_of_exp) 
@@ -100,7 +100,7 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 					%s,%s,%s,
 					%s,%s,%s,
 					%s,%s,%s,
-					%s,%s,%s,
+				    %s,%s,%s,
 					%s,%s,
 					%s,%s,%s,
 					%s,%s,%s,%s) returning id """
@@ -111,7 +111,7 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
                       ip_name2, ip_email2, ip_phone2,
                       hiring_mgr_name, hiring_mgr_email, hiring_mgr_phone,
                       hr_name, hr_email, hr_phone,
-                      location, min_yrs_of_exp, jd_file_name,
+                      city_id, min_yrs_of_exp, jd_file_name,
                       primary_skills, secondary_skills,
                       ctc_min, ctc_max, ctc_currency,
                       fees_percent, warranty_period_in_months,
@@ -138,7 +138,7 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 						ip_name_2 = %s, ip_emailid_2 = %s, ip_phone_2 = %s,
 						hiring_mgr_name = %s, hiring_mgr_emailid = %s, hiring_mgr_phone = %s,
 						hr_name = %s, hr_emailid = %s, hr_phone = %s,
-						location=%s,min_yrs_of_exp =%s,
+						city_id=%s,min_yrs_of_exp =%s,
 						primary_skills=%s,secondary_skills=%s,
 						ctc_min=%s,ctc_max=%s,ctc_currency=%s,
 						fees_in_percent=%s,warranty_period_in_months=%s,max_yrs_of_exp=%s
@@ -149,7 +149,7 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
                       ip_name2, ip_email2, ip_phone2,
                       hiring_mgr_name, hiring_mgr_email, hiring_mgr_phone,
                       hr_name, hr_email, hr_phone,
-                      location, min_yrs_of_exp,
+                      city_id, min_yrs_of_exp,
                       primary_skills, secondary_skills,
                       ctc_min, ctc_max, ctc_currency,
                       fees_percent, warranty_period_in_months, max_yrs_of_exp,
@@ -591,9 +591,9 @@ def get_country_names():
         db_con = dbUtils.getConnFromPool()
         cursor = dbUtils.getNamedTupleCursor(db_con)
 
-        query = """SELECT name
-				FROM country_code
-				ORDER BY name"""
+        query = """SELECT *
+				FROM countries
+				ORDER BY id"""
 
         params = ()
         _logger.debug(cursor.mogrify(query, params))
@@ -612,17 +612,18 @@ def get_country_names():
         dbUtils.returnToPool(db_con)
         
 
-def get_city_names():
+def get_city_names(country_id):
     try:
         db_con = dbUtils.getConnFromPool()
         cursor = dbUtils.getNamedTupleCursor(db_con)
 
-        query = """SELECT city
-				FROM india_cities
-				ORDER BY population DESC LIMIT 50
+        query = """SELECT *
+				FROM cities
+                WHERE country_id = %s
+				ORDER BY id ASC LIMIT 50
                 """
 
-        params = ()
+        params = (country_id,)
         _logger.debug(cursor.mogrify(query, params))
         cursor.execute(query, params)
 
