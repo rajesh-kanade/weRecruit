@@ -37,7 +37,7 @@ class ResetPasswordForm(FlaskForm):
     confirm = PasswordField('Confirm New Password*',[
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')],id="confirm_password")
-    submit = SubmitField('Save')
+    submit = SubmitField('Change Password')
 
 class UserForm(FlaskForm):
 

@@ -1,3 +1,4 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @font-face {
   font-family: "poppins-medium";
@@ -43,7 +44,9 @@ textarea,
 .header th {
   font-family: "regular", sans-serif;
 }
-
+html, body{
+  background-color: #f3f4f6;
+}
 *{ 
   color-adjust: exact;  
   -webkit-print-color-adjust: exact; 
@@ -291,7 +294,7 @@ table thead tr th {
     flex-grow: 1;
     margin: 0 auto;
     position: relative;
-    width: 100%;
+    width: 75%;
     /*width: auto;*/
   }
 
@@ -712,7 +715,39 @@ th{
 }
 
 /* reset-password feature */
+.reset-head{
+  padding-bottom: 2rem;
+  padding-top: 0 auto;
+  margin-left: -3rem;
+}
+#col-md-6 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 50%;
+  flex: 0 0 50%;
+  max-width: 50%;
+}
 
+.row .label{
+  letter-spacing: 1px;
+}
+
+.reset-head .title{
+  font-size: 28pt;
+  font-family: "poppins-medium", sans-serif;
+}
+.reset-head .is-size-7{
+  font-weight: 3rem;
+  font-family: "poppins-medium", sans-serif;
+}
+.row ,.column.is-half{
+  margin-left: 0 auto;
+}
+.reset-columns{
+  max-width: 100%;
+}
+.column .job-position{
+  margin-left: -100px;
+}
 .flash{
   padding-right:50px ; 
   padding-top:20px;
@@ -722,7 +757,6 @@ th{
   position:relative ; 
   padding-top:10px;
   margin-right: 0px;
-  margin-left:-100px ;
 }
 .container .row .inputs{
   width:100%;
@@ -746,23 +780,26 @@ th{
 .reset-columns i {
   margin: 0 10px;
   color: #aaa;
+  
 }
 
 .reset-columns .field .control{
-  
+  background-color: #fff;
   display: flex;
   align-items: center;
-  border: 1px solid black ; 
+  border: 2px solid #c6c6c6 ; 
   border-radius: 3px;
   width: 100%;
   
 }
+
 label{
   margin-bottom: 2px;
 }
 .label{
   font-size: 15px;
 }
+.email ,
 .field .label .control .input{
   text-align: left !important;
   padding-left: 0px;
@@ -778,19 +815,21 @@ label{
   position: relative;
   border: none;
   box-shadow: none;
-  /* margin-top: 19px; */
+  margin-top: 19px;
+  margin-left: -10%;
 }
 .password-reset .container .card .card-content {
   margin-left: 0px;
   padding: 2rem;
 }
-
-.column{
-  margin-left: 30px;
+.reset-container{
+  display: flex;
+  flex-direction: ;
 }
-/* .reset-columns{
+
+.reset-columns{
   margin-left: -20px;
-} */
+}
 @media screen and (min-width: 769px){
   .row .column.is-half, .row .column.is-half-tablet {
     flex: none;
@@ -808,17 +847,13 @@ label{
     margin-left: 10px;
     font-size: 10px;
   }
-  .column {
-    margin-left: 0px;
-}
-  .column {
-    margin-left: 0px;
-  }
+  
   .row{
     position:relative ; 
     padding-top:10px;
     margin-right: 0px;
-    margin-left:-170px ;
+    margin-left:-90px ;
+    float: left !important;
   }
 
   .column {
