@@ -268,7 +268,6 @@ def save_JD():
 
     _logger.debug('inside save JD.')
 
-    # form = JDForm(request.form)
     form = JDForm()
 
     '''if request.method == 'POST' and form.max_yrs_of_exp.validate(form) is False:
@@ -289,6 +288,8 @@ def save_JD():
         f.close()
     else:
         filename = None
+
+    _logger.debug('JD filename is {0}'.format(filename))
 
     results = jdUtils.save_jd(form.id.data, form.title.data, form.details.data,
                               form.client.data, int(loggedInUserID), int(
@@ -558,8 +559,9 @@ def resume_save():
         return redirect(form.referrer.data)
 
     else:
-        flash(retCode + ':' + msg, "is-danger")
-        return render_template('resume/edit.html', form=form)
+        flash(retCode + ':' + msg, "is-danger")   
+        _logger.error("Server side validation error occured while saving. Error was as %s", msg)
+        return render_template('resume/edit.html', form=form),415
 
 
 @app.route("/resume/search", methods=["POST"])
@@ -1110,6 +1112,11 @@ def do_reset_password():
 @app.route('/user/forgotPassword', methods=['POST'])
 def do_forgot_password():
     email = request.form.get('email')
+    
+    if not email.strip():
+        flash('Please enter valid email ID', "is-danger") 
+        return redirect(url_for('show_signin_page'))
+
     user = userUtils.get_user_by_email(email)
     if not user[2]:
         flash(
@@ -1124,6 +1131,8 @@ def do_forgot_password():
         emailContentType = 'html'
         emailUtils.sendMail(user[2].email, subject=emailSubject,
                             body=emailBody, contentType=emailContentType)
+        
+        #Handle if sendMail function failed...
 
         flash('A new password has been sent to your email successfully', "is-success")
         return redirect(url_for('show_signin_page'))
