@@ -84,10 +84,12 @@
                   <td>{{resume.email}}</td>
                   <td>{{resume.phone}}</td>
                   <td class="table-actions" data-turbo="false">
-                    <a href="/resume/showEditPage/{{resume.id}}"><abbr title="Edit"><i
-                          class="fa fa-pencil-square-o"></i></abbr></a>
-                    <span><a href="/resume/download/{{resume.id}}" onclick="this.classList.add('is-loading');"><abbr
-                          title="Download Resume"><i class="fa fa-download"></i></abbr></a></span>
+                    <a title="Edit" href="/resume/showEditPage/{{resume.id}}">
+                      <i class="fa fa-pencil-square-o"></i>
+                    </a>
+                    <span><a title="Download Resume" href="/resume/download/{{resume.id}}" onclick="this.classList.add('is-loading');">
+                      <i class="fa fa-download"></i>
+                    </a></span>
                   </td>
                 </tr>
                 {% else %}
