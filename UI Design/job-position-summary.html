@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <link rel="stylesheet" href="bulma/css/bulma.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .no-show{
+      color: #df4949;
+    }
+
+    .accepted{
+      color: #6fb2d7;
+    }
+
+    .done{
+      color: #0ead28; 
+    }
+
+    table .header th{
+      color: #8c8c8c;
+      padding-top: 15px;
+    }
+
+    .table-summary td{
+      font-size: 14px;
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+
+    .table-summary .td-margin{
+      padding-top: 28px;
+    }
+
+    .footer {
+      background-color: #fafafa;
+      max-height: 3px;
+      padding: 1rem 0rem 0rem;
+    }
+
+    .footer-column .columns{
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .footer p{
+      margin-left: 85px;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar is-white has-shadow">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item">
+          <img src="images/logo_login.png" style="max-height: 70px" class="py-2 px-2">
+        </a>
+        <a class="navbar-burger" id="burger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="nav-links">
+        <div class="navbar-end">
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Job Positions
+            </a>
+            <div class="navbar-dropdown">
+              <a class="navbar-item">
+                Sub menu -1
+              </a>
+              <a class="navbar-item">
+                Sub menu -2 
+              </a>
+            </div>
+          </div>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Resumes
+            </a>
+
+            <div class="navbar-dropdown">
+              <a class="navbar-item">
+                Sub menu -1
+              </a>
+              <a class="navbar-item">
+                Sub menu -2 
+              </a>
+            </div>
+          </div> 
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              Reports
+            </a>
+
+            <div class="navbar-dropdown">
+              <a class="navbar-item">
+                Sub menu -1
+              </a>
+              <a class="navbar-item">
+                Sub menu -2 
+              </a>
+            </div>
+          </div>
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+              <img src="images/profile.png"><span style="margin-left:10px"> Jon Doe</span>
+            </a>
+
+            <div class="navbar-dropdown">
+              <a class="navbar-item">
+                Sub menu -1
+              </a>
+              <a class="navbar-item">
+                Sub menu -2 
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="body-background">
+      <div class="job-position"> 
+        <div class="container">
+          <section class="section topbar-title">
+              <h1 class="title">Client Wise Job Position Status Summary</h1>
+              <h2 class="subtitle">
+                This report summarizes job applications in various phase for all job positions.
+              </h2>
+          </section>
+        </div>
+      </div>
+      <div class="job-position table-height">
+        <div class="container">
+          <section class="application-form">
+              <div class="table-container">
+                <table class="table is-fullwidth">
+                  <thead>
+                    <tr class="header">
+                      <th>Client<span style="margin-left: 10px;"><i class="fa fa-arrow-up"></i></span></th>
+                      <th>Title <span style="margin-left: 10px;"><i class="fa fa-arrow-up"></i></span></th>
+                      <th>Resume <br>Shortlisted </th>
+                      <th>Initial <br>  Screening</th>
+                      <th>Round 1 </th>
+                      <th>Round 2 </th>
+                      <th>Hiring Manager</th>
+                      <th>HR</th>
+                      <th>Offer</th>
+                      <th>Onboarding</th>
+                    </tr>
+                </thead>
+                <tbody>
+                  <tr class="table-summary" style="padding-bottom: 20px;">
+                    <td class="td-margin">Loadshare<br> Networks</td>
+                    <td class="td-margin">  QA/Lead <br>Engineer</td>
+                    <td class="td-margin">6</td>
+                    <td>
+                      Scheduled - 1<br>
+                      Cleared - 2 <br>
+                      Failed - 4</td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Pending with HR - 4 <br>
+                      Released - 3 <br>
+                     <span class="accepted"> Accepted - 2</span> </td>
+                    <td>
+                     <span class="done"> Done - 8 <br>
+                     <span class="no-show"> No Show - 2</span> </td>
+                  </tr>
+
+                  <tr class="table-summary">
+                    <td class="td-margin">Loadshare<br> Networks</td>
+                    <td class="td-margin">  SDE - 2 </td>
+                    <td class="td-margin">4</td>
+                    <td>
+                      Scheduled - 1<br>
+                      Cleared - 2 <br>
+                      Failed - 4</td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Pending with HR - 4 <br>
+                      Released - 3 <br>
+                     <span class="accepted"> Accepted - 2</span> </td>
+                    <td>
+                     <span class="done"> Done - 8 <br>
+                     <span class="no-show"> No Show - 2</span> </td>
+                  </tr>
+
+                  <tr class="table-summary">
+                    <td class="td-margin">Loadshare<br> Networks</td>
+                    <td class="td-margin">  SDE - 3</td>
+                    <td class="td-margin">2</td>
+                    <td>
+                      Scheduled - 1<br>
+                      Cleared - 2 <br>
+                      Failed - 4</td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Pending with HR - 4 <br>
+                      Released - 3 <br>
+                     <span class="accepted"> Accepted - 2</span> </td>
+                    <td>
+                     <span class="done"> Done - 8 <br>
+                     <span class="no-show"> No Show - 2</span> </td>
+                  </tr>
+
+                  <tr class="table-summary">
+                    <td class="td-margin">Loadshare<br> Networks</td>
+                    <td class="td-margin">  SDE - 2 <br>(React)</td>
+                    <td class="td-margin">5</td>
+                    <td>
+                      Scheduled - 1<br>
+                      Cleared - 2 <br>
+                      Failed - 4</td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Pending with HR - 4 <br>
+                      Released - 3 <br>
+                     <span class="accepted"> Accepted - 2</span> </td>
+                    <td>
+                     <span class="done"> Done - 8 <br>
+                     <span class="no-show"> No Show - 2</span> </td>
+                  </tr>
+
+                  <tr class="table-summary">
+                    <td class="td-margin">Loadshare<br> Networks</td>
+                    <td class="td-margin">  SDE - 2</td>
+                    <td class="td-margin">3</td>
+                    <td>
+                      Scheduled - 1<br>
+                      Cleared - 2 <br>
+                      Failed - 4</td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Pending with HR - 4 <br>
+                      Released - 3 <br>
+                     <span class="accepted"> Accepted - 2</span> </td>
+                    <td>
+                     <span class="done"> Done - 8 <br>
+                     <span class="no-show"> No Show - 2</span> </td>
+                  </tr>
+
+                  <tr class="table-summary">
+                    <td class="td-margin">Loadshare<br> Networks</td>
+                    <td class="td-margin">  SDE - 3</td>
+                    <td class="td-margin">6</td>
+                    <td>
+                      Scheduled - 1<br>
+                      Cleared - 2 <br>
+                      Failed - 4</td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Pending with HR - 4 <br>
+                      Released - 3 <br>
+                     <span class="accepted"> Accepted - 2</span> </td>
+                    <td>
+                     <span class="done"> Done - 8 <br>
+                     <span class="no-show"> No Show - 2</span> </td>
+                  </tr>
+
+                  <tr class="table-summary">
+                    <td class="td-margin">Loadshare<br> Networks</td>
+                    <td class="td-margin">SDE - 4</td>
+                    <td class="td-margin">4</td>
+                    <td>
+                      Scheduled - 1<br>
+                      Cleared - 2 <br>
+                      Failed - 4</td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Pending with HR - 4 <br>
+                      Released - 3 <br>
+                     <span class="accepted"> Accepted - 2</span> </td>
+                    <td>
+                     <span class="done"> Done - 8 <br>
+                     <span class="no-show"> No Show - 2</span> </td>
+                  </tr>
+
+                  <tr class="table-summary">
+                    <td class="td-margin">Loadshare<br> Networks</td>
+                    <td class="td-margin">Lead <br> Engineer</td>
+                    <td class="td-margin">2</td>
+                    <td>
+                      Scheduled - 1<br>
+                      Cleared - 2 <br>
+                      Failed - 4</td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Pending with HR - 4 <br>
+                      Released - 3 <br>
+                     <span class="accepted"> Accepted - 2</span> </td>
+                    <td>
+                     <span class="done"> Done - 8 <br>
+                     <span class="no-show"> No Show - 2</span> </td>
+                  </tr>
+
+                  <tr class="table-summary">
+                    <td class="td-margin">Loadshare<br> Networks</td>
+                    <td class="td-margin">SDE - 4<br>Dev Ops</td>
+                    <td class="td-margin">5</td>
+                    <td>
+                      Scheduled - 1<br>
+                      Cleared - 2 <br>
+                      Failed - 4</td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Pending with HR - 4 <br>
+                      Released - 3 <br>
+                     <span class="accepted"> Accepted - 2</span> </td>
+                    <td>
+                     <span class="done"> Done - 8 <br>
+                     <span class="no-show"> No Show - 2</span> </td>
+                  </tr>
+
+                  <tr class="table-summary">
+                    <td class="td-margin">Loadshare<br> Networks</td>
+                    <td class="td-margin">Test JD</td>
+                    <td class="td-margin">3</td>
+                    <td>
+                      Scheduled - 1<br>
+                      Cleared - 2 <br>
+                      Failed - 4</td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 2 <br>
+                      Rejected - 4 <br>
+                      Passed - 6<br>
+                     <span class="no-show"> No Show - 3</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Scheduled - 5 <br>
+                      Rejected - 2 <br>
+                      Passed - 3<br>
+                     <span class="no-show"> No Show - 1</span> </td>
+                    <td>
+                      Pending with HR - 4 <br>
+                      Released - 3 <br>
+                     <span class="accepted"> Accepted - 2</span> </td>
+                    <td>
+                     <span class="done"> Done - 8 <br>
+                     <span class="no-show"> No Show - 2</span> </td>
+                  </tr>
+                  
+                </tbody>
+              </table>
+              <button class="button is-success" style="border-radius: 0px; height: 35px;"> Print </button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+      <footer class="footer">
+        <div class="footer-column">
+          <div class="columns">
+            <div class="column is-three-quarters">
+              <div class="content has-text-left">
+                <p>
+                  &#169; Copyright 2022 by WeRecruit. All rights reserved. <span style="margin-left: 30px;">Privacy Policy</span><span style="margin-left: 30px;">Term of use</span>
+                </p>
+              </div>
+            </div>
+            <div class="column">
+              <div class="content has-text-right">
+                <div class="column" style="margin-right: 85px;">
+                  <a href=""><img style="height: 25px;" src="images/linkedin.png"></a>
+                  <a href=""><img style="height: 25px;" src="images/facebook.png"></a>
+                  <a href=""><img style="height: 25px;" src="images/twitter.png"></a>
+                  <a href=""><img style="height: 25px;" src="images/email.png"></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+  </body>
+  <script src="script.js"></script>
+</html>
