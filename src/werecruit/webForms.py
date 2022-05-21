@@ -72,7 +72,9 @@ class JDForm(FlaskForm):
     client = StringField('Client Name*', validators=[DataRequired('Enter Client Name')])
     client_jd = FileField('Client JD File')
 
-    location = StringField('Location')
+    # location = StringField('Location')
+    country = SelectField('Country')
+    city = SelectField('City')
 
     b=[]
     a=[]
