@@ -1,3 +1,5 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @font-face {
   font-family: "poppins-medium";
   src: url(fonts/Poppins-Medium.ttf) format("truetype");
@@ -42,7 +44,14 @@ textarea,
 .header th {
   font-family: "regular", sans-serif;
 }
-
+html, body{
+  background-color: #f3f4f6;
+}
+*{ 
+  color-adjust: exact;  
+  -webkit-print-color-adjust: exact; 
+  print-color-adjust: exact; 
+}
 .heading {
   font-size: 14px;
   margin-top: 40px;
@@ -273,7 +282,7 @@ table thead tr th {
     flex-grow: 1;
     margin: 0 auto;
     position: relative;
-    width: 70%;
+    width: 75%;
     /*width: auto;*/
   }
 
@@ -708,28 +717,160 @@ th{
   margin-left: 3rem;
 }
 
+
+/* reset-password feature */
+.reset-head{
+  padding-bottom: 2rem;
+  padding-top: 0 auto;
+  margin-left: -3rem;
+}
+#col-md-6 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 50%;
+  flex: 0 0 50%;
+  max-width: 50%;
+
 .revenue .container{
   margin-left: 10% !important;
+
 }
 
-.revenue .table{
-  width: 70%;
+.row .label{
+  letter-spacing: 1px;
 }
-.button-revenue{
-  margin-left: -10%;
+
+.reset-head .title{
+  font-size: 28pt;
+  font-family: "poppins-medium", sans-serif;
 }
-.button-revenue .button.is-success{
-  color: #fff;
+.reset-head .is-size-7{
+  font-weight: 3rem;
+  font-family: "poppins-medium", sans-serif;
+}
+.row ,.column.is-half{
+  margin-left: 0 auto;
+}
+.reset-columns{
+  max-width: 100%;
+}
+.column .job-position{
+  margin-left: -100px;
+}
+.flash{
+  padding-right:50px ; 
+  padding-top:20px;
+}
+
+.row{
+  position:relative ; 
+  padding-top:10px;
+  margin-right: 0px;
+}
+.container .row .inputs{
+  width:100%;
+  margin-bottom: 0%;
+}
+.reset-password-container{
+  padding : 0rem;
+  margin-left: 160px;
 }
 .is-size-7{
-  color: #222 !important;
+  font-family: 'Poppins', sans-serif;
 }
-body{
-  background-color: #f6f6f6 ;
-}
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+.reset-columns .field .control .input{
+  position: relative;
+  text-align: left;
+  border:#ffffff;
+  margin-top: 0px;
+  padding-left: 10px;
+  
+} 
+.reset-columns i {
+  margin: 0 10px;
+  color: #aaa;
+  
 }
 
+.reset-columns .field .control{
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  border: 2px solid #c6c6c6 ; 
+  border-radius: 3px;
+  width: 100%;
+  
+}
+
+label{
+  margin-bottom: 2px;
+}
+.label{
+  font-size: 15px;
+}
+.email ,
+.field .label .control .input{
+  text-align: left !important;
+  padding-left: 0px;
+}
+
+.label:not(:last-child) {
+  margin-bottom: 0px !important;
+}
+.password-reset .container .card {
+  background-color: #d1efd8;
+  color: #4a4a4a;
+  max-width: 100%;
+  position: relative;
+  border: none;
+  box-shadow: none;
+  margin-top: 19px;
+  margin-left: -10%;
+}
+.password-reset .container .card .card-content {
+  margin-left: 0px;
+  padding: 2rem;
+}
+.reset-container{
+  display: flex;
+  flex-direction: ;
+}
+
+.reset-columns{
+  margin-left: -20px;
+}
+@media screen and (min-width: 769px){
+  .row .column.is-half, .row .column.is-half-tablet {
+    flex: none;
+    width: 75%;
+    margin-left: -20px;
+}
+}
+
+@media screen and (max-width:1004px) {
+  .password-reset .container .card .card-content {
+    margin-left: 0px;
+    padding: 1rem;
+  }
+  .card-content {
+    margin-left: 10px;
+    font-size: 10px;
+  }
+  
+  .row{
+    position:relative ; 
+    padding-top:10px;
+    margin-right: 0px;
+    margin-left:-90px ;
+    float: left !important;
+  }
+
+  .column {
+    display: block;
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    width: 90%;
+    padding: 0.75rem;
+  }
+
+}
