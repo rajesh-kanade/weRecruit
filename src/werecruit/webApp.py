@@ -268,7 +268,8 @@ def save_JD():
 
     _logger.debug('inside save JD.')
 
-    form = JDForm(request.form)
+    # form = JDForm(request.form)
+    form = JDForm()
 
     '''if request.method == 'POST' and form.max_yrs_of_exp.validate(form) is False:
 		_logger.debug('JD save validation failed') 
