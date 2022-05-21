@@ -1074,6 +1074,11 @@ def do_reset_password():
 @app.route('/user/forgotPassword', methods=['POST'])
 def do_forgot_password():
     email = request.form.get('email')
+    
+    if not email.strip():
+        flash('Please enter valid email ID', "is-danger") 
+        return redirect(url_for('show_signin_page'))
+
     user = userUtils.get_user_by_email(email)
     if not user[2]:
         flash(
@@ -1088,6 +1093,8 @@ def do_forgot_password():
         emailContentType = 'html'
         emailUtils.sendMail(user[2].email, subject=emailSubject,
                             body=emailBody, contentType=emailContentType)
+        
+        #Handle if sendMail function failed...
 
         flash('A new password has been sent to your email successfully', "is-success")
         return redirect(url_for('show_signin_page'))
