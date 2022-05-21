@@ -506,9 +506,15 @@ label {
   display: inline;
 }
 
-#sort_name i {
+#sort_name i,
+#sort_client i,
+#sort_status i,
+#sort_title i,
+#sort_open_date i,
+#sort_hiring_manager i{
   color: #8c8c8c;
 }
+
 #resumeBrowserPage .job-position,
 #resumeBrowserPage section {
   padding-top: 0.5rem;
@@ -647,7 +653,7 @@ label {
   color:gray;
 }
 .table thead th{
-  font-size: 16px;
+  font-size: 12px;
   font-family: 'Poppins', sans-serif;
   font-weight: 550;
 }

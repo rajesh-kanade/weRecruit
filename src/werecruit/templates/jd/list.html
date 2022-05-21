@@ -125,16 +125,21 @@
                 <td>{{ jd.open_date.strftime("%Y-%b-%d") }}</td>
                 <td>{{ jd.hiring_mgr_name }}</td>
                 <td>
-                  <a href="/jd/showShortlistPage/{{jd.id}}"><abbr title="Shortlist candidates"><i
-                        class="fa fa-thumbs-o-up"></i></abbr></a>
-                  <span style="margin-left: 20px;"><a href="/jd/showWorkPage/{{jd.id}}"><abbr
-                        title="View Shortlisted candidates"><i class="fa fa-search"></i></abbr></a></span>
-                  <span style="margin-left: 20px;"><a href="/jd/showSummaryPage/{{jd.id}}"><abbr
-                        title="View Status Summary"><i class="fa fa-file-text"></i></abbr></a></span>
-                  <span style="margin-left: 20px;"><a href="/jd/showEditPage/{{jd.id}}"><abbr title="Edit"><i
-                          class="fa fa-pencil-square-o"></i></abbr></a></span>
-                  <span style="margin-left: 20px;"><a href="/jd/download/{{jd.id}}"><abbr title="Download Client JD"><i
-                          class="fa fa-download"></i></abbr></a></span>
+                  <a href="/jd/showShortlistPage/{{jd.id}}" title="Shortlist candidates">
+                    <i class="fa fa-thumbs-o-up"></i></a>
+                  <span style="margin-left: 20px;" >
+                    <a href="/jd/showWorkPage/{{jd.id}}"  title="View Shortlisted candidates">
+                      <i class="fa fa-search"></i></a></span>
+                  <span style="margin-left: 20px;">
+                    <a href="/jd/showSummaryPage/{{jd.id}}"  title="View Status Summary">
+                      <i class="fa fa-file-text"></i></abbr></a></span>
+                  <span style="margin-left: 20px;">
+                    <a href="/jd/showEditPage/{{jd.id}}" title="Edit">
+                      <i class="fa fa-pencil-square-o">
+                        </i></a></span>
+                  <span style="margin-left: 20px;">
+                    <a href="/jd/download/{{jd.id}}" title="Download Client JD">
+                      <i class="fa fa-download"></i></a></span>
                 </td>
               </tr>
               {% else %}
@@ -144,13 +149,37 @@
               {% endfor %}
             </tbody>
           </table>
-
+          <div class="is-flex is-flex-direction-row is-justify-content-flex-end container pagination">
+            {% if totalPages > 1 %}
+            <div class="currentPage"><a>{{pagination.page}} <span class="sr-only">(current)</span></a></div>
+            <div class="totalPages"><a>Of {{ totalPages}} <span class="sr-only">(current)</span></a></div>
+            {% if pagination.page > 1 %}
+            <div><a class="left"
+                href="?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+                aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a></div>
+        
+            {% else %}
+            <div><a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+            </div>
+            {% endif %}
+        
+            {% if pagination.page < totalPages %} <div><a class="right"
+                href="?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
+                aria-label="Next">
+                <span>&raquo;</span><span class="sr-only">Next</span></a>
+          </div>
+          {% else %}
+          <div><a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+          </div>
+          {% endif %}
+          {% endif %}
+        </div>
         </div>
 
       </section>
     </div>
   </div>
-  <div style="width: min-content; margin-left: auto; margin-right: auto;">{{pagination.links}}</div>
+  
 
 </div>
 {% endblock %}
