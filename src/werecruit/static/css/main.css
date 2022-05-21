@@ -506,6 +506,9 @@ label {
   display: inline;
 }
 
+#sort_name i {
+  color: #8c8c8c;
+}
 #resumeBrowserPage .job-position,
 #resumeBrowserPage section {
   padding-top: 0.5rem;
@@ -704,7 +707,7 @@ th{
 .sub-heading{
   margin-left: 3rem;
 }
-=======
+
 .revenue .container{
   margin-left: 10% !important;
 }

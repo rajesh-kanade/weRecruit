@@ -642,7 +642,7 @@ def show_resume_browser_page():
     toggles = {
         "name": {
             "arrowToggle": "fa fa-arrow-down"
-            if (orderBy == "name" and order == "ASC")
+            if (orderBy == "name" and order == "DESC")
             else "fa fa-arrow-up",
             "orderToggle": "DESC" if order == "ASC" else "ASC",
         }
