@@ -116,7 +116,7 @@ class JDForm(FlaskForm):
     hiring_mgr_phone = StringField('Hiring Manager Phone')
 
     
-    submit = SubmitField('Save JD')
+    submit = SubmitField('Save')
 
     def validate_max_yrs_of_exp(self, field):
         print('inside validate_max_yrs_of_exp')
