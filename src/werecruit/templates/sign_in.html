@@ -2,7 +2,7 @@
 {%block content%}
 
 <section class="hero is-fullheight has-background-grey-lighter">
-
+  
   <div class="hero-body has-text-centered">
     <div class="container">
       <div class="box">
@@ -17,15 +17,19 @@
               <div class="card-content is-overlay has-text-left content">
                 <div class="has-text-white">
                   <h2 class="heading has-text-white">Welcome to WeRECRUIT</h2>
-                  <p class="sub-heading">
+                  <p class="sub-heading has-text-left">
                     WeRecruit is on a mission to build world's most sophisticated
                     ai driven recruitment stack in collaboration with recruiters
-                    across the globe.
+                    across the globe.If you are a freelancer recruiter or a small/medium
+                    sized recruitment agency using excel sheets and gmail, we would like 
+                    you to be in our journey.
                   </p>
 
                 </div>
-                <div class="has-text-left content">
-                  <p class="label"><a href="/user/showSignupPage"> Create new account</a></p>
+                <div class="login-button">
+                  <div class="has-text-left content">
+                    <button type="button" class="button is-white is-outlined" onclick="window.location.href='/user/showSignupPage'" >Create account</a></button>
+                  </div>
                 </div>
               </div>
 
@@ -42,6 +46,7 @@
             <div class="container has-text-left">
               <form action="/user/doSignin" method="POST">
                 <!--<img src="{{url_for('static', filename='logo_login.png')}}" alt="Login Logo" > -->
+                <img src="{{url_for('static', filename='images/logo_login.png')}}" alt="Login Logo" >
                 <h2 class="heading-login"><b>Login To Your Account</b></h2>
                 <div class="field">
                   <label class="label {{theme_text_color}} has-text-left">{{ form.email.label }}</label>
@@ -70,8 +75,11 @@
                     </div>
                   </div>
 
+                  
                   <div class="column is-half is-right">
-                    <p><a href="#" onclick="forgotPassword()">Forgot Password?</a></p>
+                    <div class="forgot"> 
+                      <p><a href="#" onclick="forgotPassword()">Forgot Password?</a></p>
+                    </div>
                   </div>
                 </div>
               </form>
