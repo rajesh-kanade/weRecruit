@@ -44,9 +44,9 @@ class UserForm(FlaskForm):
     #company_name = StringField('Company Name', validators=[DataRequired(message='Please enter company name')])
     user_id = HiddenField('ID' )
     
-    name = StringField( 'Name', validators=[DataRequired(message='Please enter your name')])
-    email = StringField('Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
-    password = PasswordField('Password', validators=[DataRequired('Please enter password.')])
+    name = StringField( 'Name', validators=[DataRequired(message='Please Enter your Name')])
+    email = StringField('Email', validators=[DataRequired(message='Please Enter Email ID'),Email(message='Please Enter a valid Email Address')])
+    password = PasswordField('Password', validators=[DataRequired('Please Enter Password.')])
     
     #role = SelectField('Role', choices=[(int(userUtils.RoleIDs.ADMIN.value), 'Admin'), 
     #                    (int(userUtils.RoleIDs.RECRUITER.value), 'Recruiter')])
