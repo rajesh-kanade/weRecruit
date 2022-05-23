@@ -1216,3 +1216,16 @@ table th{
   margin-left: 6px;
 }
 }
+.is-size-7{
+  color: #222 !important;
+}
+.add-user .container{
+  margin-left: 10%;
+}
+.add-user .columns:not(.is-desktop) {
+  display: block;
+}
+.revenue .button-revenue{
+  margin-left: -10%;
+  margin-bottom: 2%;
+}
