@@ -46,7 +46,7 @@ insert into public.application_status_codes(id,description,is_deleted) values (3
 /* ******** end upgrade prod on 28-March-2022 on contabo2 server *******************/
 
 
-/* *** #26 location drop down issue new table creation and alter in wr_jds 21/05/2022 ****/ 
+/* *** #26 location drop down issue new table creation and alter in wr_jds 22/05/2022 ****/ 
 
 CREATE TABLE IF NOT EXISTS public.countries
 (
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS public.countries
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.countries
-    OWNER to postgres;
+    OWNER to werecruit;
 
 CREATE TABLE IF NOT EXISTS public.cities
 (
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS public.cities
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.cities
-    OWNER to postgres;
+    OWNER to werecruit;
 
 insert into countries(name, code) 
 values ('India', 'IN');
@@ -134,10 +134,10 @@ values (1,	'Mumbai',	1),
 (49	,'Gwalior',	1),
 (50	,'Vijayawada',	1);
 
-alter TABLE public.wr_jds
+alter TABLE if exists public.wr_jds
 drop column location;
 
-alter table public.wr_jds
+alter table if exists public.wr_jds
 add column city_id int;
 
-/* ******** end upgrade prod on 21/05/2022 for countries and cities *******************/
+/* ******** end upgrade prod on 22/05/2022 for countries and cities *******************/

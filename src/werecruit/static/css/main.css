@@ -1,5 +1,4 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @font-face {
   font-family: "poppins-medium";
   src: url(fonts/Poppins-Medium.ttf) format("truetype");
@@ -287,7 +286,7 @@ table thead tr th {
   .section {
     margin-left: -5px;
   }
-
+  
   .job-position .container .section {
     padding: 1rem 0.5rem;
   }
@@ -377,8 +376,10 @@ table thead tr th {
     border-top-left-radius: 0.25rem;
     border-top-right-radius: 0.25rem;
     margin-left: 40px;
-    height: 550px;
-    margin-top: -78px;
+    height: 460px;
+    margin-top: -68px;
+    max-width: 380px;
+    width: 380px;
   }
 
   .card-content {
@@ -391,7 +392,7 @@ table thead tr th {
   }
 
   .card-content .sub-heading {
-    font-size: 14px;
+    font-size: 11pt;
     margin-top: 20px;
   }
 
@@ -742,9 +743,7 @@ th{
   margin-top: 1rem;
   font-size: larger;
 }
-.sub-heading{
-  margin-left: 3rem;
-}
+
 
 
 /* reset-password feature */
@@ -827,6 +826,7 @@ th{
 
 label{
   margin-bottom: 2px;
+  letter-spacing: 1px;
 }
 .label{
   font-size: 15px;
@@ -893,7 +893,7 @@ label{
     flex-basis: 0;
     flex-grow: 1;
     flex-shrink: 1;
-    width: 90%;
+    width: 100%;
     padding: 0.75rem;
   }
 
@@ -1035,4 +1035,203 @@ table th{
 }
 .is-fullwidth{
   border: 2px solid #f6f6f6;
+}
+/* signin page */
+
+.hero-body .column.is-half{
+  margin-right: 3rem;
+  margin-left: 0px;
+}
+.forgot {
+  margin-top: 0.5rem ;
+  margin-left: -2rem;
+  margin-right: 1rem;
+}
+.hero-body .has-text-white{
+  margin-top: 12%;
+  margin-left: -2%;
+  margin-right: -3rem;
+  font-size: 20pt;
+}
+@media screen and (max-width:380px) {
+  .hero-body .has-text-white {
+    margin-top: -2%;
+    margin-right: -3%;
+  }
+  .box{
+    padding: 0.5rem;
+  }
+  .hero-body .heading{
+    font-size: 20px;
+  }
+  .hero-body {
+    padding-top: 4rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  .forgot a{
+    margin-left: 45%;
+  }
+  .forgot{
+    margin-top: -3rem;
+  }
+  .login-button{
+    margin-top:10% ;
+  }
+}
+@media screen and (min-width:380px) and (max-width:501px) {
+  .hero-body .has-text-white {
+    margin-top: -2%;
+    margin-right: -3%;
+  }
+.login-button{
+  margin-top:22% ;
+  }
+  .forgot a{
+    margin-top: -20% ;
+    margin-left: 50%;
+  }
+  .forgot{
+    margin-top: -12%;
+  }
+  .box{
+    padding: 0.5rem;
+  }
+  .hero-body {
+    padding-top: 4rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  .hero-body .sub-heading{
+    font-size: 16px;
+  }  
+}
+@media screen and (min-width:501px) and (max-width:768px) {
+  .hero-body {
+    padding-top: 4rem;
+    padding-right: 1rem;
+  }
+  .column {
+    width: 100%;
+  }
+  .login-button{
+    margin-top:22% ;
+  }
+  .hero-body .heading{
+    font-size: 35px;
+  }
+  .hero-body .sub-heading{
+    font-size: 18px;
+  }
+  .hero-body .has-text-white {
+    margin-top: 12%;
+    margin-right:-2% ;
+    font-size: 20pt;
+  }
+  .forgot a{
+    margin-top: -20% ;
+    margin-left: 50%;
+  }
+  .forgot{
+    margin-top: -3rem;
+  }
+  .box {
+    display: block;
+    padding: 1.25rem;
+    padding-bottom: 50px;
+  }
+}
+@media screen and (min-width:769px) and (max-width:821px) {
+  .hero-body .column.is-half {
+    margin-right: 0rem;
+  }
+  .hero-body .has-text-white {
+    margin-top: 7%;
+    margin-left: -2.2%;
+    margin-right: -1.2rem;
+    font-size: 20pt;
+  }
+  .hero-body .heading{
+    font-size: 15pt;
+  }
+  .hero-body form{
+    padding-top: 9%;
+  }
+  
+  .login-button .content{
+    margin-top: 30%;
+  }
+}
+@media screen and (min-width:820px) and (max-width:1023px) {
+  .hero-body .column.is-half {
+    margin-right: 0rem;
+  }
+  .hero-body .has-text-white {
+    margin-top: 7%;
+    margin-left: -2.2%;
+    margin-right: -1.2rem;
+    font-size: 20pt;
+  }
+  .hero-body .heading{
+    font-size: 17pt;
+    padding-left: 1%;
+  }
+  .hero-body .sub-heading{
+    font-size: 11pt;
+  }
+  .hero-body form{
+    padding-top: 10%;
+  }
+  .login-button .content{
+    margin-top: 17%;
+  }
+}
+@media screen and (min-width:1023px) and (max-width:1216px) {
+  .box {
+    max-width: 1100px;
+    margin-left: 140px;
+  }
+  .login-button .content{
+    margin-top: 20%;
+  }
+}
+@media screen and (min-width:1216px) and (max-width:1408px) {
+  .card-image {
+    max-width: 400px;
+    margin-left: 10px;
+  }
+  .login-button .content{
+    margin-top: 20%;
+  }
+  .card-image:first-child img {
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
+    0 0px 0 1px rgba(10, 10, 10, 0.02);
+    color: #4a4a4a;
+    margin-top: -68px;
+    max-width: 380px;
+    width: 380px;
+  }
+  .hero-body .column.is-half {
+    margin-right: 3rem;
+  }
+  
+}
+@media screen and (min-width:1408px) {
+  .card-image:first-child img {
+    max-width: 410px;
+    width: 410px;
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1),
+      0 0px 0 1px rgba(10, 10, 10, 0.02);
+      color: #4a4a4a;
+  }
+  .login-button .content{
+    margin-top: 28%;
+  }
+  .hero-body .column.is-half {
+    margin-right: 2rem;
+    margin-left: -2%;
+}
+.control .button.is-success {
+  margin-left: 6px;
+}
 }
