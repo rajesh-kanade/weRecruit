@@ -1,253 +1,255 @@
 {%extends "app_header.html" %}
 {%block content%}
 
-  <div class="body-background">
-    <div class="columns">
-      <div class="column is-two-thirds">
-        <div class="job-position">
-          <div class="container">
-            <section class="section topbar-title">
-              <h1 class="title">Create/Edit a job position</h1>
-              <h2 class="subtitle">
-                This section allows you to create or edit a job position.
-              </h2>
-            </section>
-            {% for field in form.errors %}
-            {% for error in form.errors[field] %}
-            <div class="alert alert-error">
-              <small class="has-text-danger has-text-left">{{ error }}</small>
-            </div>
-          </div>
-          {% endfor %}
-          {% endfor %}
-          <section class="application-form">
-            <form action="/jd/save" method="POST" enctype="multipart/form-data">
-              {{ form.hidden_tag() }}
-              {{form.id()}}
-              <div class="form-group">
-                <div class="field">
-                  <label class="label">{{ form.title.label }}</label>
-                  <div class="control">
-                    {{form.title(class='input', title ="Enter short & meaning title for this job posting" , placeholder='Enter Title')}}
-                  </div>
-                </div>
-                <div class="field">
-                  <label class="label">{{ form.client.label }}</label>
-                  <div class="control">
-                    {{form.client(class='input', placeholder='Enter Client Name')}}
-                  </div>
-                </div>
-
-
-                <div class="field">
-                  <label class="label has-text-left">{{ form.client_jd.label }}</label>
-
-                  <div  id="jd-selector" class="file has-name">
-                    <label class="file-label">
-                      <input type="file" name="client_jd" class="file-input">
-                      <span class="file-cta">
-                        <span class="file-icon">
-                          <i class="fas fa-upload"></i>
-                        </span>
-                        <span class="file-label">
-                          Select JD File ( docx, pdf only)…
-                        </span>
-                      </span>
-                      <span class="file-name">
-                        {{form.client_jd.data}}
-                      </span>
-                    </label>
-                  </div>
-                  <script>
-                    jdFileInput = document.querySelector('#jd-selector input[type=file]');
-                    jdFileInput.onchange = () => {
-                      if (jdFileInput.files.length > 0) {
-                        fileName = document.querySelector('#jd-selector .file-name');
-                        fileName.textContent = jdFileInput.files[0].name;
-                        console.log('File selected for upload is : ' + fileName.textContent);
-                      }
-                    }
-                  </script>
-    
-                  {% for error in form.client_jd.errors %}
-                    <small class="has-text-danger has-text-left">{{ error }}</small>
-                  {% endfor %}
-
-                </div>
-                
-                <div class="columns">
-                  <div class="column">
-                    <div class="field">
-                      <label class="label">{{form.country.label}}</label>
-                      <div class="control">
-                        <div class="select is-black">
-                          {{form.country(class='select', placeholder='Enter country')}}
-                        </div>                      
-                      </div>
-                    </div>
-                  </div>
-                  <div class="column">
-                    <div class="field">
-                      <label class="label">{{form.city.label }}</label>
-                      <div class="control">
-                        <div class="select is-black">
-                          {{form.city(class=  'select', placeholder='Enter city', id='cityField')}}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="columns">
-                  <div class="column">
-                    <div class="field">
-                      <label class="label">{{form.total_positions.label}}</label>
-                      <div class="control">
-                        {{form.total_positions(class='input', placeholder='Enter Total number of positions')}}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="column">
-                    <div class="field">
-                      <label class="label">{{form.status.label }}</label>
-                      <div class="control">
-                        <div class="select is-black">
-                          {{form.status(class='select', placeholder='Enter Status')}}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="field">
-                  <label class="label">{{ form.primary_skills.label }}*</label>
-                  <div class="control">
-                    {{form.primary_skills(class='textarea', title ="Enter mandatory or must have skillsets.",placeholder='Enter primary skillsets required for the job.')}}
-                  </div>
-                </div>
-                <div class="field">
-                  <label class="label">{{ form.secondary_skills.label }}*</label>
-                  <div class="control">
-                    {{form.secondary_skills(class='textarea', title ="Enter mandatory or good to have
-                  skillsets.",placeholder='Enter secondary skillsets required for the job.')}} </div>
-                </div>
-                <div class="columns">
-                  <div class="column">
-                    <div class="field">
-                      <label class="label">{{ form.min_yrs_of_exp.label }}*</label>
-                      <div class="control">
-                        <div class="select is-black">
-                          {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="column">
-                    <div class="field">
-                      <label class="label">{{ form.max_yrs_of_exp.label }}*</label>
-                      <div class="control">
-                        <div class="select is-black">
-                          {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
-                        </div>
-                        {% for error in form.max_yrs_of_exp.errors %}
-                        <small class="has-text-danger has-text-left">{{ error }}</small>
-                        {% endfor %}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <hr>
-                <div class="field">
-                  <div class="section-title">
-                    <label class="label">About CTC*</label>
-                  </div>
-                </div>
-                <div class="columns">
-                  <div class="column">
-                    <div class="field">
-                      <label class="label">Min</label>
-                      <div class="control">
-                        <div class="">
-                          {{form.ctc_min(class='input', placeholder='Min CTC')}}
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="column">
-                    <div class="field">
-                      <label class="label">Max</label>
-                      <div class="control">
-                        <div class="">
-                          {{form.ctc_max(class='input', placeholder='Max CTC')}}
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="column">
-                    <div class="field">
-                      <label class="label">Currency</label>
-                      <div class="control">
-                        <div class="select is-black">
-                          {{form.ctc_currency(class='select', placeholder='Select Currency')}}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <hr>
-                {% include 'jd/team.html'%}
-                <div class="columns">
-                  <div class="column">
-                    <div class="field">
-                      <label class="label">{{form.fees_percent.label}}</label>
-                      <div class="control">
-                        {{form.fees_percent(class='input', placeholder='Enter Fees Percent ')}}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="column">
-                    <div class="field">
-                      <label class="label">{{form.warranty_in_months.label}}</label>
-                      <div class="control">
-                        {{form.warranty_in_months(class='input', placeholder='Enter Warranty in Months')}}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="field">
-                  <div class="control">
-                    {{ form.submit( class = 'button is-success') }}
-                  </div>
-                </div>
-              </div>
-            </form>
+<div class="body-background">
+  <div class="columns">
+    <div class="column is-two-thirds">
+      <div class="job-position">
+        <div class="container">
+          <section class="section topbar-title">
+            <h1 class="title">Create/Edit a job position</h1>
+            <h2 class="subtitle">
+              This section allows you to create or edit a job position.
+            </h2>
           </section>
+          {% for field in form.errors %}
+          {% for error in form.errors[field] %}
+          <div class="alert alert-error">
+            <small class="has-text-danger has-text-left">{{ error }}</small>
+          </div>
         </div>
-        </div>
-      </div>
-      <div class="column is-one-third">
-        <div class="job-position">
-          <div class="container">
-            <div class="card">
-              <div class="card-content">
-                <div class="content">
-                  <label class="label" style="font-size: 18px;">
-                    Few guidelines
-                  </label>
-                  <ul class="list-unstyled">
-                    <li>Proper formatting of the text/content of the posting with clear spaces and standard bullets (-) to
-                      be used.</li>
-                    <li>No short forms/abbreviations to be used in the text.</li>
-                    <li>No spelling mistakes in the content.</li>
-                    <li>JD should be concise and crisp - to the point.</li>
-                    <li>(*) mark is mandatory.</li>
-                  </ul>
+        {% endfor %}
+        {% endfor %}
+        <section class="application-form">
+          <form action="/jd/save" method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            {{form.id()}}
+            <div class="form-group">
+              <div class="field">
+                <label class="label">{{ form.title.label }}</label>
+                <div class="control">
+                  {{form.title(class='input', title ="Enter short & meaning title for this job posting" ,
+                  placeholder='Enter Title')}}
                 </div>
               </div>
+              <div class="field">
+                <label class="label">{{ form.client.label }}</label>
+                <div class="control">
+                  {{form.client(class='input', placeholder='Enter Client Name')}}
+                </div>
+              </div>
+
+
+              <div class="field">
+                <label class="label has-text-left">{{ form.client_jd.label }}</label>
+
+                <div id="jd-selector" class="file has-name">
+                  <label class="file-label">
+                    <input type="file" name="client_jd" class="file-input">
+                    <span class="file-cta">
+                      <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                      </span>
+                      <span class="file-label">
+                        Select JD File ( docx, pdf only)…
+                      </span>
+                    </span>
+                    <span class="file-name">
+                      {{form.client_jd.data}}
+                    </span>
+                  </label>
+                </div>
+                <script>
+                  jdFileInput = document.querySelector('#jd-selector input[type=file]');
+                  jdFileInput.onchange = () => {
+                    if (jdFileInput.files.length > 0) {
+                      fileName = document.querySelector('#jd-selector .file-name');
+                      fileName.textContent = jdFileInput.files[0].name;
+                      console.log('File selected for upload is : ' + fileName.textContent);
+                    }
+                  }
+                </script>
+
+                {% for error in form.client_jd.errors %}
+                <small class="has-text-danger has-text-left">{{ error }}</small>
+                {% endfor %}
+
+              </div>
+
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <label class="label">{{form.country.label}}</label>
+                    <div class="control">
+                      <div class="select is-black">
+                        {{form.country(class='select', placeholder='Enter country')}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="field">
+                    <label class="label">{{form.city.label }}</label>
+                    <div class="control">
+                      <div class="select is-black">
+                        {{form.city(class= 'select', placeholder='Enter city', id='cityField')}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <label class="label">{{form.total_positions.label}}</label>
+                    <div class="control">
+                      {{form.total_positions(class='input', placeholder='Enter Total number of positions')}}
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="field">
+                    <label class="label">{{form.status.label }}</label>
+                    <div class="control">
+                      <div class="select is-black">
+                        {{form.status(class='select', placeholder='Enter Status')}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">{{ form.primary_skills.label }}*</label>
+                <div class="control">
+                  {{form.primary_skills(class='textarea', title ="Enter mandatory or must have
+                  skillsets.",placeholder='Enter primary skillsets required for the job.')}}
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">{{ form.secondary_skills.label }}*</label>
+                <div class="control">
+                  {{form.secondary_skills(class='textarea', title ="Enter mandatory or good to have
+                  skillsets.",placeholder='Enter secondary skillsets required for the job.')}}
+                </div>
+              </div>
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <label class="label">{{ form.min_yrs_of_exp.label }}*</label>
+                    <div class="control">
+                      <div class="select is-black">
+                        {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="field">
+                    <label class="label">{{ form.max_yrs_of_exp.label }}*</label>
+                    <div class="control">
+                      <div class="select is-black">
+                        {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
+                      </div>
+                      {% for error in form.max_yrs_of_exp.errors %}
+                      <small class="has-text-danger has-text-left">{{ error }}</small>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <div class="field">
+                <div class="section-title">
+                  <label class="label">About CTC*</label>
+                </div>
+              </div>
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <label class="label">Min</label>
+                    <div class="control">
+                      <div class="">
+                        {{form.ctc_min(class='input', placeholder='Min CTC')}}
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="field">
+                    <label class="label">Max</label>
+                    <div class="control">
+                      <div class="">
+                        {{form.ctc_max(class='input', placeholder='Max CTC')}}
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="field">
+                    <label class="label">Currency</label>
+                    <div class="control">
+                      <div class="select is-black">
+                        {{form.ctc_currency(class='select', placeholder='Select Currency')}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              {% include 'jd/team.html'%}
+              <div class="columns">
+                <div class="column">
+                  <div class="field">
+                    <label class="label">{{form.fees_percent.label}}</label>
+                    <div class="control">
+                      {{form.fees_percent(class='input', placeholder='Enter Fees Percent ')}}
+                    </div>
+                  </div>
+                </div>
+                <div class="column">
+                  <div class="field">
+                    <label class="label">{{form.warranty_in_months.label}}</label>
+                    <div class="control">
+                      {{form.warranty_in_months(class='input', placeholder='Enter Warranty in Months')}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field">
+                <div class="control">
+                  {{ form.submit( class = 'button is-success') }}
+                </div>
+              </div>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div class="column is-one-third">
+    <div class="job-position">
+      <div class="container">
+        <div class="card">
+          <div class="card-content">
+            <div class="content">
+              <label class="label" style="font-size: 18px;">
+                Few guidelines
+              </label>
+              <ul class="list-unstyled">
+                <li>Proper formatting of the text/content of the posting with clear spaces and standard bullets (-) to
+                  be used.</li>
+                <li>No short forms/abbreviations to be used in the text.</li>
+                <li>No spelling mistakes in the content.</li>
+                <li>JD should be concise and crisp - to the point.</li>
+                <li>(*) mark is mandatory.</li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
