@@ -3,20 +3,20 @@
 {% set messages = get_flashed_messages(with_categories = true ) %}
 
 <section class="container is-fullheight has-text-centered">
-  <div class="block"><br></div>
+  <div class="block"><br/></div>
 
-  <div class="block mt-5 is-size-4">{% include '/utils/werecruit.html'%}
-    is on a mission to build world's most sophisticated ai
+  <div class="block mt-5 is-size-4">
+    WeRecruit is on a mission to build world's most sophisticated ai
     driven recruitment stack
     in collaboration with recruiters across the globe. </div>
 
   <div class="block is-size-4">If you are a freelance recruiter or
     a small/medium sized recruitment
     agency using excel sheets and gmail,
-    we would like you to be in our journey.</div>
+    we would like you to be part of this journey.</div>
 
-  <br>
-  <hr><br>
+  <hr><br/>
+
   <div id="features" class="block is-size-2 has-text-centered">Features designed to make recruitment a breeze</div>
 
   <div class="tile is-ancestor">
@@ -26,24 +26,10 @@
         Define the team of interview panels, Hiring manager & HR to collaborate seamlessly.
       </div>
     </div>
-    <div class="tile">
-      <div class="box is-size-4">
-        <figure class="image is-512x512">
-          <img src="{{url_for('static', filename='images/job_browser_1.png')}}">
-        </figure>
-      </div>
-    </div>
   </div>
 
-  <br>
   <div class="tile is-ancestor">
-    <div class="tile">
-      <div class="box is-size-4">
-        <figure class="image is-512x512">
-          <img src="{{url_for('static', filename='job_shortlisting.png')}}">
-        </figure>
-      </div>
-    </div>
+
     <div class="tile">
       <div class="box is-size-4">
         Upload resumes using web App or via email.
@@ -55,6 +41,7 @@
     </div>
   </div>
 
+
   <div class="tile is-ancestor">
     <div class="tile">
       <div class="box is-size-4">
@@ -62,26 +49,10 @@
         Take unlimited notes as you update the the job application status.
       </div>
     </div>
-    <div class="tile">
-      <div class="box is-size-4">
-        <figure class="image is-512x512">
-          <img src="{{url_for('static', filename='job_appl_status_1.png')}}">
-        </figure>
-      </div>
-    </div>
   </div>
-
-  <br>
 
 
   <div class="tile is-ancestor">
-    <div class="tile">
-      <div class="box is-size-4">
-        <figure class="image is-512x512">
-          <img src="{{url_for('static', filename='job_summary_report.png')}}">
-        </figure>
-      </div>
-    </div>
 
     <div class="tile">
       <div class="box is-size-4">
@@ -90,16 +61,15 @@
       </div>
     </div>
   </div>
-  <br>
 
-  <br>
-  <hr><br>
+  <br/>
+  <hr><br/>
 
   <div id="pricing" class="block is-size-2 has-text-centered">Flexible pricing for Startups, Resellers & Recruitment
     agencies.</div>
   <div id="pricing" class="block is-size-2 has-text-centered">Drop us an email at <strong>sales@werecruit.cloud</strong>
     and we will get in touch with you.</div>
-  <br>
+  <br/>
 
 </section>
 

@@ -23,23 +23,21 @@ class SignInForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
     password = PasswordField('Password', validators=[DataRequired('Please enter password.')])
     
-    submit = SubmitField('Sign In')
+    submit = SubmitField('Login')
 
 class ResetPasswordForm(FlaskForm):
 
     id = HiddenField('ID' )
 
     email = StringField('Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
-    current_password = PasswordField('Current Password', validators=[DataRequired('Please enter current password.')])
-    new_password = PasswordField('New password', [
+    current_password = PasswordField('Current Password*', validators=[DataRequired('Please enter current password.')],id="current_password")
+    new_password = PasswordField('New password*', [
         validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')
-    ])
-    confirm = PasswordField('Confirm New Password',[
+        validators.EqualTo('confirm', message='Passwords must match')],id="new_password")
+    confirm = PasswordField('Confirm New Password*',[
         validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')
-    ])
-    submit = SubmitField('Save')
+        validators.EqualTo('confirm', message='Passwords must match')],id="confirm_password")
+    submit = SubmitField('Change Password')
 
 class UserForm(FlaskForm):
 
@@ -72,10 +70,17 @@ class JDForm(FlaskForm):
     client = StringField('Client Name*', validators=[DataRequired('Enter Client Name')])
     client_jd = FileField('Client JD File')
 
-    location = StringField('Location')
+    # location = StringField('Location')
+    country = SelectField('Country')
+    city = SelectField('City')
 
-    min_yrs_of_exp = DecimalField("Minimum years of Experience",validators=[DataRequired(NumberRange(min=0,max=99,message="Min experience needs be in range of 0 to 99"))])
-    max_yrs_of_exp = DecimalField("Maximum years of Experience",validators=[DataRequired(NumberRange(min=0,max=99,message="Max experience needs be in range of 0 to 99"))])
+    b=[]
+    a=[]
+    for i in range(1,101):
+        a.append(i)
+
+    min_yrs_of_exp = SelectField("Minimum years of Experience",choices=a,default=0,validators=[DataRequired()])
+    max_yrs_of_exp = SelectField("Maximum years of Experience",choices=a,default=0,validators=[DataRequired(NumberRange(min=0,max=99,message="Min experience needs be in range of 0 to 99"))])
     
     primary_skills = TextAreaField('Primary Skills', validators=[DataRequired('Enter mandatory or good to have skillsets.')])
     secondary_skills = TextAreaField('Secondary Skills', validators=[DataRequired('Enter mandatory or good to have skillsets.')])
@@ -87,7 +92,7 @@ class JDForm(FlaskForm):
     ctc_currency = SelectField( "Currency", choices =[('INR', 'INR'),('USD', 'USD')])
     
     fees_percent = DecimalField("Fees Percent",validators=[NumberRange(min=0,max=99)])
-    warranty_in_months = IntegerField("Warranty in months",validators=[NumberRange(min=0,max=12)])
+    warranty_in_months = IntegerField("Warranty in Months",validators=[NumberRange(min=0,max=12)])
 
     status = SelectField('Status', choices=[(jdUtils.JDStatusCodes.open.value, 'Open'), 
                         (jdUtils.JDStatusCodes.draft.value, 'Draft'), 
@@ -111,7 +116,7 @@ class JDForm(FlaskForm):
     hiring_mgr_phone = StringField('Hiring Manager Phone')
 
     
-    submit = SubmitField('Save JD')
+    submit = SubmitField('Save')
 
     def validate_max_yrs_of_exp(self, field):
         print('inside validate_max_yrs_of_exp')

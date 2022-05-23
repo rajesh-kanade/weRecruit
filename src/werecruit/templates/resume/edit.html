@@ -2,14 +2,19 @@
 {%block content%}
 
 <section class="container is-fullheight">
-  <div class = "block">
-    <span class="title has-text-info">Upload resumes</span><br>
-    <span class="is-size-7 has-text-info">This section allows you to upload resume with basic information about the candidate</span>
-  </div>
+      <div class="block"></div>
 
       <div class="columns is-centered">
           <div class="column is-half">
-          <form  onsubmit ="document.getElementById('spinner').style.display = 'block';document.getElementById('spinner').classList.add('is-loading');return true;" action = "/resume/save" method="POST" enctype="multipart/form-data">
+            <section class="section topbar-title">
+              <h1 class="title">Upload resumes</h1>
+              <h2 class="subtitle">
+                This section allows you to upload resume with basic information about the candidate
+              </h2>
+            </section>
+          <form  action = "/resume/save" method="POST" enctype="multipart/form-data">
+            {% include '/utils/show_msg.html'%}
+
             {% for error in form.submit.errors %}
                 <p><large class="has-text-danger">{{ error }}</large></p>  
             {% endfor %}
@@ -83,7 +88,6 @@
             <div class="field">
               <p class="control">
                 {{ form.submit( class = 'button is-success ') }}
-                <div id ="spinner" class='button is-primary' style="display:none">Saving...</div>
               </p>      
               {% for error in form.submit.errors %}
               <p><large class="has-text-danger">{{ error }}</large></p>  
@@ -95,6 +99,7 @@
           {%include'resume/show_resume_upload_via_email_page.html' %}
         
       </div>
+
 </section>
 
 {% endblock %}

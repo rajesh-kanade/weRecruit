@@ -63,7 +63,6 @@ fa = FontAwesome(app)
 """def cleanup(sender, **extra):
 	_logger.debug('inside Tearing down cleanup  function')
 	session.close()
-
 from flask import appcontext_tearing_down
 appcontext_tearing_down.connect(cleanup, app)"""
 
@@ -116,6 +115,33 @@ def show_signup_page():
     form = SignUpForm()
     return render_template('sign_up.html', form=form)
 
+def validate_password(password):
+        Capi_alpha = 0
+        small_alpha = 0
+        num = 0
+        Spe_char = ['@', '#', '%', '&', '?']
+        Spe_count = 0
+        valid = False
+        for i in password:
+            if(ord(i) >= 65 and ord(i) <= 90):
+                Capi_alpha += 1
+            elif(i in Spe_char):
+                Spe_count += 1
+            elif(ord(i) >= 48 and ord(i) <= 57):
+                num += 1
+            elif(ord(i) >= 97 and ord(i) <= 122):
+                small_alpha += 1
+            else:
+                pass
+
+        if(len(password) >= 8):
+            if(Capi_alpha > 0):
+                if(small_alpha > 0):
+                    if(Spe_count == 1):
+                        if(num > 0):
+                            valid = True
+
+        return valid
 
 @app.route('/user/signUp',  methods=['POST'])
 def sign_up():
@@ -130,17 +156,21 @@ def sign_up():
     userAttrs['status'] = userUtils.Status.active.value
     userAttrs['tname'] = form.company_name.data
 
-    results = userUtils.do_signUp(userAttrs)
 
-    if (results[0] == userUtils.RetCodes.success.value):
-        flash("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(
-            form.name.data), "is-info")
-        #form.success = True
-        # return render_template('sign_in.html', form = SignInForm())
-        return redirect(url_for("show_signin_page"))
+    password = request.form["password"]
+    if(validate_password(password)):
+        results = userUtils.do_signUp(userAttrs)
+        if (results[0] == userUtils.RetCodes.success.value):
+            flash("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(
+                form.name.data), "is-info")
+        
+            return redirect(url_for("show_signin_page"))
+        else:
+            flash(results[0] + ':' + results[1], "is-danger")
+            return redirect(url_for("show_signup_page"))
     else:
-        flash(results[0] + ':' + results[1], "is-danger")
-        return redirect(url_for("show_signup_page"))
+        flash("Password criteria does not match.Password should contain  ","is-danger")
+        return render_template('sign_up.html', form = form)
 
 
 def login_required(func):
@@ -182,7 +212,7 @@ def do_signout():
 	return redirect(url_for('/'))'''
 
 
-@app.route('/jd/showCreatePage', methods=['GET'])
+@app.route('/jd/showCreatePage', methods=['GET', 'POST'])
 @login_required
 def show_jd_create_page():
     form = JDForm()
@@ -191,8 +221,24 @@ def show_jd_create_page():
     form.total_positions.data = jdUtils.JD_DEF_POSITIONS
     form.status.data = jdUtils.JDStatusCodes.open.value
 
-    return render_template('jd/edit.html', form=form)
+    countryNames = None
+    try:
+        countryRecords = jdUtils.get_country_names()
+        if countryRecords:
+            countryNames = [record.name for record in countryRecords[2]] 
+    except:
+        countryNames = ['India']
 
+    try:
+        cityRecords = jdUtils.get_city_names(1) #only Indian Cities To Be Populated
+        if cityRecords:
+            cityNames = cityRecords[2] 
+    except:
+        cityNames = ['Pune', 'Bangalore']
+    form.country.choices = countryNames
+    form.city.choices = [(record.id, record.name) for record in cityNames]
+
+    return render_template('jd/edit.html', form=form)
 
 @app.route('/jd/showAllPage', methods=['GET'])
 @login_required
@@ -200,16 +246,16 @@ def show_jd_all_page():
     orderBy = request.args.get('order_by', None)
     order = request.args.get('order', None)
 
-    toggles = {'client': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'client' and order == 'ASC') else 'fa fa-arrow-up',
+    toggles = {'client': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'client' and order == 'DESC') else 'fa fa-arrow-up',
                           'orderToggle': 'DESC' if order == 'ASC' else 'ASC'},
-               'status': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'status' and order == 'ASC') else 'fa fa-arrow-up',
+               'status': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'status' and order == 'DESC') else 'fa fa-arrow-up',
                           'orderToggle': 'DESC' if order == 'ASC' else 'ASC'},
 
-               'title': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'title' and order == 'ASC') else 'fa fa-arrow-up',
+               'title': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'title' and order == 'DESC') else 'fa fa-arrow-up',
                          'orderToggle': 'DESC' if order == 'ASC' else 'ASC'},
-               'open_date': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'open_date' and order == 'ASC') else 'fa fa-arrow-up',
+               'open_date': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'open_date' and order == 'DESC') else 'fa fa-arrow-up',
                              'orderToggle': 'DESC' if order == 'ASC' else 'ASC'},
-               'hiring_mgr_name': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'hiring_mgr_name' and order == 'ASC') else 'fa fa-arrow-up',
+               'hiring_mgr_name': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'hiring_mgr_name' and order == 'DESC') else 'fa fa-arrow-up',
                                    'orderToggle': 'DESC' if order == 'ASC' else 'ASC'}
                }
 
@@ -225,22 +271,20 @@ def show_jd_all_page():
         page = request.args.get(get_page_parameter(), type=int, default=1)
         per_page = request.args.get(
             get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
-        # page, per_page, offset = get_page_args(page_parameter='page',
-        #                                        per_page_parameter='per_page')
+
         offset = (page - 1) * per_page
         total = len(jdList)
+        from math import ceil
+        totalPages = ceil(total/per_page)
 
         def getPages(offset=0, per_page=1):
             return jdList[offset: offset + per_page]
+
         pagination_JDList = getPages(offset=offset, per_page=per_page)
-        # print(offset, per_page, page)
-        pagination = Pagination(page=page, per_page=per_page, total=total,
-                                css_framework='bootstrap4')
-        pagination = Pagination(
-            page=page, per_page=per_page,   total=total, css_framework='bootstrap4')
+        pagination = Pagination(page=page, per_page=per_page, total=total)
         for jd in jdList:
             _logger.debug(jd.title)
-        return render_template('jd/list.html', jdList=pagination_JDList, request=request, page=page, per_page=1, pagination=pagination, toggles=toggles)
+        return render_template('jd/list.html', jdList=pagination_JDList, request=request, page=page, per_page=1, pagination=pagination, toggles=toggles, totalPages=totalPages)
     else:
         flash(results[0] + ':' + results[1], "is-danger")
         return render_template('jd/list.html', jdList=None)
@@ -252,7 +296,7 @@ def save_JD():
 
     _logger.debug('inside save JD.')
 
-    form = JDForm(request.form)
+    form = JDForm()
 
     '''if request.method == 'POST' and form.max_yrs_of_exp.validate(form) is False:
 		_logger.debug('JD save validation failed') 
@@ -273,6 +317,8 @@ def save_JD():
     else:
         filename = None
 
+    _logger.debug('JD filename is {0}'.format(filename))
+
     results = jdUtils.save_jd(form.id.data, form.title.data, form.details.data,
                               form.client.data, int(loggedInUserID), int(
                                   form.total_positions.data), form.open_date.data,
@@ -281,7 +327,7 @@ def save_JD():
                               form.hiring_mgr_name.data, form.hiring_mgr_email.data, form.hiring_mgr_phone.data,
                               form.hr_name.data, form.hr_email.data, form.hr_phone.data,
                               int(form.status.data),
-                              form.location.data, form.min_yrs_of_exp.data, filename,
+                              form.city.data, form.min_yrs_of_exp.data, filename,
                               form.primary_skills.data, form.secondary_skills.data,
                               form.ctc_min.data, form.ctc_max.data, form.ctc_currency.data,
                               form.fees_percent.data, form.warranty_in_months.data,
@@ -330,6 +376,31 @@ def show_jd_edit_page(id):
 
         jd = results[2]
 
+        
+        form.city.data = jd.city_id
+        print(jd.city_id)
+        countryNames = None
+        try:
+            countryRecords = jdUtils.get_country_names()
+            if countryRecords:
+                countryNames = [(record.id, record.name) for record in countryRecords[2]] 
+        except:
+            countryNames = [('1','India')]
+
+        try:
+            cityRecords = jdUtils.get_city_names(1) #only Indian Cities To Be Populated
+            if cityRecords:
+                cityNames = cityRecords[2] 
+        except:
+            cityNames = ['Pune', 'Bangalore']
+        
+        form.country.choices = countryNames
+        form.city.choices = [(record.id, record.name) for record in cityNames]
+        form.country.default = 'US'
+        form.city.default = jd.city_id
+
+        form.process()    # works
+
         form.id.data = jd.id
         form.title.data = jd.title
         form.details.data = jd.details
@@ -354,8 +425,6 @@ def show_jd_edit_page(id):
         form.hr_name.data = jd.hr_name
         form.hr_email.data = jd.hr_emailid
         form.hr_phone.data = jd.hr_phone
-
-        form.location.data = jd.location
 
         form.min_yrs_of_exp.data = jd.min_yrs_of_exp
         form.max_yrs_of_exp.data = jd.max_yrs_of_exp
@@ -518,8 +587,9 @@ def resume_save():
         return redirect(form.referrer.data)
 
     else:
-        flash(retCode + ':' + msg, "is-danger")
-        return render_template('resume/edit.html', form=form)
+        flash(retCode + ':' + msg, "is-danger")   
+        _logger.error("Server side validation error occured while saving. Error was as %s", msg)
+        return render_template('resume/edit.html', form=form),415
 
 
 @app.route("/resume/search", methods=["POST"])
@@ -600,7 +670,7 @@ def show_resume_browser_page():
     toggles = {
         "name": {
             "arrowToggle": "fa fa-arrow-down"
-            if (orderBy == "name" and order == "ASC")
+            if (orderBy == "name" and order == "DESC")
             else "fa fa-arrow-up",
             "orderToggle": "DESC" if order == "ASC" else "ASC",
         }
@@ -736,19 +806,14 @@ def jd_download(id):
 @app.route('/resume/showshortlistpage', methods = ['GET'])
 @login_required
 def show_resume_shortlist_page():
-
 	try:
 		_logger.debug('inside shortlist resume page for  ID {0} '.format(id))
-
 		assert request.args.get('id'), "Resume ID request parameter not found."
 		assert request.args.get('name'), "Candidate Name request parameter not found."
-
 		form = ResumeShortlistForm()
 		form.id.data = request.args.get('id')
 		form.candidate_name.data = request.args.get('name')
-
 		results = jdUtils.list_jds_by_tenant(session.get('tenant_id'))
-
 		if (results[0] == jdUtils.RetCodes.success.value): 
 			jdList = results[2]    
 			for jd in jdList:
@@ -825,6 +890,10 @@ def show_shortlist_resumes_page(job_id):
         job_id, None, session.get('tenant_id'))
     assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes not associated with job  id {0}. Error code is {1}. Error message is {2}".format(
         job_id, retCode, msg)
+    (retCode, msg, allresumeList) = jdUtils.get_resumes_not_associated_with_job(
+        job_id, None, session.get('tenant_id'))
+    assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes not associated with job  id {0}. Error code is {1}. Error message is {2}".format(
+        job_id, retCode, msg)    
 
     # get all candidates who are currently associated with the job
     (retCode, msg, shortlistedList) = jdUtils.get_resumes_associated_with_job(job_id)
@@ -834,11 +903,36 @@ def show_shortlist_resumes_page(job_id):
     searchForm = ResumeSearchForm()
     searchForm.job_id.data = job_id
     # searchForm.source.data = "jd_shorlist_resumes_page"  #set the source field of search box
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = request.args.get(
+        get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
 
-    return render_template('/jd/shortlist.html', jd=jd, job_id=jd.id,
-                           resumeList=resumeList,
-                           shortlistedList=shortlistedList, actionTemplate="shortlist",
-                           searchForm=searchForm)
+    offset = (page - 1) * per_page
+    allresume_total = len(resumeList)
+    shortlisted_resume_total=len(shortlistedList)
+    from math import ceil
+    all_resume_total_pages = ceil(allresume_total/per_page)
+    shortlisted_resume_total_pages = ceil(shortlisted_resume_total/per_page)
+
+    def getResumePages(offset=0, per_page=1):
+        return allresumeList[offset: offset + per_page]
+    def getShortlistedResumePages(offset=0, per_page=1):
+        return shortlistedList[offset: offset + per_page]    
+    pagination_ResumeList = getResumePages(offset=offset, per_page=per_page)
+    pagination_shortlistedList=getShortlistedResumePages(offset=offset, per_page=per_page)
+    all_resume_pagination = Pagination(page=page, per_page=per_page, total=allresume_total)
+    shortlisted_resume_pagination = Pagination(page=page, per_page=per_page, total=shortlisted_resume_total)
+    return render_template('/jd/shortlisting_wrapper.html', jd=jd, job_id=jd.id,
+                            allresumeList=pagination_ResumeList,
+                            shortlistedList=pagination_shortlistedList, actionTemplate="shortlist",
+                            searchForm=searchForm,
+                            page=page,
+                            per_page=1,
+                            all_resume_pagination=all_resume_pagination,
+                            shortlisted_resume_pagination=shortlisted_resume_pagination,
+                            all_resume_total_pages=all_resume_total_pages,
+                            shortlisted_resume_total_pages=shortlisted_resume_total_pages)
+
 
 
 # @app.errorhandler(500)
@@ -1053,40 +1147,53 @@ def show_reset_password():
 @app.route('/user/doResetPassword', methods=['POST'])
 @login_required
 def do_reset_password():
-
+    
     form = ResetPasswordForm()
 
     form.id.data = session["user_id"]
     form.email.data = session["email_id"]
-    # print("Form Data : ", form.id.data,form.email.data,form.current_password.data,form.confirm.data,form.new_password.data)
-    # userUtils.check_cur_pass_and_newPass(form.id.data,form.email.data,form.current_password.data,form.new_password.data)
+    user = userUtils.check_cur_pass_and_newPass(form.id.data,form.email.data,form.current_password.data,form.new_password.data)
+    #print("Form Data : ", form.id.data,form.email.data,form.current_password.data,form.confirm.data,form.new_password.data)
+    #userUtils.check_cur_pass_and_newPass(form.id.data,form.email.data,form.current_password.data,form.new_password.data)
+    
+        
     if((form.current_password.data == form.new_password.data)):
         flash('Current password and New password must be different', "is-danger")
         return redirect(url_for('show_reset_password'))
 
-    elif((form.new_password.data == form.confirm.data)):
-        (retCode, msg, data) = userUtils.do_reset_password(form.id.data,
-                                                           form.email.data, form.current_password.data, form.new_password.data)
-        if (retCode == userUtils.RetCodes.success.value):
-            session.clear()
-            # do_signout()
-            flash(
-                "Password reset successfully. Please sign-in again with your new password", "is-success")
-            return redirect(url_for("show_signin_page"))
-        else:
-            flash("Password reset failed. {0} ".format(msg), "is-danger")
-            return render_template("password_reset.html", form=form)
-
+    if(validate_password(form.new_password.data)):
+        if((form.new_password.data == form.confirm.data)):
+            (retCode, msg, data) = userUtils.do_reset_password(form.id.data,
+                                                                form.email.data, form.current_password.data, form.new_password.data)
+            if (retCode == userUtils.RetCodes.success.value):
+                session.clear()
+                    # do_signout()
+                flash(
+                        "Password reset successfully. Please sign-in again with your new password", "is-success")
+                return redirect(url_for("show_signin_page"))
+            
+            else:
+                flash("Password reset failed. {0} ".format(msg), "is-danger")
+                return redirect(url_for('show_reset_password'))
+    
+        elif((form.new_password.data != form.confirm.data)):
+                flash('New Password and Confirm new password must be same',"is-danger")
+                return redirect(url_for('show_reset_password'))
     else:
-        # print("Password Not matched")
-        # flash ("New Password and Confirm Password must be same", "is-danger")
-        flash('New Password and Confirm new password must be same', "is-danger")
-        return redirect(url_for('show_reset_password'))
+		# print("Password Not matched")
+		# flash ("New Password and Confirm Password must be same", "is-danger")
+        flash('Password criteria does not match.\nPassword should contain One upper One lower case',"is-danger")
+        return redirect(url_for('show_reset_password'))   
 
 
 @app.route('/user/forgotPassword', methods=['POST'])
 def do_forgot_password():
     email = request.form.get('email')
+    
+    if not email.strip():
+        flash('Please enter valid email ID', "is-danger") 
+        return redirect(url_for('show_signin_page'))
+
     user = userUtils.get_user_by_email(email)
     if not user[2]:
         flash(
@@ -1101,6 +1208,8 @@ def do_forgot_password():
         emailContentType = 'html'
         emailUtils.sendMail(user[2].email, subject=emailSubject,
                             body=emailBody, contentType=emailContentType)
+        
+        #Handle if sendMail function failed...
 
         flash('A new password has been sent to your email successfully', "is-success")
         return redirect(url_for('show_signin_page'))
@@ -1115,10 +1224,57 @@ def show_manage_users_page():
     #form.id.data = session["user_id"]
     #form.email.data = session["email_id"]
 
-    (retCode, msg, userList) = userUtils.list_users(session["tenant_id"])
+    orderBy = request.args.get("order_by", None)
+    order = request.args.get("order", None)
+
+    toggles = {
+        "name": {
+            "arrowToggle": "fa fa-arrow-down"
+            if (orderBy == "name" and order == "ASC")
+            else "fa fa-arrow-up",
+            "orderToggle": "DESC" if order == "ASC" else "ASC",
+        },
+        "status": {
+            "arrowToggle": "fa fa-arrow-down"
+            if (orderBy == "status" and order == "ASC")
+            else "fa fa-arrow-up",
+            "orderToggle": "DESC" if order == "ASC" else "ASC",
+        },
+        "email": {
+            "arrowToggle": "fa fa-arrow-down"
+            if (orderBy == "email" and order == "ASC")
+            else "fa fa-arrow-up",
+            "orderToggle": "DESC" if order == "ASC" else "ASC",
+        },
+    }
+
+    (retCode, msg, userList) = userUtils.list_users(
+        session["tenant_id"], orderBy=orderBy, order=order
+    )
     assert retCode == userUtils.RetCodes.success.value, msg
 
-    return render_template("user/manage_users.html", userList=userList)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = request.args.get(
+        get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+
+    offset = (page - 1) * per_page
+    total = len(userList)
+    from math import ceil
+    totalPages = ceil(total/per_page)
+
+    def getPages(offset=0, per_page=1):
+        return userList[offset: offset + per_page]
+
+    pagination_UserList = getPages(offset=offset, per_page=per_page)
+    pagination = Pagination(page=page, per_page=per_page, total=total)
+
+    return render_template("user/manage_users.html",
+                           userList=pagination_UserList,
+                           toggles=toggles,
+                           page=page,
+                           per_page=1,
+                           pagination=pagination,
+                           totalPages=totalPages)
 
 
 @app.route('/user/showAddPage', methods=['GET'])

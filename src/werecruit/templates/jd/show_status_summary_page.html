@@ -1,50 +1,81 @@
+<div class="status-div">
 {%extends "app_header.html" %}
 {%block content%}
+  {% include 'jd/header1.html'%}
+  <section class="container">
 
-<section class="container is-fullheight">
+      {% include 'utils/show_modal_msg.html'%}
+      
+      <div class = "block has-text-left ml-3">
+          <span class="title is-size-4 has-text-info">Candidates Status Summary Page</span><br>
+          <span class="is-size-7">This page shows number of candidates at each stages for a job position</span>
+      </div>
+      <div class="container-status">
+      <div class="block ml-3">   
+          <div class="table has-text-centered">
+            <table class="table">
+              <tbody>
+              {% for ss in statusSummary %}
+                {%if loop.first %}
 
-    {% include 'utils/show_modal_msg.html'%}
-    {% include 'jd/header1.html'%}
-    <div class = "block has-text-left">
-        <span class="title is-size-4 has-text-info">Candidates status summary page</span><br>
-        <span class="is-size-7 has-text-info">This page shows number of candidates at each stages for a job position</span>
-    </div>
-    
-    <div class="block">   
-        <div class="table-container has-text-centered">
-          <table class="table is-striped">
-            <tbody>
-            {% for ss in statusSummary %}
-              {%if loop.first %}
+                  <thead>
+                    <tr class="{{theme_bg_color}}">
+                      <th class="has-text-centered {{theme_text_color}}">STATUS CODE</th>
+                      <th class="has-text-centered {{theme_text_color}}">STATUS </th>
+                      <th class="has-text-centered {{theme_text_color}}">COUNT</th>
 
-                <thead>
-                  <tr class="{{theme_bg_color}}">
-                    <th class="has-text-centered {{theme_text_color}}">STATUS CODE</th>
-                    <th class="has-text-centered {{theme_text_color}}">STATUS DESCRIPTION</th>
-                    <th class="has-text-centered {{theme_text_color}}">CANDIDATES COUNT</th>
-
+                  </tr>
+                  </thead>
+                {%endif %}
+                <tr class="{{theme_bg_color}}">
+                  <td class="has-text-centered {{theme_text_color}}">{{ ss.status }}</td>
+                  <td class="has-text-centered {{theme_text_color}}">{{ ss.description }}</td>
+                  <td class="has-text-centered {{theme_text_color}}">{{ ss.count }}</td>
                 </tr>
-                </thead>
-              {%endif %}
-              <tr class="{{theme_bg_color}}">
-                <td class="has-text-centered {{theme_text_color}}">{{ ss.status }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ ss.description }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ ss.count }}</td>
-              </tr>
-            {% else %}
-              <div class="notification is-warning">
-                No status summary found for this job. !!!
-              </div>
-            {% endfor %}
-          </tbody>
-          </table>
-        </div>  
+              {% else %}
+              <table class="table">
+                <tbody>
+                  <thead>
+                    <tr class="header">
+                      <td class="has-text-left ">Status</td>
+                      <td class="has-text-left ">Count</td>
+                      
+
+                    </tr>
+                  <tr class="{{theme_bg_color}}">
+                    
+                    <th class="has-text-left {{theme_text_color}}">Shortlisted</th>
+                    <th class="has-text-left">2</th>
+                  </tr>
+                  <tr class="{{theme_bg_color}}">
+                    
+                    <th class="has-text-left {{theme_text_color}}">Hiring Manager Interview Sceduled</th>
+                    <th class="has-text-left">1</th>
+                  </tr>
+                  </thead>
+                </tbody>
+              </table>
+              {% endfor %}
+            </tbody>
+            </table>
+          </div>  
+      </div>
+
+      <a class="button is-success is-squared ml-3" id="printpagebutton" onclick="printpage()"><span class="print-btn">Print<span></a>
+      <!--<a class="button is-success is-rounded" href="/">Email</a> -->
     </div>
-
-    <a class="button is-success is-rounded" onclick="window.print();">Print</a>
-    <!--<a class="button is-success is-rounded" href="/">Email</a> -->
-
-</section>
-
+  </section>
+<script type="text/javascript">
+  function printpage() {
+      
+      var printButton = document.getElementById("printpagebutton");
+      
+      printButton.style.visibility = 'hidden';
+      
+      window.print()
+  
+      printButton.style.visibility = 'visible';
+  }
+</script>
 {% endblock %}
-
+</div>

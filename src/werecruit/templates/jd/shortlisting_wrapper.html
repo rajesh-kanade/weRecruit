@@ -1,0 +1,50 @@
+{%extends "app_header.html" %}
+{%block content%}
+{% include 'jd/header1.html'%}
+<div class="shortlist">
+<section class="container is-fullheight">
+    <turbo-frame id ="header">
+      {% include 'utils/show_modal_msg.html'%}
+
+     
+    </turbo-frame>
+
+    <div class="mytabs">
+      
+      <input type="radio" id="Shortlist Resume" name="mytabs" checked="checked">
+      <label for="Shortlist Resume">Shortlist Resume</label>
+      <div class="tab">
+       
+        <turbo-frame id = 'show_non_shortlisted_resumeList' class="turbo">
+
+        <div class="tile is-child box {{theme_bg_color}}">
+          <p>Search existing resumes and shortlist them for a job</p><br>
+          {% include '/jd/non_shortlisted_candidates_list.html'%}
+  
+        </div>
+        </turbo-frame></div>
+                <input type="radio" id="Currently Shortlisted" name="mytabs">
+        <label class="Currently-Shortlisted" for="Currently Shortlisted">Currently Shortlisted</label>
+      <div class="tab">
+       
+        <turbo-frame id="show_shorlisted_resumes">
+
+        <div class="tile is-child box {{theme_bg_color}}">
+          
+          {% include '/jd/shortlist.html'%}
+  
+        </div>
+        </turbo-frame></div>
+
+  
+   
+  
+          </div>
+          </turbo-frame>
+    </div> 
+
+    </div>
+
+</section>
+</div>
+{% endblock %}

@@ -1,22 +1,22 @@
 {%extends "app_header.html" %}
 {%block content%}
 
-{# changes 15/04 9:00 PM #}
-<div class="body-background">
-  <div class="columns">
-    <div class="column is-two-thirds">
-      <div class="job-position">
-        <div class="container">
-          <section class="section topbar-title">
-            <h1 class="title">Create/Edit a job position</h1>
-            <h2 class="subtitle">
-              This section allows you to create or edit a job position.
-            </h2>
-          </section>
-          {% for field in form.errors %}
-          {% for error in form.errors[field] %}
-          <div class="alert alert-error">
-            <small class="has-text-danger has-text-left">{{ error }}</small>
+  <div class="body-background">
+    <div class="columns">
+      <div class="column is-two-thirds">
+        <div class="job-position">
+          <div class="container">
+            <section class="section topbar-title">
+              <h1 class="title">Create/Edit a job position</h1>
+              <h2 class="subtitle">
+                This section allows you to create or edit a job position.
+              </h2>
+            </section>
+            {% for field in form.errors %}
+            {% for error in form.errors[field] %}
+            <div class="alert alert-error">
+              <small class="has-text-danger has-text-left">{{ error }}</small>
+            </div>
           </div>
           {% endfor %}
           {% endfor %}
@@ -75,11 +75,25 @@
 
                 </div>
                 
-                <div class="field">
-                  <label class="label">{{ form.location.label }}</label>
-                  <div class="control">
-                    <div class="select is-black">
-                      {{form.location(class='input', placeholder='Enter the job location.')}}
+                <div class="columns">
+                  <div class="column">
+                    <div class="field">
+                      <label class="label">{{form.country.label}}</label>
+                      <div class="control">
+                        <div class="select is-black">
+                          {{form.country(class='select', placeholder='Enter country')}}
+                        </div>                      
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="field">
+                      <label class="label">{{form.city.label }}</label>
+                      <div class="control">
+                        <div class="select is-black">
+                          {{form.city(class=  'select', placeholder='Enter city', id='cityField')}}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -88,7 +102,7 @@
                     <div class="field">
                       <label class="label">{{form.total_positions.label}}</label>
                       <div class="control">
-                        {{form.total_positions(class='input', placeholder='Enter total number of positions')}}
+                        {{form.total_positions(class='input', placeholder='Enter Total number of positions')}}
                       </div>
                     </div>
                   </div>
@@ -97,7 +111,7 @@
                       <label class="label">{{form.status.label }}</label>
                       <div class="control">
                         <div class="select is-black">
-                          {{form.status(class='select', placeholder='Enter status')}}
+                          {{form.status(class='select', placeholder='Enter Status')}}
                         </div>
                       </div>
                     </div>
@@ -120,7 +134,7 @@
                     <div class="field">
                       <label class="label">{{ form.min_yrs_of_exp.label }}*</label>
                       <div class="control">
-                        <div class="">
+                        <div class="select is-black">
                           {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
                         </div>
                       </div>
@@ -130,7 +144,7 @@
                     <div class="field">
                       <label class="label">{{ form.max_yrs_of_exp.label }}*</label>
                       <div class="control">
-                        <div class="">
+                        <div class="select is-black">
                           {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
                         </div>
                         {% for error in form.max_yrs_of_exp.errors %}
@@ -151,8 +165,8 @@
                     <div class="field">
                       <label class="label">Min</label>
                       <div class="control">
-                        <div class="select is-black">
-                          {{form.ctc_min(class='input', placeholder='Enter minimum CTC')}}
+                        <div class="">
+                          {{form.ctc_min(class='input', placeholder='Min CTC')}}
 
                         </div>
                       </div>
@@ -162,8 +176,8 @@
                     <div class="field">
                       <label class="label">Max</label>
                       <div class="control">
-                        <div class="select is-black">
-                          {{form.ctc_max(class='input', placeholder='Enter maximum CTC')}}
+                        <div class="">
+                          {{form.ctc_max(class='input', placeholder='Max CTC')}}
 
                         </div>
                       </div>
@@ -174,7 +188,7 @@
                       <label class="label">Currency</label>
                       <div class="control">
                         <div class="select is-black">
-                          {{form.ctc_currency(class='select', placeholder='Select currency')}}
+                          {{form.ctc_currency(class='select', placeholder='Select Currency')}}
                         </div>
                       </div>
                     </div>
@@ -187,7 +201,7 @@
                     <div class="field">
                       <label class="label">{{form.fees_percent.label}}</label>
                       <div class="control">
-                        {{form.fees_percent(class='input', placeholder='Enter fees percent being charged for this job position.')}}
+                        {{form.fees_percent(class='input', placeholder='Enter Fees Percent ')}}
                       </div>
                     </div>
                   </div>
@@ -195,7 +209,7 @@
                     <div class="field">
                       <label class="label">{{form.warranty_in_months.label}}</label>
                       <div class="control">
-                        {{form.warranty_in_months(class='input', placeholder='Enter warranty in months')}}
+                        {{form.warranty_in_months(class='input', placeholder='Enter Warranty in Months')}}
                       </div>
                     </div>
                   </div>
@@ -208,27 +222,27 @@
               </div>
             </form>
           </section>
-
+        </div>
         </div>
       </div>
-    </div>
-    <div class="column is-one-third">
-      <div class="job-position">
-        <div class="container">
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <label class="label" style="font-size: 18px;">
-                  Few guidelines
-                </label>
-                <ul class="list-unstyled">
-                  <li>Proper formatting of the text/content of the posting with clear spaces and standard bullets (-) to
-                    be used.</li>
-                  <li>No short forms/abbreviations to be used in the text.</li>
-                  <li>No spelling mistakes in the content.</li>
-                  <li>JD should be concise and crisp - to the point.</li>
-                  <li>(*) mark is mandatory.</li>
-                </ul>
+      <div class="column is-one-third">
+        <div class="job-position">
+          <div class="container">
+            <div class="card">
+              <div class="card-content">
+                <div class="content">
+                  <label class="label" style="font-size: 18px;">
+                    Few guidelines
+                  </label>
+                  <ul class="list-unstyled">
+                    <li>Proper formatting of the text/content of the posting with clear spaces and standard bullets (-) to
+                      be used.</li>
+                    <li>No short forms/abbreviations to be used in the text.</li>
+                    <li>No spelling mistakes in the content.</li>
+                    <li>JD should be concise and crisp - to the point.</li>
+                    <li>(*) mark is mandatory.</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -236,5 +250,4 @@
       </div>
     </div>
   </div>
-</div>
 {% endblock %}

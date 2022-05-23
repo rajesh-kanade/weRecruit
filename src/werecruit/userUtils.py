@@ -192,7 +192,6 @@ def save_user(tenantID, userID, name, email, password, roleID):
             params = (name, email, password, userID)
             _logger.debug(cursor.mogrify(sql, params))
 
-
             cursor.execute(sql, params)
             assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
@@ -292,7 +291,6 @@ def get_user_by_email(email):
 
         params = (False, email)
 
-
         _logger.debug(sql)
         _logger.debug(cursor.mogrify(sql, params))
 
@@ -312,33 +310,51 @@ def get_user_by_email(email):
         dbUtils.returnToPool(db_con)
 
 
-def list_users(tenant_id):
+def list_users(tenant_id, orderBy=None, order=None):
     try:
 
         db_con = dbUtils.getConnFromPool()
         cursor = dbUtils.getNamedTupleCursor(db_con)
 
-        sql = """SELECT * FROM users WHERE is_deleted = %s and
-				id in (select uid from tenant_user_roles where tid =%s)
-				order by id"""
+        query, params = None, None
+        q1 = """SELECT * FROM users WHERE is_deleted = %s and
+						id in (select uid from tenant_user_roles where tid =%s)
+						order by """
+        q2 = """"""
+        q3 = """ id"""
+        query, params = None, None
+
+        if orderBy == "client":
+            q2 = """ client, """
+        elif orderBy == "status":
+            q2 = """ status, """
+        elif orderBy == "title":
+            q2 = """ title, """
+        elif orderBy == "open_date":
+            q2 = """ open_date, """
+
+        query = q1 + q2 + q3
         params = (False, tenant_id)
 
-        _logger.debug(sql)
-        _logger.debug(cursor.mogrify(sql, params))
+        _logger.debug(query)
+        _logger.debug(cursor.mogrify(query, params))
 
-        cursor.execute(sql, params)
+        cursor.execute(query, params)
 
         userList = cursor.fetchall()
-
+        if order == "DESC":
+            userList = userList[::-1]
         for user in userList:
             _logger.debug(user)
 
-        return(RetCodes.success.value, "User List successfully fetched from db", userList)
-
+        return (
+            RetCodes.success.value,
+            "User List successfully fetched from db",
+            userList,
+        )
     except Exception as e:
         _logger.error(e)
-        return(RetCodes.server_error.value, str(e), None)
-
+        return (RetCodes.server_error.value, str(e), None)
     finally:
         cursor.close()
         dbUtils.returnToPool(db_con)
@@ -429,38 +445,38 @@ def do_SignIn(id, password):
         _logger.error(e)
         return (RetCodes.server_error, str(e))
 
-# def check_cur_pass_and_newPass(id, email, cur_password, new_password):
-# 	try:
-# 		new_password = hashit(new_password)
-# 		cur_password = hashit(cur_password)
-# 		try:
-# 			db_con = dbUtils.getConnFromPool()
-# 			cursor = dbUtils.getNamedTupleCursor(db_con)
+def check_cur_pass_and_newPass(id, email, cur_password, new_password):
+	try:
+		new_password = hashit(new_password)
+		cur_password = hashit(cur_password)
+		try:
+			db_con = dbUtils.getConnFromPool()
+			cursor = dbUtils.getNamedTupleCursor(db_con)
 
-# 			query = """SELECT * from users WHERE id =%s and email = %s and password =%s
-# 					"""
+			query = """SELECT * from users WHERE id =%s and email = %s and password =%s
+					"""
 
-# 			data_tuple = (id, email, cur_password)
+			data_tuple = (id, email, cur_password)
 
-# 			_logger.debug ( cursor.mogrify(query, data_tuple))
-# 			u=cursor.execute(query, data_tuple).fetchOne()
-# 			print(u.email)
+			_logger.debug ( cursor.mogrify(query, data_tuple))
+			u=cursor.execute(query, data_tuple).fetchOne()
+			print(u.email)
 
 
-# 		except Exception as dbe:
-# 			_logger.error(dbe)
-# 			db_con.rollback()
-# 			return ( RetCodes.server_error, str(dbe), None)
+		except Exception as dbe:
+			_logger.error(dbe)
+			db_con.rollback()
+			return ( RetCodes.server_error, str(dbe), None)
 
-# 		finally:
-# 			if 'cursor' in locals() and cursor is not None:
-# 				cursor.close()
-# 			dbUtils.returnToPool(db_con)
+		finally:
+			if 'cursor' in locals() and cursor is not None:
+				cursor.close()
+			dbUtils.returnToPool(db_con)
 
-# 	except Exception as e:
-# 		_logger.error ("In the exception block.")
-# 		_logger.error(e)
-# 		return ( RetCodes.server_error, str(e))
+	except Exception as e:
+		_logger.error ("In the exception block.")
+		_logger.error(e)
+		return ( RetCodes.server_error, str(e))
 
 
 def do_reset_password(id, email, cur_password, new_password):

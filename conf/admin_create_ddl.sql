@@ -35,6 +35,15 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
+CREATE ROLE werecruit WITH
+	NOLOGIN
+	NOSUPERUSER
+	NOCREATEDB
+	NOCREATEROLE
+	INHERIT
+	NOREPLICATION
+	CONNECTION LIMIT -1;
+
 CREATE TABLE public.tenants
 (
     name text COLLATE pg_catalog."default" NOT NULL,
@@ -49,7 +58,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.tenants
-    OWNER to postgres;
+    OWNER to werecruit;
 
 
 CREATE TABLE public.roles
@@ -78,7 +87,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.application_status_codes
-    OWNER to postgres;
+    OWNER to werecruit;
 
 
 CREATE TABLE public.users
@@ -97,7 +106,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.users
-    OWNER to postgres;
+    OWNER to werecruit;
 
 CREATE TABLE public.tenant_user_roles
 (
@@ -115,7 +124,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.tenant_user_roles
-    OWNER to postgres;
+    OWNER to werecruit;
 
 CREATE TABLE public.wr_jds
 (
@@ -168,7 +177,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.wr_jds
-    OWNER to postgres;
+    OWNER to werecruit;
 
 
 create table public.wr_resumes
@@ -188,7 +197,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.wr_resumes
-    OWNER to postgres;
+    OWNER to werecruit;
 
 create table public.wr_jd_resumes
 (
@@ -207,7 +216,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.wr_jd_resumes
-    OWNER to postgres;
+    OWNER to werecruit;
 
 
 create table public.wr_jd_resume_status_audit_log
@@ -230,7 +239,7 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public.wr_jd_resume_status_audit_log
-    OWNER to postgres;
+    OWNER to werecruit;
 
 
 insert into public.roles(id,name,is_deleted, status) values (1,'admin',false,0);

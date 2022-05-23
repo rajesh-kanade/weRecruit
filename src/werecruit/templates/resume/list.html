@@ -84,10 +84,12 @@
                   <td>{{resume.email}}</td>
                   <td>{{resume.phone}}</td>
                   <td class="table-actions" data-turbo="false">
-                    <a href="/resume/showEditPage/{{resume.id}}"><abbr title="Edit"><i
-                          class="fa fa-pencil-square-o"></i></abbr></a>
-                    <span><a href="/resume/download/{{resume.id}}" onclick="this.classList.add('is-loading');"><abbr
-                          title="Download Resume"><i class="fa fa-download"></i></abbr></a></span>
+                    <a title="Edit" href="/resume/showEditPage/{{resume.id}}">
+                      <i class="fa fa-pencil-square-o"></i>
+                    </a>
+                    <span><a title="Download Resume" href="/resume/download/{{resume.id}}" onclick="this.classList.add('is-loading');">
+                      <i class="fa fa-download"></i>
+                    </a></span>
                   </td>
                 </tr>
                 {% else %}
@@ -97,27 +99,31 @@
                 {% endfor %}
               </tbody>
             </table>
-            <div class="pagination">
+            <div class="is-flex is-flex-direction-row is-justify-content-flex-end container pagination">
               {% if totalPages > 1 %}
-              <a class="number">{{pagination.page}} <span class="sr-only">(current)</span></a>
-              <a class="number">of {{ totalPages}} <span class="sr-only">(current)</span></a>
+              <div class="currentPage"><a>{{pagination.page}} <span class="sr-only">(current)</span></a></div>
+              <div class="totalPages"><a>Of {{ totalPages}} <span class="sr-only">(current)</span></a></div>
               {% if pagination.page > 1 %}
-              <a class="left" href="/resume/showBrowser?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
-                aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
-
+              <div><a class="left"
+                  href="?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+                  aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a></div>
+  
               {% else %}
-              <a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+              <div><a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+              </div>
               {% endif %}
-
-              {% if pagination.page < totalPages %} <a class="right"
-                href="/resume/showBrowser?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
-                aria-label="Next">
-                <span>&raquo;</span><span class="sr-only">Next</span></a>
-                {% else %}
-                <a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
-                {% endif %}
-                {% endif %}
+  
+              {% if pagination.page < totalPages %} <div><a class="right"
+                  href="?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
+                  aria-label="Next">
+                  <span>&raquo;</span><span class="sr-only">Next</span></a>
             </div>
+            {% else %}
+            <div><a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+            </div>
+            {% endif %}
+            {% endif %}
+          </div>
           </div>
 
         </section>
