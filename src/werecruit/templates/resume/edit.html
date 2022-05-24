@@ -1,6 +1,6 @@
 {%extends "app_header.html" %}
 {%block content%}
-
+<div class="resume-upload">
 <section class="container is-fullheight">
       <div class="block"></div>
 
@@ -31,7 +31,7 @@
                       <i class="fas fa-upload"></i>
                     </span>
                     <span class="file-label">
-                      Select resume ( word, pdf only)…
+                      Select Resume ( word, pdf only)…
                     </span>
                   </span>
                   <span class="file-name">
@@ -60,7 +60,7 @@
             <div class="field">
               <label class="label {{theme_text_color}} has-text-left">{{ form.candidate_name.label }}</label>
               <div class="control">
-                {{form.candidate_name(class='input', placeholder="Enter candidate's name")}}
+                {{form.candidate_name(class='input', placeholder="Enter Candidate's Name")}}
                 {% for error in form.candidate_name.errors %}
                   <small class="has-text-danger">{{ error }}</small>  
                 {% endfor %}
@@ -69,7 +69,7 @@
             <div class="field">
               <label class="label {{theme_text_color}} has-text-left">{{ form.candidate_email.label }}</label>
               <div class="control">
-                {{form.candidate_email(class='input', placeholder="Enter candidate's email")}}
+                {{form.candidate_email(class='input', placeholder="Enter Candidate's Email")}}
                 {% for error in form.candidate_email.errors %}
                   <small class="has-text-danger">{{ error }}</small>  
                 {% endfor %}
@@ -78,7 +78,7 @@
             <div class="field">
               <label class="label {{theme_text_color}} has-text-left">{{ form.candidate_phone.label }}</label>
               <div class="control">
-                {{form.candidate_phone(class='input', placeholder="Enter candidate's phone")}}
+                {{form.candidate_phone(class='input', placeholder="Enter Candidate's Phone")}}
                 {% for error in form.candidate_phone.errors %}
                   <small class="has-text-danger">{{ error }}</small>  
                 {% endfor %}
@@ -102,5 +102,6 @@
 
 </section>
 
+</div>
 {% endblock %}
 

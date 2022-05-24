@@ -1248,3 +1248,11 @@ table th{
   margin-left: -10%;
   margin-bottom: 2%;
 }
+.resume-upload .container{
+  margin-left: 10%;
+}
+.resume-upload .notification.is-info{
+  margin-left: -18%;
+  margin-right: 2%;
+  padding-right: 2%;
+}
