@@ -401,6 +401,57 @@ def list_application_status_codes():
         dbUtils.returnToPool(db_con)
 
 
+def list_resume_application_status_codes_category():
+    try:
+        db_con = dbUtils.getConnFromPool()
+        cursor = dbUtils.getNamedTupleCursor(db_con)
+
+        query = """SELECT * FROM resume_application_status_codes_category
+				    ORDER BY id ASC"""
+
+        #params = (recruiterID,)
+        _logger.debug(cursor.mogrify(query, ))
+        cursor.execute(query,)
+
+        appStatusCodesCatList = cursor.fetchall()
+
+        return(RetCodes.success.value, "Resume application status code List successfully fetched from db", appStatusCodesCatList)
+
+    except Exception as dbe:
+        _logger.error(dbe)
+        return (RetCodes.server_error.value, str(dbe), None)
+
+    finally:
+        cursor.close()
+        dbUtils.returnToPool(db_con)
+
+
+def list_resume_application_status_codes_sub_category(category_id):
+    try:
+        db_con = dbUtils.getConnFromPool()
+        cursor = dbUtils.getNamedTupleCursor(db_con)
+
+        query = """SELECT * FROM resume_application_status_codes_sub_category
+                    WHERE category_id = %s
+					ORDER BY id ASC"""
+
+        params = (category_id,)
+        _logger.debug(cursor.mogrify(query, params))
+        cursor.execute(query, params)
+
+        appStatusCodesSubCatList = cursor.fetchall()
+
+        return(RetCodes.success.value, "Resume application status code List successfully fetched from db", appStatusCodesSubCatList)
+
+    except Exception as dbe:
+        _logger.error(dbe)
+        return (RetCodes.server_error.value, str(dbe), None)
+
+    finally:
+        cursor.close()
+        dbUtils.returnToPool(db_con)
+
+
 def get(id):
     try:
         db_con = dbUtils.getConnFromPool()
