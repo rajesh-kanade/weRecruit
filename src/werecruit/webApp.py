@@ -147,7 +147,7 @@ def validate_password(password):
 def sign_up():
 
     form = SignUpForm()
-
+    
     userAttrs = {}
 
     userAttrs['email'] = form.email.data
@@ -165,11 +165,14 @@ def sign_up():
                 form.name.data), "is-info")
         
             return redirect(url_for("show_signin_page"))
+        elif(results[0] == "IAM_CRUD_E500"):
+            flash("Email Id given by you already exists in our database. Please enter another email ID.","is-danger")
+            return render_template('sign_up.html',form=form)
         else:
             flash(results[0] + ':' + results[1], "is-danger")
-            return redirect(url_for("show_signup_page"))
+            return render_template('sign_up.html',form=form)
     else:
-        flash("Password criteria does not match.Password should contain  ","is-danger")
+        flash("Password criteria not met. Please enter password again.","is-danger")
         return render_template('sign_up.html', form = form)
 
 
