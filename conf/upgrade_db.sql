@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS public.resume_application_status_codes_category
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.resume_application_status_codes_category
-    OWNER to postgres;
+    OWNER to werecruit;
 
 CREATE TABLE IF NOT EXISTS public.resume_application_status_codes_sub_category
 (
@@ -171,7 +171,7 @@ CREATE TABLE IF NOT EXISTS public.resume_application_status_codes_sub_category
 TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public.resume_application_status_codes_sub_category
-    OWNER to postgres;
+    OWNER to werecruit;
 
 INSERT INTO public.resume_application_status_codes_category(
 	id, description)
