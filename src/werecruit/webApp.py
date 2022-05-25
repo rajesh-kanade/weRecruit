@@ -147,7 +147,7 @@ def validate_password(password):
 def sign_up():
 
     form = SignUpForm()
-
+    
     userAttrs = {}
 
     userAttrs['email'] = form.email.data
@@ -165,11 +165,15 @@ def sign_up():
                 form.name.data), "is-info")
         
             return redirect(url_for("show_signin_page"))
+        elif(results[0] == "IAM_CRUD_E500"):
+            flash("Email Id given by you already exists in our database. Please enter another email ID.","is-danger")
+            return render_template('sign_up.html',form=form)
         else:
             flash(results[0] + ':' + results[1], "is-danger")
-            return redirect(url_for("show_signup_page"))
+            return render_template('sign_up.html',form=form)
     else:
-        flash("Password criteria does not match.","is-danger")
+
+        flash("Password criteria not met. Please enter password again.","is-danger")
         return render_template('sign_up.html', form = form)
 
 
@@ -848,11 +852,26 @@ def show_shortlisted_candidates_page(id):
     assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(
         id, retCode, msg)
 
+    (retCode, msg, appStatusCodesCatList) = resumeUtils.list_resume_application_status_codes_category()
+    assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch resume application status category codes. Error code is {0}. Error message is {1}".format(
+        retCode, msg)
+    appStatusCodesSubCatList = {}
+    for record in appStatusCodesCatList:
+        (retCode, msg, appStatusCodesSubCat) = resumeUtils.list_resume_application_status_codes_sub_category(
+            record.id)
+        assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch resume application status category codes. Error code is {0}. Error message is {1}".format(
+            retCode, msg)
+        appStatusCodesSubCatList[record.id] = appStatusCodesSubCat
+    
+    appStatusDescriptionList = {record.id: record.description for record in appStatusCodesList}
     searchForm = ResumeSearchForm()
-
     return render_template('jd/shortlisted_candidates_list.html', jd=jd,
                            resumeList=resumeList, actionTemplate="work",
-                           appStatusCodesList=appStatusCodesList, searchForm=searchForm)
+                           appStatusCodesList=appStatusCodesList,
+                           appStatusDescriptionList=appStatusDescriptionList,
+                           appStatusCodesCatList=appStatusCodesCatList,
+                           appStatusCodesSubCatList=appStatusCodesSubCatList,
+                           searchForm=searchForm)
 
 # This shows all the resumes / candidates not yet associated with a specific job id
 

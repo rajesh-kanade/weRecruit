@@ -1,41 +1,57 @@
-    <div class="block">  
-          <table class="table is-striped">
-            <tbody>
-            {% for resume in resumeList %}
-              {%if loop.first %}
-                <thead>
-                  <tr class="{{theme_bg_color}}">
-                    <!-- <th class="has-text-centered {{theme_text_color}}">RESUME ID</th> -->
-                    <th class="has-text-centered {{theme_text_color}}">NAME</th>
-                    <th class="has-text-centered {{theme_text_color}}">EMAIL</th>
-                    <th class="has-text-centered {{theme_text_color}}">PHONE</th>
-                    <th class="has-text-centered {{theme_text_color}}">STATUS</th>
-                    <th class="has-text-centered {{theme_text_color}}"></th>
-                  </tr>
-                </thead>
-              {%endif %}
-              <tr class="{{theme_bg_color}}">
-                <!-- <td class="has-text-centered {{theme_text_color}}">{{ resume.id }}</td> -->
-                <td class="has-text-centered {{theme_text_color}}">{{ resume.name }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{ resume.email }}</td> 
-                <td class="has-text-centered {{theme_text_color}}">{{ resume.phone }}</td>
-                <td class="has-text-centered {{theme_text_color}}">{{resume.description}}</td>
-                <td class="has-text-centered {{theme_text_color}}">
-                  {%if actionTemplate == 'shortlist' %}
-                    {% include 'jd/shortlist_actions.html'%}
-                  {%endif %}
-                  {%if actionTemplate == 'work' %}
-                    {% include 'jd/shortlisted_actions.html'%}
-                  {%endif %}
-
-                </td>       
+<div class="body-background is-half">
+  <div class="job-position table-height">
+    <div class="container">
+      <section class="section">
+        <div class="table-container">
+          <table class="table is-fullwidth">
+            {% for resume in resumeList %} {%if loop.first %}
+            <thead>
+              <tr class="header">
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
-            {% else %}
-              <div class="notification is-warning">
-                No Resumes found !!!
-              </div>
-            {% endfor %}
-          </tbody>
-        </table>
+            </thead>
+            {% endif %}
+            <tbody>
+              <tr class="table-data">
+                <td>{{resume.name}}</td>
+                <td>{{resume.email}}</td>
+                <td>{{resume.phone}}</td>
+                <td>{{appStatusDescriptionList[resume.status]}} </td>
+                <td class="table-actions">
+                  {%if actionTemplate == 'shortlist' %} {# {% include
+                  'jd/shortlist_actions.html'%} #}
+                  <a href="/resume/download/{{resume.id}}" title="View Resume">
+                    <i class="fa fa-download"></i>
+                  </a>
+                  <span>
+                    <a href="/jd/shortlist/?resume_id={{resume.id}}&job_id={{job_id}}" title="Shortlist">
+                      <i class="fa fa-bookmark" aria-hidden="true"></i>
+                    </a>
+                  </span>
+                  {%endif %} {%if actionTemplate == 'work' %} {# {% include
+                  'jd/shortlisted_actions.html'%} #}
+                  <a href="/resume/download/{{resume.id}}" title="Download Resume">
+                    <i class="fa fa-download"></i>
+                  </a>
+                  <span>
+                    <a href="/jd/showJobAppUpdatePage?resume_id={{resume.id}}&job_id={{jd.id}}" title="Update Status">
+                      <i class="fa fa fa-pencil-square-o"></i>
+                    </a>
+                  </span>
+                  {%endif %}
+                </td>
+              </tr>
+              {% else %}
+              <div class="notification is-warning">No Resumes found !!!</div>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
-
+  </div>
+</div>
