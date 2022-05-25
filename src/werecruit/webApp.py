@@ -169,7 +169,7 @@ def sign_up():
             flash(results[0] + ':' + results[1], "is-danger")
             return redirect(url_for("show_signup_page"))
     else:
-        flash("Password criteria does not match.Password should contain  ","is-danger")
+        flash("Password criteria does not match.","is-danger")
         return render_template('sign_up.html', form = form)
 
 
