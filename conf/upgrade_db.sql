@@ -141,3 +141,77 @@ alter table if exists public.wr_jds
 add column city_id int;
 
 /* ******** end upgrade prod on 22/05/2022 for countries and cities *******************/
+
+
+/* **** 25/05/2022 status codes table creation **** */
+CREATE TABLE IF NOT EXISTS public.resume_application_status_codes_category
+(
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    description character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT resume_application_status_codes_category_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.resume_application_status_codes_category
+    OWNER to postgres;
+
+CREATE TABLE IF NOT EXISTS public.resume_application_status_codes_sub_category
+(
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    description character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    category_id integer,
+    CONSTRAINT resume_application_status_codes_sub_category_pkey PRIMARY KEY (id),
+    CONSTRAINT category_fk FOREIGN KEY (category_id)
+        REFERENCES public.resume_application_status_codes_category (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.resume_application_status_codes_sub_category
+    OWNER to postgres;
+
+INSERT INTO public.resume_application_status_codes_category(
+	id, description)
+    OVERRIDING SYSTEM VALUE
+	VALUES (1, 'Resume Shortlisted'),
+    (2, 'Initial Screening'),
+    (3, 'Round 1'),
+    (4, 'Round 2'),
+    (5, 'Hiring Manager'),
+    (6, 'HR'),
+    (7, 'Offer'),
+    (8, 'Onboarding');
+
+INSERT INTO public.resume_application_status_codes_sub_category(
+	id, description, category_id)
+    OVERRIDING SYSTEM VALUE
+	VALUES (0, 'Shortlisted', 1),
+    (1, 'Scheduled', 2),
+    (2, 'Cleared', 2),
+    (3, 'Failed', 2),
+    (10, 'Scheduled', 3),
+    (20, 'Cleared', 3),
+    (30, 'Failed', 3),
+    (31, 'No Show', 3),
+    (40, 'Scheduled', 4),
+    (50, 'Cleared', 4),
+    (60, 'Failed', 4),
+    (61, 'No Show', 4),
+    (70, 'Scheduled', 5),
+    (80, 'Cleared', 5),
+    (90, 'Failed', 5),
+    (91, 'No Show', 5),
+    (100, 'Scheduled', 6),
+    (110, 'Cleared', 6),
+    (120, 'Failed', 6),
+    (121, 'No Show', 6),
+    (130, 'Pending with HR', 7),
+    (140, 'Released to Candidate', 7),
+    (150, 'Accepted by Candidate', 7),
+    (160, 'Done', 8),
+    (170, 'No Show', 8);
+
+/* ******** end upgrade prod on 25/05/2022 for status codes category and sub category *****/
