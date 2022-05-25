@@ -578,6 +578,7 @@ label {
 
 #manageUsersPageMessages .notification {
   margin-top: 0%;
+  margin-left: 0%;
   margin-bottom: 1%;
 }
 #jd_browser_messages div .notification {
