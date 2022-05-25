@@ -620,7 +620,9 @@ label {
 #actionColumn i {
   font-size: large;
 }
-
+#actionColumn span {
+  margin-left: 10%;
+}
 
 
 /* status summary page */
@@ -1214,4 +1216,86 @@ table th{
 .control .button.is-success {
   margin-left: 6px;
 }
+}
+
+.menu-bar{
+  text-align: center;
+}
+.menu-bar ul li{
+  width: 20rem;
+}
+.menu-bar .fa{
+  margin-right: 8px;
+}
+.sub-menu-1
+{
+  display: none;
+  margin-left: 0px;
+  position: relative;
+  z-index: 10000;
+}
+.menu-bar ul li:hover .sub-menu-1{
+  display: block;
+  position: absolute;
+  background: #fff;
+}
+.menu-bar ul li:hover .sub-menu-1 ul{
+  display: block;
+  margin: 10px;
+}
+.menu-bar ul li:hover .sub-menu-1 ul li{
+  width: 165px;
+  padding: 10px;
+  padding-left: 5px;
+  border-bottom: 1px dotted #fff;
+  background: transparent;
+  text-align: left;
+}
+
+.menu-bar ul li:hover .sub-menu-1 ul li:last-child{
+  border-bottom: none;
+}
+
+
+.fa-angle-right{
+  float: right;
+}
+.menu-bar .fa-angle-down{
+  text-align: right;
+}
+.sub-menu-2{
+  display: none;
+}
+
+.hover-me:hover .sub-menu-2{
+  position: absolute;
+  display: block;
+  margin-top: -40px;
+  margin-left: 150px;
+  background: #fff;
+}
+
+.menu-bar label{
+  padding-right: 135px !important;
+}
+
+.new-button{
+  background-color: #fff;
+  width: 108.5%;
+  padding-block: 1%;
+  display: flex;
+  border: 1px solid grey;
+}
+
+.new-button .icon {
+  margin-left: auto;
+    margin-right: 0.1rem;
+}
+
+td span {
+  margin-left: 3%;
+}
+
+td .fa {
+  font-size: medium;
 }

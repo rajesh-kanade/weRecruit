@@ -60,33 +60,35 @@
       </section>
     </div>
     <div class="container">
-      <div class="block has-text-left">
-        <h4>Status</h4>
-        <div class="menu-bar">
-      <ul>
-        <li>
-          <button class="new-button" aria-haspopup="true" aria-controls="dropdown-menu">
-            <span>All</span>
-            <span class="icon is-small">
-              <i class="fas fa-angle-down" aria-hidden="true"></i>
-            </span>
-          </button>
-          <div class="sub-menu-1">
+      <section class="section topbar-title">
+        <div class="block has-text-left">
+          <h4>Status</h4>
+          <div class="menu-bar">
             <ul>
-              {% for status_category in appStatusCodesCatList %}
-              <li class="hover-me"><a href="#">{{status_category.description}} </a><i class="fa fa-angle-right"></i>
-                <div class="sub-menu-2">
+              <li>
+                <button class="new-button" aria-haspopup="true" aria-controls="dropdown-menu">
+                  <span>All</span>
+                  <span class="icon is-small">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                  </span>
+                </button>
+                <div class="sub-menu-1">
                   <ul>
-                    {% for status_sub_category in appStatusCodesSubCatList[status_category.id] %}
-                    <li><a href="#">{{status_sub_category.description}} </a></li>
+                    {% for status_category in appStatusCodesCatList %}
+                    <li class="hover-me"><a href="#">{{status_category.description}} </a><i class="fa fa-angle-right"></i>
+                      <div class="sub-menu-2">
+                        <ul>
+                          {% for status_sub_category in appStatusCodesSubCatList[status_category.id] %}
+                          <li><a href="#">{{status_sub_category.description}} </a></li>
+                          {% endfor %}
+                        </ul>
+                    </li>
                     {% endfor %}
-                  </ul>
+        
+                </div>
               </li>
-              {% endfor %}
-
-          </div>
-        </li>
-      </ul>
+            </ul>
+      </section>
     </div>
 
       </div>
