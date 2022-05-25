@@ -20,7 +20,7 @@
                 <td>{{resume.name}}</td>
                 <td>{{resume.email}}</td>
                 <td>{{resume.phone}}</td>
-                <td>{{resume.status}}</td>
+                <td>{{appStatusDescriptionList[resume.status]}} </td>
                 <td class="table-actions">
                   {%if actionTemplate == 'shortlist' %} {# {% include
                   'jd/shortlist_actions.html'%} #}

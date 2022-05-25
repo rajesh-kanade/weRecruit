@@ -851,22 +851,20 @@ def show_shortlisted_candidates_page(id):
     (retCode, msg, appStatusCodesCatList) = resumeUtils.list_resume_application_status_codes_category()
     assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch resume application status category codes. Error code is {0}. Error message is {1}".format(
         retCode, msg)
-    # print(appStatusCodesCatList)
     appStatusCodesSubCatList = {}
-    # for record in appStatusCodesCatList:
-    #     print(record)
     for record in appStatusCodesCatList:
-        # print(record)
         (retCode, msg, appStatusCodesSubCat) = resumeUtils.list_resume_application_status_codes_sub_category(
             record.id)
         assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch resume application status category codes. Error code is {0}. Error message is {1}".format(
             retCode, msg)
         appStatusCodesSubCatList[record.id] = appStatusCodesSubCat
+    
+    appStatusDescriptionList = {record.id: record.description for record in appStatusCodesList}
     searchForm = ResumeSearchForm()
-    # print(appStatusCodesSubCatList)
     return render_template('jd/shortlisted_candidates_list.html', jd=jd,
                            resumeList=resumeList, actionTemplate="work",
                            appStatusCodesList=appStatusCodesList,
+                           appStatusDescriptionList=appStatusDescriptionList,
                            appStatusCodesCatList=appStatusCodesCatList,
                            appStatusCodesSubCatList=appStatusCodesSubCatList,
                            searchForm=searchForm)
