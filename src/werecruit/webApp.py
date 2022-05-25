@@ -1169,6 +1169,10 @@ def do_reset_password():
                 flash(
                         "Password reset successfully. Please sign-in again with your new password", "is-success")
                 return redirect(url_for("show_signin_page"))
+                
+            elif(user != userUtils.RetCodes.success.value):
+                flash("Current password entered is wrong","is-danger")
+                return redirect(url_for('show_reset_password'))
             
             else:
                 flash("Password reset failed. {0} ".format(msg), "is-danger")
@@ -1180,7 +1184,7 @@ def do_reset_password():
     else:
 		# print("Password Not matched")
 		# flash ("New Password and Confirm Password must be same", "is-danger")
-        flash('Password criteria does not match.\nPassword should contain One upper One lower case',"is-danger")
+        flash('Password criteria does not match.',"is-danger")
         return redirect(url_for('show_reset_password'))   
 
 

@@ -1,5 +1,4 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @font-face {
   font-family: "poppins-medium";
   src: url(fonts/Poppins-Medium.ttf) format("truetype");
@@ -254,12 +253,35 @@ table thead tr th {
 .table-height {
   margin-top: -60px;
 }
-
 /* new changes 18 april*/
 /* .column .job-position {
   margin-left:auto;
 } */
-
+.ml-7{
+  margin-left: -100px;
+}
+.reset-password-container .label{
+  letter-spacing: 1px;
+}
+@media screen and (min-width:1380px) {
+  .reset-head{
+    margin-left: -4rem !important;
+  }
+}
+@media screen and (max-width:1000px) {
+  .reset-columns{
+    margin-left: -100px !important;
+  }
+  .ml-7{
+    margin-left: -136px;
+    margin-right: 20%;
+  }
+}
+@media screen and(min-width:530px) and (max-width:770px) {
+  .reset-columns {
+    margin-left: -100px !important;
+  }
+}
 @media screen and (min-width: 1024px) {
   .section {
     margin-left: -5px;
@@ -757,9 +779,6 @@ th{
 }
 .row ,.column.is-half{
   margin-left: 0 auto;
-}
-.reset-columns{
-  max-width: 100%;
 }
 
 .flash{
@@ -1299,4 +1318,25 @@ td span {
 
 td .fa {
   font-size: medium;
+}
+.is-size-7{
+  color: #222 !important;
+}
+.add-user .container{
+  margin-left: 10%;
+}
+.add-user .columns:not(.is-desktop) {
+  display: block;
+}
+.revenue .button-revenue{
+  margin-left: -10%;
+  margin-bottom: 2%;
+}
+.resume-upload .container{
+  margin-left: 10%;
+}
+.resume-upload .notification.is-info{
+  margin-left: -18%;
+  margin-right: 2%;
+  padding-right: 2%;
 }
