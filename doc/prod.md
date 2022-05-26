@@ -1,4 +1,5 @@
 # PROD WIKI
+Old hardware becomes obsolete; old software goes into production every night. 
 
 ## Accessing prod
 - From main contabo machine do `docker exec -it werecruit_prod /bin/bash` to login to werecruit container.
@@ -17,12 +18,11 @@
 ## starting weRecruit
 * cd to `etc/werecruit` .
 * Run `./werecruit_start.sh`
-* if you get permission error please run `chmod +X werecruit_start.sh`. Typically file permissions are lost after you do git pull.
+* if you get permission error please run `chmod +x werecruit_start.sh`. Typically file permissions are lost after you do git pull.
 
 ## stopping weRecruit
-- (optional ) find running gunicorn processes by running `ps ax|grep gunicorn`.
-- stop gunicorn by running `pkill gunicorn` 
-- find weRecruit scheduler process by running command `ps ax|grep cronjobs.py`. In theory you should see only python process listed ( excluding gunicorn related python processes if any.)
+- cd to `/etc/werecruit`
+- run `./wr_stop.sh`. This should stop gunicorn processes & also display the pid for scheduler python process.
 - To stop weRecruit scheduler note down the pid listed in above step and run `kill <pid>`
 - Confirm it is stopped by visiting werecruit website from browser & verify you get a gateway error.
 
@@ -31,7 +31,7 @@
 
 - Run `wr_maintain.sh` script to clean up *.log & *.out files 
 - cleanup sessions related folder by ( TODO -> automate this step )
-    - `cd /etc/werecruit/sessions`
+    - `cd /etc/werecruit/flask_session`
     - `rm *`
 - DB backups ( Need to automate it)
     - currently backups are being taken by connecting to pg thru pg admin and taking back up on laptop. **Needs a better way**

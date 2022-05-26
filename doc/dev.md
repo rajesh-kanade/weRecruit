@@ -1,7 +1,9 @@
 # Dev WIKI
 
 ## Quick Tips
-- from docker machine do `docker exec -it werecruit_prod /bin/bash` to loginto werecruit container.
+- From docker machine do `docker exec -it werecruit_prod /bin/bash` to loginto werecruit container.
+    - To get out the container shell without stopping the container ,  please enter *ctrl+p followed by ctrl+q*
+
 - To figure out all *open connections on pg*, run following sql on db
 
 ## Setting up dev environment
@@ -26,6 +28,8 @@ That's it.. Hopefully you are all set...
 - chmod +x for sh scripts where permissions are lost as we do git pull
 - nohup <command to be executed> &
 - grep ERROR wr_job.log
+- cat /etc/os-release  to get the linux flvaor /version etc.
+
 
 
 ## Frequently used git commands
@@ -33,6 +37,8 @@ That's it.. Hopefully you are all set...
 - `git status`
 - `git restore`
 - `git clone <repo name>` . - only done once
+-  `git tag -a <v1.1.Build1> -m "weRecruit 1.1 Build 1"`  //used to tag the commit 
+-  `git push origin <v1.1.Build1>`  // to push the tag onto remote 
 
 ## Frequently used docker commands
 - `docker exec -it werecruit_prod /bin/bash` -> to get shell acess to werecruit_prod container.
