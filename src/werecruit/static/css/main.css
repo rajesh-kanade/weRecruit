@@ -1041,6 +1041,10 @@ table th{
 .is-fullwidth{
   border: 2px solid #f6f6f6;
 }
+/*signup page*/
+.body-background .sign-up{
+  padding-top: 6rem;
+}
 /* signin page */
 
 .hero-body .column.is-half{
