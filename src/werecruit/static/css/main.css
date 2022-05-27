@@ -1335,7 +1335,7 @@ td .fa {
 .add-user .columns:not(.is-desktop) {
   display: block;
 }
-.revenue .button-revenue{
+.button-revenue{
   margin-left: -10%;
   margin-bottom: 2%;
 }
@@ -1346,4 +1346,11 @@ td .fa {
   margin-left: -18%;
   margin-right: 2%;
   padding-right: 2%;
+}
+
+.show-clientwise-summary .container{
+  margin-left: 10%;
+}
+.show-clientwise-summary .table.is-fullwidth{
+  width: 70%;
 }
