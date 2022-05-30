@@ -52,13 +52,13 @@
         <td class="has-text-left {{theme_text_color}}">{{ resume.name }}</td>
         <td class="has-text-left {{theme_text_color}}">{{ resume.email }}</td> 
         <td class="has-text-left {{theme_text_color}}">{{ resume.phone }}</td>
-        <td class="has-text-left {{theme_text_color}}">{{ resume.status }}-{{resume.description}}</td>
+        <td class="has-text-left {{theme_text_color}}">{{resume.description}}</td>
         <td class="has-text-left{{theme_text_color}}">
           <div class ="field is-grouped" data-turbo="false">
             <a title="shortlist"  href="/jd/shortlist/?resume_id={{resume.id}}&job_id={{job_id}}"><i class="fa fa-bookmark"></i></abbr></a>
-        <span ><a title="show summary page" href="/jd/showSummaryPage/{{jd.id}}">
+        <!-- <span ><a title="show summary page" href="/jd/showSummaryPage/{{jd.id}}">
    <i class="fa fa-list-alt" aria-hidden="true"></i>
-</a></span>
+</a></span> -->
              <span ></span><a title="download" href="/resume/download/{{resume.id}}?src=jd-shortlist-page"><i
                 class="fa fa-download"></i></a></span>
             <span>
