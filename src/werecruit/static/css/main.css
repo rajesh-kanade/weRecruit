@@ -1248,9 +1248,9 @@ table th{
 .menu-bar{
   text-align: center;
 }
-.menu-bar ul li{
+/* .menu-bar ul li{
   width: 20rem;
-}
+} */
 .menu-bar .fa{
   margin-right: 8px;
 }
@@ -1307,16 +1307,19 @@ table th{
 }
 
 .new-button{
-  background-color: #fff;
+  background-color: transparent;
   width: 108.5%;
   padding-block: 1%;
   display: flex;
-  border: 1px solid grey;
+  border: 0px solid transparent;
+  font-size: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 550;
 }
 
 .new-button .icon {
-  margin-left: auto;
-    margin-right: 0.1rem;
+  margin-left: 0.5rem;
+    /* margin-right: 0.1rem; */
 }
 
 td span {
@@ -1346,4 +1349,9 @@ td .fa {
   margin-left: -18%;
   margin-right: 2%;
   padding-right: 2%;
+}
+
+#statusFilterBlock {
+  padding-top: 0%;
+  padding-bottom: 0%;
 }

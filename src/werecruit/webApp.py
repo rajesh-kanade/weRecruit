@@ -381,7 +381,7 @@ def show_jd_edit_page(id):
 
         
         form.city.data = jd.city_id
-        print(jd.city_id)
+        # print(jd.city_id)
         countryNames = None
         try:
             countryRecords = jdUtils.get_country_names()
@@ -897,10 +897,33 @@ def show_shortlist_resumes_page(job_id):
         job_id, retCode, msg)    
 
     # get all candidates who are currently associated with the job
-    (retCode, msg, shortlistedList) = jdUtils.get_resumes_associated_with_job(job_id)
+    cat_status_code = request.args.get('catStatusCode') if request.args.get(
+        'catStatusCode') else None
+    sub_cat_status_code = request.args.get('subCatStatusCode') if request.args.get(
+        'subCatStatusCode') else None
+    (retCode, msg, shortlistedList) = jdUtils.get_resumes_associated_with_job(
+        job_id, cat_status_code, sub_cat_status_code)
     assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(
         job_id, retCode, msg)
+    # changes 26/05/22
+    (retCode, msg, appStatusCodesList) = resumeUtils.list_application_status_codes()
+    assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch application status codes. Error code is {0}. Error message is {1}".format(
+        retCode, msg)
 
+    (retCode, msg, appStatusCodesCatList) = resumeUtils.list_resume_application_status_codes_category()
+    assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch resume application status category codes. Error code is {0}. Error message is {1}".format(
+        retCode, msg)
+    appStatusCodesSubCatList = {}
+    for record in appStatusCodesCatList:
+        (retCode, msg, appStatusCodesSubCat) = resumeUtils.list_resume_application_status_codes_sub_category(
+            record.id)
+        assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch resume application status category codes. Error code is {0}. Error message is {1}".format(
+            retCode, msg)
+        appStatusCodesSubCatList[record.id] = appStatusCodesSubCat
+
+    appStatusDescriptionList = {
+        record.id: record.description for record in appStatusCodesList}
+    
     searchForm = ResumeSearchForm()
     searchForm.job_id.data = job_id
     # searchForm.source.data = "jd_shorlist_resumes_page"  #set the source field of search box
@@ -926,6 +949,10 @@ def show_shortlist_resumes_page(job_id):
     return render_template('/jd/shortlisting_wrapper.html', jd=jd, job_id=jd.id,
                             allresumeList=pagination_ResumeList,
                             shortlistedList=pagination_shortlistedList, actionTemplate="shortlist",
+                            appStatusCodesList=appStatusCodesList,
+                            appStatusDescriptionList=appStatusDescriptionList,
+                            appStatusCodesCatList=appStatusCodesCatList,
+                            appStatusCodesSubCatList=appStatusCodesSubCatList,
                             searchForm=searchForm,
                             page=page,
                             per_page=1,
@@ -1077,7 +1104,7 @@ def update_job_application_status():
         flash("Status update failed. Failure detail as follow - " +
               retCode + ':' + msg, "is-danger")
 
-    return redirect(url_for('show_shortlisted_candidates_page', id=form.job_id.data))
+    return redirect(url_for('show_shortlist_resumes_page', job_id=form.job_id.data))
 
 
 @app.route('/jd/showSummaryPage/<int:job_id>', methods=['GET'])
