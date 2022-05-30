@@ -25,27 +25,27 @@
             {%if loop.first %}
             <thead>
               <tr class="header">
-                <th style="color: #8c8c8c;">Client<span style="margin-left: 10px;">
+                <th>Client<span>
                     <a href="?order_by=client&order={{toggles.client.orderToggle}}"><i class="{{toggles.client.arrowToggle}}"></i></a></a>
                   </span>
                 </th>
-                <th style="color: #8c8c8c;">Status <span style="margin-left: 10px;">
+                <th>Status <span >
                     <a href="?order_by=status&order={{toggles.status.orderToggle}}"><i class="{{toggles.status.arrowToggle}}"></i></a></a>   
                   </span>
                 </th>
-                <th style="color: #8c8c8c;">Title <span style="margin-left: 10px;">
+                <th>Title <span >
                     <a href="?order_by=title&order={{toggles.title.orderToggle}}"><i class="{{toggles.title.arrowToggle}}"></i></a></a>     
                   </span>
                 </th>
-                <th style="color: #8c8c8c;">Open Date <span style="margin-left: 10px;">
+                <th>Open Date <span >
                     <a href="?order_by=open_date&order={{toggles.open_date.orderToggle}}"><i class="{{toggles.open_date.arrowToggle}}"></i></a></a>
                   </span>
                 </th>
-                <th style="color: #8c8c8c;">Hiring Manager <span style="margin-left: 10px;">
+                <th>Hiring Manager <span >
                     <a href="?order_by=hiring_mgr_name&order={{toggles.hiring_mgr_name.orderToggle}}"><i class="{{toggles.hiring_mgr_name.arrowToggle}}"></i></a></a>
                   </span>
                 </th>
-                <th style="color: #8c8c8c;">Actions</th>
+                <th>Actions</th>
               </tr>
             </thead>
             {% endif %}
@@ -68,17 +68,17 @@
                 <td>
                   <a href="/jd/showShortlistPage/{{jd.id}}" title="Shortlist candidates">
                     <i class="fa fa-thumbs-o-up"></i></a>
-                  <span style="margin-left: 20px;" >
+                  <span>
                     <a href="/jd/showWorkPage/{{jd.id}}"  title="View Shortlisted candidates">
                       <i class="fa fa-search"></i></a></span>
-                  <span style="margin-left: 20px;">
+                  <span>
                     <a href="/jd/showSummaryPage/{{jd.id}}"  title="View Status Summary">
                       <i class="fa fa-file-text"></i></abbr></a></span>
-                  <span style="margin-left: 20px;">
+                  <span>
                     <a href="/jd/showEditPage/{{jd.id}}" title="Edit">
                       <i class="fa fa-pencil-square-o">
                         </i></a></span>
-                  <span style="margin-left: 20px;">
+                  <span>
                     <a href="/jd/download/{{jd.id}}" title="Download Client JD">
                       <i class="fa fa-download"></i></a></span>
                 </td>
