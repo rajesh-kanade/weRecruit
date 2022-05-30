@@ -1,12 +1,12 @@
 {%extends "header.html" %}
 {%block content%}
 
-<section class="hero is-fullheight">
-
-  <div class="hero-body">
-    <div class="container">
-      <div class="columns is-centered">
-          <div class="column is-half">
+<div class="body-background">
+  <div class="sign-up">
+    <div class="columns">
+      <div class="column is-two-thirds">
+        <div class="job-position">
+          <div class="container">
             {% set messages = get_flashed_messages() %}
             {% if messages %}   
                   <div class="notification is-danger">  
@@ -16,62 +16,88 @@
                                 <p> {{ message }}</p>  
                           {% endfor %}  
                     {% endif %}  
-              
+
                 </div>        
-            {% endif %}  
-          <form action = "/user/signUp" method="POST">
-            {{ form.hidden_tag() }}
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.company_name.label }}</label>
-              <div class="control has-icons-left has-icons-right">
-                {{form.company_name(class='input', placeholder='Enter company name')}}
-                <span class="icon is-small is-left">
-                  <i class="fas fa-building"></i>
-                </span>
-              </div>
-            </div>
+            {% endif %} 
+            <section class="application-form">
+              <form action = "/user/signUp" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="field">
+                  <label class="label {{theme_text_color}} has-text-left">{{ form.company_name.label }}</label>
+                  <div class="control has-icons-left has-icons-right">
+                    {{form.company_name(class='input', placeholder='Enter company name')}}
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-building"></i>
+                    </span>
+                  </div>
+                </div>
 
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.name.label }}</label>
-              <div class="control has-icons-left has-icons-right">
-                {{form.name(class='input', placeholder='Enter name')}}
-                <span class="icon is-small is-left">
-                  <i class="fas fa-user"></i>
-                </span>
-              </div>
-            </div>
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{ form.email.label }}</label>
-              <div class="control has-icons-left has-icons-right">
-                {{ form.email(class='input', placeholder='Enter email') }}
-                <span class="icon is-small is-left">
-                  <i class="fas fa-envelope"></i>
-                </span>
-              </div>
-            </div>
+                <div class="field">
+                  <label class="label {{theme_text_color}} has-text-left">{{ form.name.label }}</label>
+                  <div class="control has-icons-left has-icons-right">
+                    {{form.name(class='input', placeholder='Enter name')}}
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-user"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="label {{theme_text_color}} has-text-left">{{ form.email.label }}</label>
+                  <div class="control has-icons-left has-icons-right">
+                    {{ form.email(class='input', placeholder='Enter email') }}
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-envelope"></i>
+                    </span>
+                  </div>
+                </div>
 
-            <div class="field">
-              <label class="label {{theme_text_color}} has-text-left">{{form.password.label}}</label>
-              <div class="control has-icons-left has-icons-right">
-                {{ form.password(class='input', placeholder='Enter password') }}
-                <span class="icon is-small is-left">
-                  <i class="fas fa-lock"></i>
-                </span>
-              </div>
-            </div>
-              
-            <div class="field">
-              <p class="control">
-                {{ form.submit( class = 'button is-success') }}  
+                <div class="field">
+                  <label class="label {{theme_text_color}} has-text-left">{{form.password.label}}</label>
+                  <div class="control has-icons-left has-icons-right">
+                    {{ form.password(class='input', placeholder='Enter password') }}
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-lock"></i>
+                    </span>
+                  </div>
+                </div>
+                  
+                <div class="field">
+                  <p class="control">
+                    {{ form.submit( class = 'button is-success') }}  
 
-              </p>      
-            </div>
-          </form>
+                  </p>  
+                </div>
+              </form>
+            </section>
+          </div>
         </div>
       </div>
-    </div>
+      <div class="column is-one-third">
+        <div class="job-position">
+          <div class="container">
+            <div class="card">
+              <div class="card-content">
+                <div class="content">
+                  <label class="label">
+                    Few guidelines
+                  </label>
+                  <ul class="list-unstyled">
+                    <li>Minimum password length 8 characters</li>
+                    <li>Password must contain the following categories:</li>
+                    <ul>
+                      <li>English uppercase characters (A-Z)</li>
+                      <li>English lowercase characters (a-z)</li>
+                      <li>Base digits (0-9)</li>
+                      <li>Only one non alphanumeric characters (e.g.,@,%,#,!)</li>
+                    </ul>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
-</section>
-
+</div>
 {% endblock %}
 
