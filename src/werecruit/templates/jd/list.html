@@ -26,82 +26,23 @@
             <thead>
               <tr class="header">
                 <th style="color: #8c8c8c;">Client<span style="margin-left: 10px;">
-                    <form id="sort_client" action="/jd/showAllPage" style="display: inline;" onsubmit="onclientSubmit">
-                      <input type="hidden" name="order_by" value="client">
-                      <input type="hidden" name="order" value="{{toggles.client.orderToggle}}">
-                      <!-- {{toggles}} -->
-                      <a href="" onclick="sortByClient()">
-                        <i class="{{toggles.client.arrowToggle}}"></i></a>
-                    </form>
-                    <script>
-                      const onclientSubmit = (e) => {
-                        e.preventDefault();
-
-                      }
-                      const sortByClient = (e) => {
-                        document.getElementById("sort_client").submit();
-                      }
-                    </script>
+                    <a href="?order_by=client&order={{toggles.client.orderToggle}}"><i class="{{toggles.client.arrowToggle}}"></i></a></a>
                   </span>
                 </th>
                 <th style="color: #8c8c8c;">Status <span style="margin-left: 10px;">
-                    <form id="sort_status" action="/jd/showAllPage" style="display: inline;">
-                      <input type="hidden" name="order_by" value="status">
-                      <input type="hidden" name="order" value="{{toggles.status.orderToggle}}">
-
-                      <script>
-                        function sortByStatus() {
-                          document.getElementById("sort_status").submit();
-                        }
-                      </script>
-                      <a href="" onclick="sortByStatus()">
-                        <i class="{{toggles.status.arrowToggle}}"></i> </a>
-                    </form>
+                    <a href="?order_by=status&order={{toggles.status.orderToggle}}"><i class="{{toggles.status.arrowToggle}}"></i></a></a>   
                   </span>
                 </th>
                 <th style="color: #8c8c8c;">Title <span style="margin-left: 10px;">
-                    <form id="sort_title" action="/jd/showAllPage" style="display: inline;">
-                      <input type="hidden" name="order_by" value="title">
-                      <input type="hidden" name="order" value="{{toggles.title.orderToggle}}">
-
-                      <script>
-                        function sortByTitle() {
-                          document.getElementById("sort_title").submit();
-                        }
-                      </script>
-                      <a href="" onclick="sortByTitle()">
-                        <i class="{{toggles.title.arrowToggle}}"></i> </a>
-                    </form>
+                    <a href="?order_by=title&order={{toggles.title.orderToggle}}"><i class="{{toggles.title.arrowToggle}}"></i></a></a>     
                   </span>
                 </th>
                 <th style="color: #8c8c8c;">Open Date <span style="margin-left: 10px;">
-                    <form id="sort_open_date" action="/jd/showAllPage" style="display: inline;">
-                      <input type="hidden" name="order_by" value="open_date">
-                      <input type="hidden" name="order" value="{{toggles.open_date.orderToggle}}">
-
-                      <script>
-                        function sortByOpenDate() {
-                          document.getElementById("sort_open_date").submit();
-                        }
-                      </script>
-                      <a href="" onclick="sortByOpenDate()">
-                        <i class="{{toggles.open_date.arrowToggle}}"></i> </a>
-                    </form>
+                    <a href="?order_by=open_date&order={{toggles.open_date.orderToggle}}"><i class="{{toggles.open_date.arrowToggle}}"></i></a></a>
                   </span>
                 </th>
                 <th style="color: #8c8c8c;">Hiring Manager <span style="margin-left: 10px;">
-                    <form id="sort_hiring_manager" action="/jd/showAllPage" style="display: inline;">
-                      <input type="hidden" name="order_by" value="hiring_mgr_name">
-                      <input type="hidden" name="order" value="{{toggles.hiring_mgr_name.orderToggle}}">
-
-                      <script>
-                        function sortByHRManager() {
-                          document.getElementById("sort_hiring_manager").submit();
-                        }
-                      </script>
-                      <a href="" onclick="sortByHRManager()">
-                        <i class="{{toggles.hiring_mgr_name.arrowToggle}}"></i></a>
-                    </form>
+                    <a href="?order_by=hiring_mgr_name&order={{toggles.hiring_mgr_name.orderToggle}}"><i class="{{toggles.hiring_mgr_name.arrowToggle}}"></i></a></a>
                   </span>
                 </th>
                 <th style="color: #8c8c8c;">Actions</th>
