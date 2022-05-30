@@ -25,12 +25,13 @@
                       </button>
                       <div class="sub-menu-1">
                         <ul>
+                          <li class="hover-me"><a href="#">All </a></li>
                           {% for status_category in appStatusCodesCatList %}
-                          <li class="hover-me"><a href="#">{{status_category.description}} </a><i class="fa fa-angle-right"></i>
+                          <li class="hover-me"><a href="?catStatusCode={{status_category.id}}">{{status_category.description}} </a><i class="fa fa-angle-right"></i>
                             <div class="sub-menu-2">
                               <ul>
                                 {% for status_sub_category in appStatusCodesSubCatList[status_category.id] %}
-                                <li><a href="#">{{status_sub_category.description}} </a></li>
+                                <li><a href="?subCatStatusCode={{status_sub_category.id}}">{{status_sub_category.description}} </a></li>
                                 {% endfor %}
                               </ul>
                           </li>

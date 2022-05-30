@@ -324,7 +324,7 @@ def get(id):
         dbUtils.returnToPool(db_con)
 
 
-def get_resumes_associated_with_job(job_id):
+def get_resumes_associated_with_job(job_id, cat_status_code=None,sub_cat_status_code=None):
     try:
         db_con = dbUtils.getConnFromPool()
         cursor = dbUtils.getNamedTupleCursor(db_con)
@@ -336,8 +336,21 @@ def get_resumes_associated_with_job(job_id):
 					from wr_resumes ,wr_jd_resumes
 					where wr_resumes.id = wr_jd_resumes.resume_id
 					and wr_jd_resumes.jd_id = %s """
-
+        
+        catStatusCodeQuery = """and wr_jd_resumes.status in
+                                (select id from resume_application_status_codes_sub_category
+                                    WHERE category_id = %s
+					                ORDER BY id ASC
+                                )"""
+        subCatstatusCodeQuery = """and wr_jd_resumes.status = %s"""
         params = (int(job_id),)
+        if cat_status_code is not None:
+            query += catStatusCodeQuery
+            params = (int(job_id), cat_status_code)
+        elif sub_cat_status_code is not None:
+            query += subCatstatusCodeQuery
+            params = (int(job_id), sub_cat_status_code)
+
         _logger.debug(cursor.mogrify(query, params))
         cursor.execute(query, params)
 

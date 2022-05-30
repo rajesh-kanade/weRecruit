@@ -897,10 +897,14 @@ def show_shortlist_resumes_page(job_id):
         job_id, retCode, msg)    
 
     # get all candidates who are currently associated with the job
-    (retCode, msg, shortlistedList) = jdUtils.get_resumes_associated_with_job(job_id)
+    cat_status_code = request.args.get('catStatusCode') if request.args.get(
+        'catStatusCode') else None
+    sub_cat_status_code = request.args.get('subCatStatusCode') if request.args.get(
+        'subCatStatusCode') else None
+    (retCode, msg, shortlistedList) = jdUtils.get_resumes_associated_with_job(
+        job_id, cat_status_code, sub_cat_status_code)
     assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch resumes associated with job  id {0}. Error code is {1}. Error message is {2}".format(
         job_id, retCode, msg)
-
     # changes 26/05/22
     (retCode, msg, appStatusCodesList) = resumeUtils.list_application_status_codes()
     assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch application status codes. Error code is {0}. Error message is {1}".format(
