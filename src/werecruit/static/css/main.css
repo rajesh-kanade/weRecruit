@@ -192,10 +192,10 @@ hr {
 .body-background {
   background-color: #f6f6f6;
 }
-
+/* 
 .has-shadow {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.1) inset;
-}
+} */
 
 /* .has-shadow:before, */
 /* .has-shadow:after {
@@ -1346,4 +1346,10 @@ td .fa {
   margin-left: -18%;
   margin-right: 2%;
   padding-right: 2%;
+}
+.navbar {
+  min-height: 4rem;
+}
+.navbar-item {
+  font-size: 14px;
 }
