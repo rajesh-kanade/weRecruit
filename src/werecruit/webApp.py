@@ -381,7 +381,7 @@ def show_jd_edit_page(id):
 
         
         form.city.data = jd.city_id
-        print(jd.city_id)
+        # print(jd.city_id)
         countryNames = None
         try:
             countryRecords = jdUtils.get_country_names()
