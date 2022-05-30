@@ -1323,11 +1323,11 @@ table th{
 }
 
 td span {
-  margin-left: 3%;
+  margin-left: 5%;
 }
 
 td .fa {
-  font-size: medium;
+  font-size: large;
 }
 .is-size-7{
   color: #222 !important;
@@ -1350,7 +1350,12 @@ td .fa {
   margin-right: 2%;
   padding-right: 2%;
 }
-
+.table thead th, .table thead th a {
+  color: #8c8c8c;
+}
+.table thead th span {
+  margin-left: 5%;
+}
 #statusFilterBlock {
   padding-top: 0%;
   padding-bottom: 0%;
