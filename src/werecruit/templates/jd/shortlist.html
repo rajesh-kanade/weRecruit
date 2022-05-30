@@ -8,27 +8,64 @@
         <thead>
           <tr class="{{theme_bg_color}}">
             <!-- <th class="has-text-centered {{theme_text_color}}">RESUME ID</th> -->
-            <th class="has-text-centered {{theme_text_color}}">Name</th>
-            <th class="has-text-centered {{theme_text_color}}">Email</th>
-            <th class="has-text-centered {{theme_text_color}}">Phone</th>
-            <th class="has-text-centered {{theme_text_color}}">Status</th>
+            <th class="has-text-left {{theme_text_color}}">Name</th>
+            <th class="has-text-left {{theme_text_color}}">Email</th>
+            <th class="has-text-left {{theme_text_color}}">Phone</th>
+            <th class="has-text-left {{theme_text_color}}">
+              <div class="has-text-left">
+                <!-- <h4>Status</h4> -->
+                <div class="menu-bar">
+                  <ul>
+                    <li>
+                      <button class="new-button" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <span>Status</span>
+                        <span class="icon is-small">
+                          <i  class="fa fa-filter" aria-hidden="true"></i>
+                        </span>
+                      </button>
+                      <div class="sub-menu-1">
+                        <ul>
+                          <li class="hover-me"><a href="#">All </a></li>
+                          {% for status_category in appStatusCodesCatList %}
+                          <li class="hover-me"><a href="?catStatusCode={{status_category.id}}">{{status_category.description}} </a><i class="fa fa-angle-right"></i>
+                            <div class="sub-menu-2">
+                              <ul>
+                                {% for status_sub_category in appStatusCodesSubCatList[status_category.id] %}
+                                <li><a href="?subCatStatusCode={{status_sub_category.id}}">{{status_sub_category.description}} </a></li>
+                                {% endfor %}
+                              </ul>
+                          </li>
+                          {% endfor %}
+              
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </th>
             <th class="has-text-left {{theme_text_color}}">Action</th>
           </tr>
         </thead>
       {%endif %}
       <tr class="{{theme_bg_color}}">
         <!-- <td class="has-text-centered {{theme_text_color}}">{{ resume.id }}</td> -->
-        <td class="has-text-centered {{theme_text_color}}">{{ resume.name }}</td>
-        <td class="has-text-centered {{theme_text_color}}">{{ resume.email }}</td> 
-        <td class="has-text-centered {{theme_text_color}}">{{ resume.phone }}</td>
-        <td class="has-text-centered {{theme_text_color}}">{{ resume.status }}-{{resume.description}}</td>
+        <td class="has-text-left {{theme_text_color}}">{{ resume.name }}</td>
+        <td class="has-text-left {{theme_text_color}}">{{ resume.email }}</td> 
+        <td class="has-text-left {{theme_text_color}}">{{ resume.phone }}</td>
+        <td class="has-text-left {{theme_text_color}}">{{resume.description}}</td>
         <td class="has-text-left{{theme_text_color}}">
           <div class ="field is-grouped" data-turbo="false">
             <a title="shortlist"  href="/jd/shortlist/?resume_id={{resume.id}}&job_id={{job_id}}"><i class="fa fa-bookmark"></i></abbr></a>
-        <span ><a title="show summary page" href="/jd/showSummaryPage/{{jd.id}}">
-   <i class="fa fa-edit"></i></a></span>
+        <!-- <span ><a title="show summary page" href="/jd/showSummaryPage/{{jd.id}}">
+   <i class="fa fa-list-alt" aria-hidden="true"></i>
+</a></span> -->
              <span ></span><a title="download" href="/resume/download/{{resume.id}}?src=jd-shortlist-page"><i
                 class="fa fa-download"></i></a></span>
+            <span>
+              <a href="/jd/showJobAppUpdatePage?resume_id={{resume.id}}&job_id={{jd.id}}" title="Update Status">
+                <i class="fa fa fa-pencil-square-o"></i>
+              </a>
+            </span>
           </div>
         </td>       
       </tr>
