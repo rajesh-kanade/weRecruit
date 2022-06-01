@@ -181,7 +181,7 @@ def login_required(func):
     def secure_function(*args, **kwargs):
         if "user_id" not in session:
             flash(
-                "You are not authenticated. Please login to access this page.", "is-danger")
+                "Session expired . Please login to access this page.", "is-danger")
             return redirect(url_for("show_signin_page"))
 
         return func(*args, **kwargs)
