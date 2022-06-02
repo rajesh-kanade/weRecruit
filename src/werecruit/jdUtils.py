@@ -8,7 +8,7 @@ import constants
 import resumeUtils
 
 import decimal
-
+from commonUtils import getFileExtension
 #from dotenv import load_dotenv , find_dotenv
 import logging
 _logger = logging.getLogger()
@@ -76,7 +76,6 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 
         _logger.debug('Client JD file name is {0}'.format(jd_file_name))
         
-        from resumeUtils import getFileExtension
         ext = getFileExtension(jd_file_name)
         if ext not in ['docx','pdf']:
             raise Exception('unsupported jd file type {0}'.format(ext))
