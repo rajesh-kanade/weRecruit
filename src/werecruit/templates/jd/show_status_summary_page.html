@@ -17,7 +17,6 @@
               <tbody>
               {% for ss in statusSummary %}
                 {%if loop.first %}
-
                   <thead>
                     <tr class="{{theme_bg_color}}">
                       <th class="has-text-centered {{theme_text_color}}">STATUS CODE</th>
@@ -26,36 +25,20 @@
 
                   </tr>
                   </thead>
-                {%endif %}
+                {% else %}
                 <tr class="{{theme_bg_color}}">
                   <td class="has-text-centered {{theme_text_color}}">{{ ss.status }}</td>
                   <td class="has-text-centered {{theme_text_color}}">{{ ss.description }}</td>
                   <td class="has-text-centered {{theme_text_color}}">{{ ss.count }}</td>
                 </tr>
-              {% else %}
-              <table class="table">
-                <tbody>
-                  <thead>
-                    <tr class="header">
-                      <td class="has-text-left ">Status</td>
-                      <td class="has-text-left ">Count</td>
-                      
-
-                    </tr>
-                  <tr class="{{theme_bg_color}}">
-                    
-                    <th class="has-text-left {{theme_text_color}}">Shortlisted</th>
-                    <th class="has-text-left">2</th>
-                  </tr>
-                  <tr class="{{theme_bg_color}}">
-                    
-                    <th class="has-text-left {{theme_text_color}}">Hiring Manager Interview Sceduled</th>
-                    <th class="has-text-left">1</th>
-                  </tr>
-                  </thead>
-                </tbody>
-              </table>
+                {%endif %}
+                {% else %}
+                <div class="notification is-warning">
+                  No shortlisted candidates found for this job position.
+                </div>
               {% endfor %}
+              
+
             </tbody>
             </table>
           </div>  
