@@ -75,6 +75,11 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
             open_date = datetime.now(tz=timezone.utc)
 
         _logger.debug('Client JD file name is {0}'.format(jd_file_name))
+        
+        from resumeUtils import getFileExtension
+        ext = getFileExtension(jd_file_name)
+        if ext not in ['docx','pdf']:
+            raise Exception('unsupported jd file type {0}'.format(ext))
         if (jd_file_name is None):
             file_data = None
         else:
