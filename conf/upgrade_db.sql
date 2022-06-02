@@ -215,3 +215,10 @@ INSERT INTO public.resume_application_status_codes_sub_category(
     (170, 'No Show', 8);
 
 /* ******** end upgrade prod on 25/05/2022 for status codes category and sub category *****/
+
+/***** changed precision for max_years_of_exp for wr_jds *****/
+
+ALTER TABLE wr_jds
+ALTER COLUMN max_yrs_of_exp TYPE numeric(5,2);
+
+/*** end upgrade on 2/06/2022 ****/
