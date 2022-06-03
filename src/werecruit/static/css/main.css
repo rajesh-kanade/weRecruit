@@ -955,11 +955,12 @@ label{
 .mytabs label {
   padding: 25px;
   background: #4ccd3d;
-  font-weight: bold;
+  /* font-weight: bold; */
   width: 35%;
   margin-bottom: 0%;
   margin-right: 2%;
   color: #fff;
+  font-size: larger;
 }
 
 .mytabs .tab {
