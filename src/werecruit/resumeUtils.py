@@ -174,14 +174,14 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
     cursor = db_con.cursor()
     try:
         _logger.info(candidateName)
-        if not candidateName.strip():
+        if not bool(candidateName):
             return(RetCodes.empty_ent_attrs_error.value, "Candidate Name empty or null.", None)
 
         _logger.info(candidateEmail)
-        if not candidateEmail.strip():
+        if not bool(candidateEmail):
             return(RetCodes.empty_ent_attrs_error.value, "Candidate Email empty or null.", None)
 
-        if not candidatePhone.strip():
+        if not bool(candidatePhone):
             return(RetCodes.empty_ent_attrs_error.value, "Candidate Phone empty or null.", None)
 
         if not recruiterID:
