@@ -181,7 +181,7 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
         if not candidateEmail.strip():
             return(RetCodes.empty_ent_attrs_error.value, "Candidate Email empty or null.", None)
 
-        if not bool(candidatePhone):
+        if not candidatePhone.strip():
             return(RetCodes.empty_ent_attrs_error.value, "Candidate Phone empty or null.", None)
 
         if not recruiterID:
