@@ -1157,7 +1157,7 @@ def show_clientwise_job_application_status_summary_report_page():
         
         page = request.args.get(get_page_parameter(), type=int, default=1)
         per_page = request.args.get(
-            get_per_page_parameter(), type=int, default=constants.PAGE_SIZE1)
+            get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
         offset = (page - 1) * per_page
         total = len(clientSummary)
         from math import ceil
