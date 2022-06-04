@@ -40,11 +40,13 @@
 
         <div class="field">
           <label class="label {{theme_text_color}} has-text-left">{{form.password.label}}</label>
-          <div class="control has-icons-left has-icons-right">
+          <div class="control has-text-left  has-icons-right">
             {{ form.password(class='input', placeholder='Enter Password') }}
-            <span class="icon is-small is-left">
-              <i class="fas fa-lock"></i>
+            <div class="icon1">
+            <span onClick="showPassword('editPassToggle')" >
+              <i class="fa fa-eye" id="editPassToggle" ></i>
             </span>
+          </div>
           </div>
         </div>
 
@@ -67,6 +69,22 @@
       </form>
     </div>
   </div>
+  <script>
+    function showPassword(inputName) {
+      var icon=document.getElementById(inputName);
+      switch(inputName){
+      
+        case "editPassToggle":
+          var x = document.getElementById("password1")
+      }
+      if (x.type === "password") {
+        x.type = "text";
+      } else {
+        x.type = "password";
+      }
+      icon.classList.toggle("fa-eye-slash")
+    }
+  </script>
 </section>
 </div>
 

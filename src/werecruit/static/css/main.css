@@ -1396,3 +1396,22 @@ margin-left: -10%;
   padding-right: 15%;
   padding-bottom: 5%;
 }
+/*add/edit page */
+#editPassToggle{
+  margin-right:170%;
+}
+.icon1{
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+ .control.has-icons-right .icon1 {
+  cursor: pointer;
+  position: absolute;
+  width: 2.5em;
+  margin-top: 1%;
+  margin-left: -6vh;
+  z-index: 4;
+}
