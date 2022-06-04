@@ -1338,7 +1338,7 @@ td .fa {
 .add-user .columns:not(.is-desktop) {
   display: block;
 }
-.revenue .button-revenue{
+.button-revenue{
   margin-left: -10%;
   margin-bottom: 2%;
 }
@@ -1382,4 +1382,17 @@ margin-left: -10%;
 
 .is-text-gray{
   color: #f6f6f6;
+}
+.show-clientwise-summary{
+  overflow: none;
+}
+.show-clientwise-summary .container{
+  margin-left: 10%;
+}
+.show-clientwise-summary .table.is-fullwidth{
+  width: 70%;
+} 
+.show-clientwise-summary .pagination{
+  padding-right: 15%;
+  padding-bottom: 5%;
 }

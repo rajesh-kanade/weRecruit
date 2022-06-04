@@ -1135,7 +1135,23 @@ def show_clientwise_summary_report_page():
         session["tenant_id"])
     assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise summary report"
 
-    return render_template("reports/show_clientwise_summary_reportpage.html", clientSummary=clientSummary)
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = request.args.get(
+            get_per_page_parameter(), type=int, default=constants.PAGE_SIZE1)
+    offset = (page - 1) * per_page
+    total = len(clientSummary)
+    from math import ceil
+    totalPages = ceil(total/per_page)
+
+    def getPages(offset=0, per_page=1):
+            return  clientSummary[offset: offset + per_page]
+
+    pagination_JDList = getPages(offset=offset, per_page=per_page)
+    pagination = Pagination(page=page, per_page=per_page, total=total)        
+
+    return render_template("reports/show_clientwise_summary_reportpage.html",
+                 clientSummary=pagination_JDList, request=request, page=page,
+                 per_page=1, pagination=pagination, totalPages=totalPages)
 
 
 @app.route('/reports/showClientWiseJobApplicationStatusSummary', methods=['GET'])
