@@ -1360,3 +1360,26 @@ td .fa {
   padding-top: 0%;
   padding-bottom: 0%;
 }
+/*status summary*/
+.container-t{
+  width:80%;
+  margin-left: 15%;
+}
+.has-text-success-light-new{
+color: rgb(56, 165, 189);
+}
+.container-t{
+width:85%;
+margin-left: 12%;  
+}
+.container-t{
+background-color: #f3f4f6;
+height:100vh;
+}
+.container-t .button.is-success{
+margin-left: -10%;
+}
+
+.is-text-gray{
+  color: #f6f6f6;
+}

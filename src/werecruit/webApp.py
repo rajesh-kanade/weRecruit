@@ -1141,13 +1141,41 @@ def show_clientwise_summary_report_page():
 @app.route('/reports/showClientWiseJobApplicationStatusSummary', methods=['GET'])
 @login_required
 def show_clientwise_job_application_status_summary_report_page():
+    orderBy = request.args.get("order_by", None)
+    order = request.args.get("order", None)
+    toggles = {'client': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'client' and order == 'DESC') else 'fa fa-arrow-up',
+                          'orderToggle': 'DESC' if order == 'ASC' else 'ASC'},
+                'title': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'title' and order == 'DESC') else 'fa fa-arrow-up',
+                         'orderToggle': 'DESC' if order == 'ASC' else 'ASC'}
+              }
 
-    (retCode, msg, clientSummary) = reports.get_client_wise_job_application_status_summary_report(
-        session["tenant_id"])
-    assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise job application summary report"
+    results = reports.get_client_wise_job_application_status_summary_report(
+        session.get('tenant_id'), orderBy=orderBy, order=order)
+    # print(orderBy)
+    if (results[0] == reports.RetCodes.success.value):
+        clientSummary = results[2]
+        
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        per_page = request.args.get(
+            get_per_page_parameter(), type=int, default=constants.PAGE_SIZE1)
+        offset = (page - 1) * per_page
+        total = len(clientSummary)
+        from math import ceil
+        totalPages = ceil(total/per_page)
 
-    return render_template("reports/show_clientwise_job_app_summary_reportpage.html", clientSummary=clientSummary)
+        def getPages(offset=0, per_page=1):
+            return  clientSummary[offset: offset + per_page]
 
+        pagination_JDList = getPages(offset=offset, per_page=per_page)
+        pagination = Pagination(page=page, per_page=per_page, total=total)
+        for cs in clientSummary:
+            _logger.debug(cs.title)
+           
+        return render_template("reports/show_clientwise_job_app_summary_reportpage.html",  clientSummary=pagination_JDList, request=request, page=page, per_page=1, pagination=pagination, toggles=toggles, totalPages=totalPages)
+    else:
+        flash("Failed to fetch client wise job application summary report", "is-danger")
+        return render_template("reports/show_clientwise_job_app_summary_reportpage.html",  clientSummary=None)
+    
 
 @app.route('/reports/showClientWiseRevenueOpportunitySummary', methods=['GET'])
 @login_required
