@@ -1197,13 +1197,42 @@ def show_clientwise_job_application_status_summary_report_page():
 @app.route('/reports/showClientWiseRevenueOpportunitySummary', methods=['GET'])
 @login_required
 def show_clientwise_revenue_opportunity_summary_report_page():
+    orderBy = request.args.get("order_by", None)
+    order = request.args.get("order", None)
+    toggles = {"client": {
+                "arrowToggle": "fa fa-arrow-down"
+                if (orderBy == "client" and order == "DESC")
+                else "fa fa-arrow-up",
+                "orderToggle": "DESC" if order == "ASC" else "ASC",
+            }
+              }
+    results = reports.get_client_wise_revenue_opportunity_report(
+        session.get('tenant_id'), orderBy=orderBy, order=order)
+    # print(orderBy)
+    if (results[0] == reports.RetCodes.success.value):
+        clientSummary = results[2]
+        
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        per_page = request.args.get(
+            get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+        offset = (page - 1) * per_page
+        total = len(clientSummary)
+        from math import ceil
+        totalPages = ceil(total/per_page)
 
-    (retCode, msg, clientSummary) = reports.get_client_wise_revenue_opportunity_report(
-        session["tenant_id"])
-    assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise job application summary report"
+        def getPages(offset=0, per_page=1):
+            return  clientSummary[offset: offset + per_page]
 
-    return render_template("reports/show_clientwise_revenue_opportunity_reportpage.html", clientSummary=clientSummary)
-
+        pagination_JDList = getPages(offset=offset, per_page=per_page)
+        pagination = Pagination(page=page, per_page=per_page, total=total)
+        for cs in clientSummary:
+            _logger.debug(cs.title)
+           
+        return render_template("reports/show_clientwise_revenue_opportunity_reportpage.html",  clientSummary=pagination_JDList, request=request, page=page, per_page=1, pagination=pagination, toggles=toggles, totalPages=totalPages)
+    else:
+        flash("Failed to fetch client wise revenue opportunity report", "is-danger")
+        return render_template("reports/show_clientwise_revenue_opportunity_reportpage.html",  clientSummary=None)
+    
 
 @app.route('/user/showResetPassword', methods=['GET'])
 @login_required
