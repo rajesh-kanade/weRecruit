@@ -40,7 +40,7 @@ def get_client_wise_summary_report(tenantID):
 		dbUtils.returnToPool(db_con)	
 
 
-def get_client_wise_job_application_status_summary_report(tenantID):
+def get_client_wise_job_application_status_summary_report(tenantID, orderBy=None, order=None):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
