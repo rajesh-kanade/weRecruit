@@ -74,13 +74,13 @@ class JDForm(FlaskForm):
     country = SelectField('Country')
     city = SelectField('City')
 
-    b=[]
-    a=[]
-    for i in range(1,101):
-        a.append(i)
+    expChoice = [i for i in range(100)]
 
-    min_yrs_of_exp = SelectField("Minimum years of Experience",choices=a,default=0,validators=[DataRequired()])
-    max_yrs_of_exp = SelectField("Maximum years of Experience",choices=a,default=0,validators=[DataRequired(NumberRange(min=0,max=99,message="Min experience needs be in range of 0 to 99"))])
+    min_yrs_of_exp = SelectField("Minimum years of Experience",
+                                 choices=expChoice, default=0, validators=[DataRequired()])
+    max_yrs_of_exp = SelectField("Maximum years of Experience", choices=expChoice, default=0, validators=[
+                                 DataRequired(NumberRange(min=0, max=99, message="Min experience needs be in range of 0 to 99"))])
+
     
     primary_skills = TextAreaField('Primary Skills', validators=[DataRequired('Enter mandatory or good to have skillsets.')])
     secondary_skills = TextAreaField('Secondary Skills', validators=[DataRequired('Enter mandatory or good to have skillsets.')])
