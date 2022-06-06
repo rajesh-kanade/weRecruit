@@ -26,8 +26,8 @@
                       <a href="/reports/showClientWiseJobApplicationStatusSummary?order_by=title&order={{toggles.title.orderToggle}}"><i class="{{toggles.title.arrowToggle}}"></i></a></a>
                     </span></th>
                     
-                    <th class="has-text-left is-text-gray">Resume Shortlisted</th>
-                    <th class="has-text-left is-text-gray">Initial Screening</th>
+                    <th class="has-text-left is-text-gray">Resume<br>Shortlisted</th>
+                    <th class="has-text-left is-text-gray">Initial<br>Screening</th>
                     <th class="has-text-left is-text-gray">Round 1</th>
                     <th class="has-text-left is-text-gray">Round 2</th>
                     <th class="has-text-left is-text-gray">Hiring Manager</th>
@@ -87,15 +87,15 @@
                 </td>
                 <td>
                   <ul>
-                    <li class="has-text-left {{theme_text_color}}" title ="R1 Interviews scheduled">Pending with HR - {{ cs.offer_pending if cs.offer_pending !=0 else '' }}</li>
+                    <li class="has-text-left {{theme_text_color}}" title ="R1 Interviews scheduled">Pending(HR) - {{ cs.offer_pending if cs.offer_pending !=0 else '' }}</li>
                     <li class="has-text-left {{theme_text_color}}" title =" R1 Interviews cleared"> Released - {{ cs.offer_released if cs.offer_released !=0 else '' }}</li>
                     <li class="has-text-left has-text-success-light-new" title =" R1 Interviews rejected">Accepted -{{ cs.offer_accepted if cs.offer_accepted !=0 else ''}}</li>
                   </ul>
                 </td>
                 <td>
                   <ul>
-                    <li class="has-text-left has-text-success" title ="Joined">Done - {{ cs.joined if cs.joined !=0 else 0}}</li>
-                    <li class="has-text-left has-text-danger" title ="No shows">No Show - {{ cs.no_show if cs.no_show !=0 else 0}}</li>
+                    <li class="has-text-left has-text-success" title ="Joined">Done - {{ cs.joined if cs.joined !=0 else ''}}</li>
+                    <li class="has-text-left has-text-danger" title ="No shows">No Show - {{ cs.no_show if cs.no_show !=0 else ''}}</li>
                     
                   </ul>
                   
