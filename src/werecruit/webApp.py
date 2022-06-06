@@ -189,12 +189,31 @@ def login_required(func):
     return secure_function
 
 
-@app.route('/showHomePage')
+@app.route('/showHomePage', methods=['GET','POST'])
 @login_required
 def show_home_page():
+    (retCode, msg, clients) = (retCode, msg, clientSummary) = reports.get_client_names_by_tenant_id(
+        session["tenant_id"])
+    assert retCode == reports.RetCodes.success.value, "Failed to fetch clients by tenant_id"
+    activeClient = int(request.args.get('client') if request.args.get(
+        'client') else clients[0].client_id)
+    print(activeClient)
+    (retCode, msg, job_titles) = (retCode, msg,
+                                  clientSummary) = reports.get_jod_titles_by_client_id(activeClient)
+    assert retCode == reports.RetCodes.success.value, "Failed to fetch job_titles by client_id and tenant_id"
+    activeJobTitle = request.args.get('job_title') if request.args.get(
+        'job_title') else job_titles[0].title
+    print(activeJobTitle)
 
-    return render_template('home.html')
-
+    (retCode, msg, clientSummary) = reports.get_client_and_title_wise_application_status_report(
+        activeClient, activeJobTitle)
+    assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise job application summary report"
+    return render_template('home.html',
+                            activeClient=activeClient,
+                            activeJobTitle=activeJobTitle,
+                            clients=clients,
+                            job_titles=job_titles,
+                            cs=clientSummary[0])
 
 @app.route('/user/doSignout', methods=['GET'])
 @login_required

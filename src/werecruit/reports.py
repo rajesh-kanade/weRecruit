@@ -126,6 +126,111 @@ def get_client_wise_revenue_opportunity_report(tenantID, orderBy= None, order=No
 		cursor.close()
 		dbUtils.returnToPool(db_con)
 
+
+def get_client_and_title_wise_application_status_report(clientID, jobTitle):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+
+		query = """
+		select id, client, title,
+			(jd_stats->'0') as shortlisted,
+			(jd_stats->'10') as R1_Interview_Scheduled,
+			(jd_stats->'20') as R1_Interview_Cleared,
+			(jd_stats->'30') as R1_Interview_Failed,
+			(jd_stats->'31') as R1_Interview_No_Show,
+			(jd_stats->'40') as R2_Interview_Scheduled,
+			(jd_stats->'50') as R2_Interview_Cleared,
+			(jd_stats->'60') as R2_Interview_Failed,
+			(jd_stats->'61') as R2_Interview_No_Show,
+			(jd_stats->'70') as HM_Interview_Scheduled,
+			(jd_stats->'80') as HM_Interview_Cleared,
+			(jd_stats->'90') as HM_Interview_Failed,
+			(jd_stats->'91') as HM_Interview_No_Show,
+			(jd_stats->'100') as HR_Interview_Scheduled,
+			(jd_stats->'110') as HR_Interview_Cleared,
+			(jd_stats->'120') as HR_Interview_Failed,
+			(jd_stats->'121') as HR_Interview_No_Show,
+			(jd_stats->'130') as Offer_Pending,
+			(jd_stats->'140') as Offer_Released,
+			(jd_stats->'150') as Offer_Accepted,
+			(jd_stats->'160') as Joined,
+			(jd_stats->'170') as No_show
+			from wr_jds 
+			where status = 0
+			and client_id=%s
+			and title=%s
+		"""
+
+		params = (clientID, jobTitle)
+		_logger.debug(cursor.mogrify(query, params))
+		cursor.execute(query, params)
+
+		clientSummaryList = cursor.fetchall()
+
+		return(RetCodes.success.value, "Client wise summary report fetched successfully from db for client_id {0}".format(clientID), clientSummaryList)
+
+	except Exception as dbe:
+		_logger.error(dbe)
+		return (RetCodes.server_error, str(dbe), None)
+
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)
+		
+def get_client_names_by_tenant_id(tenantID):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+
+		query = """
+				select * from wr_clients
+				where tenant_id = %s
+				order by client_id
+				"""
+
+		params = (int(tenantID),)
+		_logger.debug(cursor.mogrify(query, params))
+		cursor.execute(query, params)
+
+		clientList = cursor.fetchall()
+
+		return(RetCodes.success.value, "Client List fetched successfully from db for tenant ID {0}".format(tenantID), clientList)
+
+	except Exception as dbe:
+		_logger.error(dbe)
+		return (RetCodes.server_error, str(dbe), None)
+
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)
+
+def get_jod_titles_by_client_id(clientID):
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+
+		query = """
+				select title from wr_jds
+				where client_id = %s
+				order by title
+				"""
+		params = (clientID,)
+		_logger.debug(cursor.mogrify(query, params))
+		cursor.execute(query, params)
+
+		job_titles_list = cursor.fetchall()
+
+		return(RetCodes.success.value, "Job Title List fetched successfully from db for client {}".format(clientID), job_titles_list)
+
+	except Exception as dbe:
+		_logger.error(dbe)
+		return (RetCodes.server_error, str(dbe), None)
+
+	finally:
+		cursor.close()
+		dbUtils.returnToPool(db_con)
+
 if __name__ == "__main__":
 
 	#(code,msg,resumeList) = get_resumes_not_associated_with_job(18)
