@@ -76,13 +76,14 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 
         _logger.debug('Client JD file name is {0}'.format(jd_file_name))
         
-        ext = getFileExtension(jd_file_name)
-        if ext not in ['docx','pdf']:
-            raise Exception('unsupported jd file type {0}'.format(ext))
         if (jd_file_name is None):
             file_data = None
         else:
-            file_data = bytes(open(jd_file_name, "rb").read())
+            ext = getFileExtension(jd_file_name)
+            if ext not in ['docx','pdf']:
+                raise Exception('unsupported jd file type {0}'.format(ext))
+            else:
+                file_data = bytes(open(jd_file_name, "rb").read())
 
         if (int(id) == constants.NEW_ENTITY_ID):
             # insert a record in user table
