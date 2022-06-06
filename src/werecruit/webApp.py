@@ -197,13 +197,11 @@ def show_home_page():
     assert retCode == reports.RetCodes.success.value, "Failed to fetch clients by tenant_id"
     activeClient = int(request.args.get('client') if request.args.get(
         'client') else clients[0].client_id)
-    print(activeClient)
     (retCode, msg, job_titles) = (retCode, msg,
                                   clientSummary) = reports.get_jod_titles_by_client_id(activeClient)
     assert retCode == reports.RetCodes.success.value, "Failed to fetch job_titles by client_id and tenant_id"
     activeJobTitle = request.args.get('job_title') if request.args.get(
         'job_title') else job_titles[0].title
-    print(activeJobTitle)
 
     (retCode, msg, clientSummary) = reports.get_client_and_title_wise_application_status_report(
         activeClient, activeJobTitle)
