@@ -18,9 +18,13 @@
 
                 <thead>
                   <tr class="{{theme_bg_color}}">
-                    <th class="has-text-left is-text-gray">Client</th>
+                    <th class="has-text-left is-text-gray">Client<span>
+                      <a href="/reports/showClientWiseJobApplicationStatusSummary?order_by=client&order={{toggles.client.orderToggle}}"><i class="{{toggles.client.arrowToggle}}"></i></a></a>
+                    </span></th>
                     <!-- <th class="has-text-left {{theme_text_color}}">JOB ID</th> -->
-                    <th class="has-text-left is-text-gray">Title</th>
+                    <th class="has-text-left is-text-gray">Title<span>
+                      <a href="/reports/showClientWiseJobApplicationStatusSummary?order_by=title&order={{toggles.title.orderToggle}}"><i class="{{toggles.title.arrowToggle}}"></i></a></a>
+                    </span></th>
                     
                     <th class="has-text-left is-text-gray">Resume Shortlisted</th>
                     <th class="has-text-left is-text-gray">Initial Screening</th>
