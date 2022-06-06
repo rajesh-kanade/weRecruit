@@ -94,27 +94,68 @@ def get_client_wise_job_application_status_summary_report(tenantID, orderBy=None
 		dbUtils.returnToPool(db_con)
 
 
-def get_client_wise_revenue_opportunity_report(tenantID, orderBy= None, order=None):
+def get_client_wise_revenue_opportunity_report(tenantID, orderBy= None, order=None, limit=1000):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
-
-		query = """
-			select client,id, title, positions, 
-			ctc_currency, 
-			sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
-			where status = 0  
-				and ctc_max is not NULL
-				and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
-				order by ro asc
-			"""
-
-		params = (int(tenantID),)
+		query, params = None, None
+		if orderBy == 'ctc_currency':
+			query = """
+				select client,id, title, positions, 
+				ctc_currency, 
+				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
+				where status = 0  
+					and ctc_max is not NULL
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					order by ctc_currency, id DESC limit %s
+				"""
+		elif orderBy == 'client':
+			query = """
+				select client,id, title, positions, 
+				ctc_currency, 
+				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
+				where status = 0  
+					and ctc_max is not NULL
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					order by client, id DESC limit %s
+				"""
+		elif orderBy == 'title':
+			query = """
+				select client,id, title, positions, 
+				ctc_currency, 
+				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
+				where status = 0  
+					and ctc_max is not NULL
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					order by title, id DESC limit %s
+				"""
+		elif orderBy == 'positions':
+			query = """
+				select client,id, title, positions, 
+				ctc_currency, 
+				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
+				where status = 0  
+					and ctc_max is not NULL
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					order by positions, id DESC limit %s
+				"""
+		else:
+			query = """
+				select client,id, title, positions, 
+				ctc_currency, 
+				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
+				where status = 0  
+					and ctc_max is not NULL
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					order by id DESC limit %s
+				"""
+		params = (tenantID,limit)
 		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		clientSummaryList =cursor.fetchall()
-
+		if order == 'DESC':
+			clientSummaryList = clientSummaryList[::-1]
 		return(RetCodes.success.value, "Client wise revenue opportunity summary report fetched successfully from db for tenant ID {0}".format(tenantID), clientSummaryList)
 
 

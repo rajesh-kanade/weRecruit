@@ -20,11 +20,19 @@
 
                 <thead>
                   <tr class="{{theme_bg_color}}">
-                    <th class="has-text-left is-text-gray">Client</th>
+                    <th class="has-text-left is-text-gray">Client<span>
+                      <a href="/reports/showClientWiseRevenueOpportunitySummary?order_by=client&order={{toggles.client.orderToggle}}"><i class="{{toggles.client.arrowToggle}}"></i></a></a>
+                    </span></th>
                     <!-- <th class="has-text-left {{theme_text_color}}">JOB ID</th> -->
-                    <th class="has-text-left is-text-gray">Job Title</th>
-                    <th class="has-text-left is-text-gray">Positions</th>                    
-                    <th class="has-text-left is-text-gray">Revenue Opportunity</th>
+                    <th class="has-text-left is-text-gray">Job Title<span>
+                      <a href="/reports/showClientWiseRevenueOpportunitySummary?order_by=title&order={{toggles.title.orderToggle}}"><i class="{{toggles.title.arrowToggle}}"></i></a></a>
+                    </span></th>
+                    <th class="has-text-left is-text-gray">Positions<span>
+                      <a href="/reports/showClientWiseRevenueOpportunitySummary?order_by=positions&order={{toggles.positions.orderToggle}}"><i class="{{toggles.positions.arrowToggle}}"></i></a></a>
+                    </span></th>                    
+                    <th class="has-text-left is-text-gray">Revenue Opportunity<span>
+                      <a href="/reports/showClientWiseRevenueOpportunitySummary?order_by=ctc_currency&order={{toggles.ctc_currency.orderToggle}}"><i class="{{toggles.ctc_currency.arrowToggle}}"></i></a></a>
+                    </span></th>
                     
                 </tr>
                 </thead>
