@@ -955,10 +955,13 @@ label{
 .mytabs label {
   padding: 25px;
   background: #4ccd3d;
-  font-weight: bold;
-  width: 30%;
+  /* font-weight: bold; */
+  width: 35%;
   margin-bottom: 0%;
   margin-right: 2%;
+  color: #fff;
+  font-size: larger;
+  text-align: center;
 }
 
 .mytabs .tab {
@@ -974,10 +977,13 @@ label{
 
 .mytabs input[type='radio']:checked + label + .tab {
   display: block;
+  color: #4ccd3d;
 }
 
 .mytabs input[type="radio"]:checked + label {
-  background: #fff;}
+  background: #fff;
+  color: #4ccd3d;
+}
 
 .block{
   overflow: auto;
