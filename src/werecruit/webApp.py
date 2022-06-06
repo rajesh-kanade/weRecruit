@@ -619,15 +619,15 @@ def search_resume():
     from math import ceil
     totalPages = ceil(total/per_page)
 
-    def getPages(offset=0, per_page=1):
+    def getPages(offset=0, per_page=constants.PAGE_SIZE):
         return resumeList[offset: offset + per_page]
 
     pagination_ResumeList = getPages(offset=offset, per_page=per_page)
     pagination = Pagination(page=page, per_page=per_page, total=total)
 
     if retCode == resumeUtils.RetCodes.success.value:
-        return render_template("resume/list.html", resumeList=resumeList, form=form, page=page,
-                               per_page=1,
+        return render_template("resume/list.html", resumeList=resumeList, form=form, page=1,
+                               per_page=constants.PAGE_SIZE,
                                pagination=pagination,
                                totalPages=totalPages)
     else:
