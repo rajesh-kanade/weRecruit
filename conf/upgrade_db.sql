@@ -215,3 +215,27 @@ INSERT INTO public.resume_application_status_codes_sub_category(
     (170, 'No Show', 8);
 
 /* ******** end upgrade prod on 25/05/2022 for status codes category and sub category *****/
+
+/* ***** 07/06/2022 wr_clients table creation, added column client_id on wr_jds  ****** */
+
+CREATE TABLE IF NOT EXISTS public.wr_clients
+(
+    client_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    client_name character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    tenant_id bigint,
+    CONSTRAINT client_name_unique UNIQUE (client_name),
+    CONSTRAINT tenant_id FOREIGN KEY (tenant_id)
+        REFERENCES public.tenants (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.wr_clients
+    OWNER to werecruit;
+
+ALTER TABLE IF EXISTS public.wr_jds
+add column client_id bigint;
+/* ******** end upgrade prod on 07/06/2022 for wr_clients *****/
