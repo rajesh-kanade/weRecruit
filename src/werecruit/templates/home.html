@@ -1,24 +1,15 @@
-{%extends "app_header.html" %}
-{%block content%}
+{%extends "app_header.html" %} {%block content%}
 <section class="container is-fullheight">
-  {% set messages = get_flashed_messages(with_categories = true ) %}
-  {% if messages %}
-  {% for category, message in messages %}
+  {% set messages = get_flashed_messages(with_categories = true ) %} {% if
+  messages %} {% for category, message in messages %}
   <div class="notification {{ category }}">{{ message }}</div>
-  {% endfor %}
-  {% endif %}
+  {% endfor %} {% endif %}
   <div class="columns is-centered">
-    <div class="column is-half">
-      {% include 'jd/interviews_card.html'%}
-    </div>
-    <div class="column is-half">
-      {% include 'jd/joining_card.html'%}
-    </div>
+    <div class="column is-half">{% include 'jd/interviews_card.html'%}</div>
+    <div class="column is-half">{% include 'jd/joining_card.html'%}</div>
   </div>
   <div class="columns is-centered">
-    <div class="column is-half">
-      {% include 'jd/trending_jds_card.html'%}
-    </div>
+    <div class="column is-half">{% include 'jd/trending_jds_card.html'%}</div>
     <div class="column is-half">
       {% include 'jd/high_priority_jds_card.html'%}
     </div>
@@ -27,7 +18,7 @@
 <div class="body-background" id="dashboard">
   <div class="job-position">
     <div class="container">
-      <div class="card" style="height: auto;">
+      <div class="card" style="height: auto">
         <div class="card-content white-background height-105">
           <div class="columns">
             <div class="column">
@@ -38,7 +29,10 @@
             <div class="column">
               <div class="content has-text-right">
                 <!-- <div class="background-img"></div> -->
-                <img src="static/images/home_bg.png" style="margin-top: -25px; height: auto; width: auto;">
+                <img
+                  src="static/images/home_bg.png"
+                  style="margin-top: -25px; height: auto; width: auto"
+                />
               </div>
             </div>
           </div>
@@ -48,664 +42,23 @@
   </div>
   <div class="job-position table-height">
     <div class="container">
-        <section class="application-form">
-          <section class="section topbar-title">
-            <h1 class="title">Client Name</h1>
-          </section>
-          <div class="client-name">
-            <div class="columns">
-              {% for client in clients %}
-              <div class="column is-one-fifth clientCard {{'active' if client.client_id == activeClient else 'false'}}"
-                id="{{client.client_id}}">
-                <div class="card">
-                  <div class="card-content white-background card-height-120">
-                    <a href="/showHomePage?client={{client.client_id}}">
-                      <p> {{client.client_name}}</p>
-                    </a>
-                    {# <img src="static/images/loadshare.png"> #}
-                  </div>
-                </div>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-          <turbo-frame id="dashboard">
-          <section class="section topbar-title">
-            <h1 class="title">Candidate Funnel</h1>
-          </section>
-          <div class="candidate-funnel">
-            <div class="columns">
-              {% for record in job_titles %}
-              <div class="column">
-                <div class="card">
-                  <div
-                    class="card-content white-background card-height-100 job-title-card {{'card-active' if record.title == activeJobTitle}}"
-                    id="jobCard-{{record.title}}">
-                    <a href="/showHomePage?client={{activeClient}}&job_title={{record.title}}"><p class="card-text">{{record.title}}</p></a>
-                  </div>
-                </div>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-          <section class="application-form margin-top-bottom-30">
-            <div class="table">
-              <table class="table is-fullwidth">
-                <thead>
-                  <tr class="header-home" style="border-bottom: 0px;">
-                    <th>
-                      <div class="columns">
-                        <div class="column has-text-center margin-left-20px">
-                          Resume <br> Shortlisted
-                        </div>
-                        <div class="has-text-right">
-                          <i class="arrow right"></i>
-                        </div>
-                      </div>
-                    </th>
-                    <th>
-                      <div class="columns">
-                        <div class="column has-text-center margin-left-20px">
-                          Initial <br> Screening
-                        </div>
-                        <div class="has-text-right">
-                          <i class="arrow right"></i>
-                        </div>
-                      </div>
-                    </th>
-                    <th>
-                      <div class="columns">
-                        <div class="column has-text-center margin-left-top-15px">
-                          Round 1
-                        </div>
-                        <div class="has-text-right">
-                          <i class="arrow right"></i>
-                        </div>
-                      </div>
-                    </th>
-                    <th>
-                      <div class="columns">
-                        <div class="column has-text-left margin-left-top-15px">
-                          Round 2
-                        </div>
-                        <div class="has-text-right">
-                          <i class="arrow right"></i>
-                        </div>
-                      </div>
-                    </th>
-                    <th>
-                      <div class="columns">
-                        <div class="column has-text-left margin-left-20px">
-                          Hiring <br> Manager
-                        </div>
-                        <div class="has-text-right">
-                          <i class="arrow right"></i>
-                        </div>
-                      </div>
-                    </th>
-                    <th>
-                      <div class="columns">
-                        <div class="column has-text-left margin-left-top-15px">
-                          HR
-                        </div>
-                        <div class="has-text-right">
-                          <i class="arrow right"></i>
-                        </div>
-                      </div>
-                    </th>
-                    <th>
-                      <div class="columns">
-                        <div class="column has-text-left margin-left-top-15px">
-                          Offer
-                        </div>
-                        <div class="has-text-right">
-                          <i class="arrow right"></i>
-                        </div>
-                      </div>
-                    </th>
-                    <th>
-                      <div class="margin-left-top-15px">Onboarding</div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="table-summary" style="padding-bottom: 20px; margin-top: 30px;">
-                    <td class="td-margin">
-                      <p style="font-size: 56px;">{{cs.shortlisted}} </p>
-                    </td>
-                    <td>
-                      <div class="columns margin-bottom-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Scheduled -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.r1_interview_scheduled }}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Cleared -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.r1_interview_cleared}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Failed -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.r1_interview_failed}}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="columns margin-bottom-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Scheduled -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.r2_interview_scheduled}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Rejected -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.r1_interview_failed}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Passed -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.r1_interview_cleared}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div class="no-show">
-                            No Show -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right no-show">
-                            {{cs.r1_interview_no_show}}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-
-                    <td>
-                      <div class="columns margin-bottom-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Scheduled -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.r2_interview_scheduled}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Rejected -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.r2_interview_failed}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Passed -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.r2_interview_cleared}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div class="no-show">
-                            No Show -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right no-show">
-                            {{cs.r2_interview_no_show}}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="columns margin-bottom-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Scheduled -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.hm_interview_scheduled}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Rejected -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.hm_interview_failed}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Passed -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.hm_interview_cleared}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div class="no-show">
-                            No Show -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right no-show">
-                            {{cs.hm_interview_no_show}}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="columns margin-bottom-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Scheduled -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.hr_interview_scheduled}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Rejected -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.hr_interview_failed}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Passed -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.hr_interview_cleared}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div class="no-show">
-                            No Show -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right no-show">
-                            {{cs.hr_interview_no_show}}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="columns margin-bottom-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Pending (HR) -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.offer_pending}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div>
-                            Released -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right">
-                            {{cs.offer_released}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div class="accepted">
-                            Accepted -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right accepted">
-                            {{cs.offer_accepted}}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div class="columns margin-bottom-0">
-                        <div class="column is-three-quarters done">
-                          <div>
-                            Done -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right done">
-                            {{cs.joined}}
-                          </div>
-                        </div>
-                      </div>
-                      <div class="line"></div>
-                      <div class="columns margin-bottom-top-0">
-                        <div class="column is-three-quarters">
-                          <div class="no-show">
-                            No Show -
-                          </div>
-                        </div>
-                        <div class="column">
-                          <div class="has-text-right no-show">
-                            {{cs.no_show}}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-          {# <section class="section topbar-title">
-            <h1 class="title">Pending Actions</h1>
-          </section>
-          <div class="pending-action">
-            <div class="columns">
-              <div class="column is-one-fifth">
-                <div class="card">
-                  <div class="card-content white-background">
-                    <div class="columns">
-                      <div class="column is-half">
-                        <div class="content has-text-left">
-                          <img src="static/images/analyst.png">
-                        </div>
-                      </div>
-                      <div class="column is-half">
-                        <div class="content has-text-center">
-                          <p>Client<br><span class="font-40 font-color-orange">0</span></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="column is-one-fifth">
-                <div class="card">
-                  <div class="card-content white-background">
-                    <div class="columns">
-                      <div class="column is-half">
-                        <div class="content has-text-left">
-                          <img src="static/images/support.png">
-                        </div>
-                      </div>
-                      <div class="column is-half">
-                        <div class="content has-text-center">
-                          <p>Recruitor<br><span class="font-40 font-color-blue">0</span></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="column is-one-fifth">
-                <div class="card">
-                  <div class="card-content white-background">
-                    <div class="columns">
-                      <div class="column is-half">
-                        <div class="content has-text-left">
-                          <img src="static/images/cv.png">
-                        </div>
-                      </div>
-                      <div class="column is-half">
-                        <div class="content has-text-center">
-                          <p>Candidate<br><span class="font-40 font-color-pink">0</span></p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> #}
-          {# <section class="section topbar-title">
-            <h1 class="title">Scheduled</h1>
-          </section>
-          <div class="scheduled">
-            <div class="columns">
-              <div class="column is-one-third">
-                <div class="card">
-                  <header class="card-header">
-                    <p class="card-header-title">
-                      Scheduled Interview
-                    </p>
-                  </header>
-                  <div class="card-content white-background">
-                    <div class="content has-text-right">
-                      <select>
-                        <option>Today</option>
-                        <option>Next 7 days</option>
-                        <option>Next 30 days</option>
-                      </select>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <div class="has-text-left">
-                          <p>name of candidate<br><span class="light-gray-color">DD/MMM/YYYY</span></p>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="has-text-right">
-                          <p class="light-gray-color">Time</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <div class="has-text-left">
-                          <p>name of candidate<br><span class="light-gray-color">DD/MMM/YYYY</span></p>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="has-text-right">
-                          <p class="light-gray-color">Time</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <div class="has-text-left">
-                          <p>name of candidate<br><span class="light-gray-color">DD/MMM/YYYY</span></p>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="has-text-right">
-                          <p class="light-gray-color">Time</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <div class="has-text-left">
-                          <p>name of candidate<br><span class="light-gray-color">DD/MMM/YYYY</span></p>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="has-text-right">
-                          <p class="light-gray-color">Time</p>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-              <div class="column is-one-third">
-                <div class="card">
-                  <header class="card-header">
-                    <p class="card-header-title">
-                      Scheduled Joining
-                    </p>
-                  </header>
-                  <div class="card-content white-background">
-                    <div class="content has-text-right">
-                      <select>
-                        <option>Today</option>
-                        <option>Next 7 days</option>
-                        <option>Next 30 days</option>
-                      </select>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <div class="has-text-left">
-                          <p>name of candidate<br><span class="light-gray-color">DD/MMM/YYYY</span></p>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="has-text-right">
-                          <p class="light-gray-color">Time</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <div class="has-text-left">
-                          <p>name of candidate<br><span class="light-gray-color">DD/MMM/YYYY</span></p>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="has-text-right">
-                          <p class="light-gray-color">Time</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <div class="has-text-left">
-                          <p>name of candidate<br><span class="light-gray-color">DD/MMM/YYYY</span></p>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="has-text-right">
-                          <p class="light-gray-color">Time</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="columns">
-                      <div class="column">
-                        <div class="has-text-left">
-                          <p>name of candidate<br><span class="light-gray-color">DD/MMM/YYYY</span></p>
-                        </div>
-                      </div>
-                      <div class="column">
-                        <div class="has-text-right">
-                          <p class="light-gray-color">Time</p>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> #}
-          </turbo-frame>  
-        </section>
+      <section class="application-form">
+        <turbo-frame id="candidate_funnel">
+          {% block candidate_funnel %}
+          {% include "candidate_funnel.html" %}
+          {% endblock candidate_funnel %}  
+        </turbo-frame>
+        <turbo-frame id="pending_actions">
+         {% block actions %}
+         {% include "pending_actions.html" %}
+         {% endblock actions %}
+        </turbo-frame>
+        <turbo-frame id="scheduled">
+         {% block scheduled %}
+         {% include "interview_schedule.html" %}
+         {% endblock scheduled %}
+        </turbo-frame>
+      </section>
     </div>
   </div>
 </div>
@@ -715,18 +68,27 @@
       <div class="column is-three-quarters">
         <div class="content has-text-left">
           <p>
-            &#169; Copyright 2022 by WeRecruit. All rights reserved. <span style="margin-left: 30px;">Privacy
-              Policy</span><span style="margin-left: 30px;">Term of use</span>
+            &#169; Copyright 2022 by WeRecruit. All rights reserved.
+            <span style="margin-left: 30px">Privacy Policy</span
+            ><span style="margin-left: 30px">Term of use</span>
           </p>
         </div>
       </div>
       <div class="column">
         <div class="content has-text-right">
-          <div class="column" style="margin-right: 85px;">
-            <a href=""><img style="height: 25px;" src="static/images/linkedin.png"></a>
-            <a href=""><img style="height: 25px;" src="static/images/facebook.png"></a>
-            <a href=""><img style="height: 25px;" src="static/images/twitter.png"></a>
-            <a href=""><img style="height: 25px;" src="static/images/email.png"></a>
+          <div class="column" style="margin-right: 85px">
+            <a href=""
+              ><img style="height: 25px" src="static/images/linkedin.png"
+            /></a>
+            <a href=""
+              ><img style="height: 25px" src="static/images/facebook.png"
+            /></a>
+            <a href=""
+              ><img style="height: 25px" src="static/images/twitter.png"
+            /></a>
+            <a href=""
+              ><img style="height: 25px" src="static/images/email.png"
+            /></a>
           </div>
         </div>
       </div>
