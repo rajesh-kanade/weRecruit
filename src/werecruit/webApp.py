@@ -1201,7 +1201,25 @@ def show_clientwise_revenue_opportunity_summary_report_page():
     order = request.args.get("order", None)
     toggles = {"client": {
                 "arrowToggle": "fa fa-arrow-down"
-                if (orderBy == "client" and order == "DESC")
+                if (orderBy == 'client' and order == "DESC")
+                else "fa fa-arrow-up",
+                "orderToggle": "DESC" if order == "ASC" else "ASC",
+            },
+                "title": {
+                "arrowToggle": "fa fa-arrow-down"
+                if (orderBy == 'title' and order == "DESC")
+                else "fa fa-arrow-up",
+                "orderToggle": "DESC" if order == "ASC" else "ASC",
+            },
+                "positions": {
+                "arrowToggle": "fa fa-arrow-down"
+                if (orderBy == "positions" and order == "DESC")
+                else "fa fa-arrow-up",
+                "orderToggle": "DESC" if order == "ASC" else "ASC",
+            },
+                "ctc_currency": {
+                "arrowToggle": "fa fa-arrow-down"
+                if (orderBy == "ctc_currency" and order == "DESC")
                 else "fa fa-arrow-up",
                 "orderToggle": "DESC" if order == "ASC" else "ASC",
             }
