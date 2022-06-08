@@ -402,6 +402,9 @@ def show_jd_edit_page(id):
         form.country.default = 'US'
         form.city.default = jd.city_id
 
+        form.status.choices = [(0,'Open'), (1, 'Draft'), (2,'Close')]
+        form.status.default = jd.status
+        
         form.process()    # works
 
         form.id.data = jd.id
@@ -411,7 +414,6 @@ def show_jd_edit_page(id):
 
         form.total_positions.data = jd.positions
         form.open_date.data = jd.open_date
-        form.status.data = jd.status
 
         form.intv_panel_name_1.data = jd.ip_name_1
         form.intv_panel_email_1.data = jd.ip_emailid_1
