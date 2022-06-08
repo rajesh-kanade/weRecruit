@@ -74,11 +74,15 @@ class JDForm(FlaskForm):
     country = SelectField('Country')
     city = SelectField('City')
 
-    expChoice = [i for i in range(100)]
+    minXPChoice = [i for i in range(100)]
+    minXPChoice.insert(0, 'Min Exp')
+
+    maxXPChoice = [i for i in range(100)]
+    maxXPChoice.insert(0, 'Max Exp')
 
     min_yrs_of_exp = SelectField("Minimum years of Experience",
-                                 choices=expChoice, default=0, validators=[DataRequired()])
-    max_yrs_of_exp = SelectField("Maximum years of Experience", choices=expChoice, default=0, validators=[
+                                 choices=minXPChoice, default='Min Exp', validators=[DataRequired()])
+    max_yrs_of_exp = SelectField("Maximum years of Experience", choices=maxXPChoice, default='Max Exp', validators=[
                                  DataRequired(NumberRange(min=0, max=99, message="Min experience needs be in range of 0 to 99"))])
 
     
