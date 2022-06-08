@@ -29,7 +29,7 @@ def get_client_wise_summary_report(tenantID,orderBy=None, order=None):
 		elif orderBy == 'count':
 			query = """select client, count(*) from wr_jds 
 				where status = 0 and recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
-				group by client order by count DESC"""
+				group by client order by count ASC"""
 		
 			
 
