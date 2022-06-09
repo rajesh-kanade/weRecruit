@@ -1130,31 +1130,45 @@ def show_job_summary_page(job_id):
 @app.route('/reports/showClientWiseSummary', methods=['GET'])
 @login_required
 def show_clientwise_summary_report_page():
-
+    orderBy = request.args.get("order_by", None)
+    order = request.args.get("order", None)
     # get the summary
-    (retCode, msg, clientSummary) = reports.get_client_wise_summary_report(
-        session["tenant_id"])
-    assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise summary report"
+    toggles = {'client': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'client' and order == 'DESC') else 'fa fa-arrow-up',
+                          'orderToggle': 'DESC' if order == 'ASC' else 'ASC'},
+                'count': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'count' and order == 'DESC') else 'fa fa-arrow-up',
+                         'orderToggle': 'DESC' if order == 'ASC' else 'ASC'}
+              }
+    results = reports.get_client_wise_summary_report(
+        session.get('tenant_id'), orderBy=orderBy, order=order)
+    # (retCode, msg, clientSummary) = reports.get_client_wise_summary_report(
+    #     session["tenant_id"])
+    # assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise summary report"
+    if (results[0] == reports.RetCodes.success.value):
+        clientSummary = results[2]
 
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    per_page = request.args.get(
-            get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
-    offset = (page - 1) * per_page
-    total = len(clientSummary)
-    from math import ceil
-    totalPages = ceil(total/per_page)
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        per_page = request.args.get(
+                get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+        offset = (page - 1) * per_page
+        total = len(clientSummary)
+        from math import ceil
+        totalPages = ceil(total/per_page)
 
-    def getPages(offset=0, per_page=1):
-            return  clientSummary[offset: offset + per_page]
+        def getPages(offset=0, per_page=1):
+                return  clientSummary[offset: offset + per_page]
 
-    pagination_JDList = getPages(offset=offset, per_page=per_page)
-    pagination = Pagination(page=page, per_page=per_page, total=total)        
-
-    return render_template("reports/show_clientwise_summary_reportpage.html",
-                 clientSummary=pagination_JDList, request=request, page=page,
-                 per_page=1, pagination=pagination, totalPages=totalPages)
-
-
+        pagination_JDList = getPages(offset=offset, per_page=per_page)
+        pagination = Pagination(page=page, per_page=per_page, total=total)        
+        for cs in clientSummary:
+            _logger.debug(cs.client)
+        return render_template("reports/show_clientwise_summary_reportpage.html",
+                    clientSummary=pagination_JDList, request=request, page=page,
+                    per_page=1, pagination=pagination, toggles=toggles, totalPages=totalPages)
+    else:
+        flash("Failed to fetch client wise revenue opportunity report", "is-danger")
+        render_template("reports/show_clientwise_summary_reportpage.html",
+                    clientSummary=None)
+                    
 @app.route('/reports/showClientWiseJobApplicationStatusSummary', methods=['GET'])
 @login_required
 def show_clientwise_job_application_status_summary_report_page():

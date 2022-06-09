@@ -18,8 +18,12 @@
 
                 <thead>
                   <tr class="{{theme_bg_color}}">
-                    <th class="has-text-left {{theme_text_color}}">Client</th>
-                    <th class="has-text-centered {{theme_text_color}}">Count</th>
+                    <th class="has-text-left {{theme_text_color}}">Client<span>
+                      <a href="/reports/showClientWiseSummary?order_by=client&order={{toggles.client.orderToggle}}"><i class="{{toggles.client.arrowToggle}}"></i></a></a>
+                    </span></th>
+                    <th class="has-text-centered {{theme_text_color}}">Count<span>
+                      <a href="/reports/showClientWiseSummary?order_by=count&order={{toggles.count.orderToggle}}"><i class="{{toggles.count.arrowToggle}}"></i></a></a>
+                    </span></th>
 
                 </tr>
                 </thead>

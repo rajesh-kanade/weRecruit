@@ -13,21 +13,33 @@ class RetCodes(Enum):
 	get_ent_error = "RPT_CRUD_E405"
 	server_error = "RPT_CRUD_E500"
 
-def get_client_wise_summary_report(tenantID):
+def get_client_wise_summary_report(tenantID,orderBy=None, order=None):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
-		query = """select client, count(*) from wr_jds 
+		if not orderBy:
+			query = """select client, count(*) from wr_jds 
 				where status = 0 and recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
-				group by client order by count desc"""
+				group by client order by count ASC"""
+		if orderBy == 'client':
+			query = """select client, count(*) from wr_jds 
+				where status = 0 and recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
+				group by client order by client ASC"""
+		elif orderBy == 'count':
+			query = """select client, count(*) from wr_jds 
+				where status = 0 and recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
+				group by client order by count ASC"""
+		
+			
 
 		params = (int(tenantID),)
 		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		clientSummaryList =cursor.fetchall()
-
+		if order == 'DESC':
+			clientSummaryList = clientSummaryList[::-1]
 		return(RetCodes.success.value, "Client wise summary report fetched successfully from db for tenant ID {0}".format(tenantID), clientSummaryList)
 
 
