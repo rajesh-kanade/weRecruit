@@ -402,6 +402,12 @@ def show_jd_edit_page(id):
         form.country.default = 'US'
         form.city.default = jd.city_id
 
+        expChoice = [i for i in range(100)]
+        form.min_yrs_of_exp.choices = expChoice
+        form.max_yrs_of_exp.choices = expChoice
+        form.min_yrs_of_exp.default = int(jd.min_yrs_of_exp)
+        form.max_yrs_of_exp.default = int(jd.max_yrs_of_exp)
+        
         form.process()    # works
 
         form.id.data = jd.id
@@ -429,8 +435,7 @@ def show_jd_edit_page(id):
         form.hr_email.data = jd.hr_emailid
         form.hr_phone.data = jd.hr_phone
 
-        form.min_yrs_of_exp.data = jd.min_yrs_of_exp
-        form.max_yrs_of_exp.data = jd.max_yrs_of_exp
+        
 
         form.client_jd.data = jd.jd_file_name
 
