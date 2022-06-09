@@ -26,12 +26,17 @@
 <div class="candidate-funnel">
   <div class="columns">
     {% for record in job_titles %}
-    <div class="column">
+    <div class="column is-one-fifth">
       <div class="card">
         <div
           class="card-content white-background card-height-100 job-title-card {{'card-active' if record.title == activeJobTitle}}"
           id="jobCard-{{record.title}}"
         >
+        {% if record.title == activeJobTitle %}
+          <div class="has-text-right card-check-img">
+            <img class="margin-top-10" src="static/images/check-2.png">
+          </div>
+        {% endif %}
           <a
             href="/showHomePage?client={{activeClient}}&job_title={{record.title}}"
             ><p class="card-text">{{record.title}}</p></a
