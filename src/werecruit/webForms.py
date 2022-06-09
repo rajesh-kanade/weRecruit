@@ -6,6 +6,7 @@ from wtforms.validators import DataRequired, Email,NumberRange, ValidationError
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import IntegerField, DateField
 
+from constants import NEW_ENTITY_ID
 import jdUtils
 
 
@@ -74,15 +75,12 @@ class JDForm(FlaskForm):
     country = SelectField('Country')
     city = SelectField('City')
 
-    minXPChoice = [i for i in range(100)]
-    minXPChoice.insert(0, 'Min Exp')
-
-    maxXPChoice = [i for i in range(100)]
-    maxXPChoice.insert(0, 'Max Exp')
+    xpChoice = [(i,i) for i in range(100)]
+    xpChoice.insert(0, (NEW_ENTITY_ID, '- Select -'))
 
     min_yrs_of_exp = SelectField("Minimum years of Experience",
-                                 choices=minXPChoice, default='Min Exp', validators=[DataRequired()])
-    max_yrs_of_exp = SelectField("Maximum years of Experience", choices=maxXPChoice, default='Max Exp', validators=[
+                                 choices=xpChoice, default=NEW_ENTITY_ID, validators=[DataRequired()])
+    max_yrs_of_exp = SelectField("Maximum years of Experience", choices=xpChoice, default=NEW_ENTITY_ID, validators=[
                                  DataRequired(NumberRange(min=0, max=99, message="Min experience needs be in range of 0 to 99"))])
 
     
