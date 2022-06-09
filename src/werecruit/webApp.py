@@ -402,7 +402,8 @@ def show_jd_edit_page(id):
         form.country.default = 'US'
         form.city.default = jd.city_id
 
-        expChoice = [i for i in range(100)]
+        expChoice = [(i, i) for i in range(100)]
+        expChoice.insert(0, (constants.NEW_ENTITY_ID, '- Select -'))
         form.min_yrs_of_exp.choices = expChoice
         form.max_yrs_of_exp.choices = expChoice
         form.min_yrs_of_exp.default = int(jd.min_yrs_of_exp)
