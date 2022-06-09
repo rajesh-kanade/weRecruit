@@ -402,7 +402,9 @@ def show_jd_edit_page(id):
         form.country.default = 'US'
         form.city.default = jd.city_id
 
-        form.status.choices = [(0,'Open'), (1, 'Draft'), (2,'Close')]
+        form.status.choices = [(jdUtils.JDStatusCodes.open.value, 'Open'), 
+                        (jdUtils.JDStatusCodes.draft.value, 'Draft'), 
+                        (jdUtils.JDStatusCodes.close.value, 'Close')]
         form.status.default = jd.status
         
         form.process()    # works
