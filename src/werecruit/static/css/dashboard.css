@@ -538,3 +538,17 @@ width: 66%;
 #dashboard th {
     background-color: #cecece;
 }
+
+#dashboard .clientCard .card-content {
+  display: flex;
+  align-items: center;
+
+}
+#dashboard .clientCard .card-content a {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#dashboard .clientCard .card-content p {
+  font-size: x-large;
+}
