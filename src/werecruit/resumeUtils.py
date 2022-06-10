@@ -187,6 +187,8 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
         if candidatePhone is not None:
             phone_data = phonenumbers.parse(candidatePhone)
             if phonenumbers.is_valid_number(phone_data):
+                pass
+            else:
                 return(RetCodes.save_ent_error.value, "Please enter valid Phone Number ", None)
 
         if not recruiterID:
