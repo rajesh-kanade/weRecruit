@@ -1,7 +1,7 @@
 from enum import Enum
 import dbUtils
 import constants
-
+import phonenumbers
 from datetime import datetime
 from datetime import timezone
 
@@ -183,6 +183,11 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
 
         if not candidatePhone.strip():
             return(RetCodes.empty_ent_attrs_error.value, "Candidate Phone empty or null.", None)
+
+        if candidatePhone is not None:
+            phone_data = phonenumbers.parse(candidatePhone)
+            if phonenumbers.is_valid_number(phone_data):
+                return(RetCodes.save_ent_error.value, "Please enter valid Phone Number ", None)
 
         if not recruiterID:
             return(RetCodes.empty_ent_attrs_error.value, "Recruiter ID field is empty or null.", None)
