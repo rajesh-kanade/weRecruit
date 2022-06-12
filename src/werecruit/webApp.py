@@ -577,8 +577,8 @@ def resume_save():
         f = form.candidate_resume.data
         filename = secure_filename(f.filename)
         _logger.debug('app root path is {0}'.format(app.root_path))
-        # filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
-        filename = os.path.join(filename)
+        filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
+        #filename = os.path.join(filename)
         f.save(filename)
         f.close()
     else:
