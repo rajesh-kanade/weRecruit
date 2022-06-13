@@ -499,6 +499,35 @@ def shortlist(resume_id, jd_id, application_date, status, recruiterid):
             cursor.close()
         dbUtils.returnToPool(db_con)
 
+def unshortlist(resume_id, jd_id):
+    _logger.debug('inside unshortlist function')
+    db_con = dbUtils.getConnFromPool()
+    cursor = db_con.cursor()
+    try:
+
+        sql = """DELETE FROM public.wr_jd_resumes WHERE resume_id=%s and jd_id=%s"""
+
+        params = (int(resume_id), str(jd_id))
+       
+        _logger.debug(cursor.mogrify(sql, params))
+        
+        cursor.execute(sql, params)
+        assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+      
+        db_con.commit()
+
+       
+        return (RetCodes.success.value, "Resume creation successful.", None)
+
+    except Exception as e:
+        _logger.error(e)
+        db_con.rollback()
+        return (RetCodes.server_error.value, str(e), None)
+
+    finally:
+        if cursor is not None:
+            cursor.close()
+        dbUtils.returnToPool(db_con)
 
 def get_job_status_summary(job_id):
 
