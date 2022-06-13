@@ -402,6 +402,20 @@ def show_jd_edit_page(id):
         form.country.default = 'US'
         form.city.default = jd.city_id
 
+        
+        form.status.choices = [(jdUtils.JDStatusCodes.open.value, 'Open'), 
+                        (jdUtils.JDStatusCodes.draft.value, 'Draft'), 
+                        (jdUtils.JDStatusCodes.close.value, 'Close')]
+        form.status.default = jd.status
+        
+        expChoice = [(i, i) for i in range(100)]
+        expChoice.insert(0, (constants.NEW_ENTITY_ID, '- Select -'))
+        
+        form.min_yrs_of_exp.choices = expChoice
+        form.max_yrs_of_exp.choices = expChoice
+        form.min_yrs_of_exp.default = int(jd.min_yrs_of_exp)
+        form.max_yrs_of_exp.default = int(jd.max_yrs_of_exp)
+        
         form.process()    # works
 
         form.id.data = jd.id
@@ -411,7 +425,6 @@ def show_jd_edit_page(id):
 
         form.total_positions.data = jd.positions
         form.open_date.data = jd.open_date
-        form.status.data = jd.status
 
         form.intv_panel_name_1.data = jd.ip_name_1
         form.intv_panel_email_1.data = jd.ip_emailid_1
@@ -429,8 +442,7 @@ def show_jd_edit_page(id):
         form.hr_email.data = jd.hr_emailid
         form.hr_phone.data = jd.hr_phone
 
-        form.min_yrs_of_exp.data = jd.min_yrs_of_exp
-        form.max_yrs_of_exp.data = jd.max_yrs_of_exp
+        
 
         form.client_jd.data = jd.jd_file_name
 
@@ -572,8 +584,8 @@ def resume_save():
         f = form.candidate_resume.data
         filename = secure_filename(f.filename)
         _logger.debug('app root path is {0}'.format(app.root_path))
-        # filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
-        filename = os.path.join(filename)
+        filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
+        #filename = os.path.join(filename)
         f.save(filename)
         f.close()
     else:
@@ -656,13 +668,16 @@ def search_non_shortlisted_resumes():
         # return redirect(url_for("show_home_page"),303)
 
         return render_template('/jd/non_shortlisted_candidates_list.html',
-                               resumeList=resumeList,
+                               allresumeList=resumeList,
                                job_id=form.job_id.data,
                                searchForm=form)
 
     else:
         flash(retCode + ':' + msg, "is-danger")
-        return render_template('jd/non_shortlisted_candidates_list.html', resumeList=resumeList, job_id=form.job_id.data, searchForm=form)
+        return render_template('jd/non_shortlisted_candidates_list.html', 
+                        allresumeList=resumeList, 
+                        job_id=form.job_id.data, 
+                        searchForm=form)
 
 
 @app.route("/resume/showBrowser", methods=["GET"])
