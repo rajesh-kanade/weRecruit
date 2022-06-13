@@ -10,7 +10,7 @@
     >
       <div class="card">
         <div class="card-content white-background card-height-120">
-          <a href="/showHomePage?client={{client.client_id}}">
+          <a href="/showDashboardPage?client={{client.client_id}}">
             <p>{{client.client_name}}</p>
           </a>
           {# <img src="static/images/loadshare.png" /> #}
@@ -38,7 +38,7 @@
           </div>
         {% endif %}
           <a
-            href="/showHomePage?client={{activeClient}}&job_title={{record.title}}"
+            href="/showDashboardPage?client={{activeClient}}&job_title={{record.title}}"
             ><p class="card-text">{{record.title}}</p></a
           >
         </div>

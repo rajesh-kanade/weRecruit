@@ -189,7 +189,7 @@ def login_required(func):
     return secure_function
 
 
-@app.route('/showHomePage', methods=['GET','POST'])
+@app.route('/showDashboardPage', methods=['GET','POST'])
 @login_required
 def show_home_page():
     (retCode, msg, clients) = (retCode, msg, clientSummary) = reports.get_client_names_by_tenant_id(
@@ -206,7 +206,7 @@ def show_home_page():
     (retCode, msg, clientSummary) = reports.get_client_and_title_wise_application_status_report(
         activeClient, activeJobTitle)
     assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise job application summary report"
-    return render_template('home.html',
+    return render_template('dashboard/dashboard.html',
                             activeClient=activeClient,
                             activeJobTitle=activeJobTitle,
                             clients=clients,
