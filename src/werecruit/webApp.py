@@ -402,6 +402,10 @@ def show_jd_edit_page(id):
         form.country.default = 'US'
         form.city.default = jd.city_id
 
+        form.status.choices = [(jdUtils.JDStatusCodes.open.value, 'Open'), 
+                        (jdUtils.JDStatusCodes.draft.value, 'Draft'), 
+                        (jdUtils.JDStatusCodes.close.value, 'Close')]
+        form.status.default = jd.status
         expChoice = [i for i in range(100)]
         form.min_yrs_of_exp.choices = expChoice
         form.max_yrs_of_exp.choices = expChoice
@@ -417,7 +421,6 @@ def show_jd_edit_page(id):
 
         form.total_positions.data = jd.positions
         form.open_date.data = jd.open_date
-        form.status.data = jd.status
 
         form.intv_panel_name_1.data = jd.ip_name_1
         form.intv_panel_email_1.data = jd.ip_emailid_1
