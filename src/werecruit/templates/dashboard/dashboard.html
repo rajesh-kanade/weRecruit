@@ -44,20 +44,12 @@
     <div class="container">
       <section class="application-form">
         <turbo-frame id="candidate_funnel">
-          {% block candidate_funnel %}
           {% include "dashboard/candidate_funnel.html" %}
-          {% endblock candidate_funnel %}  
+          {# {% include "dashboard/pending_actions.html" %} #}
         </turbo-frame>
-        <!-- <turbo-frame id="pending_actions">
-         {% block actions %}
-         {% include "dashboard/pending_actions.html" %}
-         {% endblock actions %}
-        </turbo-frame>
-        <turbo-frame id="scheduled">
-         {% block scheduled %}
+        {# <turbo-frame id="scheduled">
          {% include "dashboard/interview_schedule.html" %}
-         {% endblock scheduled %}
-        </turbo-frame> -->
+        </turbo-frame> #}
       </section>
     </div>
   </div>

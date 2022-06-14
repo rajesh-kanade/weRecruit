@@ -25,21 +25,21 @@
 </section>
 <div class="candidate-funnel">
   <div class="columns">
-    {% for record in job_titles %}
+    {% for jd in jdList %}
     <div class="column is-one-fifth">
       <div class="card">
         <div
-          class="card-content white-background card-height-100 job-title-card {{'card-active' if record.title == activeJobTitle}}"
-          id="jobCard-{{record.title}}"
+          class="card-content white-background card-height-100 job-title-card {{'card-active' if jd.id == activeJD}}"
+          id="jobCard-{{jd.title}}"
         >
-        {% if record.title == activeJobTitle %}
+        {% if jd.id == activeJD %}
           <div class="has-text-right card-check-img">
             <img class="margin-top-10" src="static/images/check-2.png">
           </div>
         {% endif %}
           <a
-            href="/showDashboardPage?client={{activeClient}}&job_title={{record.title}}"
-            ><p class="card-text">{{record.title}}</p></a
+            href="/showDashboardPage?client={{activeClient}}&jd_id={{jd.id}}"
+            ><p class="card-text">{{jd.title}}</p></a 
           >
         </div>
       </div>

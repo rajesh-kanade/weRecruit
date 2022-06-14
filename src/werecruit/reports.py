@@ -127,7 +127,7 @@ def get_client_wise_revenue_opportunity_report(tenantID, orderBy= None, order=No
 		dbUtils.returnToPool(db_con)
 
 
-def get_client_and_title_wise_application_status_report(clientID, jobTitle):
+def get_jd_wise_application_status_report(jd_id):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
@@ -156,19 +156,18 @@ def get_client_and_title_wise_application_status_report(clientID, jobTitle):
 			(jd_stats->'150') as Offer_Accepted,
 			(jd_stats->'160') as Joined,
 			(jd_stats->'170') as No_show
-			from wr_jds 
-			where status = 0
-			and client_id=%s
-			and title=%s
+		from wr_jds 
+		where 	id=%s
+				and status = 0
 		"""
 
-		params = (clientID, jobTitle)
+		params = (jd_id,)
 		_logger.debug(cursor.mogrify(query, params))
 		cursor.execute(query, params)
 
-		clientSummaryList = cursor.fetchall()
+		job_summary = cursor.fetchall()
 
-		return(RetCodes.success.value, "Client wise summary report fetched successfully from db for client_id {0}".format(clientID), clientSummaryList)
+		return(RetCodes.success.value, "JD wise summary report fetched successfully from db for jd_id {0}".format(jd_id), job_summary)
 
 	except Exception as dbe:
 		_logger.error(dbe)
@@ -178,7 +177,7 @@ def get_client_and_title_wise_application_status_report(clientID, jobTitle):
 		cursor.close()
 		dbUtils.returnToPool(db_con)
 		
-def get_client_names_by_tenant_id(tenantID):
+def get_clients_by_tenant_id(tenantID):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
@@ -205,13 +204,13 @@ def get_client_names_by_tenant_id(tenantID):
 		cursor.close()
 		dbUtils.returnToPool(db_con)
 
-def get_jod_titles_by_client_id(clientID):
+def get_jds_by_client_id(clientID):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
 		query = """
-				select title from wr_jds
+				select * from wr_jds
 				where client_id = %s
 				order by title
 				"""
@@ -219,9 +218,9 @@ def get_jod_titles_by_client_id(clientID):
 		_logger.debug(cursor.mogrify(query, params))
 		cursor.execute(query, params)
 
-		job_titles_list = cursor.fetchall()
+		jdList = cursor.fetchall()
 
-		return(RetCodes.success.value, "Job Title List fetched successfully from db for client {}".format(clientID), job_titles_list)
+		return(RetCodes.success.value, "JD List fetched successfully from db for client {}".format(clientID), jdList)
 
 	except Exception as dbe:
 		_logger.error(dbe)
