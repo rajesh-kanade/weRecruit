@@ -668,13 +668,16 @@ def search_non_shortlisted_resumes():
         # return redirect(url_for("show_home_page"),303)
 
         return render_template('/jd/non_shortlisted_candidates_list.html',
-                               resumeList=resumeList,
+                               allresumeList=resumeList,
                                job_id=form.job_id.data,
                                searchForm=form)
 
     else:
         flash(retCode + ':' + msg, "is-danger")
-        return render_template('jd/non_shortlisted_candidates_list.html', resumeList=resumeList, job_id=form.job_id.data, searchForm=form)
+        return render_template('jd/non_shortlisted_candidates_list.html', 
+                        allresumeList=resumeList, 
+                        job_id=form.job_id.data, 
+                        searchForm=form)
 
 
 @app.route("/resume/showBrowser", methods=["GET"])
