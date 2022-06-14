@@ -61,6 +61,9 @@ def get_client_wise_job_application_status_summary_report(tenantID, orderBy=None
 			query ="""
 			select id, client, title,
 				(jd_stats->'0') as shortlisted,
+				(jd_stats->'1') as Initial_Screening_Interviews_scheduled,
+				(jd_stats->'2') as Initial_Screening_Interviews_cleared,
+				(jd_stats->'3') as Initial_Screening_Interviews_rejected,
 				(jd_stats->'10') as R1_Interview_Scheduled,
 				(jd_stats->'20') as R1_Interview_Cleared,
 				(jd_stats->'30') as R1_Interview_Failed,
@@ -91,6 +94,9 @@ def get_client_wise_job_application_status_summary_report(tenantID, orderBy=None
 			query = """
 			select id, client, title,
 				(jd_stats->'0') as shortlisted,
+				(jd_stats->'1') as Initial_Screening_Interviews_scheduled,
+				(jd_stats->'2') as Initial_Screening_Interviews_cleared,
+				(jd_stats->'3') as Initial_Screening_Interviews_rejected,
 				(jd_stats->'10') as R1_Interview_Scheduled,
 				(jd_stats->'20') as R1_Interview_Cleared,
 				(jd_stats->'30') as R1_Interview_Failed,
@@ -121,6 +127,9 @@ def get_client_wise_job_application_status_summary_report(tenantID, orderBy=None
 			query ="""
 			select id, client, title,
 				(jd_stats->'0') as shortlisted,
+				(jd_stats->'1') as Initial_Screening_Interviews_scheduled,
+				(jd_stats->'2') as Initial_Screening_Interviews_cleared,
+				(jd_stats->'3') as Initial_Screening_Interviews_rejected,
 				(jd_stats->'10') as R1_Interview_Scheduled,
 				(jd_stats->'20') as R1_Interview_Cleared,
 				(jd_stats->'30') as R1_Interview_Failed,

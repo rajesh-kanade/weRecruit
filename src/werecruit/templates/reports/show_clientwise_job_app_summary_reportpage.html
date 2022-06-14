@@ -46,10 +46,9 @@
                 {# new changes to be applied #}
                 <td>
                   <ul>
-                    <li class="has-text-left {{theme_text_color}}" title ="Initial Screening Interviews scheduled">Scheduled - {{ cs.r1_interview_scheduled if cs.r1_interview_scheduled !=0 else ''}}</li>
-                    <li class="has-text-left {{theme_text_color}}" title =" Initial Screening Interviews cleared"> Cleared - {{ cs.r1_interview_cleared if cs.r1_interview_cleared !=0 else '' }}</li>
-                    <li class="has-text-left {{theme_text_color}}" title =" Initial Screening Interviews rejected">Failed - {{ cs.r1_interview_failed if cs.r1_interview_failed !=0 else ''}}</li>
-                    <li class="has-text-left has-text-danger" title =" Initial Screening Interviews no show">No Show - {{ cs.r1_interview_no_show if cs.r1_interview_no_show !=0 else ''}}</li>
+                    <li class="has-text-left {{theme_text_color}}" title ="Initial Screening Interviews scheduled">Scheduled - {{ cs.initial_screening_interviews_scheduled if cs.initial_screening_interviews_scheduled !=0 else ''}}</li>
+                    <li class="has-text-left {{theme_text_color}}" title =" Initial Screening Interviews cleared"> Cleared - {{ cs.initial_screening_interviews_cleared if cs.initial_screening_interviews_cleared !=0 else '' }}</li>
+                    <li class="has-text-left {{theme_text_color}}" title =" Initial Screening Interviews rejected">Failed - {{ cs.initial_screening_interviews_rejected if cs.initial_screening_interviews_rejected !=0 else ''}}</li>
                   </ul>
                 </td>
                 
