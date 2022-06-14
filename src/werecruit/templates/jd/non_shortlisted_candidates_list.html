@@ -45,23 +45,22 @@
               <td class="has-text-centered {{theme_text_color}}">{{ resume.status }}-{{resume.description}}</td>
               <td class="has-text-left {{theme_text_color}}">
                 <div class ="field is-grouped" data-turbo="false">
-                  <a title="shortlist"  href="/jd/shortlist/?resume_id={{resume.id}}&job_id={{job_id}}">
-                    <i class="fa fa-bookmark"></i></abbr>
-                  </a>
-                  <span ><a title="download" href="/resume/download/{{resume.id}}?src=jd-shortlist-page">
-                    <i class="fa fa-download"></i></a></span>
+                  <a title="Shortlist"  href="/jd/shortlist/?resume_id={{resume.id}}&job_id={{job_id}}"><i class="fa fa-bookmark"></i></abbr></a>
+          <span ><a title="Edit" href="/resume/showEditPage/{{resume.id}}">
+     <i class="fa fa-edit"></i></a></span>
+               <span ></span><a title="Download" href="/resume/download/{{resume.id}}?src=jd-shortlist-page"><i
+                  class="fa fa-download"></i></a></span>
                 </div>
               </td>       
             </tr>
           {% else %}
             <div class="notification is-warning">
               No Resumes found !!!
-            </div>
+              </div>
           {% endfor %}
         </tbody>
       </table>  
     </div>
   </turbo-frame>
-  
 </div>
 
