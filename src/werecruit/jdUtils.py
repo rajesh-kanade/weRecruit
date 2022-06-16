@@ -499,15 +499,15 @@ def shortlist(resume_id, jd_id, application_date, status, recruiterid):
             cursor.close()
         dbUtils.returnToPool(db_con)
 
-def unshortlist(resume_id, jd_id):
+def unshortlist(jd_id, resume_id):
     _logger.debug('inside unshortlist function')
     db_con = dbUtils.getConnFromPool()
     cursor = db_con.cursor()
     try:
 
-        sql = """DELETE FROM public.wr_jd_resumes WHERE resume_id=%s and jd_id=%s"""
+        sql = """DELETE FROM public.wr_jd_resumes WHERE jd_id=%s and resume_id=%s"""
 
-        params = (int(resume_id), str(jd_id))
+        params = (int(jd_id), int(resume_id))
        
         _logger.debug(cursor.mogrify(sql, params))
         

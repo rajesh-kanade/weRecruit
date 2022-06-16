@@ -1009,8 +1009,8 @@ def jd_resume_unshortlist():
 
     resume_id = request.args.get('resume_id')
     jd_id = request.args.get('job_id')
-    (retCode, msg, data) = jdUtils.unshortlist(resume_id, jd_id)
-    print(jdUtils.unshortlist(resume_id, jd_id))
+    (retCode, msg, data) = jdUtils.unshortlist(jd_id, resume_id)
+   
     if retCode == jdUtils.RetCodes.success.value:
         flash('Candidate successfully unshortlisted.', "is-success")
     else:
