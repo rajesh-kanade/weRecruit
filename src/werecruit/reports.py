@@ -13,21 +13,33 @@ class RetCodes(Enum):
 	get_ent_error = "RPT_CRUD_E405"
 	server_error = "RPT_CRUD_E500"
 
-def get_client_wise_summary_report(tenantID):
+def get_client_wise_summary_report(tenantID,orderBy=None, order=None):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
-		query = """select client, count(*) from wr_jds 
+		if not orderBy:
+			query = """select client, count(*) from wr_jds 
 				where status = 0 and recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
-				group by client order by count desc"""
+				group by client order by count ASC"""
+		if orderBy == 'client':
+			query = """select client, count(*) from wr_jds 
+				where status = 0 and recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
+				group by client order by client ASC"""
+		elif orderBy == 'count':
+			query = """select client, count(*) from wr_jds 
+				where status = 0 and recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
+				group by client order by count ASC"""
+		
+			
 
 		params = (int(tenantID),)
 		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		clientSummaryList =cursor.fetchall()
-
+		if order == 'DESC':
+			clientSummaryList = clientSummaryList[::-1]
 		return(RetCodes.success.value, "Client wise summary report fetched successfully from db for tenant ID {0}".format(tenantID), clientSummaryList)
 
 
@@ -40,48 +52,110 @@ def get_client_wise_summary_report(tenantID):
 		dbUtils.returnToPool(db_con)	
 
 
-def get_client_wise_job_application_status_summary_report(tenantID, orderBy=None, order=None):
+def get_client_wise_job_application_status_summary_report(tenantID, orderBy=None, order=None, limit=1000):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
+		query, params = None, None
+		if not orderBy:
+			query ="""
+			select id, client, title,
+				(jd_stats->'0') as shortlisted,
+				(jd_stats->'10') as R1_Interview_Scheduled,
+				(jd_stats->'20') as R1_Interview_Cleared,
+				(jd_stats->'30') as R1_Interview_Failed,
+				(jd_stats->'31') as R1_Interview_No_Show,
+				(jd_stats->'40') as R2_Interview_Scheduled,
+				(jd_stats->'50') as R2_Interview_Cleared,
+				(jd_stats->'60') as R2_Interview_Failed,
+				(jd_stats->'61') as R2_Interview_No_Show,
+				(jd_stats->'70') as HM_Interview_Scheduled,
+				(jd_stats->'80') as HM_Interview_Cleared,
+				(jd_stats->'90') as HM_Interview_Failed,
+				(jd_stats->'91') as HM_Interview_No_Show,
+				(jd_stats->'100') as HR_Interview_Scheduled,
+				(jd_stats->'110') as HR_Interview_Cleared,
+				(jd_stats->'120') as HR_Interview_Failed,
+				(jd_stats->'121') as HR_Interview_No_Show,
+				(jd_stats->'130') as Offer_Pending,
+				(jd_stats->'140') as Offer_Released,
+				(jd_stats->'150') as Offer_Accepted,
+				(jd_stats->'160') as Joined,
+				(jd_stats->'170') as No_show
+				from wr_jds 
+				where status = 0
+				and recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+				order by id DESC limit %s
+			"""
+		if orderBy == 'client':
+			query = """
+			select id, client, title,
+				(jd_stats->'0') as shortlisted,
+				(jd_stats->'10') as R1_Interview_Scheduled,
+				(jd_stats->'20') as R1_Interview_Cleared,
+				(jd_stats->'30') as R1_Interview_Failed,
+				(jd_stats->'31') as R1_Interview_No_Show,
+				(jd_stats->'40') as R2_Interview_Scheduled,
+				(jd_stats->'50') as R2_Interview_Cleared,
+				(jd_stats->'60') as R2_Interview_Failed,
+				(jd_stats->'61') as R2_Interview_No_Show,
+				(jd_stats->'70') as HM_Interview_Scheduled,
+				(jd_stats->'80') as HM_Interview_Cleared,
+				(jd_stats->'90') as HM_Interview_Failed,
+				(jd_stats->'91') as HM_Interview_No_Show,
+				(jd_stats->'100') as HR_Interview_Scheduled,
+				(jd_stats->'110') as HR_Interview_Cleared,
+				(jd_stats->'120') as HR_Interview_Failed,
+				(jd_stats->'121') as HR_Interview_No_Show,
+				(jd_stats->'130') as Offer_Pending,
+				(jd_stats->'140') as Offer_Released,
+				(jd_stats->'150') as Offer_Accepted,
+				(jd_stats->'160') as Joined,
+				(jd_stats->'170') as No_show
+				from wr_jds 
+				where status = 0
+				and recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+				order by client , id DESC limit %s 
+			"""
+		elif orderBy == 'title':
+			query ="""
+			select id, client, title,
+				(jd_stats->'0') as shortlisted,
+				(jd_stats->'10') as R1_Interview_Scheduled,
+				(jd_stats->'20') as R1_Interview_Cleared,
+				(jd_stats->'30') as R1_Interview_Failed,
+				(jd_stats->'31') as R1_Interview_No_Show,
+				(jd_stats->'40') as R2_Interview_Scheduled,
+				(jd_stats->'50') as R2_Interview_Cleared,
+				(jd_stats->'60') as R2_Interview_Failed,
+				(jd_stats->'61') as R2_Interview_No_Show,
+				(jd_stats->'70') as HM_Interview_Scheduled,
+				(jd_stats->'80') as HM_Interview_Cleared,
+				(jd_stats->'90') as HM_Interview_Failed,
+				(jd_stats->'91') as HM_Interview_No_Show,
+				(jd_stats->'100') as HR_Interview_Scheduled,
+				(jd_stats->'110') as HR_Interview_Cleared,
+				(jd_stats->'120') as HR_Interview_Failed,
+				(jd_stats->'121') as HR_Interview_No_Show,
+				(jd_stats->'130') as Offer_Pending,
+				(jd_stats->'140') as Offer_Released,
+				(jd_stats->'150') as Offer_Accepted,
+				(jd_stats->'160') as Joined,
+				(jd_stats->'170') as No_show
+				from wr_jds 
+				where status = 0
+				and recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+				order by title, id DESC limit %s
+			"""
+		
 
-		query = """
-		select id, client, title,
-			(jd_stats->'0') as shortlisted,
-			(jd_stats->'10') as R1_Interview_Scheduled,
-			(jd_stats->'20') as R1_Interview_Cleared,
-			(jd_stats->'30') as R1_Interview_Failed,
-			(jd_stats->'31') as R1_Interview_No_Show,
-			(jd_stats->'40') as R2_Interview_Scheduled,
-			(jd_stats->'50') as R2_Interview_Cleared,
-			(jd_stats->'60') as R2_Interview_Failed,
-			(jd_stats->'61') as R2_Interview_No_Show,
-			(jd_stats->'70') as HM_Interview_Scheduled,
-			(jd_stats->'80') as HM_Interview_Cleared,
-			(jd_stats->'90') as HM_Interview_Failed,
-			(jd_stats->'91') as HM_Interview_No_Show,
-			(jd_stats->'100') as HR_Interview_Scheduled,
-			(jd_stats->'110') as HR_Interview_Cleared,
-			(jd_stats->'120') as HR_Interview_Failed,
-			(jd_stats->'121') as HR_Interview_No_Show,
-			(jd_stats->'130') as Offer_Pending,
-			(jd_stats->'140') as Offer_Released,
-			(jd_stats->'150') as Offer_Accepted,
-			(jd_stats->'160') as Joined,
-			(jd_stats->'170') as No_show
-			from wr_jds 
-			where status = 0
-			and recruiter_id in ( select uid from tenant_user_roles where tid = %s)
-			order by client, id
-		"""
-
-
-		params = (int(tenantID),)
+		params = (tenantID,limit)
 		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		clientSummaryList =cursor.fetchall()
-
+		if order == 'DESC':
+			clientSummaryList = clientSummaryList[::-1]
 		return(RetCodes.success.value, "Client wise job application summary report fetched successfully from db for tenant ID {0}".format(tenantID), clientSummaryList)
 
 
@@ -94,27 +168,68 @@ def get_client_wise_job_application_status_summary_report(tenantID, orderBy=None
 		dbUtils.returnToPool(db_con)
 
 
-def get_client_wise_revenue_opportunity_report(tenantID, orderBy= None, order=None):
+def get_client_wise_revenue_opportunity_report(tenantID, orderBy= None, order=None, limit=1000):
 	try:
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
-
-		query = """
-			select client,id, title, positions, 
-			ctc_currency, 
-			sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
-			where status = 0  
-				and ctc_max is not NULL
-				and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
-				order by ro asc
-			"""
-
-		params = (int(tenantID),)
+		query, params = None, None
+		if orderBy == 'ctc_currency':
+			query = """
+				select client,id, title, positions, 
+				ctc_currency, 
+				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
+				where status = 0  
+					and ctc_max is not NULL
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					order by ctc_currency, id DESC limit %s
+				"""
+		elif orderBy == 'client':
+			query = """
+				select client,id, title, positions, 
+				ctc_currency, 
+				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
+				where status = 0  
+					and ctc_max is not NULL
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					order by client, id DESC limit %s
+				"""
+		elif orderBy == 'title':
+			query = """
+				select client,id, title, positions, 
+				ctc_currency, 
+				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
+				where status = 0  
+					and ctc_max is not NULL
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					order by title, id DESC limit %s
+				"""
+		elif orderBy == 'positions':
+			query = """
+				select client,id, title, positions, 
+				ctc_currency, 
+				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
+				where status = 0  
+					and ctc_max is not NULL
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					order by positions, id DESC limit %s
+				"""
+		else:
+			query = """
+				select client,id, title, positions, 
+				ctc_currency, 
+				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
+				where status = 0  
+					and ctc_max is not NULL
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					order by id DESC limit %s
+				"""
+		params = (tenantID,limit)
 		_logger.debug ( cursor.mogrify(query, params))
 		cursor.execute(query,params)
 
 		clientSummaryList =cursor.fetchall()
-
+		if order == 'DESC':
+			clientSummaryList = clientSummaryList[::-1]
 		return(RetCodes.success.value, "Client wise revenue opportunity summary report fetched successfully from db for tenant ID {0}".format(tenantID), clientSummaryList)
 
 

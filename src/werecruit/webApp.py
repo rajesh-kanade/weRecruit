@@ -427,6 +427,20 @@ def show_jd_edit_page(id):
         form.country.default = 'US'
         form.city.default = jd.city_id
 
+        
+        form.status.choices = [(jdUtils.JDStatusCodes.open.value, 'Open'), 
+                        (jdUtils.JDStatusCodes.draft.value, 'Draft'), 
+                        (jdUtils.JDStatusCodes.close.value, 'Close')]
+        form.status.default = jd.status
+        
+        expChoice = [(i, i) for i in range(100)]
+        expChoice.insert(0, (constants.NEW_ENTITY_ID, '- Select -'))
+        
+        form.min_yrs_of_exp.choices = expChoice
+        form.max_yrs_of_exp.choices = expChoice
+        form.min_yrs_of_exp.default = int(jd.min_yrs_of_exp)
+        form.max_yrs_of_exp.default = int(jd.max_yrs_of_exp)
+        
         form.process()    # works
 
         form.id.data = jd.id
@@ -436,7 +450,6 @@ def show_jd_edit_page(id):
 
         form.total_positions.data = jd.positions
         form.open_date.data = jd.open_date
-        form.status.data = jd.status
 
         form.intv_panel_name_1.data = jd.ip_name_1
         form.intv_panel_email_1.data = jd.ip_emailid_1
@@ -454,8 +467,7 @@ def show_jd_edit_page(id):
         form.hr_email.data = jd.hr_emailid
         form.hr_phone.data = jd.hr_phone
 
-        form.min_yrs_of_exp.data = jd.min_yrs_of_exp
-        form.max_yrs_of_exp.data = jd.max_yrs_of_exp
+        
 
         form.client_jd.data = jd.jd_file_name
 
@@ -597,8 +609,8 @@ def resume_save():
         f = form.candidate_resume.data
         filename = secure_filename(f.filename)
         _logger.debug('app root path is {0}'.format(app.root_path))
-        # filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
-        filename = os.path.join(filename)
+        filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
+        #filename = os.path.join(filename)
         f.save(filename)
         f.close()
     else:
@@ -644,15 +656,15 @@ def search_resume():
     from math import ceil
     totalPages = ceil(total/per_page)
 
-    def getPages(offset=0, per_page=1):
+    def getPages(offset=0, per_page=constants.PAGE_SIZE):
         return resumeList[offset: offset + per_page]
 
     pagination_ResumeList = getPages(offset=offset, per_page=per_page)
     pagination = Pagination(page=page, per_page=per_page, total=total)
 
     if retCode == resumeUtils.RetCodes.success.value:
-        return render_template("resume/list.html", resumeList=resumeList, form=form, page=page,
-                               per_page=1,
+        return render_template("resume/list.html", resumeList=resumeList, form=form, page=1,
+                               per_page=constants.PAGE_SIZE,
                                pagination=pagination,
                                totalPages=totalPages)
     else:
@@ -1155,31 +1167,45 @@ def show_job_summary_page(job_id):
 @app.route('/reports/showClientWiseSummary', methods=['GET'])
 @login_required
 def show_clientwise_summary_report_page():
-
+    orderBy = request.args.get("order_by", None)
+    order = request.args.get("order", None)
     # get the summary
-    (retCode, msg, clientSummary) = reports.get_client_wise_summary_report(
-        session["tenant_id"])
-    assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise summary report"
+    toggles = {'client': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'client' and order == 'DESC') else 'fa fa-arrow-up',
+                          'orderToggle': 'DESC' if order == 'ASC' else 'ASC'},
+                'count': {'arrowToggle': 'fa fa-arrow-down' if (orderBy == 'count' and order == 'DESC') else 'fa fa-arrow-up',
+                         'orderToggle': 'DESC' if order == 'ASC' else 'ASC'}
+              }
+    results = reports.get_client_wise_summary_report(
+        session.get('tenant_id'), orderBy=orderBy, order=order)
+    # (retCode, msg, clientSummary) = reports.get_client_wise_summary_report(
+    #     session["tenant_id"])
+    # assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise summary report"
+    if (results[0] == reports.RetCodes.success.value):
+        clientSummary = results[2]
 
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    per_page = request.args.get(
-            get_per_page_parameter(), type=int, default=constants.PAGE_SIZE1)
-    offset = (page - 1) * per_page
-    total = len(clientSummary)
-    from math import ceil
-    totalPages = ceil(total/per_page)
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        per_page = request.args.get(
+                get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+        offset = (page - 1) * per_page
+        total = len(clientSummary)
+        from math import ceil
+        totalPages = ceil(total/per_page)
 
-    def getPages(offset=0, per_page=1):
-            return  clientSummary[offset: offset + per_page]
+        def getPages(offset=0, per_page=1):
+                return  clientSummary[offset: offset + per_page]
 
-    pagination_JDList = getPages(offset=offset, per_page=per_page)
-    pagination = Pagination(page=page, per_page=per_page, total=total)        
-
-    return render_template("reports/show_clientwise_summary_reportpage.html",
-                 clientSummary=pagination_JDList, request=request, page=page,
-                 per_page=1, pagination=pagination, totalPages=totalPages)
-
-
+        pagination_JDList = getPages(offset=offset, per_page=per_page)
+        pagination = Pagination(page=page, per_page=per_page, total=total)        
+        for cs in clientSummary:
+            _logger.debug(cs.client)
+        return render_template("reports/show_clientwise_summary_reportpage.html",
+                    clientSummary=pagination_JDList, request=request, page=page,
+                    per_page=1, pagination=pagination, toggles=toggles, totalPages=totalPages)
+    else:
+        flash("Failed to fetch client wise revenue opportunity report", "is-danger")
+        render_template("reports/show_clientwise_summary_reportpage.html",
+                    clientSummary=None)
+                    
 @app.route('/reports/showClientWiseJobApplicationStatusSummary', methods=['GET'])
 @login_required
 def show_clientwise_job_application_status_summary_report_page():
@@ -1226,7 +1252,25 @@ def show_clientwise_revenue_opportunity_summary_report_page():
     order = request.args.get("order", None)
     toggles = {"client": {
                 "arrowToggle": "fa fa-arrow-down"
-                if (orderBy == "client" and order == "DESC")
+                if (orderBy == 'client' and order == "DESC")
+                else "fa fa-arrow-up",
+                "orderToggle": "DESC" if order == "ASC" else "ASC",
+            },
+                "title": {
+                "arrowToggle": "fa fa-arrow-down"
+                if (orderBy == 'title' and order == "DESC")
+                else "fa fa-arrow-up",
+                "orderToggle": "DESC" if order == "ASC" else "ASC",
+            },
+                "positions": {
+                "arrowToggle": "fa fa-arrow-down"
+                if (orderBy == "positions" and order == "DESC")
+                else "fa fa-arrow-up",
+                "orderToggle": "DESC" if order == "ASC" else "ASC",
+            },
+                "ctc_currency": {
+                "arrowToggle": "fa fa-arrow-down"
+                if (orderBy == "ctc_currency" and order == "DESC")
                 else "fa fa-arrow-up",
                 "orderToggle": "DESC" if order == "ASC" else "ASC",
             }

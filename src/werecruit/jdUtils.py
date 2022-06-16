@@ -64,6 +64,8 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
             return(RetCodes.empty_ent_attrs_error.value, "Recruiter ID field is empty or null.", None)
 
         if (max_yrs_of_exp is not None and min_yrs_of_exp is not None):
+            if int(min_yrs_of_exp) == constants.NEW_ENTITY_ID or int(max_yrs_of_exp) == constants.NEW_ENTITY_ID:
+                return(RetCodes.empty_ent_attrs_error.value, "Experience field is empty or null.", None)
             if (max_yrs_of_exp < min_yrs_of_exp):
                 return(RetCodes.save_ent_error.value, "Maximum years of experience can not be less then minimum years of experience .", None)
 
@@ -76,13 +78,14 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 
         _logger.debug('Client JD file name is {0}'.format(jd_file_name))
         
-        ext = getFileExtension(jd_file_name)
-        if ext not in ['docx','pdf']:
-            raise Exception('unsupported jd file type {0}'.format(ext))
         if (jd_file_name is None):
             file_data = None
         else:
-            file_data = bytes(open(jd_file_name, "rb").read())
+            ext = getFileExtension(jd_file_name)
+            if ext not in ['docx','pdf']:
+                raise Exception('unsupported jd file type {0}'.format(ext))
+            else:
+                file_data = bytes(open(jd_file_name, "rb").read())
 
         if (int(id) == constants.NEW_ENTITY_ID):
             # insert a record in user table

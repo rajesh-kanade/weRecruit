@@ -25,13 +25,13 @@
 
                   </tr>
                   </thead>
-                {% else %}
+                {% endif %}
                 <tr class="{{theme_bg_color}}">
                   <td class="has-text-centered {{theme_text_color}}">{{ ss.status }}</td>
                   <td class="has-text-centered {{theme_text_color}}">{{ ss.description }}</td>
                   <td class="has-text-centered {{theme_text_color}}">{{ ss.count }}</td>
                 </tr>
-                {%endif %}
+                
                 {% else %}
                 <div class="notification is-warning">
                   No shortlisted candidates found for this job position.

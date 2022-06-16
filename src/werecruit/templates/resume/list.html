@@ -18,7 +18,7 @@
     <div class="container">
       <!-- enctype="multipart/form-data" -->
       <section class="section" id="resumeSearchBar">
-        <form action="/resume/search" method="POST">
+        <form action="/resume/search" method="POST" data-turbo-frame="show_resumeList">
           <div class="field">
             <div class="field has-addons">
               <div class="control">
@@ -47,25 +47,12 @@
               <thead>
                 <tr class="header">
                   <th>Name<span>
-                      <form id="sort_name" action="/resume/showBrowser">
-                        <input type="hidden" name="order_by" value="name">
-                        <input type="hidden" name="order" value="{{toggles.name.orderToggle}}">
-                        <!-- {{toggles}} -->
-                        <a href="" onclick="sortByName()">
-                          <i class="{{toggles.name.arrowToggle}}"></i></a>
-                      </form>
-                      <script>
-                        const sortByName = (e) => {
-                          document.getElementById("sort_name").submit();
-                        }
-                      </script>
                     </span>
                   </th>
                   <th>Email<span>
 
                       <!-- <i class="fa fa-arrow-up"></i> -->
 
-                    </span>
                     </span>
                   </th>
                   <th>Phone<span>
