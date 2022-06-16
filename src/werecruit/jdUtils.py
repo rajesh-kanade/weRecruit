@@ -64,6 +64,8 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
             return(RetCodes.empty_ent_attrs_error.value, "Recruiter ID field is empty or null.", None)
 
         if (max_yrs_of_exp is not None and min_yrs_of_exp is not None):
+            if int(min_yrs_of_exp) == constants.NEW_ENTITY_ID or int(max_yrs_of_exp) == constants.NEW_ENTITY_ID:
+                return(RetCodes.empty_ent_attrs_error.value, "Experience field is empty or null.", None)
             if (max_yrs_of_exp < min_yrs_of_exp):
                 return(RetCodes.save_ent_error.value, "Maximum years of experience can not be less then minimum years of experience .", None)
 
