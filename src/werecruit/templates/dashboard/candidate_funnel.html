@@ -4,13 +4,18 @@
 <div class="client-name">
   <div id="client-corousel" class="columns carousel">
     {% for client in clients %}
-    <div class="column clientCard {{'active' if client.client_id == activeClient else 'false'}}"
-      id="{{client.client_id}}" style="max-width: 20rem;">
+    <div class="column clientCard"
+      id="{{client.client_id}}" style="max-width: 20rem; margin-bottom: 20px;">
       <div class="card">
-        <div class="card-content white-background card-height-120">
+        <div class="card-content white-background card-height-120 {{'card-active' if client.client_id == activeClient else 'false'}}">
+          {% if client.client_id == activeClient %}
+          <div class="has-text-right card-check-img">
+            <img class="margin-top-10" src="static/images/check-2.png" />
+          </div>
+          {% endif %}
           <a href="/showDashboardPage?client={{client.client_id}}" >
-            <!-- data-turbo-frame="" -->
-            <p>{{client.client_name}}</p>
+            <!-- data-turbo-frame="jobsframe" -->
+            <p class="card-text">{{client.client_name}}</p>
           </a>
           {# <img src="static/images/loadshare.png" /> #}
         </div>
@@ -21,7 +26,6 @@
     {% endfor %}  
   </div>
 </div>
-<turbo-frame id="jobsframe">
 <section class="section topbar-title">
   <h1 class="title">Candidate Funnel</h1>
 </section>
@@ -419,4 +423,3 @@
     </table>
   </div>
 </section>
-</turbo-frame>
