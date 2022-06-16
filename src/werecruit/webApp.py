@@ -557,6 +557,32 @@ def show_resume_upload_via_email_page():
     return render_template('resume/show_resume_upload_via_email_page.html')
 
 
+@app.route('/resume/parser', methods=['GET','POST'])
+@login_required
+def resume_parser():
+    form = ResumeForm()
+    _logger.debug('candidate resume file name is {0}'.format(
+        form.candidate_resume.data))
+    if form.candidate_resume.data != None:
+        f = form.candidate_resume.data
+        filename = secure_filename(f.filename)
+        _logger.debug('app root path is {0}'.format(app.root_path))
+        # filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
+        filename = os.path.join(filename)
+        f.save(filename)
+        f.close()
+    else:
+        filename = None     
+    name,phone,email = resumeUtils.parse_resume(filename)
+    if filename is not None and os.path.exists(filename):
+        os.remove(filename)
+    print(name,phone,email)
+
+    return render_template('resume/new.html',form=form,name=name)
+
+    
+
+
 @app.route('/resume/save', methods=['POST'])
 @login_required
 def resume_save():
@@ -604,7 +630,19 @@ def resume_save():
 @app.route("/resume/search", methods=["POST"])
 @login_required
 def search_resume():
-
+    orderBy = request.args.get("order_by", None)
+    order = request.args.get("order", None)
+    toggles = {
+        "name": {
+            "arrowToggle": "fa fa-arrow-down"
+            if (orderBy == "name" and order == "DESC")
+            else "fa fa-arrow-up",
+            "orderToggle": "DESC" if order == "ASC" else "ASC",
+        }
+    }
+    # results = resumeUtils.list_resumes_by_tenant(
+    #     session.get("tenant_id"), orderBy=orderBy, order=order
+    # )
     form = ResumeSearchForm()
     # print('search resume triggered')
     # print(form.data)
@@ -613,7 +651,7 @@ def search_resume():
         return redirect(url_for("show_resume_browser_page"))
 
     (retCode, msg, resumeList) = resumeUtils.search_resumes(
-        session.get("tenant_id"), form.ft_search.data
+        session.get("tenant_id"), form.ft_search.data, orderBy=orderBy, order=order
     )
     page = request.args.get(get_page_parameter(), type=int, default=1)
     per_page = request.args.get(
@@ -634,7 +672,7 @@ def search_resume():
         return render_template("resume/list.html", resumeList=resumeList, form=form, page=1,
                                per_page=constants.PAGE_SIZE,
                                pagination=pagination,
-                               totalPages=totalPages)
+                               totalPages=totalPages,toggles=toggles)
     else:
         flash(retCode + ":" + msg, "is-danger")
         return render_template("resume/list.html", resumeList=None, form=form)
@@ -652,6 +690,7 @@ def search_non_shortlisted_resumes():
     (retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(form.job_id.data,
                                                                              form.ft_search.data, session.get('tenant_id'))
     #_logger.debug("ResumeList is %s", resumeList)
+    
     if (retCode == jdUtils.RetCodes.success.value):
         # return render_template('resume/list.html', resumeList = resumeList, form = form )
         _logger.debug('ready to render')

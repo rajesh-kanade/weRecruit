@@ -8,6 +8,8 @@ from datetime import timezone
 import docx2txt
 import re
 #import docx
+from pyresparser import ResumeParser
+from docx import Document
 import os.path
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import TextConverter
@@ -124,16 +126,19 @@ def update_resume(id, resume_attr_list):
         # Update the first one else ask user to update manually.
         if bool(resume_attr_list['name']):
             name = resume_attr_list['name'][0]
+            print(name)
         else:
             name = 'Resume parser can not update this field.Manual update required.'
 
         if bool(resume_attr_list['phone']):
             phone = resume_attr_list['phone'][0]
+            print(phone)
         else:
             phone = 'Resume parser can not update this field.Manual update required.'
 
         if bool(resume_attr_list['email']):
             email = resume_attr_list['email'][0]
+            print(email)
         else:
             email = 'Resume parser can not update this field.Manual update required.'
 
@@ -167,6 +172,44 @@ def update_resume(id, resume_attr_list):
             cursor.close()
         dbUtils.returnToPool(db_con)
 
+def parse_resume(fileName):
+    _logger.debug('inside parse_resume function')
+
+    
+    _logger.debug('Resume file name is {0}'.format(fileName))
+    (resume_attr_list) = process_single_resume(fileName)
+    if (fileName is None):
+            file_data = None
+            json_resume = None
+    else:
+            # file_data = bytes(open(fileName, "rb").read())
+            (resume_attr_list) = process_single_resume(fileName)
+            # json_resume = json.dumps(
+            #     resume_attr_list, indent=4, sort_keys=False)
+            # print(resume_attr_list)   
+    if bool(resume_attr_list['name']):
+            name = resume_attr_list['name'][0]
+            # print(name)
+    else:
+            name = 'Resume parser can not update this field.Manual update required.'
+
+    if bool(resume_attr_list['phone']):
+            phone = resume_attr_list['phone'][0]
+            # print(phone)
+    else:
+            phone = 'Resume parser can not update this field.Manual update required.'
+
+    if bool(resume_attr_list['email']):
+            email = resume_attr_list['email'][0]
+            # print(email)
+    else:
+            email = 'Resume parser can not update this field.Manual update required.'
+ 
+    return(name,phone,email)
+
+
+    
+
 
 def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, recruiterID):
     _logger.debug('inside save_resume function')
@@ -193,12 +236,12 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
         #         return(RetCodes.save_ent_error.value, "Please enter valid Phone Number ", None)
      
 
-        if candidatePhone is not None:
-            phone_data = phonenumbers.parse(candidatePhone)
-            if phonenumbers.is_valid_number(phone_data):
-                pass
-            else:
-                return(RetCodes.save_ent_error.value, "Please enter valid Phone Number ", None)
+        # if candidatePhone is not None:
+        #     phone_data = phonenumbers.parse(candidatePhone)
+        #     if phonenumbers.is_valid_number(phone_data):
+        #         pass
+        #     else:
+        #         return(RetCodes.save_ent_error.value, "Please enter valid Phone Number ", None)
 
         if not recruiterID:
             return(RetCodes.empty_ent_attrs_error.value, "Recruiter ID field is empty or null.", None)
@@ -212,6 +255,36 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
             (resume_attr_list) = process_single_resume(fileName)
             json_resume = json.dumps(
                 resume_attr_list, indent=4, sort_keys=False)
+            # print(resume_attr_list)   
+        if bool(resume_attr_list['name']):
+            name = resume_attr_list['name'][0]
+            # print(name)
+        else:
+            name = 'Resume parser can not update this field.Manual update required.'
+
+        if bool(resume_attr_list['phone']):
+            phone = resume_attr_list['phone'][0]
+            # print(phone)
+        else:
+            phone = 'Resume parser can not update this field.Manual update required.'
+
+        if bool(resume_attr_list['email']):
+            email = resume_attr_list['email'][0]
+            # print(email)
+        else:
+            email = 'Resume parser can not update this field.Manual update required.'
+ 
+
+        # try:
+        #     doc = Document()
+        #     with open(fileName, 'r') as file:
+        #         doc.add_paragraph(file.read())
+        #     doc.save("text.docx")
+        #     data = ResumeParser('text.docx').get_extracted_data()
+        #     print(data['skills'])
+        # except:
+        #     data = ResumeParser(fileName).get_extracted_data()
+        #     print(data['skills'])        
 
         if (int(id) == constants.NEW_ENTITY_ID):
             # insert a record in user table
@@ -345,7 +418,7 @@ def list_resumes_by_tenant(tenantID, orderBy=None, order=None):
         dbUtils.returnToPool(db_con)
 
 
-def search_resumes(tenantID, ftSearch):
+def search_resumes(tenantID, ftSearch,orderBy=None, order=None):
     try:
 
         if not bool(ftSearch):
@@ -356,6 +429,7 @@ def search_resumes(tenantID, ftSearch):
 
         # to_tsvector('english',json_resume)
         # @@ to_tsquery('Java')
+
 
         kwrdList = ftSearch.split()
         _logger.debug("Keyword list for free text is as under %s", kwrdList)
@@ -370,16 +444,27 @@ def search_resumes(tenantID, ftSearch):
 
         _logger.debug("Full text search is %s", ft_cond)
 
-        query = """SELECT * FROM wr_resumes 
+
+
+        if not orderBy:
+            query = """SELECT * FROM wr_resumes 
 				where is_deleted = %s and
 				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
 				and """ + str(ft_cond) + " order by id desc"
+        if orderBy == 'client':
+            query = """SELECT * FROM wr_resumes 
+				where is_deleted = %s and
+				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
+				and """ + str(ft_cond) + " order by name ASC"
+
 
         params = (False, tenantID)
         _logger.debug(cursor.mogrify(query, params))
         cursor.execute(query, params)
 
         resumeList = cursor.fetchall()
+        if order == 'DESC':
+            resumeList = resumeList[::-1]
 
         return(RetCodes.success.value, "Resume List successfully fetched from db for tenant ID {0}".format(tenantID), resumeList)
 

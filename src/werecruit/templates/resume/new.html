@@ -1,0 +1,50 @@
+<html>
+    <body>
+{{name}}
+                    <form action="/resume/parser" method="POST" enctype="multipart/form-data">
+              <p>hello {{name}}</p>
+              <div class="field">
+                <div  id="resume-selector" class="file has-name">
+                  <label class="file-label">
+                    <input type="file" name="candidate_resume" class="file-input">
+                    <span class="file-cta">
+                      <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                      </span>
+                      <span class="file-label">
+                        Select Resume ( word, pdf only)…
+                      </span>
+                    </span>
+                    <span class="file-name">
+                      {{form.candidate_resume.data}}
+                    </span>
+                  </label>
+                </div>
+                <script>
+                  resumefileInput = document.querySelector('#resume-selector input[type=file]');
+                  resumefileInput.onchange = () => {
+                    if (resumefileInput.files.length > 0) {
+                      //alert('inside file change');
+                      console.log('File selected for upload is : ');
+                      fileName = document.querySelector('#resume-selector .file-name');
+                      fileName.textContent = resumefileInput.files[0].name;
+                      console.log('File selected for upload is : ' + fileName.textContent);
+  
+                    }
+                  }
+                </script>
+                  {% for error in form.candidate_resume.errors %}
+                      <small class="has-text-danger has-text-left">{{ error }}</small>  
+                  {% endfor %}
+                  <div class="field">
+                    <p class="control">
+                      {{ form.submit( class = 'button is-success ') }}
+                    </p>      
+                    {% for error in form.submit.errors %}
+                    <p><large class="has-text-danger">{{ error }}</large></p>  
+                    {% endfor %}
+      
+                  </div>     
+            </div></form>
+    </body>
+</html>
