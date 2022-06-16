@@ -192,20 +192,26 @@ def login_required(func):
 @app.route('/showDashboardPage', methods=['GET','POST'])
 @login_required
 def show_home_page():
+    activeClient, activeJD, job_summary = None, None, None
+
     (retCode, msg, clients) = (retCode, msg, clientSummary) = reports.get_clients_by_tenant_id(
         session["tenant_id"])
     assert retCode == reports.RetCodes.success.value, "Failed to fetch clients by tenant_id"
 
-    activeClient = int(request.args.get('client') if request.args.get(
-        'client') else clients[0].client_id)
-        
+    if clients:
+        activeClient = int(request.args.get('client') if request.args.get(
+            'client') else clients[0].client_id)
+
     (retCode, msg, jdList) = reports.get_jds_by_client_id(activeClient)
     assert retCode == reports.RetCodes.success.value, "Failed to fetch job_titles by client_id and tenant_id"
 
-    activeJD = int(request.args.get('jd_id') if request.args.get(
-        'jd_id') else jdList[0].id)
+    if jdList:
+        activeJD = int(request.args.get('jd_id') if request.args.get(
+            'jd_id') else jdList[0].id)
 
-    (retCode, msg, job_summary) = reports.get_jd_wise_application_status_report(activeJD)
+    (retCode, msg, job_summary_record) = reports.get_jd_wise_application_status_report(activeJD)
+    if job_summary_record:
+        job_summary = job_summary_record[0]
     assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise job application summary report"
 
     return render_template('dashboard/dashboard.html',
@@ -213,7 +219,7 @@ def show_home_page():
                             activeJD=activeJD,
                             clients=clients,
                             jdList=jdList,
-                            cs=job_summary[0])
+                           job_summary=job_summary)
 
 @app.route('/user/doSignout', methods=['GET'])
 @login_required

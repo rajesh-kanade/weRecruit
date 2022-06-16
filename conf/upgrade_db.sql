@@ -238,4 +238,10 @@ ALTER TABLE IF EXISTS public.wr_clients
 
 ALTER TABLE IF EXISTS public.wr_jds
 add column client_id bigint;
-/* ******** end upgrade prod on 07/06/2022 for wr_clients *****/
+
+insert into wr_clients(client_name, tenant_id)
+select distinct(wr_jds.client), tenant_user_roles.tid from wr_jds, tenant_user_roles
+       where wr_jds.recruiter_id = tenant_user_roles.rid
+
+update wr_jds
+set client_id = (select client_id from wr_clients where wr_jds.client = wr_clients.client_name)

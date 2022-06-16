@@ -158,8 +158,8 @@ def get_jd_wise_application_status_report(jd_id):
 			(jd_stats->'170') as No_show
 		from wr_jds 
 		where 	id=%s
-				and status = 0
 		"""
+		# and status = 0
 
 		params = (jd_id,)
 		_logger.debug(cursor.mogrify(query, params))
@@ -185,7 +185,7 @@ def get_clients_by_tenant_id(tenantID):
 		query = """
 				select * from wr_clients
 				where tenant_id = %s
-				order by client_id
+				order by client_name
 				"""
 
 		params = (int(tenantID),)
@@ -211,8 +211,8 @@ def get_jds_by_client_id(clientID):
 
 		query = """
 				select * from wr_jds
-				where client_id = %s
-				order by title
+				where client_id = %s and status=0
+				order by title ASC
 				"""
 		params = (clientID,)
 		_logger.debug(cursor.mogrify(query, params))

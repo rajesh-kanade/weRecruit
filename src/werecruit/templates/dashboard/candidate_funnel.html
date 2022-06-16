@@ -2,50 +2,57 @@
   <h1 class="title">Client Name</h1>
 </section>
 <div class="client-name">
-  <div class="columns">
+  <div id="client-corousel" class="columns carousel">
     {% for client in clients %}
-    <div
-      class="column is-one-fifth clientCard {{'active' if client.client_id == activeClient else 'false'}}"
-      id="{{client.client_id}}"
-    >
+    <div class="column clientCard {{'active' if client.client_id == activeClient else 'false'}}"
+      id="{{client.client_id}}" style="max-width: 20rem;">
       <div class="card">
         <div class="card-content white-background card-height-120">
-          <a href="/showDashboardPage?client={{client.client_id}}">
+          <a href="/showDashboardPage?client={{client.client_id}}" >
+            <!-- data-turbo-frame="" -->
             <p>{{client.client_name}}</p>
           </a>
           {# <img src="static/images/loadshare.png" /> #}
         </div>
       </div>
     </div>
-    {% endfor %}
+    {% else %}
+    <div class="column notification is-warning">No clients found !!!</div>
+    {% endfor %}  
   </div>
 </div>
+<turbo-frame id="jobsframe">
 <section class="section topbar-title">
   <h1 class="title">Candidate Funnel</h1>
 </section>
 <div class="candidate-funnel">
-  <div class="columns">
+
+  <div id="jobs-corousel" class="columns carousel">
     {% for jd in jdList %}
-    <div class="column is-one-fifth">
+    <div class="column" style="max-width: 20rem;">
       <div class="card">
-        <div
-          class="card-content white-background card-height-100 job-title-card {{'card-active' if jd.id == activeJD}}"
-          id="jobCard-{{jd.title}}"
-        >
-        {% if jd.id == activeJD %}
+        <div class="card-content white-background card-height-100 job-title-card {{'card-active' if jd.id == activeJD}}"
+          id="jobCard-{{jd.title}}">
+          {% if jd.id == activeJD %}
           <div class="has-text-right card-check-img">
-            <img class="margin-top-10" src="static/images/check-2.png">
+            <img class="margin-top-10" src="static/images/check-2.png" />
           </div>
-        {% endif %}
-          <a
-            href="/showDashboardPage?client={{activeClient}}&jd_id={{jd.id}}"
-            ><p class="card-text">{{jd.title}}</p></a 
-          >
+          {% endif %}
+          <a href="/showDashboardPage?client={{activeClient}}&jd_id={{jd.id}}">
+            <p class="card-text">{{jd.title}}</p>
+          </a>
         </div>
       </div>
     </div>
+    {% else %}
+    <div class="column">
+      <div class="card notification is-warning">No jobs found !!!</div>
+    </div>
     {% endfor %}
   </div>
+  {#
+</div>
+#}
 </div>
 <section class="application-form margin-top-bottom-30">
   <div class="table">
@@ -115,7 +122,9 @@
           </th>
           <th>
             <div class="columns">
-              <div class="column has-text-left margin-left-top-15px">Offer</div>
+              <div class="column has-text-left margin-left-top-15px">
+                Offer
+              </div>
               <div class="has-text-right">
                 <i class="arrow right"></i>
               </div>
@@ -127,12 +136,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr
-          class="table-summary"
-          style="padding-bottom: 20px; margin-top: 30px"
-        >
+        <tr class="table-summary" style="padding-bottom: 20px; margin-top: 30px">
           <td class="td-margin">
-            <p style="font-size: 56px">{{cs.shortlisted}}</p>
+            <p style="font-size: 56px">{{job_summary.shortlisted}}</p>
           </td>
           <td>
             <div class="columns margin-bottom-0">
@@ -140,7 +146,9 @@
                 <div>Scheduled -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.r1_interview_scheduled }}</div>
+                <div class="has-text-right">
+                  {{job_summary.r1_interview_scheduled }}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -149,7 +157,9 @@
                 <div>Cleared -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.r1_interview_cleared}}</div>
+                <div class="has-text-right">
+                  {{job_summary.r1_interview_cleared}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -158,7 +168,9 @@
                 <div>Failed -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.r1_interview_failed}}</div>
+                <div class="has-text-right">
+                  {{job_summary.r1_interview_failed}}
+                </div>
               </div>
             </div>
           </td>
@@ -168,7 +180,9 @@
                 <div>Scheduled -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.r2_interview_scheduled}}</div>
+                <div class="has-text-right">
+                  {{job_summary.r2_interview_scheduled}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -177,7 +191,9 @@
                 <div>Rejected -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.r1_interview_failed}}</div>
+                <div class="has-text-right">
+                  {{job_summary.r1_interview_failed}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -187,7 +203,9 @@
                 <div>Passed -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.r1_interview_cleared}}</div>
+                <div class="has-text-right">
+                  {{job_summary.r1_interview_cleared}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -197,7 +215,7 @@
               </div>
               <div class="column">
                 <div class="has-text-right no-show">
-                  {{cs.r1_interview_no_show}}
+                  {{job_summary.r1_interview_no_show}}
                 </div>
               </div>
             </div>
@@ -209,7 +227,9 @@
                 <div>Scheduled -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.r2_interview_scheduled}}</div>
+                <div class="has-text-right">
+                  {{job_summary.r2_interview_scheduled}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -218,7 +238,9 @@
                 <div>Rejected -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.r2_interview_failed}}</div>
+                <div class="has-text-right">
+                  {{job_summary.r2_interview_failed}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -228,7 +250,9 @@
                 <div>Passed -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.r2_interview_cleared}}</div>
+                <div class="has-text-right">
+                  {{job_summary.r2_interview_cleared}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -238,7 +262,7 @@
               </div>
               <div class="column">
                 <div class="has-text-right no-show">
-                  {{cs.r2_interview_no_show}}
+                  {{job_summary.r2_interview_no_show}}
                 </div>
               </div>
             </div>
@@ -249,7 +273,9 @@
                 <div>Scheduled -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.hm_interview_scheduled}}</div>
+                <div class="has-text-right">
+                  {{job_summary.hm_interview_scheduled}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -258,7 +284,9 @@
                 <div>Rejected -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.hm_interview_failed}}</div>
+                <div class="has-text-right">
+                  {{job_summary.hm_interview_failed}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -268,7 +296,9 @@
                 <div>Passed -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.hm_interview_cleared}}</div>
+                <div class="has-text-right">
+                  {{job_summary.hm_interview_cleared}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -278,7 +308,7 @@
               </div>
               <div class="column">
                 <div class="has-text-right no-show">
-                  {{cs.hm_interview_no_show}}
+                  {{job_summary.hm_interview_no_show}}
                 </div>
               </div>
             </div>
@@ -289,7 +319,9 @@
                 <div>Scheduled -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.hr_interview_scheduled}}</div>
+                <div class="has-text-right">
+                  {{job_summary.hr_interview_scheduled}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -298,7 +330,9 @@
                 <div>Rejected -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.hr_interview_failed}}</div>
+                <div class="has-text-right">
+                  {{job_summary.hr_interview_failed}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -308,7 +342,9 @@
                 <div>Passed -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.hr_interview_cleared}}</div>
+                <div class="has-text-right">
+                  {{job_summary.hr_interview_cleared}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -318,7 +354,7 @@
               </div>
               <div class="column">
                 <div class="has-text-right no-show">
-                  {{cs.hr_interview_no_show}}
+                  {{job_summary.hr_interview_no_show}}
                 </div>
               </div>
             </div>
@@ -329,7 +365,9 @@
                 <div>Pending (HR) -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.offer_pending}}</div>
+                <div class="has-text-right">
+                  {{job_summary.offer_pending}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -338,7 +376,9 @@
                 <div>Released -</div>
               </div>
               <div class="column">
-                <div class="has-text-right">{{cs.offer_released}}</div>
+                <div class="has-text-right">
+                  {{job_summary.offer_released}}
+                </div>
               </div>
             </div>
             <div class="line"></div>
@@ -347,7 +387,9 @@
                 <div class="accepted">Accepted -</div>
               </div>
               <div class="column">
-                <div class="has-text-right accepted">{{cs.offer_accepted}}</div>
+                <div class="has-text-right accepted">
+                  {{job_summary.offer_accepted}}
+                </div>
               </div>
             </div>
           </td>
@@ -357,7 +399,7 @@
                 <div>Done -</div>
               </div>
               <div class="column">
-                <div class="has-text-right done">{{cs.joined}}</div>
+                <div class="has-text-right done">{{job_summary.joined}}</div>
               </div>
             </div>
             <div class="line"></div>
@@ -366,7 +408,9 @@
                 <div class="no-show">No Show -</div>
               </div>
               <div class="column">
-                <div class="has-text-right no-show">{{cs.no_show}}</div>
+                <div class="has-text-right no-show">
+                  {{job_summary.no_show}}
+                </div>
               </div>
             </div>
           </td>
@@ -375,3 +419,4 @@
     </table>
   </div>
 </section>
+</turbo-frame>
