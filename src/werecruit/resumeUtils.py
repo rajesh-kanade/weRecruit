@@ -386,7 +386,29 @@ def search_resumes(tenantID, ftSearch,orderBy=None, order=None):
         cursor.close()
         dbUtils.returnToPool(db_con)
 
+def list_application_status_codes():
+    try:
+        db_con = dbUtils.getConnFromPool()
+        cursor = dbUtils.getNamedTupleCursor(db_con)
 
+        query = """SELECT * FROM application_status_codes
+					order by id asc"""
+
+        #params = (recruiterID,)
+        _logger.debug(cursor.mogrify(query, ))
+        cursor.execute(query,)
+
+        appStatusCodesList = cursor.fetchall()
+
+        return(RetCodes.success.value, "Application status code List successfully fetched from db", appStatusCodesList)
+
+    except Exception as dbe:
+        _logger.error(dbe)
+        return (RetCodes.server_error.value, str(dbe), None)
+
+    finally:
+        cursor.close()
+        dbUtils.returnToPool(db_con)
 
 def list_resume_application_status_codes_category():
     try:
