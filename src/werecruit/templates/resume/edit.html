@@ -38,6 +38,10 @@
                     {{form.candidate_resume.data}}
                   </span>
                 </label>
+                <input id ="sel" type="reset" onclick="window.location.reload()">
+                <!-- <input id ="sel" type="reset" onclick="document.getElementById('my').value=''"> -->
+              
+
               </div>
               <script>
                 resumefileInput = document.querySelector('#resume-selector input[type=file]');
@@ -56,6 +60,10 @@
                     <small class="has-text-danger has-text-left">{{ error }}</small>  
                 {% endfor %}
           </div>
+              <!-- <div>
+            <input id ="sel" type="reset" onclick="window.location.reload()">
+            
+          </div> -->
 
             <div class="field">
               <label class="label {{theme_text_color}} has-text-left">{{ form.candidate_name.label }}</label>
