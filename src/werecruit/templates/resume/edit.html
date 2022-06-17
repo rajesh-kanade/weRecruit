@@ -80,7 +80,7 @@
             <div class="field">
               <div  id="resume-selector" class="file has-name">
                 <label class="file-label">
-                  <input type="file" name="candidate_resume" class="file-input">
+                  <input id= "my"type="file" name="candidate_resume" class="file-input">
                   <span class="file-cta">
                     <span class="file-icon">
                       <i class="fas fa-upload"></i>
@@ -93,6 +93,8 @@
                     {{form.candidate_resume.data}}
                   </span>
                 </label>
+                <input id ="sel" type="reset" onclick="window.location.reload()">
+                <!-- <input id ="sel" type="reset" onclick="document.getElementById('my').value=''"> -->
               </div>
               <script>
                 resumefileInput = document.querySelector('#resume-selector input[type=file]');
@@ -111,13 +113,10 @@
                     <small class="has-text-danger has-text-left">{{ error }}</small>  
                 {% endfor %}
           </div>
-          <div>
-            <input id ="sel" type="button">
-            <script>
-              a=document.getElementById("resume-selector")
-              a.selectedIndex = 0
-            </script>
-          </div>
+          <!-- <div>
+            <input id ="sel" type="reset" onclick="window.location.reload()">
+            
+          </div> -->
          
 
                
