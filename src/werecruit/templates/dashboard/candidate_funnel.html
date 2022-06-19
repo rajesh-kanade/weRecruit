@@ -1,11 +1,19 @@
 <script>
-  var tikBox = document.createElement('div')
-  tikBox.classList.add('has-text-right')
-  tikBox.classList.add('card-check-img')
-  var img = document.createElement('img');
-  img.src = "static/images/check-2.png";
-  img.classList.add('margin-top-10');
-  tikBox.appendChild(img);
+  const tikBoxClient = document.createElement('div')
+  tikBoxClient.classList.add('has-text-right')
+  tikBoxClient.classList.add('card-check-img')
+  const imgClient = document.createElement('img');
+  imgClient.src = "static/images/check-2.png";
+  imgClient.classList.add('margin-top-10');
+  tikBoxClient.appendChild(imgClient);
+
+  const tikBoxJD = document.createElement('div')
+  tikBoxJD.classList.add('has-text-right')
+  tikBoxJD.classList.add('card-check-img')
+  const imgJD = document.createElement('img');
+  imgJD.src = "static/images/check-2.png";
+  imgJD.classList.add('margin-top-10');
+  tikBoxJD.appendChild(imgJD);
 </script>
 <!-- <turbo-frame id="clientframe"> -->
 <section class="section topbar-title">
@@ -41,6 +49,7 @@
 <turbo-frame id="jobsframe">
   <div class="candidate-funnel">
     <script>
+      // alert('setting active client')
       document.querySelectorAll(".clientCard").forEach(element => {
         element.classList.remove('card-active');
         if (element.children.length > 1)
@@ -48,7 +57,7 @@
       });
       document.getElementById("client-{{activeClient}}").classList.add('card-active');
       if (document.getElementById("client-{{activeClient}}").children.length === 1) {
-        document.getElementById("client-{{activeClient}}").prepend(tikBox);
+        document.getElementById("client-{{activeClient}}").prepend(tikBoxClient);
       }
     </script>
     <section class="section topbar-title">
@@ -97,6 +106,8 @@
 <turbo-frame id="summary_frame">
   <section class="application-form margin-top-bottom-30">
     <script>
+      // alert('setting active JD')
+      // alert('{{activeClient}}')
       document.querySelectorAll(".job-title-card").forEach(element => {
         element.classList.remove('card-active');
         if (element.children.length > 1)
@@ -104,8 +115,9 @@
       });
       document.getElementById("activeJD-{{activeJD}}").classList.add('card-active');
       if (document.getElementById("activeJD-{{activeJD}}").children.length === 1) {
-        document.getElementById("activeJD-{{activeJD}}").prepend(tikBox);
+        document.getElementById("activeJD-{{activeJD}}").prepend(tikBoxJD);
       }
+
     </script>
     <div class="table">
       <table class="table is-fullwidth">
