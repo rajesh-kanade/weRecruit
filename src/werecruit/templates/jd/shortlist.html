@@ -52,9 +52,13 @@
           <td class="has-text-left {{theme_text_color}}">{{ resume.email }}</td> 
           <td class="has-text-left {{theme_text_color}}">{{ resume.phone }}</td>
           <td class="has-text-left {{theme_text_color}}">{{resume.description}}</td>
+          {% if resume.description == "Shortlisted" %}
+          
           <td class="has-text-left{{theme_text_color}}">
-            <div class ="field is-grouped" >
-              <a title="shortlist"  href="/jd/shortlist/?resume_id={{resume.id}}&job_id={{job_id}}"><i class="fa fa-bookmark"></i></abbr></a>
+
+            <div class ="field is-grouped" data-turbo="false">
+              <a title="unshortlist"  href="/jd/unshortlist/?resume_id={{resume.id}}&job_id={{job_id}}"><i class="fa fa-bookmark"></i></abbr></a>
+
               <span ></span><a title="download" href="/resume/download/{{resume.id}}?src=jd-shortlist-page"><i
                   class="fa fa-download"></i></a></span>
               <span>
@@ -63,8 +67,23 @@
                 </a>
               </span>
             </div>
-          </td>       
+          </td>
+          
+          {% else %}     
+          <td class="has-text-left{{theme_text_color}}">
+            <div class ="field is-grouped" data-turbo="false">
+              <a title="unshortlist"  href="/jd/unshortlist/?resume_id={{resume.id}}&job_id={{job_id}}" style="pointer-events: none"><i class="fa fa-bookmark"></i></abbr></a>
+              <span ></span><a title="download" href="/resume/download/{{resume.id}}?src=jd-shortlist-page"><i
+                  class="fa fa-download"></i></a></span>
+              <span>
+                <a href="/jd/showJobAppUpdatePage?resume_id={{resume.id}}&job_id={{jd.id}}" title="Update Status">
+                  <i class="fa fa fa-pencil-square-o"></i>
+                </a>
+              </span>
+            </div>
+          </td>
         </tr>
+        {% endif %} 
       {% endfor %}
     </tbody>
     </table>

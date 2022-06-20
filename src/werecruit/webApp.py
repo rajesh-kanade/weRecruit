@@ -1030,6 +1030,26 @@ def jd_resume_shortlist():
 # TODO deprecate we may need to delete this function
 
 
+@app.route('/jd/unshortlist/', methods=['GET'])
+@login_required
+def jd_resume_unshortlist():
+    form = ResumeShortlistForm()
+
+    resume_id = request.args.get('resume_id')
+    jd_id = request.args.get('job_id')
+    (retCode, msg, data) = jdUtils.unshortlist(jd_id, resume_id)
+   
+    if retCode == jdUtils.RetCodes.success.value:
+        flash('Candidate successfully unshortlisted.', "is-success")
+    else:
+        flash('Candidate unshortlisting failed. Error details are as under - ' +
+              retCode + ':' + msg, "is-danger")
+
+    # /jd/showShortlistPage/<int:job_id>
+    return redirect(url_for('show_shortlist_resumes_page', job_id=jd_id))
+
+# TODO deprecate we may need to delete this function
+
 @app.route('/resume/shortlist', methods=['POST'])
 @login_required
 def resume_shortlist():
