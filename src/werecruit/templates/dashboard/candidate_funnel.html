@@ -40,7 +40,10 @@
       </div>
     </div>
     {% else %}
-    <div class="column notification is-warning">No clients found !!!</div>
+    <div class="column">
+      <div class="notification is-warning">No clients found !!!</div>
+    </div>
+   
     {% endfor %}
   </div>
 </div>
@@ -83,7 +86,7 @@
       </div>
       {% else %}
       <div class="column">
-        <div class="card notification is-warning">No jobs found !!!</div>
+        <div class="notification is-warning">No jobs found !!!</div>
       </div>
       {% endfor %}
     </div>

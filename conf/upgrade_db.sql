@@ -239,13 +239,13 @@ ALTER TABLE IF EXISTS public.wr_clients
 ALTER TABLE IF EXISTS public.wr_jds
 add column client_id bigint;
 
-BEGIN TRANSACTION;
+-- BEGIN TRANSACTION;
 
-insert into wr_clients(client_name, tenant_id)
-select distinct(wr_jds.client), tid from wr_jds, tenant_user_roles
-where wr_jds.recruiter_id = uid;
+-- insert into wr_clients(client_name, tenant_id)
+-- select distinct(wr_jds.client), tid from wr_jds, tenant_user_roles
+-- where wr_jds.recruiter_id = uid;
 
-COMMIT;
+-- COMMIT;
 
-update wr_jds
-set client_id = (select client_id from wr_clients where wr_jds.client = wr_clients.client_name)
+-- update wr_jds
+-- set client_id = (select client_id from wr_clients where wr_jds.client = wr_clients.client_name)
