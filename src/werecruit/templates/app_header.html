@@ -46,108 +46,6 @@
 <!-- class="{{theme_bg_color}} has-text-centered {{theme_text_color}} is-family-primary" -->
 
 <body>
-  {# {% set messages = get_flashed_messages(with_categories = true ) %}
-
-  <nav class="navbar {{theme_bg_color}} {{them_text_color}} is-fixed-top" role="navigation"
-    aria-label="main navigation">
-    <div class="navbar-brand">
-
-      <a class="navbar-item" href="/showHomePage">
-
-        <img src="{{url_for('static', filename='images/werecruit_logo.png')}}" alt="weRecruit Logo">
-      </a>
-
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbar">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
-
-    <div id="navbar" class="navbar-menu ">
-      <div class=" navbar-end ">
-        <div class=" navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">
-            <span class="{{theme_text_color}} has-text-weight-bold">Job Positions</span>
-          </a>
-          <div class="navbar-dropdown">
-            <a href="/jd/showCreatePage" class="navbar-item"><span class="{{theme_text_color}}">New position</span></a>
-
-            <a href="/jd/showAllPage" class="navbar-item">
-              <span class="{{theme_text_color}}">Browser</span>
-            </a>
-          </div>
-        </div>
-
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">
-            <span class="{{theme_text_color}} has-text-weight-bold">Resumes</span>
-          </a>
-          <div class="navbar-dropdown">
-            <a href="/resume/showUploadPage" class="navbar-item"><span class="{{theme_text_color}}">Upload</span></a>
-            <a href="/resume/showUploadPageViaEmail" class="navbar-item"><span class="{{theme_text_color}}">Upload via
-                email</span></a>
-
-            <a href="/resume/showBrowser" class="navbar-item">
-              <span class="{{theme_text_color}}">Browser</span>
-            </a>
-          </div>
-        </div>
-
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">
-            <span class="{{theme_text_color}} has-text-weight-bold">Reports</span>
-          </a>
-          <div class="navbar-dropdown">
-            <a href="/reports/showClientWiseSummary" class="navbar-item"><span class="{{theme_text_color}}">Active job
-                positions summary</span></a>
-
-            <a href="/reports/showClientWiseJobApplicationStatusSummary" class="navbar-item">
-              <span class="{{theme_text_color}}">Job applications status summary</span>
-            </a>
-
-            <a href="/reports/showClientWiseRevenueOpportunitySummary" class="navbar-item">
-              <span class="{{theme_text_color}}">Revenue opportunity summary</span>
-            </a>
-
-          </div>
-        </div>
-
-      </div>
-
-
-      <div class="navbar-end">
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">
-            <span class="{{theme_text_color}} has-text-weight-bold">{{session.user_name}}</span>
-          </a>
-          <div class="navbar-dropdown">
-            <a href="/user/showResetPassword" class="navbar-item">
-              <span class="{{theme_text_color}}">Reset Password</span>
-            </a>
-            <!--
-                <a href ="#"class="navbar-item">
-                  <span class ="{{theme_text_color}}">Update Profile</span>
-                </a>
-                -->
-            {% if session['role_id'] == 1 %}
-            <a href="/user/showManageUsersPage" class="navbar-item">
-              <span class="{{theme_text_color}}">Manage users</span>
-            </a>
-            {% endif %}
-
-          </div>
-        </div>
-        <div class="navbar-item">
-          <a href="/user/doSignout" class="button is-danger">
-            Sign out
-          </a>
-
-        </div>
-      </div>
-    </div>
-  </nav> #}
-
   <!-- New chagnes dated 14/04/2022 -->
   {% set messages = get_flashed_messages(with_categories = true ) %}
   <nav class="navbar is-white has-shadow " role="navigation" aria-label="main navigation">
@@ -200,13 +98,13 @@
 
             <div class="navbar-dropdown">
               <a href="/reports/showClientWiseSummary" class="navbar-item">
-                Active job positions summary
+                Active Job Positions Summary
               </a>
               <a href="/reports/showClientWiseJobApplicationStatusSummary" class="navbar-item">
-                Job applications status summary
+                Job Position Status Summary
               </a>
               <a href="/reports/showClientWiseRevenueOpportunitySummary" class="navbar-item">
-                Revenue opportunity summary
+                Revenue Opportunity Summary
               </a>
             </div>
           </div>

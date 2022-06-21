@@ -78,9 +78,9 @@ class JDForm(FlaskForm):
     xpChoice = [(i,i) for i in range(100)]
     xpChoice.insert(0, (NEW_ENTITY_ID, '- Select -'))
 
-    min_yrs_of_exp = SelectField("Minimum years of Experience",
+    min_yrs_of_exp = SelectField("Min",
                                  choices=xpChoice, default=NEW_ENTITY_ID, validators=[DataRequired()])
-    max_yrs_of_exp = SelectField("Maximum years of Experience", choices=xpChoice, default=NEW_ENTITY_ID, validators=[
+    max_yrs_of_exp = SelectField("Max", choices=xpChoice, default=NEW_ENTITY_ID, validators=[
                                  DataRequired(NumberRange(min=0, max=99, message="Min experience needs be in range of 0 to 99"))])
 
     
