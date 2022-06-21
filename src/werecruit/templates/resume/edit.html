@@ -2,6 +2,15 @@
 {%block content%}
 <div class="resume-upload">
 <section class="container is-fullheight">
+  <script type="text/javascript">
+    const clearFile = ()=> {
+                  console.log(document.getElementById('myInputFileID').value);
+                  document.getElementById('myInputFileID').value = null;
+                  console.log(document.getElementById('myInputFileID').value);
+                  document.getElementById('reset-file-field').innerHTML = "none";
+
+                }
+  </script>
       <div class="block"></div>
 
       <div class="columns is-centered">
@@ -12,7 +21,7 @@
                 This section allows you to upload resume with basic information about the candidate
               </h2>
             </section>
-          <form  action = "/resume/save" method="POST" enctype="multipart/form-data">
+          <form name="resume" action = "/resume/save" method="POST" enctype="multipart/form-data">
             {% include '/utils/show_msg.html'%}
 
             {% for error in form.submit.errors %}
@@ -25,7 +34,7 @@
             <div class="field">
               <div  id="resume-selector" class="file has-name">
                 <label class="file-label">
-                  <input type="file" name="candidate_resume" class="file-input">
+                  <input id="myInputFileID" type="file" name="candidate_resume" class="file-input">
                   <span class="file-cta">
                     <span class="file-icon">
                       <i class="fas fa-upload"></i>
@@ -34,14 +43,15 @@
                       Select Resume ( word, pdf only)…
                     </span>
                   </span>
-                  <span class="file-name">
+                  <span class="file-name" id="reset-file-field">
                     {{form.candidate_resume.data}}
                   </span>
                 </label>
-                <input id ="sel" type="reset" onclick="window.location.reload()">
+                <!-- <input id ="sel" type="reset" onclick="window.location.reload()"> -->
                 <!-- <input id ="sel" type="reset" onclick="document.getElementById('my').value=''"> -->
-              
+                <!-- <input id="res" type="button"  value="reset"> -->
 
+                <input  type="button" onclick="clearFile()" value="reset">
               </div>
               <script>
                 resumefileInput = document.querySelector('#resume-selector input[type=file]');
@@ -55,6 +65,13 @@
 
                   }
                 }
+
+                // const button = document.getElementById('res')
+                // button.addEventListener('click',()=>{
+                //   resumefileInput.value=null
+                // })
+
+                
               </script>
                 {% for error in form.candidate_resume.errors %}
                     <small class="has-text-danger has-text-left">{{ error }}</small>  
