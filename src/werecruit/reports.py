@@ -19,19 +19,18 @@ def get_client_wise_summary_report(tenantID,orderBy=None, order=None):
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
 		if not orderBy:
-			query = """select client, count(*) from wr_jds 
+			query = """select (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client, count(*) from wr_jds 
 				where status = 0 and recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
-				group by client order by count ASC"""
+				group by client_id order by count ASC"""
 		if orderBy == 'client':
-			query = """select client, count(*) from wr_jds 
+			query = """select (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client, count(*) from wr_jds 
 				where status = 0 and recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
-				group by client order by client ASC"""
+				group by client_id order by client ASC"""
 		elif orderBy == 'count':
-			query = """select client, count(*) from wr_jds 
+			query = """select (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client, count(*) from wr_jds 
 				where status = 0 and recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
-				group by client order by count ASC"""
+				group by client_id order by count ASC"""
 		
-			
 
 		params = (int(tenantID),)
 		_logger.debug ( cursor.mogrify(query, params))
@@ -59,7 +58,7 @@ def get_client_wise_job_application_status_summary_report(tenantID, orderBy=None
 		query, params = None, None
 		if not orderBy:
 			query ="""
-			select id, client, title,
+			select id, (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client, title,
 				(jd_stats->'0') as shortlisted,
 				(jd_stats->'10') as R1_Interview_Scheduled,
 				(jd_stats->'20') as R1_Interview_Cleared,
@@ -89,7 +88,7 @@ def get_client_wise_job_application_status_summary_report(tenantID, orderBy=None
 			"""
 		if orderBy == 'client':
 			query = """
-			select id, client, title,
+			select id, (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client, title,
 				(jd_stats->'0') as shortlisted,
 				(jd_stats->'10') as R1_Interview_Scheduled,
 				(jd_stats->'20') as R1_Interview_Cleared,
@@ -119,7 +118,7 @@ def get_client_wise_job_application_status_summary_report(tenantID, orderBy=None
 			"""
 		elif orderBy == 'title':
 			query ="""
-			select id, client, title,
+			select id, (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client, title,
 				(jd_stats->'0') as shortlisted,
 				(jd_stats->'10') as R1_Interview_Scheduled,
 				(jd_stats->'20') as R1_Interview_Cleared,
@@ -175,52 +174,52 @@ def get_client_wise_revenue_opportunity_report(tenantID, orderBy= None, order=No
 		query, params = None, None
 		if orderBy == 'ctc_currency':
 			query = """
-				select client,id, title, positions, 
+				select (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client,id, title, positions, 
 				ctc_currency, 
 				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
 				where status = 0  
 					and ctc_max is not NULL
-					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client_id ,id
 					order by ctc_currency, id DESC limit %s
 				"""
 		elif orderBy == 'client':
 			query = """
-				select client,id, title, positions, 
+				select (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client,id, title, positions, 
 				ctc_currency, 
 				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
 				where status = 0  
 					and ctc_max is not NULL
-					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client_id ,id
 					order by client, id DESC limit %s
 				"""
 		elif orderBy == 'title':
 			query = """
-				select client,id, title, positions, 
+				select (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client,id, title, positions, 
 				ctc_currency, 
 				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
 				where status = 0  
 					and ctc_max is not NULL
-					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client_id ,id
 					order by title, id DESC limit %s
 				"""
 		elif orderBy == 'positions':
 			query = """
-				select client,id, title, positions, 
+				select (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client,id, title, positions, 
 				ctc_currency, 
 				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
 				where status = 0  
 					and ctc_max is not NULL
-					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client_id ,id
 					order by positions, id DESC limit %s
 				"""
 		else:
 			query = """
-				select client,id, title, positions, 
+				select (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client,id, title, positions, 
 				ctc_currency, 
 				sum(((ctc_max*fees_in_percent)/100)*positions) as ro from wr_jds 
 				where status = 0  
 					and ctc_max is not NULL
-					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client ,id
+					and recruiter_id in ( select uid from tenant_user_roles where tid = %s) group by client_id ,id
 					order by id DESC limit %s
 				"""
 		params = (tenantID,limit)
@@ -248,7 +247,7 @@ def get_jd_wise_application_status_report(jd_id):
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
 		query = """
-		select id, client, title,
+		select id, (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client, title,
 			(jd_stats->'0') as shortlisted,
 			(jd_stats->'10') as R1_Interview_Scheduled,
 			(jd_stats->'20') as R1_Interview_Cleared,

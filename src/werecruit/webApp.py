@@ -9,7 +9,7 @@ from flask import (
     url_for
 )
 from flask_session import Session
-from webForms import ResumeSearchForm, UserForm, ResetPasswordForm, ApplicationStatusUpdate, ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm, SignInForm, UserForm
+from webForms import ResumeSearchForm, UserForm, ResetPasswordForm, ApplicationStatusUpdate, ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm, SignInForm, UserForm, NewClientForm
 from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
 from flask import send_file
@@ -263,10 +263,41 @@ def show_jd_create_page():
             cityNames = cityRecords[2] 
     except:
         cityNames = ['Pune', 'Bangalore']
+    try:
+        clients = []
+        clientRecords = reports.get_clients_by_tenant_id(session.get('tenant_id'))[2]
+        if clientRecords:
+            clients = [(client.client_id, client.client_name)
+                       for client in clientRecords]
+    except:
+        clients = []
+
+    clients.insert(0, (-1, '- Select -'))
+    form.client.choices = clients
     form.country.choices = countryNames
     form.city.choices = [(record.id, record.name) for record in cityNames]
 
     return render_template('jd/edit.html', form=form)
+
+
+@app.route('/jd/showAddNewClient', methods=['GET'])
+@login_required
+def show_add_new_client_page():
+    form = NewClientForm()
+    form.tenant_id.data = session.get('tenant_id')
+    return render_template('/jd/add_new_client.html', form=form)
+
+
+@app.route('/jd/addNewClient', methods=['POST'])
+@login_required
+def add_new_client_page():
+    form = NewClientForm()
+
+    (retCode, msg, retData) = jdUtils.save_new_client(
+        form.client_name.data, form.tenant_id.data)
+    if retCode == jdUtils.RetCodes.success.value:
+        flash("Client added successfully.", "is-success")
+    return redirect(url_for('show_jd_create_page'))
 
 @app.route('/jd/showAllPage', methods=['GET'])
 @login_required
@@ -421,7 +452,18 @@ def show_jd_edit_page(id):
                 cityNames = cityRecords[2] 
         except:
             cityNames = ['Pune', 'Bangalore']
-        
+        clients = []
+        try:
+            clientRecords = reports.get_clients_by_tenant_id(
+                session.get('tenant_id'))[2]
+            if clientRecords:
+                clients = [(client.client_id, client.client_name) for client in clientRecords]
+        except:
+            clients = []
+
+        clients.insert(0, (-1, '- Select -'))
+        form.client.choices = clients
+        form.client.default = jd.client_id
         form.country.choices = countryNames
         form.city.choices = [(record.id, record.name) for record in cityNames]
         form.country.default = 'US'
@@ -446,7 +488,6 @@ def show_jd_edit_page(id):
         form.id.data = jd.id
         form.title.data = jd.title
         form.details.data = jd.details
-        form.client.data = jd.client
 
         form.total_positions.data = jd.positions
         form.open_date.data = jd.open_date

@@ -91,7 +91,7 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
             # insert a record in user table
             _logger.debug('creating new JD with id %s ', id)
 
-            sql = """insert into public.wr_jds ( title, details, client, 
+            sql = """insert into public.wr_jds ( title, details, client_id, 
 					recruiter_id,positions,status,open_date,
 					ip_name_1, ip_emailid_1,ip_phone_1,
 					ip_name_2, ip_emailid_2,ip_phone_2,
@@ -139,7 +139,7 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
             _logger.debug(
                 "inside save_jd update. jd file path is : ".format(jd_file_name))
             sql = """update public.wr_jds set  
-						title = %s,  details = %s,  client = %s,
+						title = %s,  details = %s,  client_id = %s,
 						recruiter_id = %s, positions = %s, status =%s,
 						ip_name_1 = %s, ip_emailid_1 = %s, ip_phone_1 = %s,
 						ip_name_2 = %s, ip_emailid_2 = %s, ip_phone_2 = %s,
@@ -249,34 +249,34 @@ def list_jds_by_tenant(tenantID, orderBy=None, order=None, statusFilter=None, li
         query, params = None, None
 
         if not orderBy:
-            query = """SELECT * FROM wr_jds 
+            query = """SELECT wr_jds.*, (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client  FROM wr_jds 
                         where is_deleted = False and 
                         recruiter_id in ( select uid from tenant_user_roles where tid = %s)
                         order by id DESC limit %s"""
         elif orderBy == 'client':
-            query = """SELECT * FROM wr_jds 
+            query = """SELECT wr_jds.*, (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client FROM wr_jds 
                         where is_deleted = False and 
                         recruiter_id in ( select uid from tenant_user_roles where tid = %s)
                         order by client, id DESC limit %s"""
 
         elif orderBy == 'status':
-            query = """SELECT * FROM wr_jds 
+            query = """SELECT wr_jds.*, (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client FROM wr_jds 
                         where is_deleted = False and 
                         recruiter_id in ( select uid from tenant_user_roles where tid = %s)
                         order by status, id DESC limit %s"""
 
         elif orderBy == 'title':
-            query = """SELECT * FROM wr_jds 
+            query = """SELECT wr_jds.*, (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client FROM wr_jds 
                         where is_deleted = False and 
                         recruiter_id in ( select uid from tenant_user_roles where tid = %s)
                         order by title, id DESC limit %s"""
         elif orderBy == 'open_date':
-            query = """SELECT * FROM wr_jds 
+            query = """SELECT wr_jds.*, (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client FROM wr_jds 
                         where is_deleted = False and 
                         recruiter_id in ( select uid from tenant_user_roles where tid = %s)
                         order by open_date, id DESC limit %s"""
         else:
-            query = """SELECT * FROM wr_jds 
+            query = """SELECT wr_jds.*, (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client FROM wr_jds 
                         where is_deleted = False and 
                         recruiter_id in ( select uid from tenant_user_roles where tid = %s)
                         order by hiring_mgr_name, id DESC limit %s"""
@@ -658,6 +658,36 @@ def get_city_names(country_id):
     finally:
         cursor.close()
         dbUtils.returnToPool(db_con)
+
+
+def save_new_client(client_name, tenant_id):
+
+    db_con = dbUtils.getConnFromPool()
+    cursor = db_con.cursor()
+    try:
+        sql = """insert into wr_clients(client_name, tenant_id)
+                values (%s, %s)"""
+        params = (client_name, tenant_id)
+
+        _logger.debug(cursor.mogrify(sql, params))
+
+        cursor.execute(sql, params)
+        _logger.debug(cursor.rowcount)
+        assert cursor.rowcount == 1, "assertion failed : {0} Rows returned which is not equal to 1.".format(
+            cursor.rowcount)
+        db_con.commit()
+        return (RetCodes.success.value, "Client added successful.", None)
+
+    except Exception as e:
+        _logger.error(e)
+        db_con.rollback()
+        return (RetCodes.server_error.value, str(e), None)
+
+    finally:
+        if cursor is not None:
+            cursor.close()
+        dbUtils.returnToPool(db_con)
+
 # main entry point
 if __name__ == "__main__":
 

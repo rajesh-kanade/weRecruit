@@ -216,7 +216,7 @@ INSERT INTO public.resume_application_status_codes_sub_category(
 
 /* ******** end upgrade prod on 25/05/2022 for status codes category and sub category *****/
 
-/* ***** 07/06/2022 wr_clients table creation, added column client_id on wr_jds  ****** */
+/* ***** 22/06/2022 wr_clients table creation, added column client_id on wr_jds  ****** */
 
 CREATE TABLE IF NOT EXISTS public.wr_clients
 (
@@ -249,3 +249,8 @@ add column client_id bigint;
 
 -- update wr_jds
 -- set client_id = (select client_id from wr_clients where wr_jds.client = wr_clients.client_name)
+
+ALTER TABLE IF EXISTS public.wr_jds
+drop column client;
+
+/* ******** end upgrade prod on 22/06/2022 for status codes category and sub category *****/

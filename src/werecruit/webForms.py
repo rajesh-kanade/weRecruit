@@ -68,7 +68,7 @@ class JDForm(FlaskForm):
                    
     open_date = DateField('Open Date',validators=[DataRequired('Enter  Open Date')])
 
-    client = StringField('Client Name*', validators=[DataRequired('Enter Client Name')])
+    client = SelectField('Client Name*', validators=[DataRequired('Enter Client Name')])
     client_jd = FileField('Client JD File')
 
     # location = StringField('Location')
@@ -202,3 +202,9 @@ class ApplicationStatusUpdate( FlaskForm):
     notes = TextAreaField('Notes')
     change_date = DateField('Update Date & Time', format='%Y-%m-%d')
     submit = SubmitField('Update')
+
+
+class NewClientForm(FlaskForm):
+    tenant_id = HiddenField()
+    client_name = StringField('Name')
+    submit = SubmitField('Add')
