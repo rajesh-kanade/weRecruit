@@ -186,7 +186,7 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
 
         if not recruiterID:
             return(RetCodes.empty_ent_attrs_error.value, "Recruiter ID field is empty or null.", None)
-        # print(candidatePhone)
+        
         _logger.debug('Resume file name is {0}'.format(fileName))
         if (fileName is None):
             file_data = None
@@ -194,10 +194,10 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
         else:
             file_data = bytes(open(fileName, "rb").read())
             (resume_attr_list) = process_single_resume(fileName)
-            # print(resume_attr_list)
+            
             json_resume = json.dumps(
                 resume_attr_list, indent=4, sort_keys=False)
-        # print(fileName)
+      
         if (int(id) == constants.NEW_ENTITY_ID):
             # insert a record in user table
             sql = """insert into public.wr_resumes ( resume_filename, name, email, 
@@ -207,8 +207,7 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
 
             params = (fileName, candidateName, candidateEmail,
                       candidatePhone, int(recruiterID), file_data, json_resume)
-            # print(fileName) 
-            # print(json_resume)         
+                    
 
             _logger.debug(cursor.mogrify(sql, params))
 
