@@ -47,9 +47,7 @@
                     {{form.candidate_resume.data}}
                   </span>
                 </label>
-                <!-- <input id ="sel" type="reset" onclick="window.location.reload()"> -->
-                <!-- <input id ="sel" type="reset" onclick="document.getElementById('my').value=''"> -->
-                <!-- <input id="res" type="button"  value="reset"> -->
+            
                 <div><input  type="button" onclick="clearFile()" value="reset"></div>
               </div>
               <script>
@@ -65,10 +63,7 @@
                   }
                 }
 
-                // const button = document.getElementById('res')
-                // button.addEventListener('click',()=>{
-                //   resumefileInput.value=null
-                // })
+               
 
                 
               </script>
@@ -76,10 +71,7 @@
                     <small class="has-text-danger has-text-left">{{ error }}</small>  
                 {% endfor %}
           </div>
-              <!-- <div>
-            <input id ="sel" type="reset" onclick="window.location.reload()">
             
-          </div> -->
 
             <div class="field">
               <label class="label {{theme_text_color}} has-text-left">{{ form.candidate_name.label }}</label>
