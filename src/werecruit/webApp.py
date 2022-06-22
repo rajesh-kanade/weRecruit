@@ -409,6 +409,35 @@ def save_JD():
         _logger.debug(form.max_yrs_of_exp.errors)
         #form.max_yrs_of_exp.errors = tuple(list(form.max_yrs_of_exp.errors).append( 'Error from backend'))
         # form.max_yrs_of_exp.errors.append()
+        countryNames = None
+        try:
+            countryRecords = jdUtils.get_country_names()
+            if countryRecords:
+                countryNames = [record.name for record in countryRecords[2]]
+        except:
+            countryNames = ['India']
+
+        try:
+            # only Indian Cities To Be Populated
+            cityRecords = jdUtils.get_city_names(1)
+            if cityRecords:
+                cityNames = cityRecords[2]
+        except:
+            cityNames = ['Pune', 'Bangalore']
+        try:
+            clients = []
+            clientRecords = reports.get_clients_by_tenant_id(
+                session.get('tenant_id'))[2]
+            if clientRecords:
+                clients = [(client.client_id, client.client_name)
+                        for client in clientRecords]
+        except:
+            clients = []
+
+        clients.insert(0, (-1, '- Select -'))
+        form.client.choices = clients
+        form.country.choices = countryNames
+        form.city.choices = [(record.id, record.name) for record in cityNames]
         return render_template('jd/edit.html', form=form), 409
         # return redirect
 
