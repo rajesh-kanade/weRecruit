@@ -2,6 +2,15 @@
 {%block content%}
 <div class="resume-upload">
 <section class="container is-fullheight">
+  <script type="text/javascript">
+    const clearFile = ()=> {
+                  console.log(document.getElementById('myInputFileID').value);
+                  document.getElementById('myInputFileID').value = null;
+                  console.log(document.getElementById('myInputFileID').value);
+                  document.getElementById('reset-file-field').innerHTML = "none";
+
+                }
+  </script>
       <div class="block"></div>
 
       <div class="columns is-centered">
@@ -12,7 +21,7 @@
                 Section to upload resume with basic information
               </h2>
             </section>
-          <form  action = "/resume/save" method="POST" enctype="multipart/form-data">
+          <form name="resume" action = "/resume/save" method="POST" enctype="multipart/form-data">
             {% include '/utils/show_msg.html'%}
 
             {% for error in form.submit.errors %}
@@ -25,7 +34,7 @@
             <div class="field">
               <div  id="resume-selector" class="file has-name">
                 <label class="file-label">
-                  <input type="file" name="candidate_resume" class="file-input">
+                  <input id="myInputFileID" type="file" name="candidate_resume" class="file-input">
                   <span class="file-cta">
                     <span class="file-icon">
                       <i class="fas fa-upload"></i>
@@ -34,10 +43,12 @@
                       Select Resume ( word, pdf only)…
                     </span>
                   </span>
-                  <span class="file-name">
+                  <span class="file-name" id="reset-file-field">
                     {{form.candidate_resume.data}}
                   </span>
                 </label>
+            
+                <div><input  type="button" onclick="clearFile()" value="reset"></div>
               </div>
               <script>
                 resumefileInput = document.querySelector('#resume-selector input[type=file]');
@@ -51,11 +62,16 @@
 
                   }
                 }
+
+               
+
+                
               </script>
                 {% for error in form.candidate_resume.errors %}
                     <small class="has-text-danger has-text-left">{{ error }}</small>  
                 {% endfor %}
           </div>
+            
 
             <div class="field">
               <label class="label {{theme_text_color}} has-text-left">{{ form.candidate_name.label }}</label>
