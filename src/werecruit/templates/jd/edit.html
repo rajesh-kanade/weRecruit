@@ -7,9 +7,9 @@
       <div class="job-position">
         <div class="container">
           <section class="section topbar-title">
-            <h1 class="title">Create/Edit a job position</h1>
+            <h1 class="title">Create Or Edit A Job Position</h1>
             <h2 class="subtitle">
-              This section allows you to create or edit a job position.
+              Section allows you to create or edit a job position
             </h2>
           </section>
           {% for field in form.errors %}
@@ -144,20 +144,26 @@
                   <label class="label">{{ form.primary_skills.label }}*</label>
                   <div class="control">
                     {{form.primary_skills(class='textarea', title ="Enter mandatory or must have
-                    skillsets.",placeholder='Enter primary skillsets required for the job.')}}
+                    skillsets.",placeholder='Skill sets required for the job')}}
                   </div>
                 </div>
                 <div class="field">
                   <label class="label">{{ form.secondary_skills.label }}*</label>
                   <div class="control">
                     {{form.secondary_skills(class='textarea', title ="Enter mandatory or good to have
-                    skillsets.",placeholder='Enter secondary skillsets required for the job.')}}
+                    skillsets.",placeholder='Skill sets required for the job')}}
+                  </div>
+                </div>
+                <hr>
+                <div class="field">
+                  <div class="section-title">
+                    <label class="label">Years Of Experience*</label>
                   </div>
                 </div>
                 <div class="columns">
                   <div class="column">
                     <div class="field">
-                      <label class="label">{{ form.min_yrs_of_exp.label }}*</label>
+                      <label class="label">{{ form.min_yrs_of_exp.label }}</label>
                       <div class="control">
                         <div class="select is-black">
                           {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
@@ -167,7 +173,7 @@
                   </div>
                   <div class="column">
                     <div class="field">
-                      <label class="label">{{ form.max_yrs_of_exp.label }}*</label>
+                      <label class="label">{{ form.max_yrs_of_exp.label }}</label>
                       <div class="control">
                         <div class="select is-black">
                           {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
@@ -182,7 +188,7 @@
                 <hr>
                 <div class="field">
                   <div class="section-title">
-                    <label class="label">About CTC*</label>
+                    <label class="label">CTC*</label>
                   </div>
                 </div>
                 <div class="columns">
@@ -260,11 +266,11 @@
                   Few guidelines
                 </label>
                 <ul class="list-unstyled">
-                  <li>Proper formatting of the text/content of the posting with clear spaces and standard bullets (-) to
-                    be used.</li>
-                  <li>No short forms/abbreviations to be used in the text.</li>
-                  <li>No spelling mistakes in the content.</li>
-                  <li>JD should be concise and crisp - to the point.</li>
+                  <li>Proper formatting of the text/content with clear spaces.</li>
+                  <li>Standard bullets (-) to be used.</li>
+                  <li>Short forms/abbreviations not accepted .</li>
+                  <li>Check  spelling in the content.</li>
+                  <li>Concise and crisp JD.</li>
                   <li>(*) mark is mandatory.</li>
                 </ul>
               </div>

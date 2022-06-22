@@ -703,10 +703,23 @@ def resume_save():
         return render_template('resume/edit.html', form=form),415
 
 
+
 @app.route("/resume/search", methods=["POST"])
 @login_required
 def search_resume():
-
+    orderBy = request.args.get("order_by", None)
+    order = request.args.get("order", None)
+    toggles = {
+        "name": {
+            "arrowToggle": "fa fa-arrow-down"
+            if (orderBy == "name" and order == "DESC")
+            else "fa fa-arrow-up",
+            "orderToggle": "DESC" if order == "ASC" else "ASC",
+        }
+    }
+    # results = resumeUtils.list_resumes_by_tenant(
+    #     session.get("tenant_id"), orderBy=orderBy, order=order
+    # )
     form = ResumeSearchForm()
     # print('search resume triggered')
     # print(form.data)
@@ -715,7 +728,7 @@ def search_resume():
         return redirect(url_for("show_resume_browser_page"))
 
     (retCode, msg, resumeList) = resumeUtils.search_resumes(
-        session.get("tenant_id"), form.ft_search.data
+        session.get("tenant_id"), form.ft_search.data, orderBy=orderBy, order=order
     )
     page = request.args.get(get_page_parameter(), type=int, default=1)
     per_page = request.args.get(
@@ -736,7 +749,7 @@ def search_resume():
         return render_template("resume/list.html", resumeList=resumeList, form=form, page=1,
                                per_page=constants.PAGE_SIZE,
                                pagination=pagination,
-                               totalPages=totalPages)
+                               totalPages=totalPages,toggles=toggles)
     else:
         flash(retCode + ":" + msg, "is-danger")
         return render_template("resume/list.html", resumeList=None, form=form)
@@ -763,13 +776,16 @@ def search_non_shortlisted_resumes():
         # return redirect(url_for("show_home_page"),303)
 
         return render_template('/jd/non_shortlisted_candidates_list.html',
-                               resumeList=resumeList,
+                               allresumeList=resumeList,
                                job_id=form.job_id.data,
                                searchForm=form)
 
     else:
         flash(retCode + ':' + msg, "is-danger")
-        return render_template('jd/non_shortlisted_candidates_list.html', resumeList=resumeList, job_id=form.job_id.data, searchForm=form)
+        return render_template('jd/non_shortlisted_candidates_list.html', 
+                        allresumeList=resumeList, 
+                        job_id=form.job_id.data, 
+                        searchForm=form)
 
 
 @app.route("/resume/showBrowser", methods=["GET"])
@@ -1108,6 +1124,26 @@ def jd_resume_shortlist():
 
 # TODO deprecate we may need to delete this function
 
+
+@app.route('/jd/unshortlist/', methods=['GET'])
+@login_required
+def jd_resume_unshortlist():
+    form = ResumeShortlistForm()
+
+    resume_id = request.args.get('resume_id')
+    jd_id = request.args.get('job_id')
+    (retCode, msg, data) = jdUtils.unshortlist(jd_id, resume_id)
+   
+    if retCode == jdUtils.RetCodes.success.value:
+        flash('Candidate successfully unshortlisted.', "is-success")
+    else:
+        flash('Candidate unshortlisting failed. Error details are as under - ' +
+              retCode + ':' + msg, "is-danger")
+
+    # /jd/showShortlistPage/<int:job_id>
+    return redirect(url_for('show_shortlist_resumes_page', job_id=jd_id))
+
+# TODO deprecate we may need to delete this function
 
 @app.route('/resume/shortlist', methods=['POST'])
 @login_required

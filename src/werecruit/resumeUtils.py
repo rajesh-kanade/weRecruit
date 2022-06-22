@@ -328,8 +328,7 @@ def list_resumes_by_tenant(tenantID, orderBy=None, order=None):
         cursor.close()
         dbUtils.returnToPool(db_con)
 
-
-def search_resumes(tenantID, ftSearch):
+def search_resumes(tenantID, ftSearch,orderBy=None, order=None):
     try:
 
         if not bool(ftSearch):
@@ -340,6 +339,7 @@ def search_resumes(tenantID, ftSearch):
 
         # to_tsvector('english',json_resume)
         # @@ to_tsquery('Java')
+
 
         kwrdList = ftSearch.split()
         _logger.debug("Keyword list for free text is as under %s", kwrdList)
@@ -354,16 +354,27 @@ def search_resumes(tenantID, ftSearch):
 
         _logger.debug("Full text search is %s", ft_cond)
 
-        query = """SELECT * FROM wr_resumes 
+
+
+        if not orderBy:
+            query = """SELECT * FROM wr_resumes 
 				where is_deleted = %s and
 				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
 				and """ + str(ft_cond) + " order by id desc"
+        if orderBy == 'client':
+            query = """SELECT * FROM wr_resumes 
+				where is_deleted = %s and
+				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
+				and """ + str(ft_cond) + " order by name ASC"
+
 
         params = (False, tenantID)
         _logger.debug(cursor.mogrify(query, params))
         cursor.execute(query, params)
 
         resumeList = cursor.fetchall()
+        if order == 'DESC':
+            resumeList = resumeList[::-1]
 
         return(RetCodes.success.value, "Resume List successfully fetched from db for tenant ID {0}".format(tenantID), resumeList)
 
@@ -374,7 +385,6 @@ def search_resumes(tenantID, ftSearch):
     finally:
         cursor.close()
         dbUtils.returnToPool(db_con)
-
 
 def list_application_status_codes():
     try:
@@ -399,7 +409,6 @@ def list_application_status_codes():
     finally:
         cursor.close()
         dbUtils.returnToPool(db_con)
-
 
 def list_resume_application_status_codes_category():
     try:

@@ -7,7 +7,7 @@
       <section class="section topbar-title">
         <h1 class="title">Resume Browser</h1>
         <h2 class="subtitle">
-          Search and Browse through the resumes you uploaded.
+          Search/ Browse through the resumes uploaded by you
         </h2>
         <div id="resumeBrowserMessages">{% include '/utils/show_timed_msg.html'%}</div>
       </section>
@@ -47,6 +47,7 @@
               <thead>
                 <tr class="header">
                   <th>Name<span>
+                    <a href="/resume/showBrowser?order_by=name&order={{toggles.name.orderToggle}}"><i class="{{toggles.name.arrowToggle}}"></i></a></a>
                     </span>
                   </th>
                   <th>Email<span>
@@ -61,7 +62,7 @@
 
                     </span>
                   </th>
-                  <th>Actions</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               {% endif %}
