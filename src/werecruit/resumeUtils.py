@@ -186,7 +186,7 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
 
         if not recruiterID:
             return(RetCodes.empty_ent_attrs_error.value, "Recruiter ID field is empty or null.", None)
-
+        # print(candidatePhone)
         _logger.debug('Resume file name is {0}'.format(fileName))
         if (fileName is None):
             file_data = None
@@ -194,9 +194,10 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
         else:
             file_data = bytes(open(fileName, "rb").read())
             (resume_attr_list) = process_single_resume(fileName)
+            # print(resume_attr_list)
             json_resume = json.dumps(
                 resume_attr_list, indent=4, sort_keys=False)
-
+        # print(fileName)
         if (int(id) == constants.NEW_ENTITY_ID):
             # insert a record in user table
             sql = """insert into public.wr_resumes ( resume_filename, name, email, 
@@ -206,6 +207,8 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
 
             params = (fileName, candidateName, candidateEmail,
                       candidatePhone, int(recruiterID), file_data, json_resume)
+            # print(fileName) 
+            # print(json_resume)         
 
             _logger.debug(cursor.mogrify(sql, params))
 
@@ -238,14 +241,14 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
 
             # TODO -> Think of better way to do this
             # New resume file is uploaded then we will store the parsed json_resume again
-            if fileName != None:
-                sql1 = """update public.wr_resumes set  
+            # if fileName != None:
+            sql1 = """update public.wr_resumes set  
 						resume_filename = %s,resume_content = %s,json_resume = %s
 					where id = %s"""
-                params1 = (fileName, file_data, json_resume,
+            params1 = (fileName, file_data, json_resume,
                            int(id))
-                cursor.execute(sql1, params1)
-                assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+            cursor.execute(sql1, params1)
+            assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
             db_con.commit()
             _logger.debug("Resume id {0} updated successfully.".format(id))
