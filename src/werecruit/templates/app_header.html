@@ -35,8 +35,10 @@
 
   <link rel="stylesheet" href="/static/css/normalize.css">
   <link rel="stylesheet" href="/static/css/bulma.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
   <link rel="stylesheet" href="/static/css/main.css">
+  <link rel="stylesheet" href="/static/css/dashboard.css">
 
 
   <meta name="theme-color" content="#fafafa">
@@ -51,7 +53,7 @@
   <nav class="navbar is-white has-shadow " role="navigation" aria-label="main navigation">
     <div class="container">
       <div class="navbar-brand">
-        <a class="navbar-item" href="/showHomePage">
+        <a class="navbar-item" href="/showDashboardPage">
           <img src="{{url_for('static', filename='images/werecruit_logo.png')}}" alt="weRecruit Logo"
             style="max-height: 70px" class="py-2 px-2">
         </a>
@@ -144,6 +146,18 @@
 
   {% block content %}
   {% endblock %}
+  
+  <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+  <script>
+    bulmaCarousel.attach('#client-corousel', {
+      slidesToScroll: 1,
+      slidesToShow: 4
+    }); 
+    bulmaCarousel.attach('#jobs-corousel', {
+        slidesToScroll: 1,
+        slidesToShow: 4
+      });
+  </script>
 </body>
 
 </html>

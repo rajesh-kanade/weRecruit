@@ -14,9 +14,9 @@
           </section>
           {% for field in form.errors %}
           {% for error in form.errors[field] %}
-            <div class="alert alert-error">
-              <small class="has-text-danger has-text-left">{{ error }}</small>
-            </div>
+          <div class="alert alert-error">
+            <small class="has-text-danger has-text-left">{{ error }}</small>
+          </div>
           {% endfor %}
           {% endfor %}
           <section class="application-form">
@@ -32,13 +32,36 @@
                   </div>
                 </div>
                 <div class="field">
+
                   <label class="label">{{ form.client.label }}</label>
-                  <div class="control">
-                    {{form.client(class='input', placeholder='Enter Client Name')}}
+                  <!-- <turbo-frame id="clientfield" > -->
+                    <div class="control" style="display: flex">
+                    {{form.client(class='input', placeholder='Enter Client Name', id='clientDropdown')}}
+                    <a href="/jd/showAddNewClient" data-turbo-frame="self" style="font-size: x-large;align-self: center;
+                                                                                                  margin-left: 0.5rem;"
+                      title="Add New Client">
+                      <i class="fas fa-user-plus"></i>
+                    </a>
                   </div>
+                <!-- </turbo-frame> -->
+                  
                 </div>
+                <script language="javascript" type="text/javascript">
+                  document.getElementById("otherClient").style.display = 'none';
+                  document.getElementById("clientDropdown").addEventListener("change", displayTextField);
+                  function displayTextField() {
+                    var dropDownText = document.getElementById("clientDropdown").value;
+                    if (dropDownText == "-1") {
+                      document.getElementById("otherClient").style.display = 'block';
+                    } else {
+                      document.getElementById("otherClient").style.display = 'none';
+                    }
+                  }
 
-
+                  function setOtherClient() {
+                    document.getElementById("clientDropdown").setAttribute('disabled', null)
+                  }
+                </script>
                 <div class="field">
                   <label class="label has-text-left">{{ form.client_jd.label }}</label>
 

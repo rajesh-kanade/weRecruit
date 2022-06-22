@@ -1,0 +1,86 @@
+{%extends "app_header.html" %} {%block content%}
+<section class="container is-fullheight">
+  {% set messages = get_flashed_messages(with_categories = true ) %} {% if
+  messages %} {% for category, message in messages %}
+  <div class="notification {{ category }}">{{ message }}</div>
+  {% endfor %} {% endif %}
+  <div class="columns is-centered">
+    <div class="column is-half">{% include 'jd/interviews_card.html'%}</div>
+    <div class="column is-half">{% include 'jd/joining_card.html'%}</div>
+  </div>
+  <div class="columns is-centered">
+    <div class="column is-half">{% include 'jd/trending_jds_card.html'%}</div>
+    <div class="column is-half">
+      {% include 'jd/high_priority_jds_card.html'%}
+    </div>
+  </div>
+</section>
+<div class="body-background" id="dashboard">
+  <div class="job-position">
+    <div class="container">
+      <div class="card" style="height: auto">
+        <div class="card-content white-background height-105">
+          <div class="columns">
+            <div class="column">
+              <div class="content has-text-left">
+                <h2 class="margin-top-10">Welcome, {{session.user_name}}</h2>
+              </div>
+            </div>
+            <div class="column">
+              <div class="content has-text-right">
+                <!-- <div class="background-img"></div> -->
+                <img
+                  src="static/images/home_bg.png"
+                  style="margin-top: -25px; height: auto; width: auto"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="job-position table-height">
+    <div class="container">
+      <section class="application-form">
+        {% include "dashboard/candidate_funnel.html" %}
+        {# {% include "dashboard/pending_actions.html" %} #}
+        {# {% include "dashboard/interview_schedule.html" %} #}
+      </section>
+    </div>
+  </div>
+</div>
+<footer class="footer">
+  <div class="footer-column">
+    <div class="columns">
+      <div class="column is-three-quarters">
+        <div class="content has-text-left">
+          <p>
+            &#169; Copyright 2022 by WeRecruit. All rights reserved.
+            <span style="margin-left: 30px">Privacy Policy</span
+            ><span style="margin-left: 30px">Term of use</span>
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="content has-text-right">
+          <div class="column" style="margin-right: 85px">
+            <a href=""
+              ><img style="height: 25px" src="static/images/linkedin.png"
+            /></a>
+            <a href=""
+              ><img style="height: 25px" src="static/images/facebook.png"
+            /></a>
+            <a href=""
+              ><img style="height: 25px" src="static/images/twitter.png"
+            /></a>
+            <a href=""
+              ><img style="height: 25px" src="static/images/email.png"
+            /></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+{% endblock %}

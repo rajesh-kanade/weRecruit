@@ -1,0 +1,488 @@
+<script>
+  const tikBoxClient = document.createElement('div')
+  tikBoxClient.classList.add('has-text-right')
+  tikBoxClient.classList.add('card-check-img')
+  const imgClient = document.createElement('img');
+  imgClient.src = "static/images/check-2.png";
+  imgClient.classList.add('margin-top-10');
+  tikBoxClient.appendChild(imgClient);
+
+  const tikBoxJD = document.createElement('div')
+  tikBoxJD.classList.add('has-text-right')
+  tikBoxJD.classList.add('card-check-img')
+  const imgJD = document.createElement('img');
+  imgJD.src = "static/images/check-2.png";
+  imgJD.classList.add('margin-top-10');
+  tikBoxJD.appendChild(imgJD);
+</script>
+<!-- <turbo-frame id="clientframe"> -->
+<section class="section topbar-title">
+  <h1 class="title">Client Name</h1>
+</section>
+<div class="client-name">
+  <div id="client-corousel" class="columns carousel">
+    {% for client in clients %}
+    <div class="column" style="max-width: 20rem; margin-bottom: 20px;">
+      <div class="card">
+        <div
+          class="card-content white-background card-height-120 clientCard {{'card-active' if client.client_id == activeClient else ''}}"
+          id="client-{{client.client_id}}">
+          {% if client.client_id == activeClient %}
+          <div class="has-text-right card-check-img">
+            <img class="margin-top-10" src="static/images/check-2.png" />
+          </div>
+          {% endif %}
+          <a href="/showDashboardPage?client={{client.client_id}}" data-turbo-frame="jobsframe">
+            <p class="card-text">{{client.client_name}}</p>
+          </a>
+          {# <img src="static/images/loadshare.png" /> #}
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="column">
+      <div class="notification is-warning">No clients found !!!</div>
+    </div>
+   
+    {% endfor %}
+  </div>
+</div>
+<!-- <turbo-frame> -->
+
+<turbo-frame id="jobsframe">
+  <div class="candidate-funnel">
+    <script>
+      // alert('setting active client')
+      document.querySelectorAll(".clientCard").forEach(element => {
+        element.classList.remove('card-active');
+        if (element.children.length > 1)
+          element.firstChild.remove();
+      });
+      document.getElementById("client-{{activeClient}}").classList.add('card-active');
+      if (document.getElementById("client-{{activeClient}}").children.length === 1) {
+        document.getElementById("client-{{activeClient}}").prepend(tikBoxClient);
+      }
+    </script>
+    <section class="section topbar-title">
+      <h1 class="title">Candidate Funnel</h1>
+    </section>
+    <div id="jobs-corousel" class="columns carousel">
+      {% for jd in jdList %}
+      <div class="column" style="max-width: 20rem; margin-bottom: 20px;">
+        <div class="card">
+          <div
+            class="card-content white-background card-height-100 job-title-card {{'card-active' if jd.id == activeJD}}"
+            id="activeJD-{{jd.id}}">
+            {% if jd.id == activeJD %}
+            <div class="has-text-right card-check-img">
+              <img class="margin-top-10" src="static/images/check-2.png" />
+            </div>
+            {% endif %}
+            <a href="/showDashboardPage?client={{activeClient}}&jd_id={{jd.id}}" data-turbo-frame="summary_frame">
+              <p class="card-text">{{jd.title}}</p>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="column">
+        <div class="notification is-warning">No jobs found !!!</div>
+      </div>
+      {% endfor %}
+    </div>
+    {#
+  </div>
+  #}
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.3/dist/js/bulma-carousel.min.js"></script>
+  <script>
+    bulmaCarousel.attach('#client-corousel', {
+      slidesToScroll: 1,
+      slidesToShow: 4
+    });
+    bulmaCarousel.attach('#jobs-corousel', {
+      slidesToScroll: 1,
+      slidesToShow: 4
+    });
+  </script>
+</turbo-frame>
+<turbo-frame id="summary_frame">
+  <section class="application-form margin-top-bottom-30">
+    <script>
+      // alert('setting active JD')
+      // alert('{{activeClient}}')
+      document.querySelectorAll(".job-title-card").forEach(element => {
+        element.classList.remove('card-active');
+        if (element.children.length > 1)
+          element.firstChild.remove();
+      });
+      document.getElementById("activeJD-{{activeJD}}").classList.add('card-active');
+      if (document.getElementById("activeJD-{{activeJD}}").children.length === 1) {
+        document.getElementById("activeJD-{{activeJD}}").prepend(tikBoxJD);
+      }
+
+    </script>
+    <div class="table">
+      <table class="table is-fullwidth">
+        <thead>
+          <tr class="header-home" style="border-bottom: 0px">
+            <th>
+              <div class="columns">
+                <div class="column has-text-center margin-left-20px">
+                  Resume <br />
+                  Shortlisted
+                </div>
+                <div class="has-text-right">
+                  <i class="arrow right"></i>
+                </div>
+              </div>
+            </th>
+            <th>
+              <div class="columns">
+                <div class="column has-text-center margin-left-20px">
+                  Initial <br />
+                  Screening
+                </div>
+                <div class="has-text-right">
+                  <i class="arrow right"></i>
+                </div>
+              </div>
+            </th>
+            <th>
+              <div class="columns">
+                <div class="column has-text-center margin-left-top-15px">
+                  Round 1
+                </div>
+                <div class="has-text-right">
+                  <i class="arrow right"></i>
+                </div>
+              </div>
+            </th>
+            <th>
+              <div class="columns">
+                <div class="column has-text-left margin-left-top-15px">
+                  Round 2
+                </div>
+                <div class="has-text-right">
+                  <i class="arrow right"></i>
+                </div>
+              </div>
+            </th>
+            <th>
+              <div class="columns">
+                <div class="column has-text-left margin-left-20px">
+                  Hiring <br />
+                  Manager
+                </div>
+                <div class="has-text-right">
+                  <i class="arrow right"></i>
+                </div>
+              </div>
+            </th>
+            <th>
+              <div class="columns">
+                <div class="column has-text-left margin-left-top-15px">HR</div>
+                <div class="has-text-right">
+                  <i class="arrow right"></i>
+                </div>
+              </div>
+            </th>
+            <th>
+              <div class="columns">
+                <div class="column has-text-left margin-left-top-15px">
+                  Offer
+                </div>
+                <div class="has-text-right">
+                  <i class="arrow right"></i>
+                </div>
+              </div>
+            </th>
+            <th>
+              <div class="margin-left-top-15px">Onboarding</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="table-summary" style="padding-bottom: 20px; margin-top: 30px">
+            <td class="td-margin">
+              <p style="font-size: 56px">{{job_summary.shortlisted}}</p>
+            </td>
+            <td>
+              <div class="columns margin-bottom-0">
+                <div class="column is-three-quarters">
+                  <div>Scheduled -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.r1_interview_scheduled }}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div>Cleared -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.r1_interview_cleared}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div>Failed -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.r1_interview_failed}}
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="columns margin-bottom-0">
+                <div class="column is-three-quarters">
+                  <div>Scheduled -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.r2_interview_scheduled}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div>Rejected -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.r1_interview_failed}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div>Passed -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.r1_interview_cleared}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div class="no-show">No Show -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right no-show">
+                    {{job_summary.r1_interview_no_show}}
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <td>
+              <div class="columns margin-bottom-0">
+                <div class="column is-three-quarters">
+                  <div>Scheduled -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.r2_interview_scheduled}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div>Rejected -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.r2_interview_failed}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div>Passed -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.r2_interview_cleared}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div class="no-show">No Show -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right no-show">
+                    {{job_summary.r2_interview_no_show}}
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="columns margin-bottom-0">
+                <div class="column is-three-quarters">
+                  <div>Scheduled -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.hm_interview_scheduled}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div>Rejected -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.hm_interview_failed}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div>Passed -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.hm_interview_cleared}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div class="no-show">No Show -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right no-show">
+                    {{job_summary.hm_interview_no_show}}
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="columns margin-bottom-0">
+                <div class="column is-three-quarters">
+                  <div>Scheduled -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.hr_interview_scheduled}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div>Rejected -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.hr_interview_failed}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div>Passed -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.hr_interview_cleared}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div class="no-show">No Show -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right no-show">
+                    {{job_summary.hr_interview_no_show}}
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="columns margin-bottom-0">
+                <div class="column is-three-quarters">
+                  <div>Pending (HR) -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.offer_pending}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div>Released -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right">
+                    {{job_summary.offer_released}}
+                  </div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div class="accepted">Accepted -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right accepted">
+                    {{job_summary.offer_accepted}}
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="columns margin-bottom-0">
+                <div class="column is-three-quarters done">
+                  <div>Done -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right done">{{job_summary.joined}}</div>
+                </div>
+              </div>
+              <div class="line"></div>
+              <div class="columns margin-bottom-top-0">
+                <div class="column is-three-quarters">
+                  <div class="no-show">No Show -</div>
+                </div>
+                <div class="column">
+                  <div class="has-text-right no-show">
+                    {{job_summary.no_show}}
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>

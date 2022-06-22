@@ -1,0 +1,41 @@
+{%extends "app_header.html" %}
+{%block content%}
+
+<div id="modal-window" class="modal is-active">
+    <div class="modal-background">
+
+    </div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Add New Client</p>
+        </header>
+        <div class="modal-card-body">
+            <form action="/jd/addNewClient" method="POST">
+                {{ form.hidden_tag() }}
+
+                {{form.tenant_id()}}
+                <div class="field ">
+                    <label class="label {{theme_text_color}}">{{ form.client_name.label }}</label>
+                    <div class="control">
+                        {{form.client_name(class='select', placeholder='Client Name')}}
+                    </div>
+                </div>
+                <div class="field is-grouped">
+
+                    <div class="field">
+                        <p class="control">
+                            {{ form.submit( class = 'button is-success is-rounded') }}
+                        </p>
+                    </div>
+
+                </div>
+            </form>
+            <button onclick="document.location.href = '/jd/showCreatePage'"
+                class="modal-close is-large" aria-label="close"></button>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

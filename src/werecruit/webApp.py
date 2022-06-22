@@ -9,7 +9,7 @@ from flask import (
     url_for
 )
 from flask_session import Session
-from webForms import ResumeSearchForm, UserForm, ResetPasswordForm, ApplicationStatusUpdate, ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm, SignInForm, UserForm
+from webForms import ResumeSearchForm, UserForm, ResetPasswordForm, ApplicationStatusUpdate, ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm, SignInForm, UserForm, NewClientForm
 from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
 from flask import send_file
@@ -189,12 +189,37 @@ def login_required(func):
     return secure_function
 
 
-@app.route('/showHomePage')
+@app.route('/showDashboardPage', methods=['GET','POST'])
 @login_required
 def show_home_page():
+    activeClient, activeJD, job_summary = None, None, None
 
-    return render_template('home.html')
+    (retCode, msg, clients) = (retCode, msg, clientSummary) = reports.get_clients_by_tenant_id(
+        session["tenant_id"])
+    assert retCode == reports.RetCodes.success.value, "Failed to fetch clients by tenant_id"
 
+    if clients:
+        activeClient = int(request.args.get('client') if request.args.get(
+            'client') else clients[0].client_id)
+
+    (retCode, msg, jdList) = reports.get_jds_by_client_id(activeClient)
+    assert retCode == reports.RetCodes.success.value, "Failed to fetch job_titles by client_id and tenant_id"
+
+    if jdList:
+        activeJD = int(request.args.get('jd_id') if request.args.get(
+            'jd_id') else jdList[0].id)
+
+    (retCode, msg, job_summary_record) = reports.get_jd_wise_application_status_report(activeJD)
+    if job_summary_record:
+        job_summary = job_summary_record[0]
+    assert retCode == reports.RetCodes.success.value, "Failed to fetch client wise job application summary report"
+
+    return render_template('dashboard/dashboard.html',
+                            activeClient=activeClient,
+                            activeJD=activeJD,
+                            clients=clients,
+                            jdList=jdList,
+                           job_summary=job_summary)
 
 @app.route('/user/doSignout', methods=['GET'])
 @login_required
@@ -238,10 +263,41 @@ def show_jd_create_page():
             cityNames = cityRecords[2] 
     except:
         cityNames = ['Pune', 'Bangalore']
+    try:
+        clients = []
+        clientRecords = reports.get_clients_by_tenant_id(session.get('tenant_id'))[2]
+        if clientRecords:
+            clients = [(client.client_id, client.client_name)
+                       for client in clientRecords]
+    except:
+        clients = []
+
+    clients.insert(0, (-1, '- Select -'))
+    form.client.choices = clients
     form.country.choices = countryNames
     form.city.choices = [(record.id, record.name) for record in cityNames]
 
     return render_template('jd/edit.html', form=form)
+
+
+@app.route('/jd/showAddNewClient', methods=['GET'])
+@login_required
+def show_add_new_client_page():
+    form = NewClientForm()
+    form.tenant_id.data = session.get('tenant_id')
+    return render_template('/jd/add_new_client.html', form=form)
+
+
+@app.route('/jd/addNewClient', methods=['POST'])
+@login_required
+def add_new_client_page():
+    form = NewClientForm()
+
+    (retCode, msg, retData) = jdUtils.save_new_client(
+        form.client_name.data, form.tenant_id.data)
+    if retCode == jdUtils.RetCodes.success.value:
+        flash("Client added successfully.", "is-success")
+    return redirect(url_for('show_jd_create_page'))
 
 @app.route('/jd/showAllPage', methods=['GET'])
 @login_required
@@ -353,6 +409,35 @@ def save_JD():
         _logger.debug(form.max_yrs_of_exp.errors)
         #form.max_yrs_of_exp.errors = tuple(list(form.max_yrs_of_exp.errors).append( 'Error from backend'))
         # form.max_yrs_of_exp.errors.append()
+        countryNames = None
+        try:
+            countryRecords = jdUtils.get_country_names()
+            if countryRecords:
+                countryNames = [record.name for record in countryRecords[2]]
+        except:
+            countryNames = ['India']
+
+        try:
+            # only Indian Cities To Be Populated
+            cityRecords = jdUtils.get_city_names(1)
+            if cityRecords:
+                cityNames = cityRecords[2]
+        except:
+            cityNames = ['Pune', 'Bangalore']
+        try:
+            clients = []
+            clientRecords = reports.get_clients_by_tenant_id(
+                session.get('tenant_id'))[2]
+            if clientRecords:
+                clients = [(client.client_id, client.client_name)
+                        for client in clientRecords]
+        except:
+            clients = []
+
+        clients.insert(0, (-1, '- Select -'))
+        form.client.choices = clients
+        form.country.choices = countryNames
+        form.city.choices = [(record.id, record.name) for record in cityNames]
         return render_template('jd/edit.html', form=form), 409
         # return redirect
 
@@ -396,7 +481,18 @@ def show_jd_edit_page(id):
                 cityNames = cityRecords[2] 
         except:
             cityNames = ['Pune', 'Bangalore']
-        
+        clients = []
+        try:
+            clientRecords = reports.get_clients_by_tenant_id(
+                session.get('tenant_id'))[2]
+            if clientRecords:
+                clients = [(client.client_id, client.client_name) for client in clientRecords]
+        except:
+            clients = []
+
+        clients.insert(0, (-1, '- Select -'))
+        form.client.choices = clients
+        form.client.default = jd.client_id
         form.country.choices = countryNames
         form.city.choices = [(record.id, record.name) for record in cityNames]
         form.country.default = 'US'
@@ -421,7 +517,6 @@ def show_jd_edit_page(id):
         form.id.data = jd.id
         form.title.data = jd.title
         form.details.data = jd.details
-        form.client.data = jd.client
 
         form.total_positions.data = jd.positions
         form.open_date.data = jd.open_date

@@ -258,7 +258,7 @@ table thead tr th {
   margin-left:auto;
 } */
 .table td, .table th {
-    padding: 0.7em 0.2em !important;
+    padding: 0.7em 0.2em;
 }
 .ml-7{
   margin-left: -100px;
@@ -687,7 +687,7 @@ label {
 .table thead td{
   vertical-align: bottom;
   border-bottom: 4px solid #f3f4f6;
-  border-width: 0 0 2px !important;
+  border-width: 0 0 2px;
   color:gray;
 }
 .table thead th{
@@ -696,7 +696,7 @@ label {
   font-weight: 550;
 }
 .table{
-  background-color: #f6f6f6 !important;
+  background-color: #f6f6f6;
 }
 .print-btn
 {
@@ -1041,7 +1041,7 @@ body{
   margin-left:20px ;
 }
 table th{
-  background-color: #f3f4f6 !important;
+  background-color: #f3f4f6;
   border: 2px solid #fff;
 }
 .is-fullwidth{
@@ -1421,3 +1421,5 @@ margin-left: -10%;
   margin-left: -6vh;
   z-index: 4;
 }
+
+
