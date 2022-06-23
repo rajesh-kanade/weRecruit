@@ -93,5 +93,5 @@ def add_client_id_to_wr_jds():
             cursor.close()
         dbUtils.returnToPool(db_con)
 
-#insert_into_wr_clients()
+insert_into_wr_clients()
 add_client_id_to_wr_jds()
