@@ -2,42 +2,41 @@
 {%block content%}
 {% include 'jd/header1.html'%}
 <div class="shortlist">
-<section class="container is-fullheight">
-      {% include 'utils/show_modal_msg.html'%}
-
+  <section class="container is-fullheight">
+    {% include 'utils/show_timed_msg.html'%}
     <div class="mytabs">
-      
-      <input type="radio" id="Shortlist Resume" name="mytabs" checked="checked">
+
+      <input type="radio" id="Shortlist Resume" name="mytabs" {{'' if request.args.get('active') == 'shortlisted' else 'checked'}}>
       <label for="Shortlist Resume">Shortlist Resume</label>
       <div class="tab">
-       
+
 
         <div class="tile is-child box {{theme_bg_color}}">
           <p>Search existing resumes and shortlist them for a job</p><br>
           {% include '/jd/non_shortlisted_candidates_list.html'%}
-  
-        </div>
-        </div>
-                <input type="radio" id="Currently Shortlisted" name="mytabs">
-          <label class="Currently-Shortlisted" for="Currently Shortlisted">Currently Shortlisted</label>
 
-          <div class="tab">
-       
+        </div>
+      </div>
+      <input type="radio" id="Currently Shortlisted" name="mytabs" {{'checked' if request.args.get('active') == 'shortlisted' else ''}}>
+      <label class="Currently-Shortlisted" for="Currently Shortlisted">Currently Shortlisted</label>
+
+      <div class="tab">
+
 
         <div class="tile is-child box {{theme_bg_color}}">
-          
+
           {% include '/jd/shortlist.html'%}
-  
+
         </div>
 
-  
-   
-  
-          </div>
-          
-    </div> 
+
+
+
+      </div>
 
     </div>
+
+</div>
 
 </section>
 </div>
