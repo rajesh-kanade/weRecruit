@@ -1422,4 +1422,11 @@ margin-left: -10%;
   z-index: 4;
 }
 
+.modal-card-head {
+  background-color: #4ccd3d;
+}
+
+.modal-card-title {
+  color: #f6f6f6;
+}
 
