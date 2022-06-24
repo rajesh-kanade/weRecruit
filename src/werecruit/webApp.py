@@ -400,7 +400,7 @@ def save_JD():
         return redirect(url_for("show_jd_all_page"))
 
     else:
-        flash(results[0] + ':' + results[1], "is-danger")
+        flash(results[1], "is-danger")
         _logger.debug(results[0]+":"+results[1])
         # return redirect(url_for("show_jd_edit_page", id=form.id.data))
         errorList = list(form.id.errors)

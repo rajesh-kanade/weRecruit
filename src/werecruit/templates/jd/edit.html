@@ -11,14 +11,24 @@
             <h2 class="subtitle">
               Section allows you to create or edit a job position
             </h2>
+            <div id="jd_browser_messages">
+            {% set messages = get_flashed_messages(with_categories = true ) %}            
+            {% if messages %} 
+                <div id ="expiring_msg">
+                    {% for category, message in messages %}  
+                        <div class="notification {{ category }}">{{ message }}</div>
+                    {% endfor %}  
+                </div>    
+            {% endif %}
+            </div>
           </section>
-          {% for field in form.errors %}
+          {# {% for field in form.errors %}
           {% for error in form.errors[field] %}
           <div class="alert alert-error">
             <small class="has-text-danger has-text-left">{{ error }}</small>
           </div>
           {% endfor %}
-          {% endfor %}
+          {% endfor %} #}
           <section class="application-form">
             <form action="/jd/save" method="POST" enctype="multipart/form-data">
               {{ form.hidden_tag() }}
