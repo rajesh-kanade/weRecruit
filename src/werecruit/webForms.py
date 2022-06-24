@@ -18,7 +18,7 @@ class SignUpForm(FlaskForm):
     email = StringField('Admin Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
     password = PasswordField('Password', validators=[DataRequired('Please enter password.')])
     
-    submit = SubmitField('Create WeRecruit account')
+    submit = SubmitField('Create WeRecruit Account')
 
 class SignInForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(message='Please enter email ID'),Email(message='Please enter a valid email address')])
