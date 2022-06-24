@@ -754,7 +754,6 @@ def search_resume():
         flash(retCode + ":" + msg, "is-danger")
         return render_template("resume/list.html", resumeList=None, form=form)
 
-
 @app.route('/jd/searchNonShortlistedResumes', methods=['POST'])
 @login_required
 def search_non_shortlisted_resumes():
@@ -764,28 +763,56 @@ def search_non_shortlisted_resumes():
     _logger.debug('Job ID is %s & search criteria is %s',
                   form.job_id.data, form.ft_search.data)
 
-    (retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(form.job_id.data,
+    (retCode, msg, allresumeList) = jdUtils.get_resumes_not_associated_with_job(form.job_id.data,
                                                                              form.ft_search.data, session.get('tenant_id'))
-    #_logger.debug("ResumeList is %s", resumeList)
+
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = request.args.get(
+        get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+
+    offset = (page - 1) * per_page
+    allresume_total = len(allresumeList)
+    # shortlisted_resume_total=len(shortlistedList)
+    from math import ceil
+    all_resume_total_pages = ceil(allresume_total/per_page)
+    # shortlisted_resume_total_pages = ceil(shortlisted_resume_total/per_page)
+
+    def getResumePages(offset=0, per_page=1):
+        return allresumeList[offset: offset + per_page]
+    # def getShortlistedResumePages(offset=0, per_page=1):
+    #     return shortlistedList[offset: offset + per_page]    
+    pagination_ResumeList = getResumePages(offset=offset, per_page=per_page)
+    # pagination_shortlistedList=getShortlistedResumePages(offset=offset, per_page=per_page)
+    all_resume_pagination = Pagination(page=page, per_page=per_page, total=allresume_total)
+    # shortlisted_resume_pagination = Pagination(page=page, per_page=per_page, total=shortlisted_resume_total)
     if (retCode == jdUtils.RetCodes.success.value):
         # return render_template('resume/list.html', resumeList = resumeList, form = form )
         _logger.debug('ready to render')
         _logger.debug(
-            'Non shortlisted resumes count found is %s', len(resumeList))
+            'Non shortlisted resumes count found is %s', len(allresumeList))
         # return render_template('/showHomepage')
         # return redirect(url_for("show_home_page"),303)
 
         return render_template('/jd/non_shortlisted_candidates_list.html',
-                               allresumeList=resumeList,
+                               
                                job_id=form.job_id.data,
-                               searchForm=form)
+                               searchForm=form,allresumeList=pagination_ResumeList,
+                             actionTemplate="shortlist",
+                            
+                            page=page,
+                            per_page=1,
+                            all_resume_pagination=all_resume_pagination,
+                            
+                            all_resume_total_pages=all_resume_total_pages)
 
     else:
         flash(retCode + ':' + msg, "is-danger")
         return render_template('jd/non_shortlisted_candidates_list.html', 
-                        allresumeList=resumeList, 
+                        allresumeList=allresumeList, 
                         job_id=form.job_id.data, 
                         searchForm=form)
+
 
 
 @app.route("/resume/showBrowser", methods=["GET"])
