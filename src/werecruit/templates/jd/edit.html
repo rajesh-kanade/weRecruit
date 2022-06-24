@@ -28,7 +28,7 @@
                   <label class="label">{{ form.title.label }}</label>
                   <div class="control">
                     {{form.title(class='input', title ="Enter short & meaning title for this job posting" ,
-                    placeholder='Enter Title')}}
+                    placeholder='Enter Title', maxlength="50")}}
                   </div>
                 </div>
                 <div class="field">
@@ -36,7 +36,7 @@
                   <label class="label">{{ form.client.label }}</label>
                   <!-- <turbo-frame id="clientfield" > -->
                     <div class="control" style="display: flex">
-                    {{form.client(class='input', placeholder='Enter Client Name', id='clientDropdown')}}
+                    {{form.client(class='input', placeholder='Enter Client Name', id='clientDropdown', required='')}}
                     <a href="/jd/showAddNewClient" data-turbo-frame="self" style="font-size: x-large;align-self: center;
                                                                                                   margin-left: 0.5rem;"
                       title="Add New Client">
@@ -46,22 +46,6 @@
                 <!-- </turbo-frame> -->
                   
                 </div>
-                <script language="javascript" type="text/javascript">
-                  document.getElementById("otherClient").style.display = 'none';
-                  document.getElementById("clientDropdown").addEventListener("change", displayTextField);
-                  function displayTextField() {
-                    var dropDownText = document.getElementById("clientDropdown").value;
-                    if (dropDownText == "-1") {
-                      document.getElementById("otherClient").style.display = 'block';
-                    } else {
-                      document.getElementById("otherClient").style.display = 'none';
-                    }
-                  }
-
-                  function setOtherClient() {
-                    document.getElementById("clientDropdown").setAttribute('disabled', null)
-                  }
-                </script>
                 <div class="field">
                   <label class="label has-text-left">{{ form.client_jd.label }}</label>
 
@@ -166,7 +150,7 @@
                       <label class="label">{{ form.min_yrs_of_exp.label }}</label>
                       <div class="control">
                         <div class="select is-black">
-                          {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
+                          {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience', required='')}}
                         </div>
                       </div>
                     </div>
@@ -176,7 +160,7 @@
                       <label class="label">{{ form.max_yrs_of_exp.label }}</label>
                       <div class="control">
                         <div class="select is-black">
-                          {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
+                          {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience', required='')}}
                         </div>
                         {% for error in form.max_yrs_of_exp.errors %}
                         <small class="has-text-danger has-text-left">{{ error }}</small>
