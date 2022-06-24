@@ -402,7 +402,15 @@ def show_jd_edit_page(id):
         form.country.default = 'US'
         form.city.default = jd.city_id
 
-        expChoice = [i for i in range(100)]
+        
+        form.status.choices = [(jdUtils.JDStatusCodes.open.value, 'Open'), 
+                        (jdUtils.JDStatusCodes.draft.value, 'Draft'), 
+                        (jdUtils.JDStatusCodes.close.value, 'Close')]
+        form.status.default = jd.status
+        
+        expChoice = [(i, i) for i in range(100)]
+        expChoice.insert(0, (constants.NEW_ENTITY_ID, '- Select -'))
+        
         form.min_yrs_of_exp.choices = expChoice
         form.max_yrs_of_exp.choices = expChoice
         form.min_yrs_of_exp.default = int(jd.min_yrs_of_exp)
@@ -417,7 +425,6 @@ def show_jd_edit_page(id):
 
         form.total_positions.data = jd.positions
         form.open_date.data = jd.open_date
-        form.status.data = jd.status
 
         form.intv_panel_name_1.data = jd.ip_name_1
         form.intv_panel_email_1.data = jd.ip_emailid_1
@@ -557,32 +564,6 @@ def show_resume_upload_via_email_page():
     return render_template('resume/show_resume_upload_via_email_page.html')
 
 
-@app.route('/resume/parser', methods=['GET','POST'])
-@login_required
-def resume_parser():
-    form = ResumeForm()
-    _logger.debug('candidate resume file name is {0}'.format(
-        form.candidate_resume.data))
-    if form.candidate_resume.data != None:
-        f = form.candidate_resume.data
-        filename = secure_filename(f.filename)
-        _logger.debug('app root path is {0}'.format(app.root_path))
-        # filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
-        filename = os.path.join(filename)
-        f.save(filename)
-        f.close()
-    else:
-        filename = None     
-    name,phone,email = resumeUtils.parse_resume(filename)
-    if filename is not None and os.path.exists(filename):
-        os.remove(filename)
-    print(name,phone,email)
-
-    return render_template('resume/new.html',form=form,name=name)
-
-    
-
-
 @app.route('/resume/save', methods=['POST'])
 @login_required
 def resume_save():
@@ -603,8 +584,8 @@ def resume_save():
         f = form.candidate_resume.data
         filename = secure_filename(f.filename)
         _logger.debug('app root path is {0}'.format(app.root_path))
-        # filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
-        filename = os.path.join(filename)
+        filename = os.path.join(app.root_path + UPLOAD_FOLDER, filename)
+        #filename = os.path.join(filename)
         f.save(filename)
         f.close()
     else:
@@ -630,19 +611,7 @@ def resume_save():
 @app.route("/resume/search", methods=["POST"])
 @login_required
 def search_resume():
-    orderBy = request.args.get("order_by", None)
-    order = request.args.get("order", None)
-    toggles = {
-        "name": {
-            "arrowToggle": "fa fa-arrow-down"
-            if (orderBy == "name" and order == "DESC")
-            else "fa fa-arrow-up",
-            "orderToggle": "DESC" if order == "ASC" else "ASC",
-        }
-    }
-    # results = resumeUtils.list_resumes_by_tenant(
-    #     session.get("tenant_id"), orderBy=orderBy, order=order
-    # )
+
     form = ResumeSearchForm()
     # print('search resume triggered')
     # print(form.data)
@@ -651,7 +620,7 @@ def search_resume():
         return redirect(url_for("show_resume_browser_page"))
 
     (retCode, msg, resumeList) = resumeUtils.search_resumes(
-        session.get("tenant_id"), form.ft_search.data, orderBy=orderBy, order=order
+        session.get("tenant_id"), form.ft_search.data
     )
     page = request.args.get(get_page_parameter(), type=int, default=1)
     per_page = request.args.get(
@@ -672,7 +641,7 @@ def search_resume():
         return render_template("resume/list.html", resumeList=resumeList, form=form, page=1,
                                per_page=constants.PAGE_SIZE,
                                pagination=pagination,
-                               totalPages=totalPages,toggles=toggles)
+                               totalPages=totalPages)
     else:
         flash(retCode + ":" + msg, "is-danger")
         return render_template("resume/list.html", resumeList=None, form=form)
@@ -687,26 +656,55 @@ def search_non_shortlisted_resumes():
     _logger.debug('Job ID is %s & search criteria is %s',
                   form.job_id.data, form.ft_search.data)
 
-    (retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(form.job_id.data,
+    (retCode, msg, allresumeList) = jdUtils.get_resumes_not_associated_with_job(form.job_id.data,
                                                                              form.ft_search.data, session.get('tenant_id'))
-    #_logger.debug("ResumeList is %s", resumeList)
-    
+
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = request.args.get(
+        get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+
+    offset = (page - 1) * per_page
+    allresume_total = len(allresumeList)
+    # shortlisted_resume_total=len(shortlistedList)
+    from math import ceil
+    all_resume_total_pages = ceil(allresume_total/per_page)
+    # shortlisted_resume_total_pages = ceil(shortlisted_resume_total/per_page)
+
+    def getResumePages(offset=0, per_page=1):
+        return allresumeList[offset: offset + per_page]
+    # def getShortlistedResumePages(offset=0, per_page=1):
+    #     return shortlistedList[offset: offset + per_page]    
+    pagination_ResumeList = getResumePages(offset=offset, per_page=per_page)
+    # pagination_shortlistedList=getShortlistedResumePages(offset=offset, per_page=per_page)
+    all_resume_pagination = Pagination(page=page, per_page=per_page, total=allresume_total)
+    # shortlisted_resume_pagination = Pagination(page=page, per_page=per_page, total=shortlisted_resume_total)
     if (retCode == jdUtils.RetCodes.success.value):
         # return render_template('resume/list.html', resumeList = resumeList, form = form )
         _logger.debug('ready to render')
         _logger.debug(
-            'Non shortlisted resumes count found is %s', len(resumeList))
+            'Non shortlisted resumes count found is %s', len(allresumeList))
         # return render_template('/showHomepage')
         # return redirect(url_for("show_home_page"),303)
 
         return render_template('/jd/non_shortlisted_candidates_list.html',
-                               resumeList=resumeList,
+                               
                                job_id=form.job_id.data,
-                               searchForm=form)
+                               searchForm=form,allresumeList=pagination_ResumeList,
+                             actionTemplate="shortlist",
+                            
+                            page=page,
+                            per_page=1,
+                            all_resume_pagination=all_resume_pagination,
+                            
+                            all_resume_total_pages=all_resume_total_pages)
 
     else:
         flash(retCode + ':' + msg, "is-danger")
-        return render_template('jd/non_shortlisted_candidates_list.html', resumeList=resumeList, job_id=form.job_id.data, searchForm=form)
+        return render_template('jd/non_shortlisted_candidates_list.html', 
+                        allresumeList=allresumeList, 
+                        job_id=form.job_id.data, 
+                        searchForm=form)
 
 
 @app.route("/resume/showBrowser", methods=["GET"])
