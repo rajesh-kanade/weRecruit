@@ -343,7 +343,7 @@ def show_jd_all_page():
         pagination = Pagination(page=page, per_page=per_page, total=total)
         for jd in jdList:
             _logger.debug(jd.title)
-        return render_template('jd/list.html', jdList=pagination_JDList, request=request, page=page, per_page=1, pagination=pagination, toggles=toggles, totalPages=totalPages)
+        return render_template('jd/list.html', jdList=pagination_JDList, request=request, page=page, per_page=1, pagination=pagination, toggles=toggles, totalPages=totalPages, order=order, order_by=orderBy)
     else:
         flash(results[0] + ':' + results[1], "is-danger")
         return render_template('jd/list.html', jdList=None)
