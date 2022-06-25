@@ -272,7 +272,7 @@ def show_jd_create_page():
     except:
         clients = []
 
-    clients.insert(0, (-1, '- Select -'))
+    clients.insert(0, ('', '- Select -'))
     form.client.choices = clients
     form.country.choices = countryNames
     form.city.choices = [(record.id, record.name) for record in cityNames]
@@ -400,7 +400,7 @@ def save_JD():
         return redirect(url_for("show_jd_all_page"))
 
     else:
-        flash(results[0] + ':' + results[1], "is-danger")
+        flash(results[1], "is-danger")
         _logger.debug(results[0]+":"+results[1])
         # return redirect(url_for("show_jd_edit_page", id=form.id.data))
         errorList = list(form.id.errors)
@@ -434,7 +434,7 @@ def save_JD():
         except:
             clients = []
 
-        clients.insert(0, (-1, '- Select -'))
+        clients.insert(0, ('', '- Select -'))
         form.client.choices = clients
         form.country.choices = countryNames
         form.city.choices = [(record.id, record.name) for record in cityNames]
@@ -490,7 +490,7 @@ def show_jd_edit_page(id):
         except:
             clients = []
 
-        clients.insert(0, (-1, '- Select -'))
+        clients.insert(0, ('', '- Select -'))
         form.client.choices = clients
         form.client.default = jd.client_id
         form.country.choices = countryNames
