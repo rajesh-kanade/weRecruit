@@ -1248,7 +1248,7 @@ def update_job_application_status():
         flash("Status update failed. Failure detail as follow - " +
               retCode + ':' + msg, "is-danger")
 
-    return redirect(url_for('show_shortlist_resumes_page', job_id=form.job_id.data))
+    return redirect(url_for('show_shortlist_resumes_page', job_id=form.job_id.data, active='shortlisted'))
 
 
 @app.route('/jd/showSummaryPage/<int:job_id>', methods=['GET'])
