@@ -4,6 +4,7 @@
 <div class="shortlist">
   <section class="container is-fullheight">
     {% include 'utils/show_timed_msg.html'%}
+
     <div class="mytabs">
 
       <input type="radio" id="Shortlist Resume" name="mytabs" {{'' if request.args.get('active') == 'shortlisted' else 'checked'}}>

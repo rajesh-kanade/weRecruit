@@ -223,7 +223,8 @@ CREATE TABLE IF NOT EXISTS public.wr_clients
     client_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
     client_name character varying(100) COLLATE pg_catalog."default" NOT NULL,
     tenant_id bigint,
-    CONSTRAINT client_name_unique UNIQUE (client_name),
+    CONSTRAINT client_name_unique UNIQUE (client_name, tenant_id),
+
     CONSTRAINT tenant_id FOREIGN KEY (tenant_id)
         REFERENCES public.tenants (id) MATCH SIMPLE
         ON UPDATE NO ACTION
@@ -239,17 +240,8 @@ ALTER TABLE IF EXISTS public.wr_clients
 ALTER TABLE IF EXISTS public.wr_jds
 add column client_id bigint;
 
--- BEGIN TRANSACTION;
 
--- insert into wr_clients(client_name, tenant_id)
--- select distinct(wr_jds.client), tid from wr_jds, tenant_user_roles
--- where wr_jds.recruiter_id = uid;
-
--- COMMIT;
-
--- update wr_jds
--- set client_id = (select client_id from wr_clients where wr_jds.client = wr_clients.client_name)
-
+-- **** WARNING WARNING WARNING BEFORE RUNNING FOLLOWING COMMAND, PLEASE RUN upgrade.py to migrate existing data
 ALTER TABLE IF EXISTS public.wr_jds
 drop column client;
 

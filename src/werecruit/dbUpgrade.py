@@ -23,14 +23,14 @@ def insert_into_wr_clients():
         _logger.debug('inside insert_into_wr_clients')
         params = None
 
-        sql = """ select * from tenants"""
+        sql = """ select id from tenants"""
         _logger.debug(cursor.mogrify(sql, params))
         cursor.execute(sql, params)
 
         tenants = cursor.fetchall()
 
         for tenant in tenants:
-            tid = tenant[3]
+            tid = tenant[0]
             sql = """ insert into wr_clients(client_name, tenant_id)
                         select distinct(wr_jds.client), tid from wr_jds join tenant_user_roles
                         on wr_jds.recruiter_id = tenant_user_roles.uid
@@ -57,21 +57,31 @@ def add_client_id_to_wr_jds():
         db_con = dbUtils.getConnFromPool()
         cursor = db_con.cursor()
 
-        sql = """ select * from tenants"""
+        sql = """ select id from tenants"""
         params = None
         _logger.debug(cursor.mogrify(sql, params))
         cursor.execute(sql, params)
         tenants = cursor.fetchall()
 
         for tenant in tenants:
-            tid = tenant[3]
-            sql = """ update wr_jds
-                    set client_id = (select client_id from wr_clients where wr_jds.client=wr_clients.client_name)
-                    where wr_jds.recruiter_id in (select uid from tenant_user_roles where tid=%s)
-                """
+            tid = tenant[0]
+            sql = "select id,client from wr_jds where wr_jds.recruiter_id in (select uid from tenant_user_roles where tid=%s) "
             params = (tid,)
             _logger.debug(cursor.mogrify(sql, params))
             cursor.execute(sql, params)
+            jobs = cursor.fetchall()
+
+            for job in jobs:
+                client = job[1]
+                sql ="""
+                update wr_jds set 
+                client_id = ( select client_id from wr_clients where client_name = %s and tenant_id = %s)
+                where wr_jds.id = %s
+                """
+                params = (client,tid,job[0])
+                _logger.debug(cursor.mogrify(sql, params))
+                cursor.execute(sql, params)
+
         db_con.commit()
 
     except Exception as e:
