@@ -277,6 +277,6 @@ SET description = 'Candidate Onboarding Completed'
 WHERE id=160;
 
 UPDATE application_status_codes
-SET description = 'Candidate No Show'
+SET description = 'Candidate Was A No Show'
 WHERE id=170;
 /* ******** end upgrade prod on 26/06/2022 for updated status sub categories **** */
