@@ -529,9 +529,9 @@ label {
   color: #8c8c8c;
 }
 
-#resumeListTable table thead tr th span {
+/* #resumeListTable table thead tr th span {
   margin-left: 5%;
-}
+} */
 
 #resumeListTable table tbody tr td span {
   margin-left: 10%;
@@ -664,7 +664,7 @@ label {
   height:100vh;
 }
 .status-div .container{
-  background-color: #f3f4f6;
+  /* background-color: #f3f4f6; */
   margin-left: 5vw;
 }
 .block-title .title{
@@ -1355,13 +1355,14 @@ td .fa {
   margin-left: -18%;
   margin-right: 2%;
   padding-right: 2%;
+  background-color: #d1efd8;
 }
 .table thead th, .table thead th a {
   color: #8c8c8c;
 }
-.table thead th span {
+/* .table thead th span {
   margin-left: 5%;
-}
+} */
 #statusFilterBlock {
   padding-top: 0%;
   padding-bottom: 0%;
@@ -1424,4 +1425,6 @@ margin-left: -10%;
 .reset-button{
   margin-left: 15px;
 }
-
+#navbar-logo{
+  margin-left: -40%
+}

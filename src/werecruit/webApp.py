@@ -897,7 +897,7 @@ def resume_download(id):
             id)
 
         if resume.resume_content == None or resume.resume_filename == None:
-            flash("No resume is attached with this candidate", "is-info")
+            flash("Candidate resume missing", "is-info")
             #_logger.debug("called from %s", request.referrer)
             # return redirect(url_for("show_resume_browser_page"))
             return redirect(request.referrer)

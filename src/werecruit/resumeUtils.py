@@ -175,14 +175,14 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
     try:
         _logger.info(candidateName)
         if not candidateName.strip():
-            return(RetCodes.empty_ent_attrs_error.value, "Candidate Name empty or null.", None)
+            return(RetCodes.empty_ent_attrs_error.value, "Name cannot be blank/Please enter your name.", None)
 
         _logger.info(candidateEmail)
         if not candidateEmail.strip():
-            return(RetCodes.empty_ent_attrs_error.value, "Candidate Email empty or null.", None)
+            return(RetCodes.empty_ent_attrs_error.value, "Please enter your Email", None)
 
         if not candidatePhone.strip():
-            return(RetCodes.empty_ent_attrs_error.value, "Candidate Phone empty or null.", None)
+            return(RetCodes.empty_ent_attrs_error.value, "Phone number cannot be blank", None)
 
         if not recruiterID:
             return(RetCodes.empty_ent_attrs_error.value, "Recruiter ID field is empty or null.", None)
