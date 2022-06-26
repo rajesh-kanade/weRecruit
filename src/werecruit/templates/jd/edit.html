@@ -11,14 +11,24 @@
             <h2 class="subtitle">
               Section allows you to create or edit a job position
             </h2>
+            <div id="jd_browser_messages">
+            {% set messages = get_flashed_messages(with_categories = true ) %}            
+            {% if messages %} 
+                <div id ="expiring_msg">
+                    {% for category, message in messages %}  
+                        <div class="notification {{ category }}">{{ message }}</div>
+                    {% endfor %}  
+                </div>    
+            {% endif %}
+            </div>
           </section>
-          {% for field in form.errors %}
+          {# {% for field in form.errors %}
           {% for error in form.errors[field] %}
           <div class="alert alert-error">
             <small class="has-text-danger has-text-left">{{ error }}</small>
           </div>
           {% endfor %}
-          {% endfor %}
+          {% endfor %} #}
           <section class="application-form">
             <form action="/jd/save" method="POST" enctype="multipart/form-data">
               {{ form.hidden_tag() }}
@@ -28,7 +38,7 @@
                   <label class="label">{{ form.title.label }}</label>
                   <div class="control">
                     {{form.title(class='input', title ="Enter short & meaning title for this job posting" ,
-                    placeholder='Enter Title')}}
+                    placeholder='Enter Title', maxlength="50")}}
                   </div>
                 </div>
                 <div class="field">
@@ -36,7 +46,7 @@
                   <label class="label">{{ form.client.label }}</label>
                   <!-- <turbo-frame id="clientfield" > -->
                     <div class="control" style="display: flex">
-                    {{form.client(class='input', placeholder='Enter Client Name', id='clientDropdown')}}
+                    {{form.client(class='input', placeholder='Enter Client Name', id='clientDropdown', required='')}}
                     <a href="/jd/showAddNewClient" data-turbo-frame="self" style="font-size: x-large;align-self: center;
                                                                                                   margin-left: 0.5rem;"
                       title="Add New Client">
@@ -46,28 +56,12 @@
                 <!-- </turbo-frame> -->
                   
                 </div>
-                <script language="javascript" type="text/javascript">
-                  document.getElementById("otherClient").style.display = 'none';
-                  document.getElementById("clientDropdown").addEventListener("change", displayTextField);
-                  function displayTextField() {
-                    var dropDownText = document.getElementById("clientDropdown").value;
-                    if (dropDownText == "-1") {
-                      document.getElementById("otherClient").style.display = 'block';
-                    } else {
-                      document.getElementById("otherClient").style.display = 'none';
-                    }
-                  }
-
-                  function setOtherClient() {
-                    document.getElementById("clientDropdown").setAttribute('disabled', null)
-                  }
-                </script>
                 <div class="field">
                   <label class="label has-text-left">{{ form.client_jd.label }}</label>
 
                   <div id="jd-selector" class="file has-name">
                     <label class="file-label">
-                      <input type="file" name="client_jd" class="file-input">
+                      <input type="file" name="client_jd" class="file-input" accept=".pdf, .docx">
                       <span class="file-cta">
                         <span class="file-icon">
                           <i class="fas fa-upload"></i>
@@ -166,7 +160,7 @@
                       <label class="label">{{ form.min_yrs_of_exp.label }}</label>
                       <div class="control">
                         <div class="select is-black">
-                          {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience')}}
+                          {{form.min_yrs_of_exp(class='input', placeholder='Enter minimum years of experience', required='')}}
                         </div>
                       </div>
                     </div>
@@ -176,7 +170,7 @@
                       <label class="label">{{ form.max_yrs_of_exp.label }}</label>
                       <div class="control">
                         <div class="select is-black">
-                          {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience')}}
+                          {{form.max_yrs_of_exp(class='input', placeholder='Enter maximum years of experience', required='')}}
                         </div>
                         {% for error in form.max_yrs_of_exp.errors %}
                         <small class="has-text-danger has-text-left">{{ error }}</small>

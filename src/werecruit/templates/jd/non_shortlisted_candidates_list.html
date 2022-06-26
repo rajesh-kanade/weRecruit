@@ -59,7 +59,32 @@
               </div>
           {% endfor %}
         </tbody>
-      </table>  
+      </table> 
+      <div class="is-flex is-flex-direction-row is-justify-content-flex-end container pagination">
+        {% if all_resume_total_pages > 1 %}
+        <div class="currentPage"><a>{{all_resume_pagination.page}} <span class="sr-only">(current)</span></a></div>
+        <div class="totalPages"><a>Of {{ all_resume_total_pages}} <span class="sr-only">(current)</span></a></div>
+        {% if all_resume_pagination.page > 1 %}
+        <div><a class="left"
+            href="?page={{all_resume_pagination.page - 1}}&per_page={{all_resume_pagination.per_page}}"
+            aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a></div>
+    
+        {% else %}
+        <div><a class="left" href="" aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a>
+        </div>
+        {% endif %}
+    
+        {% if all_resume_pagination.page < all_resume_total_pages %} <div><a class="right"
+            href="?page={{all_resume_pagination.page + 1}}&per_page={{all_resume_pagination.per_page}}"
+            aria-label="Next">
+            <span>&raquo;</span><span class="sr-only">Next</span></a>
+      </div>
+      {% else %}
+      <div><a class="right" href="" aria-label="Next"><span>&raquo;</span><span class="sr-only">Next</span></a>
+      </div>
+      {% endif %}
+      {% endif %}
+    </div> 
     </div>
   </turbo-frame>
 </div>

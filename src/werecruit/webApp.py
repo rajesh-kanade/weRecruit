@@ -272,7 +272,7 @@ def show_jd_create_page():
     except:
         clients = []
 
-    clients.insert(0, (-1, '- Select -'))
+    clients.insert(0, ('', '- Select -'))
     form.client.choices = clients
     form.country.choices = countryNames
     form.city.choices = [(record.id, record.name) for record in cityNames]
@@ -400,7 +400,7 @@ def save_JD():
         return redirect(url_for("show_jd_all_page"))
 
     else:
-        flash(results[0] + ':' + results[1], "is-danger")
+        flash(results[1], "is-danger")
         _logger.debug(results[0]+":"+results[1])
         # return redirect(url_for("show_jd_edit_page", id=form.id.data))
         errorList = list(form.id.errors)
@@ -434,7 +434,7 @@ def save_JD():
         except:
             clients = []
 
-        clients.insert(0, (-1, '- Select -'))
+        clients.insert(0, ('', '- Select -'))
         form.client.choices = clients
         form.country.choices = countryNames
         form.city.choices = [(record.id, record.name) for record in cityNames]
@@ -490,7 +490,7 @@ def show_jd_edit_page(id):
         except:
             clients = []
 
-        clients.insert(0, (-1, '- Select -'))
+        clients.insert(0, ('', '- Select -'))
         form.client.choices = clients
         form.client.default = jd.client_id
         form.country.choices = countryNames
@@ -698,7 +698,7 @@ def resume_save():
         return redirect(form.referrer.data)
 
     else:
-        flash(retCode + ':' + msg, "is-danger")   
+        flash( msg, "is-danger")   
         _logger.error("Server side validation error occured while saving. Error was as %s", msg)
         return render_template('resume/edit.html', form=form),415
 
@@ -754,7 +754,6 @@ def search_resume():
         flash(retCode + ":" + msg, "is-danger")
         return render_template("resume/list.html", resumeList=None, form=form)
 
-
 @app.route('/jd/searchNonShortlistedResumes', methods=['POST'])
 @login_required
 def search_non_shortlisted_resumes():
@@ -764,28 +763,44 @@ def search_non_shortlisted_resumes():
     _logger.debug('Job ID is %s & search criteria is %s',
                   form.job_id.data, form.ft_search.data)
 
-    (retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(form.job_id.data,
+    (retCode, msg, allresumeList) = jdUtils.get_resumes_not_associated_with_job(form.job_id.data,
                                                                              form.ft_search.data, session.get('tenant_id'))
-    #_logger.debug("ResumeList is %s", resumeList)
+
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = request.args.get(
+        get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+
+    offset = (page - 1) * per_page
+    allresume_total = len(allresumeList)
+
+    from math import ceil
+    all_resume_total_pages = ceil(allresume_total/per_page)
+    def getResumePages(offset=0, per_page=1):
+        return allresumeList[offset: offset + per_page]
+   
+    pagination_ResumeList = getResumePages(offset=offset, per_page=per_page)
+    all_resume_pagination = Pagination(page=page, per_page=per_page, total=allresume_total)
     if (retCode == jdUtils.RetCodes.success.value):
-        # return render_template('resume/list.html', resumeList = resumeList, form = form )
         _logger.debug('ready to render')
         _logger.debug(
-            'Non shortlisted resumes count found is %s', len(resumeList))
-        # return render_template('/showHomepage')
-        # return redirect(url_for("show_home_page"),303)
-
+            'Non shortlisted resumes count found is %s', len(allresumeList))
         return render_template('/jd/non_shortlisted_candidates_list.html',
-                               allresumeList=resumeList,
                                job_id=form.job_id.data,
-                               searchForm=form)
+                               searchForm=form,allresumeList=pagination_ResumeList,
+                             actionTemplate="shortlist",
+                            page=page,
+                            per_page=1,
+                            all_resume_pagination=all_resume_pagination,
+                            all_resume_total_pages=all_resume_total_pages)
 
     else:
         flash(retCode + ':' + msg, "is-danger")
         return render_template('jd/non_shortlisted_candidates_list.html', 
-                        allresumeList=resumeList, 
+                        allresumeList=allresumeList, 
                         job_id=form.job_id.data, 
                         searchForm=form)
+
 
 
 @app.route("/resume/showBrowser", methods=["GET"])
@@ -1248,7 +1263,7 @@ def update_job_application_status():
         flash("Status update failed. Failure detail as follow - " +
               retCode + ':' + msg, "is-danger")
 
-    return redirect(url_for('show_shortlist_resumes_page', job_id=form.job_id.data))
+    return redirect(url_for('show_shortlist_resumes_page', job_id=form.job_id.data, active='shortlisted'))
 
 
 @app.route('/jd/showSummaryPage/<int:job_id>', methods=['GET'])

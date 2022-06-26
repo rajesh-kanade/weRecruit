@@ -24,26 +24,27 @@
     {% for client in clients %}
     <div class="column" style="max-width: 20rem; margin-bottom: 20px;">
       <div class="card">
-        <div
-          class="card-content white-background card-height-120 clientCard {{'card-active' if client.client_id == activeClient else ''}}"
-          id="client-{{client.client_id}}">
-          {% if client.client_id == activeClient %}
-          <div class="has-text-right card-check-img">
-            <img class="margin-top-10" src="static/images/check-2.png" />
-          </div>
-          {% endif %}
-          <a href="/showDashboardPage?client={{client.client_id}}" data-turbo-frame="jobsframe">
+        <a href="/showDashboardPage?client={{client.client_id}}" data-turbo-frame="jobsframe">
+          <div
+            class="card-content white-background card-height-120 clientCard {{'card-active' if client.client_id == activeClient else ''}}"
+            id="client-{{client.client_id}}">
+            {% if client.client_id == activeClient %}
+            <div class="has-text-right card-check-img">
+              <img class="margin-top-10" src="static/images/check-2.png" />
+            </div>
+            {% endif %}
             <p class="card-text">{{client.client_name}}</p>
-          </a>
-          {# <img src="static/images/loadshare.png" /> #}
-        </div>
+            {# <img src="static/images/loadshare.png" /> #}
+          </div>
       </div>
+      </a>
+
     </div>
     {% else %}
     <div class="column">
       <div class="notification is-warning">No clients found !!!</div>
     </div>
-   
+
     {% endfor %}
   </div>
 </div>
@@ -70,19 +71,20 @@
       {% for jd in jdList %}
       <div class="column" style="max-width: 20rem; margin-bottom: 20px;">
         <div class="card">
-          <div
-            class="card-content white-background card-height-100 job-title-card {{'card-active' if jd.id == activeJD}}"
-            id="activeJD-{{jd.id}}">
-            {% if jd.id == activeJD %}
-            <div class="has-text-right card-check-img">
-              <img class="margin-top-10" src="static/images/check-2.png" />
-            </div>
-            {% endif %}
-            <a href="/showDashboardPage?client={{activeClient}}&jd_id={{jd.id}}" data-turbo-frame="summary_frame">
+          <a href="/showDashboardPage?client={{activeClient}}&jd_id={{jd.id}}" data-turbo-frame="summary_frame">
+            <div
+              class="card-content white-background card-height-100 job-title-card {{'card-active' if jd.id == activeJD}}"
+              id="activeJD-{{jd.id}}">
+              {% if jd.id == activeJD %}
+              <div class="has-text-right card-check-img">
+                <img class="margin-top-10" src="static/images/check-2.png" />
+              </div>
+              {% endif %}
               <p class="card-text">{{jd.title}}</p>
-            </a>
-          </div>
+            </div>
         </div>
+        </a>
+
       </div>
       {% else %}
       <div class="column">
@@ -126,79 +128,36 @@
       <table class="table is-fullwidth">
         <thead>
           <tr class="header-home" style="border-bottom: 0px">
+            
+            {% with phase='Resume  Shortlisted'%}
+            {% include "dashboard/title_card.html" %}
+            {% endwith %}
+            
+            {% with phase='Initial  Screening'%}
+            {% include "dashboard/title_card.html" %}
+            {% endwith %}
+            
+            {% with phase='Round 1'%}
+            {% include "dashboard/title_card.html" %}
+            {% endwith %}
+            
+            {% with phase='Round 2'%}
+            {% include "dashboard/title_card.html" %}
+            {% endwith %}
+            
+            {% with phase='Hiring Manager'%}
+            {% include "dashboard/title_card.html" %}
+            {% endwith %}
+            
+            {% with phase='HR'%}
+            {% include "dashboard/title_card.html" %}
+            {% endwith %}
+            
+            {% with phase='Offer'%}
+            {% include "dashboard/title_card.html" %}
+            {% endwith %}
             <th>
-              <div class="columns">
-                <div class="column has-text-center margin-left-20px">
-                  Resume <br />
-                  Shortlisted
-                </div>
-                <div class="has-text-right">
-                  <i class="arrow right"></i>
-                </div>
-              </div>
-            </th>
-            <th>
-              <div class="columns">
-                <div class="column has-text-center margin-left-20px">
-                  Initial <br />
-                  Screening
-                </div>
-                <div class="has-text-right">
-                  <i class="arrow right"></i>
-                </div>
-              </div>
-            </th>
-            <th>
-              <div class="columns">
-                <div class="column has-text-center margin-left-top-15px">
-                  Round 1
-                </div>
-                <div class="has-text-right">
-                  <i class="arrow right"></i>
-                </div>
-              </div>
-            </th>
-            <th>
-              <div class="columns">
-                <div class="column has-text-left margin-left-top-15px">
-                  Round 2
-                </div>
-                <div class="has-text-right">
-                  <i class="arrow right"></i>
-                </div>
-              </div>
-            </th>
-            <th>
-              <div class="columns">
-                <div class="column has-text-left margin-left-20px">
-                  Hiring <br />
-                  Manager
-                </div>
-                <div class="has-text-right">
-                  <i class="arrow right"></i>
-                </div>
-              </div>
-            </th>
-            <th>
-              <div class="columns">
-                <div class="column has-text-left margin-left-top-15px">HR</div>
-                <div class="has-text-right">
-                  <i class="arrow right"></i>
-                </div>
-              </div>
-            </th>
-            <th>
-              <div class="columns">
-                <div class="column has-text-left margin-left-top-15px">
-                  Offer
-                </div>
-                <div class="has-text-right">
-                  <i class="arrow right"></i>
-                </div>
-              </div>
-            </th>
-            <th>
-              <div class="margin-left-top-15px">Onboarding</div>
+              <div class="margin-left-15px" style="margin-top: 0.6rem">Onboarding</div>
             </th>
           </tr>
         </thead>
@@ -207,279 +166,110 @@
             <td class="td-margin">
               <p style="font-size: 56px">{{job_summary.shortlisted}}</p>
             </td>
-            <td>
-              <div class="columns margin-bottom-0">
-                <div class="column is-three-quarters">
-                  <div>Scheduled -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.r1_interview_scheduled }}
-                  </div>
-                </div>
-              </div>
+            <td>      
+              {% with name='Scheduled', value=job_summary.initial_screening_interviews_scheduled%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
+              <div class="line"></div>   
+              {% with name='Cleared', value=job_summary.initial_screening_interviews_cleared%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
               <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div>Cleared -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.r1_interview_cleared}}
-                  </div>
-                </div>
-              </div>
-              <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div>Failed -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.r1_interview_failed}}
-                  </div>
-                </div>
-              </div>
+              {% with name='Failed', value=job_summary.initial_screening_interviews_rejected%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
             </td>
-            <td>
-              <div class="columns margin-bottom-0">
-                <div class="column is-three-quarters">
-                  <div>Scheduled -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.r2_interview_scheduled}}
-                  </div>
-                </div>
+            <td>     
+              {% with name='Scheduled', value=job_summary.r1_interview_scheduled%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
               </div>
+              <div class="line"></div>          
+              {% with name='Rejected', value=job_summary.r1_interview_failed%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
               <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div>Rejected -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.r1_interview_failed}}
-                  </div>
-                </div>
+              {% with name='Passed', value=job_summary.r1_interview_cleared%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
               </div>
-              <div class="line"></div>
-
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div>Passed -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.r1_interview_cleared}}
-                  </div>
-                </div>
-              </div>
-              <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div class="no-show">No Show -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right no-show">
-                    {{job_summary.r1_interview_no_show}}
-                  </div>
-                </div>
-              </div>
+              <div class="line"></div>             
+              {% with name='No Show', value=job_summary.r1_interview_no_show, category='no-show'%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
             </td>
-
-            <td>
-              <div class="columns margin-bottom-0">
-                <div class="column is-three-quarters">
-                  <div>Scheduled -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.r2_interview_scheduled}}
-                  </div>
-                </div>
-              </div>
-              <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div>Rejected -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.r2_interview_failed}}
-                  </div>
-                </div>
-              </div>
-              <div class="line"></div>
-
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div>Passed -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.r2_interview_cleared}}
-                  </div>
-                </div>
-              </div>
-              <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div class="no-show">No Show -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right no-show">
-                    {{job_summary.r2_interview_no_show}}
-                  </div>
-                </div>
-              </div>
+            <td>              
+              {% with name='Scheduled', value=job_summary.r2_interview_scheduled%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
+              <div class="line"></div>             
+              {% with name='Rejected', value=job_summary.r2_interview_failed%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
+              <div class="line"></div>          
+              {% with name='Passed', value=job_summary.r2_interview_cleared%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
+              <div class="line"></div>             
+              {% with name='No Show', value=job_summary.r2_interview_no_show, category='no-show'%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
             </td>
-            <td>
-              <div class="columns margin-bottom-0">
-                <div class="column is-three-quarters">
-                  <div>Scheduled -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.hm_interview_scheduled}}
-                  </div>
-                </div>
-              </div>
-              <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div>Rejected -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.hm_interview_failed}}
-                  </div>
-                </div>
-              </div>
-              <div class="line"></div>
-
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div>Passed -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.hm_interview_cleared}}
-                  </div>
-                </div>
-              </div>
-              <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div class="no-show">No Show -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right no-show">
-                    {{job_summary.hm_interview_no_show}}
-                  </div>
-                </div>
-              </div>
+            <td>              
+              {% with name='Scheduled', value=job_summary.hm_interview_scheduled%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
+              <div class="line"></div>             
+              {% with name='Rejected', value=job_summary.hm_interview_failed%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
+              <div class="line"></div>              
+              {% with name='Passed', value=job_summary.hm_interview_cleared%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
+              <div class="line"></div>              
+              {% with name='No Show', value=job_summary.hm_interview_no_show, category='no-show'%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
             </td>
-            <td>
-              <div class="columns margin-bottom-0">
-                <div class="column is-three-quarters">
-                  <div>Scheduled -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.hr_interview_scheduled}}
-                  </div>
-                </div>
-              </div>
-              <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div>Rejected -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.hr_interview_failed}}
-                  </div>
-                </div>
-              </div>
-              <div class="line"></div>
-
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div>Passed -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.hr_interview_cleared}}
-                  </div>
-                </div>
-              </div>
-              <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div class="no-show">No Show -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right no-show">
-                    {{job_summary.hr_interview_no_show}}
-                  </div>
-                </div>
-              </div>
+            <td>             
+              {% with name='Scheduled', value=job_summary.hr_interview_scheduled%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
+              <div class="line"></div>             
+              {% with name='Rejected', value=job_summary.hr_interview_failed%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
+              <div class="line"></div>             
+              {% with name='Passed', value=job_summary.hr_interview_cleared%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
+              <div class="line"></div>             
+              {% with name='No Show', value=job_summary.hr_interview_no_show, category='no-show'%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
             </td>
-            <td>
-              <div class="columns margin-bottom-0">
-                <div class="column is-three-quarters">
-                  <div>Pending (HR) -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.offer_pending}}
-                  </div>
-                </div>
-              </div>
+            <td>             
+              {% with name='Pending (HR)', value=job_summary.offer_pending%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
               <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div>Released -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right">
-                    {{job_summary.offer_released}}
-                  </div>
-                </div>
-              </div>
+              {% with name='Released', value=job_summary.offer_released%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
               <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div class="accepted">Accepted -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right accepted">
-                    {{job_summary.offer_accepted}}
-                  </div>
-                </div>
-              </div>
+              {% with name='Accepted', value=job_summary.offer_accepted , category='accepted'%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
             </td>
-            <td>
-              <div class="columns margin-bottom-0">
-                <div class="column is-three-quarters done">
-                  <div>Done -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right done">{{job_summary.joined}}</div>
-                </div>
-              </div>
-              <div class="line"></div>
-              <div class="columns margin-bottom-top-0">
-                <div class="column is-three-quarters">
-                  <div class="no-show">No Show -</div>
-                </div>
-                <div class="column">
-                  <div class="has-text-right no-show">
-                    {{job_summary.no_show}}
-                  </div>
-                </div>
-              </div>
+            <td>              
+              {% with name='Done', value=job_summary.joined, category='done'%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
+              <div class="line"></div>             
+              {% with name='No Show', value=job_summary.no_show, category='no-show'%}
+              {% include "dashboard/data_card.html" %}
+              {% endwith %}
             </td>
           </tr>
         </tbody>

@@ -76,7 +76,7 @@ class JDForm(FlaskForm):
     city = SelectField('City')
 
     xpChoice = [(i,i) for i in range(100)]
-    xpChoice.insert(0, (NEW_ENTITY_ID, '- Select -'))
+    xpChoice.insert(0, ('', '- Select -'))
 
     min_yrs_of_exp = SelectField("Min",
                                  choices=xpChoice, default=NEW_ENTITY_ID, validators=[DataRequired()])

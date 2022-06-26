@@ -1246,7 +1246,7 @@ table th{
     margin-right: 2rem;
     margin-left: -2%;
 }
-.control .button.is-success {
+#signin-button .button.is-success {
   margin-left: 6px;
 }
 }
@@ -1428,5 +1428,9 @@ margin-left: -10%;
 
 .modal-card-title {
   color: #f6f6f6;
+}
+
+.reset-button{
+  margin-left: 15px;
 }
 
