@@ -395,8 +395,12 @@ def save_JD():
     if filename is not None and os.path.exists(filename):
         os.remove(filename)
     if (results[0] == jdUtils.RetCodes.success.value):
-        flash("Congratulations!!! Job Requistion with title '{0}' successfully created".format(
-            form.title.data), "is-info")
+        if int(form.id.data) == constants.NEW_ENTITY_ID:
+            flash("Congratulations!!! Job Requistion with title '{0}' created successfully".format(
+                form.title.data), "is-info")
+        else:
+            flash("Congratulations!!! Job Requistion with title '{0}' edited successfully".format(
+                form.title.data), "is-info")
         return redirect(url_for("show_jd_all_page"))
 
     else:
