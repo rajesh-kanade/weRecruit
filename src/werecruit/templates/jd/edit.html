@@ -33,10 +33,6 @@
             <form action="/jd/save" method="POST" enctype="multipart/form-data">
               {{ form.hidden_tag() }}
               {{form.id()}}
-              {% if mode=='create' %}
-              <input type="hidden" name=mode value='create'>
-              {% endif %}
-              
               <div class="form-group">
                 <div class="field">
                   <label class="label">{{ form.title.label }}</label>
@@ -51,13 +47,11 @@
                   <!-- <turbo-frame id="clientfield" > -->
                     <div class="control" style="display: flex">
                     {{form.client(class='input', placeholder='Enter Client Name', id='clientDropdown', required='')}}
-                    {% if mode=='create'%}
                     <a href="/jd/showAddNewClient" data-turbo-frame="self" style="font-size: x-large;align-self: center;
                                                                                                   margin-left: 0.5rem;"
                       title="Add New Client">
                       <i class="fas fa-user-plus"></i>
                     </a>
-                    {% endif %}
                   </div>
                 <!-- </turbo-frame> -->
                   
