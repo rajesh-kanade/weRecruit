@@ -420,7 +420,7 @@ def do_SignIn(id, password):
 
             if (userList is None or len(userList) != 1):
                 return (RetCodes.sign_in_failed,
-                        "Sign in failed as either no user with this email ID exists or wrong password has been provided.",
+                        "Failed to sign in.Please check your credentials and try again",
                         None)
 
             for user in userList:
