@@ -1422,6 +1422,15 @@ margin-left: -10%;
   margin-left: -6vh;
   z-index: 4;
 }
+
+.modal-card-head {
+  background-color: #4ccd3d;
+}
+
+.modal-card-title {
+  color: #f6f6f6;
+}
+
 .reset-button{
   margin-left: 15px;
 }
