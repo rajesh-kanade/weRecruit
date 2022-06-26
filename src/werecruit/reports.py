@@ -258,6 +258,9 @@ def get_jd_wise_application_status_report(jd_id):
 		query = """
 		select id, (select client_name from wr_clients where  wr_clients.client_id = wr_jds.client_id) as client, title,
 			(jd_stats->'0') as shortlisted,
+			(jd_stats->'1') as Initial_Screening_Interviews_scheduled,
+			(jd_stats->'2') as Initial_Screening_Interviews_cleared,
+			(jd_stats->'3') as Initial_Screening_Interviews_rejected,
 			(jd_stats->'10') as R1_Interview_Scheduled,
 			(jd_stats->'20') as R1_Interview_Cleared,
 			(jd_stats->'30') as R1_Interview_Failed,

@@ -1246,7 +1246,7 @@ table th{
     margin-right: 2rem;
     margin-left: -2%;
 }
-.control .button.is-success {
+#signin-button .button.is-success {
   margin-left: 6px;
 }
 }
@@ -1421,5 +1421,7 @@ margin-left: -10%;
   margin-left: -6vh;
   z-index: 4;
 }
-
+.reset-button{
+  margin-left: 15px;
+}
 
