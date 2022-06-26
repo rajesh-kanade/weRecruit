@@ -1,3 +1,4 @@
+from importlib.resources import contents
 from flask import (
     Flask,
     flash,
@@ -14,6 +15,9 @@ from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask_fontawesome import FontAwesome
+
+from flask_mail import Mail,Message
+from itsdangerous import URLSafeTimedSerializer,SignatureExpired
 
 import userUtils
 import jdUtils
@@ -45,7 +49,10 @@ logging.basicConfig(filename=constants.LOG_FILENAME_WEB, format=constants.LOG_FO
 _logger = logging.getLogger()
 
 app = Flask(__name__)
+mail = Mail(app)
+key = os.environ.get("SECRET_KEY", '')
 
+s = URLSafeTimedSerializer(key)
 # print(os.environ.get("FLASK_SESSION_API_KEY"))
 app.secret_key = os.environ.get("FLASK_SESSION_API_KEY", '')
 app.config["SESSION_PERMANENT"] = False
@@ -153,27 +160,56 @@ def sign_up():
     userAttrs['email'] = form.email.data
     userAttrs['password'] = form.password.data
     userAttrs['name'] = form.name.data
-    userAttrs['status'] = userUtils.Status.active.value
+    userAttrs['status'] = userUtils.Status.pending_verification.value
     userAttrs['tname'] = form.company_name.data
 
 
     password = request.form["password"]
     if(validate_password(password)):
-        results = userUtils.do_signUp(userAttrs)
-        if (results[0] == userUtils.RetCodes.success.value):
-            flash("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(
-                form.name.data), "is-info")
-        
-            return redirect(url_for("show_signin_page"))
-        elif(results[0] == "IAM_CRUD_E500"):
-            flash("Email Id given by you already exists in our database. Please enter another email ID.","is-danger")
-            return render_template('sign_up.html',form=form)
+        email = form.email.data
+    
+        token = s.dumps(email, salt='email-confirm')
+        msg1 = 'Confirm email'
+        link = url_for('confirm_email', token=token, _external=True)
+        msg1Body = "<p>Please click on the below link to activate your account. {}</p>".format(link)
+        contentType = 'html'
+        emailUtils.sendMail(email,subject=msg1,body=msg1Body,contentType=contentType)
+        if confirm_email(token):
+            results = userUtils.do_signUp(userAttrs)
+            
+            if (results[0] == userUtils.RetCodes.success.value):
+                flash("")
+
+            else:
+                flash("Email already exists.Please verify the email by using activation link provided to your email.", "is-danger")
+                return render_template('sign_up.html',form=form)
+
+
         else:
-            flash(results[0] + ':' + results[1], "is-danger")
-            return render_template('sign_up.html',form=form)
+            flash("Please activate your account","is-danger")
+            return render_template('sign_up.html', form = form)
+        return render_template('email/confirm_template.html')
     else:
         flash("Password criteria not met. Please enter password again.","is-danger")
         return render_template('sign_up.html', form = form)
+    
+
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    form = SignUpForm()
+   
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=2000)
+        results = userUtils.confirm_user(email)
+        
+        if (results[0] == userUtils.RetCodes.success.value):
+            flash("Account is activated .Signin to your account","is-info")
+            return redirect(url_for("show_signin_page"))
+        else:
+            flash("Account activation failed.Please try again.", "is-danger")
+            return render_template('sign_up.html',form=form)
+    except SignatureExpired:
+        return 'The token is expired'  
 
 
 def login_required(func):
@@ -395,8 +431,12 @@ def save_JD():
     if filename is not None and os.path.exists(filename):
         os.remove(filename)
     if (results[0] == jdUtils.RetCodes.success.value):
-        flash("Congratulations!!! Job Requistion with title '{0}' successfully created".format(
-            form.title.data), "is-info")
+        if int(form.id.data) == constants.NEW_ENTITY_ID:
+            flash("Congratulations!!! Job Requistion with title '{0}' created successfully".format(
+                form.title.data), "is-info")
+        else:
+            flash("Congratulations!!! Job Requistion with title '{0}' edited successfully".format(
+                form.title.data), "is-info")
         return redirect(url_for("show_jd_all_page"))
 
     else:

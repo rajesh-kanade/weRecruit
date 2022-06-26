@@ -1432,3 +1432,14 @@ margin-left: -10%;
 .modal-card-title {
   color: #fff;
 }
+/*email confirm page*/
+.confirmation-content{
+  margin-left: 10%;
+}
+.gmail-img{
+  margin-right: 4rem;
+  margin-left: 13px;
+}
+.gmail-link{
+  margin-right:3rem;
+}
