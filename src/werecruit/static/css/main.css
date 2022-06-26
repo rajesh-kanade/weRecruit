@@ -1425,6 +1425,27 @@ margin-left: -10%;
 .reset-button{
   margin-left: 15px;
 }
+
 #navbar-logo{
   margin-left: -40%
+
+
+.modal-card-head {
+  background-color: #4ccd3d;
+}
+
+.modal-card-title {
+  color: #fff;
+}
+/*email confirm page*/
+.confirmation-content{
+  margin-left: 10%;
+}
+.gmail-img{
+  margin-right: 4rem;
+  margin-left: 13px;
+}
+.gmail-link{
+  margin-right:3rem;
+
 }
