@@ -99,7 +99,7 @@
       <div class="totalPages"><a>Of {{ shortlisted_resume_total_pages}} <span class="sr-only">(current)</span></a></div>
       {% if shortlisted_resume_pagination.page > 1 %}
       <div><a class="left"
-          href="?page={{shortlisted_resume_pagination.page - 1}}&per_page={{shortlisted_resume_pagination.per_page}}"
+          href="?active=shortlisted&page={{shortlisted_resume_pagination.page - 1}}&per_page={{shortlisted_resume_pagination.per_page}}"
           aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a></div>
   
       {% else %}
@@ -108,7 +108,7 @@
       {% endif %}
   
       {% if shortlisted_resume_pagination.page < shortlisted_resume_total_pages %} <div><a class="right"
-          href="?page={{shortlisted_resume_pagination.page + 1}}&per_page={{shortlisted_resume_pagination.per_page}}"
+          href="?active=shortlisted&page={{shortlisted_resume_pagination.page + 1}}&per_page={{shortlisted_resume_pagination.per_page}}"
           aria-label="Next">
           <span>&raquo;</span><span class="sr-only">Next</span></a>
     </div>
