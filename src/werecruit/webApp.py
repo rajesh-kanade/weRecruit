@@ -277,7 +277,7 @@ def show_jd_create_page():
     form.country.choices = countryNames
     form.city.choices = [(record.id, record.name) for record in cityNames]
 
-    return render_template('jd/edit.html', form=form)
+    return render_template('jd/edit.html', form=form, mode='create')
 
 
 @app.route('/jd/showAddNewClient', methods=['GET'])
@@ -438,7 +438,9 @@ def save_JD():
         form.client.choices = clients
         form.country.choices = countryNames
         form.city.choices = [(record.id, record.name) for record in cityNames]
-        return render_template('jd/edit.html', form=form), 409
+
+        mode = request.form.get('mode') if request.form.get('mode') else ''
+        return render_template('jd/edit.html', form=form, mode=mode), 409
         # return redirect
 
 
@@ -551,7 +553,7 @@ def show_jd_edit_page(id):
         form.fees_percent.data = jd.fees_in_percent
         form.warranty_in_months.data = jd.warranty_period_in_months
 
-        return render_template('jd/edit.html', form=form)
+        return render_template('jd/edit.html', form=form, mode='edit')
     else:
         flash(results[0] + ':' + results[1], "is-danger")
         return redirect(url_for("show_home_page"))
