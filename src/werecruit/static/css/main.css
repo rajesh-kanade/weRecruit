@@ -1425,6 +1425,13 @@ margin-left: -10%;
   margin-left: 15px;
 }
 
+.modal-card-head {
+  background-color: #4ccd3d;
+}
+
+.modal-card-title {
+  color: #fff;
+}
 /*email confirm page*/
 .confirmation-content{
   margin-left: 10%;
