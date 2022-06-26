@@ -164,7 +164,7 @@ def save_user(tenantID, userID, name, email, password, roleID):
             # insert a record in user table
             sql = """insert into users ( email, name, password,is_deleted,status) 
 				values (%s,%s, %s,%s,%s) returning id """
-            params = (email, name, password, False, Status.active.value)
+            params = (email, name, password, False, Status.pending_verification.value)
             _logger.debug(cursor.mogrify(sql, params))
 
             cursor.execute(sql, params)
@@ -279,6 +279,37 @@ def delete(userID):
 
         dbUtils.returnToPool(db_con)
 
+def confirm_user(email):
+    try:
+
+        db_con = dbUtils.getConnFromPool()
+        cursor = dbUtils.getNamedTupleCursor(db_con)
+
+        sql = """UPDATE users SET status = %s WHERE email = %s"""
+        params = (1, email)
+
+        _logger.debug(sql)
+        _logger.debug(cursor.mogrify(sql, params))
+
+        cursor.execute(sql, params)
+        updated_rows = cursor.rowcount
+
+        db_con.commit()
+
+        if int(updated_rows) != 1:
+            return(RetCodes.del_ent_error.value, "CONFIRMED for User ID '{0}' failed. No. of rows updated was {1} instead of 1".format(email, updated_rows), updated_rows)
+        else:
+            return(RetCodes.success.value, "Confirmed for User ID '{0}' succeeded.".format(email), updated_rows)
+
+    except Exception as e:
+        _logger.error(e)
+        return(RetCodes.server_error.value, str(e), None)
+
+    finally:
+        if cursor is not None:
+            cursor.close()
+
+        dbUtils.returnToPool(db_con)
 
 def get_user_by_email(email):
 
@@ -408,7 +439,7 @@ def do_SignIn(id, password):
 					(select tid from tenant_user_roles where uid = id),
 					(select rid from tenant_user_roles where uid = id) 
 					FROM users WHERE
-					email = %s and password = %s and is_deleted = %s"""
+					email = %s and password = %s and is_deleted = %s and status=1"""
 
             data_tuple = (id, password, False)
 

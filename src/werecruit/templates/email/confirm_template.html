@@ -1,0 +1,29 @@
+{%extends "header.html" %}
+{%block content%}
+<body>
+    <div>
+        <img src="{{url_for('static', filename='images/header.jpg')}}" style="width:100%">
+    </div>
+    <br>
+    <div class="confirmation-content">
+        <div class="content"> 
+        <label class="title is-size-4 has-text-info">
+            Congratulations!!! verification link has been send to your email.
+        </label>
+        <br>
+        <ul class="list-unstyled">
+            <li>Account confirmation link has been send to your given email </li>
+            <li>Please click on the link to activate your account</li>
+            <li>Link is valid for 24 hours only</li>
+        </ul>
+        </div>
+        <br>
+        <img class="gmail-img" src="{{url_for('static', filename='images/gmail.png')}}">
+        <img src="{{url_for('static', filename='images/outlook.png')}}">
+        <br>
+        <a class="gmail-link" href="https://mail.google.com">Open Google</a>
+        <a href="https://outlook.com">Open outlook</a>
+        <br><br><br><br>
+        <p>Didn't get an email? Check your spam folder!</p>
+    </div>
+{%endblock%}
