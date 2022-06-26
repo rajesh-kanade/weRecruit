@@ -44,17 +44,16 @@
                 <div class="field">
 
                   <label class="label">{{ form.client.label }}</label>
-                  <!-- <turbo-frame id="clientfield" > -->
                     <div class="control" style="display: flex">
                     {{form.client(class='input', placeholder='Enter Client Name', id='clientDropdown', required='')}}
+                    {% if form.id.data == -1 %}
                     <a href="/jd/showAddNewClient" data-turbo-frame="self" style="font-size: x-large;align-self: center;
                                                                                                   margin-left: 0.5rem;"
                       title="Add New Client">
                       <i class="fas fa-user-plus"></i>
                     </a>
-                  </div>
-                <!-- </turbo-frame> -->
-                  
+                    {% endif %}
+                  </div>                  
                 </div>
                 <div class="field">
                   <label class="label has-text-left">{{ form.client_jd.label }}</label>
