@@ -217,10 +217,10 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
             result = cursor.fetchone()
             resume_id = result[0]
             _logger.debug(
-                "Resume id {} successfully created.".format(resume_id))
+                "Resume id {} successfully created.".format(candidateName))
 
             db_con.commit()
-            return (RetCodes.success.value, "Resume id {} successfully uploaded.".format(resume_id), resume_id)
+            return (RetCodes.success.value, "Resume for Candidate '{}' successfully uploaded.".format(candidateName),resume_id)
         else:
             # When record is updated, resume can be left null or can be uploaded with a new or same resume.
             # Handle resume upload case seperately...
