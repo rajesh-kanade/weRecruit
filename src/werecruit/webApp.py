@@ -968,7 +968,7 @@ def jd_download(id):
             id)
 
         if jd.client_jd == None or jd.jd_file_name == None:
-            flash("No client JD is attached with this job", "is-info")
+            flash("Client JD missing", "is-info")
             return redirect(url_for("show_jd_all_page"))
         else:
             file_data = bytes(jd.client_jd)
@@ -1518,7 +1518,7 @@ def do_reset_password():
     else:
 		# print("Password Not matched")
 		# flash ("New Password and Confirm Password must be same", "is-danger")
-        flash('Password criteria does not match.',"is-danger")
+        flash("Password criteria doesn't match","is-danger")
         return redirect(url_for('show_reset_password'))   
 
 
@@ -1547,7 +1547,7 @@ def do_forgot_password():
         
         #Handle if sendMail function failed...
 
-        flash('A new password has been sent to your email successfully', "is-success")
+        flash("We've emailed the new password to you", "is-success")
         return redirect(url_for('show_signin_page'))
 
 
