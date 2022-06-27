@@ -65,13 +65,13 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 
         if (max_yrs_of_exp is not None and min_yrs_of_exp is not None):
             if int(min_yrs_of_exp) == constants.NEW_ENTITY_ID or int(max_yrs_of_exp) == constants.NEW_ENTITY_ID:
-                return(RetCodes.empty_ent_attrs_error.value, "Experience field is empty or null.", None)
+                return(RetCodes.empty_ent_attrs_error.value, "Experience field is empty", None)
             if (int(max_yrs_of_exp) < int(min_yrs_of_exp)):
-                return(RetCodes.save_ent_error.value, "Maximum years of experience can not be less then minimum years of experience .", None)
+                return(RetCodes.save_ent_error.value, "Maximum years of experience should be more than minimum years of experience ", None)
 
         if (ctc_max is not None and ctc_min is not None):
             if (ctc_max < ctc_min):
-                return(RetCodes.save_ent_error.value, "Maximum CTC can not be less then minimum CTC .", None)
+                return(RetCodes.save_ent_error.value, "Maximum CTC cannot be less than minimum CTC", None)
 
         if open_date is None:
             open_date = datetime.now(tz=timezone.utc)

@@ -9,7 +9,7 @@
           <section class="section topbar-title">
             <h1 class="title">Create Or Edit A Job Position</h1>
             <h2 class="subtitle">
-              Section allows you to create or edit a job position
+              Create or edit a job position
             </h2>
             <div id="jd_browser_messages">
             {% set messages = get_flashed_messages(with_categories = true ) %}            
@@ -44,17 +44,16 @@
                 <div class="field">
 
                   <label class="label">{{ form.client.label }}</label>
-                  <!-- <turbo-frame id="clientfield" > -->
                     <div class="control" style="display: flex">
                     {{form.client(class='input', placeholder='Enter Client Name', id='clientDropdown', required='')}}
+                    {% if form.id.data == -1 %}
                     <a href="/jd/showAddNewClient" data-turbo-frame="self" style="font-size: x-large;align-self: center;
                                                                                                   margin-left: 0.5rem;"
                       title="Add New Client">
                       <i class="fas fa-user-plus"></i>
                     </a>
-                  </div>
-                <!-- </turbo-frame> -->
-                  
+                    {% endif %}
+                  </div>                  
                 </div>
                 <div class="field">
                   <label class="label has-text-left">{{ form.client_jd.label }}</label>
@@ -191,8 +190,7 @@
                       <label class="label">Min</label>
                       <div class="control">
                         <div class="">
-                          {{form.ctc_min(class='input', placeholder='Min CTC')}}
-
+                          {{form.ctc_min(class='input', placeholder='Min CTC', min=0)}}
                         </div>
                       </div>
                     </div>
@@ -202,8 +200,7 @@
                       <label class="label">Max</label>
                       <div class="control">
                         <div class="">
-                          {{form.ctc_max(class='input', placeholder='Max CTC')}}
-
+                          {{form.ctc_max(class='input', placeholder='Max CTC', min=0)}}
                         </div>
                       </div>
                     </div>
@@ -260,12 +257,10 @@
                   Few guidelines
                 </label>
                 <ul class="list-unstyled">
-                  <li>Proper formatting of the text/content with clear spaces.</li>
-                  <li>Standard bullets (-) to be used.</li>
-                  <li>Short forms/abbreviations not accepted .</li>
-                  <li>Check  spelling in the content.</li>
-                  <li>Concise and crisp JD.</li>
-                  <li>(*) mark is mandatory.</li>
+                  <li>Proper formatting of the text</li>
+                  <li>No short forms or abbreviations</li>
+                  <li>Check spelling</li>
+                  <li>Crisp and concise and crisp JD</li>
                 </ul>
               </div>
             </div>

@@ -175,14 +175,14 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
     try:
         _logger.info(candidateName)
         if not candidateName.strip():
-            return(RetCodes.empty_ent_attrs_error.value, "Candidate Name empty or null.", None)
+            return(RetCodes.empty_ent_attrs_error.value, "Name cannot be blank/Please enter your name.", None)
 
         _logger.info(candidateEmail)
         if not candidateEmail.strip():
-            return(RetCodes.empty_ent_attrs_error.value, "Candidate Email empty or null.", None)
+            return(RetCodes.empty_ent_attrs_error.value, "Please enter your Email", None)
 
         if not candidatePhone.strip():
-            return(RetCodes.empty_ent_attrs_error.value, "Candidate Phone empty or null.", None)
+            return(RetCodes.empty_ent_attrs_error.value, "Phone number cannot be blank", None)
 
         if not recruiterID:
             return(RetCodes.empty_ent_attrs_error.value, "Recruiter ID field is empty or null.", None)
@@ -217,10 +217,10 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
             result = cursor.fetchone()
             resume_id = result[0]
             _logger.debug(
-                "Resume id {} successfully created.".format(resume_id))
+                "Resume id {} successfully created.".format(candidateName))
 
             db_con.commit()
-            return (RetCodes.success.value, "Resume id {} successfully uploaded.".format(resume_id), resume_id)
+            return (RetCodes.success.value, "Resume for Candidate '{}' successfully uploaded.".format(candidateName),resume_id)
         else:
             # When record is updated, resume can be left null or can be uploaded with a new or same resume.
             # Handle resume upload case seperately...

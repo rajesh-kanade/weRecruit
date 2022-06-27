@@ -247,3 +247,37 @@ ALTER TABLE IF EXISTS public.wr_jds
 drop column client;
 
 /* ******** end upgrade prod on 22/06/2022 for status codes category and sub category *****/
+
+/* ***** 26/06/2022 updated status sub categories  ****** */
+UPDATE application_status_codes
+SET description = 'Initial Screening Scheduled'
+WHERE id=1;
+
+UPDATE application_status_codes
+SET description = 'Initial Screening Cleared'
+WHERE id=2;
+
+UPDATE application_status_codes
+SET description = 'Initial Screening Failed'
+WHERE id=3;
+
+UPDATE application_status_codes
+SET description = 'Offer Pending To Candidate'
+WHERE id=130;
+
+UPDATE application_status_codes
+SET description = 'Offer Released To Candidate'
+WHERE id=140;
+
+UPDATE application_status_codes
+SET description = 'Offer Accepted By Candidate'
+WHERE id=150;
+
+UPDATE application_status_codes
+SET description = 'Candidate Onboarding Completed'
+WHERE id=160;
+
+UPDATE application_status_codes
+SET description = 'Candidate Was A No Show'
+WHERE id=170;
+/* ******** end upgrade prod on 26/06/2022 for updated status sub categories **** */

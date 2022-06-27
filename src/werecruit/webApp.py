@@ -1,3 +1,4 @@
+from importlib.resources import contents
 from flask import (
     Flask,
     flash,
@@ -14,6 +15,9 @@ from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask_fontawesome import FontAwesome
+
+from flask_mail import Mail,Message
+from itsdangerous import URLSafeTimedSerializer,SignatureExpired
 
 import userUtils
 import jdUtils
@@ -45,7 +49,10 @@ logging.basicConfig(filename=constants.LOG_FILENAME_WEB, format=constants.LOG_FO
 _logger = logging.getLogger()
 
 app = Flask(__name__)
+mail = Mail(app)
+key = os.environ.get("SECRET_KEY", '')
 
+s = URLSafeTimedSerializer(key)
 # print(os.environ.get("FLASK_SESSION_API_KEY"))
 app.secret_key = os.environ.get("FLASK_SESSION_API_KEY", '')
 app.config["SESSION_PERMANENT"] = False
@@ -153,27 +160,56 @@ def sign_up():
     userAttrs['email'] = form.email.data
     userAttrs['password'] = form.password.data
     userAttrs['name'] = form.name.data
-    userAttrs['status'] = userUtils.Status.active.value
+    userAttrs['status'] = userUtils.Status.pending_verification.value
     userAttrs['tname'] = form.company_name.data
 
 
     password = request.form["password"]
     if(validate_password(password)):
-        results = userUtils.do_signUp(userAttrs)
-        if (results[0] == userUtils.RetCodes.success.value):
-            flash("Congratulations!!! '{0}' successfully signed up. Get started by signing in now.".format(
-                form.name.data), "is-info")
-        
-            return redirect(url_for("show_signin_page"))
-        elif(results[0] == "IAM_CRUD_E500"):
-            flash("Email Id given by you already exists in our database. Please enter another email ID.","is-danger")
-            return render_template('sign_up.html',form=form)
+        email = form.email.data
+    
+        token = s.dumps(email, salt='email-confirm')
+        msg1 = 'Confirm email'
+        link = url_for('confirm_email', token=token, _external=True)
+        msg1Body = "<p>Please click on the below link to activate your account. {}</p>".format(link)
+        contentType = 'html'
+        emailUtils.sendMail(email,subject=msg1,body=msg1Body,contentType=contentType)
+        if confirm_email(token):
+            results = userUtils.do_signUp(userAttrs)
+            
+            if (results[0] == userUtils.RetCodes.success.value):
+                flash("")
+
+            else:
+                flash("Email already exists.Please verify the email by using activation link provided to your email.", "is-danger")
+                return render_template('sign_up.html',form=form)
+
+
         else:
-            flash(results[0] + ':' + results[1], "is-danger")
-            return render_template('sign_up.html',form=form)
+            flash("Please activate your account","is-danger")
+            return render_template('sign_up.html', form = form)
+        return render_template('email/confirm_template.html')
     else:
         flash("Password criteria not met. Please enter password again.","is-danger")
         return render_template('sign_up.html', form = form)
+    
+
+@app.route('/confirm_email/<token>')
+def confirm_email(token):
+    form = SignUpForm()
+   
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=2000)
+        results = userUtils.confirm_user(email)
+        
+        if (results[0] == userUtils.RetCodes.success.value):
+            flash("Account is activated .Signin to your account","is-info")
+            return redirect(url_for("show_signin_page"))
+        else:
+            flash("Account activation failed.Please try again.", "is-danger")
+            return render_template('sign_up.html',form=form)
+    except SignatureExpired:
+        return 'The token is expired'  
 
 
 def login_required(func):
@@ -343,7 +379,7 @@ def show_jd_all_page():
         pagination = Pagination(page=page, per_page=per_page, total=total)
         for jd in jdList:
             _logger.debug(jd.title)
-        return render_template('jd/list.html', jdList=pagination_JDList, request=request, page=page, per_page=1, pagination=pagination, toggles=toggles, totalPages=totalPages)
+        return render_template('jd/list.html', jdList=pagination_JDList, request=request, page=page, per_page=1, pagination=pagination, toggles=toggles, totalPages=totalPages, order=order, order_by=orderBy)
     else:
         flash(results[0] + ':' + results[1], "is-danger")
         return render_template('jd/list.html', jdList=None)
@@ -395,8 +431,12 @@ def save_JD():
     if filename is not None and os.path.exists(filename):
         os.remove(filename)
     if (results[0] == jdUtils.RetCodes.success.value):
-        flash("Congratulations!!! Job Requistion with title '{0}' successfully created".format(
-            form.title.data), "is-info")
+        if int(form.id.data) == constants.NEW_ENTITY_ID:
+            flash("Congratulations!!! Job Requistion with title '{0}' created successfully".format(
+                form.title.data), "is-info")
+        else:
+            flash("Congratulations!!! Job Requistion with title '{0}' edited successfully".format(
+                form.title.data), "is-info")
         return redirect(url_for("show_jd_all_page"))
 
     else:
@@ -698,7 +738,7 @@ def resume_save():
         return redirect(form.referrer.data)
 
     else:
-        flash(retCode + ':' + msg, "is-danger")   
+        flash( msg, "is-danger")   
         _logger.error("Server side validation error occured while saving. Error was as %s", msg)
         return render_template('resume/edit.html', form=form),415
 
@@ -754,7 +794,6 @@ def search_resume():
         flash(retCode + ":" + msg, "is-danger")
         return render_template("resume/list.html", resumeList=None, form=form)
 
-
 @app.route('/jd/searchNonShortlistedResumes', methods=['POST'])
 @login_required
 def search_non_shortlisted_resumes():
@@ -764,28 +803,44 @@ def search_non_shortlisted_resumes():
     _logger.debug('Job ID is %s & search criteria is %s',
                   form.job_id.data, form.ft_search.data)
 
-    (retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(form.job_id.data,
+    (retCode, msg, allresumeList) = jdUtils.get_resumes_not_associated_with_job(form.job_id.data,
                                                                              form.ft_search.data, session.get('tenant_id'))
-    #_logger.debug("ResumeList is %s", resumeList)
+
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    per_page = request.args.get(
+        get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
+
+    offset = (page - 1) * per_page
+    allresume_total = len(allresumeList)
+
+    from math import ceil
+    all_resume_total_pages = ceil(allresume_total/per_page)
+    def getResumePages(offset=0, per_page=1):
+        return allresumeList[offset: offset + per_page]
+   
+    pagination_ResumeList = getResumePages(offset=offset, per_page=per_page)
+    all_resume_pagination = Pagination(page=page, per_page=per_page, total=allresume_total)
     if (retCode == jdUtils.RetCodes.success.value):
-        # return render_template('resume/list.html', resumeList = resumeList, form = form )
         _logger.debug('ready to render')
         _logger.debug(
-            'Non shortlisted resumes count found is %s', len(resumeList))
-        # return render_template('/showHomepage')
-        # return redirect(url_for("show_home_page"),303)
-
+            'Non shortlisted resumes count found is %s', len(allresumeList))
         return render_template('/jd/non_shortlisted_candidates_list.html',
-                               allresumeList=resumeList,
                                job_id=form.job_id.data,
-                               searchForm=form)
+                               searchForm=form,allresumeList=pagination_ResumeList,
+                             actionTemplate="shortlist",
+                            page=page,
+                            per_page=1,
+                            all_resume_pagination=all_resume_pagination,
+                            all_resume_total_pages=all_resume_total_pages)
 
     else:
         flash(retCode + ':' + msg, "is-danger")
         return render_template('jd/non_shortlisted_candidates_list.html', 
-                        allresumeList=resumeList, 
+                        allresumeList=allresumeList, 
                         job_id=form.job_id.data, 
                         searchForm=form)
+
 
 
 @app.route("/resume/showBrowser", methods=["GET"])
@@ -882,7 +937,7 @@ def resume_download(id):
             id)
 
         if resume.resume_content == None or resume.resume_filename == None:
-            flash("No resume is attached with this candidate", "is-info")
+            flash("Candidate resume missing", "is-info")
             #_logger.debug("called from %s", request.referrer)
             # return redirect(url_for("show_resume_browser_page"))
             return redirect(request.referrer)
@@ -913,7 +968,7 @@ def jd_download(id):
             id)
 
         if jd.client_jd == None or jd.jd_file_name == None:
-            flash("No client JD is attached with this job", "is-info")
+            flash("Client JD missing", "is-info")
             return redirect(url_for("show_jd_all_page"))
         else:
             file_data = bytes(jd.client_jd)
@@ -1463,7 +1518,7 @@ def do_reset_password():
     else:
 		# print("Password Not matched")
 		# flash ("New Password and Confirm Password must be same", "is-danger")
-        flash('Password criteria does not match.',"is-danger")
+        flash("Password criteria doesn't match","is-danger")
         return redirect(url_for('show_reset_password'))   
 
 
@@ -1492,7 +1547,7 @@ def do_forgot_password():
         
         #Handle if sendMail function failed...
 
-        flash('A new password has been sent to your email successfully', "is-success")
+        flash("We've emailed the new password to you", "is-success")
         return redirect(url_for('show_signin_page'))
 
 

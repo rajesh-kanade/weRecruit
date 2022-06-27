@@ -6,7 +6,7 @@
       <section class="section topbar-title">
         <h1 class="title">Job Browser</h1>
         <h2 class="subtitle">
-          Browse through existing postings or shortlist candidates/update status of job posting
+          Browse through existing postings to shortlist candidates or update status.
         </h2>
         <div id="jd_browser_messages">{% include '/utils/show_timed_msg.html'%}</div>
       </section>
@@ -91,7 +91,7 @@
             <div class="totalPages"><a>Of {{ totalPages}} <span class="sr-only">(current)</span></a></div>
             {% if pagination.page > 1 %}
             <div><a class="left"
-                href="?page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
+                href="?order={{order}}&order_by={{order_by}}&page={{pagination.page - 1}}&per_page={{pagination.per_page}}"
                 aria-label="Next"><span>&laquo;</span><span class="sr-only">Next</span></a></div>
         
             {% else %}
@@ -100,7 +100,7 @@
             {% endif %}
         
             {% if pagination.page < totalPages %} <div><a class="right"
-                href="?page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
+                href="?order={{order}}&order_by={{order_by}}&page={{pagination.page + 1}}&per_page={{pagination.per_page}}"
                 aria-label="Next">
                 <span>&raquo;</span><span class="sr-only">Next</span></a>
           </div>
