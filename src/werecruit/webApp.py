@@ -16,7 +16,7 @@ from werkzeug.utils import secure_filename
 from flask import send_file
 from flask_fontawesome import FontAwesome
 
-from flask_mail import Mail,Message
+#from flask_mail import Mail,Message
 from itsdangerous import URLSafeTimedSerializer,SignatureExpired
 
 import userUtils
@@ -49,7 +49,7 @@ logging.basicConfig(filename=constants.LOG_FILENAME_WEB, format=constants.LOG_FO
 _logger = logging.getLogger()
 
 app = Flask(__name__)
-mail = Mail(app)
+#mail = Mail(app)
 key = os.environ.get("SECRET_KEY", '')
 
 s = URLSafeTimedSerializer(key)
@@ -165,33 +165,29 @@ def sign_up():
 
 
     password = request.form["password"]
-    if(validate_password(password)):
-        email = form.email.data
-    
+
+    if (validate_password(password) == False):
+        flash("Password criteria not met. Please enter password again.","is-danger")
+        return render_template('sign_up.html', form = form)
+
+    email = form.email.data
+
+    results = userUtils.do_signUp(userAttrs)
+    if (results[0] == userUtils.RetCodes.success.value):
+        flash("")
+        
         token = s.dumps(email, salt='email-confirm')
-        msg1 = 'Confirm email'
+        msg1 = 'Confirm weRecruit account creation'
         link = url_for('confirm_email', token=token, _external=True)
         msg1Body = "<p>Please click on the below link to activate your account. {}</p>".format(link)
         contentType = 'html'
         emailUtils.sendMail(email,subject=msg1,body=msg1Body,contentType=contentType)
-        if confirm_email(token):
-            results = userUtils.do_signUp(userAttrs)
-            
-            if (results[0] == userUtils.RetCodes.success.value):
-                flash("")
 
-            else:
-                flash("Email already exists.Please verify the email by using activation link provided to your email.", "is-danger")
-                return render_template('sign_up.html',form=form)
-
-
-        else:
-            flash("Please activate your account","is-danger")
-            return render_template('sign_up.html', form = form)
         return render_template('email/confirm_template.html')
+
     else:
-        flash("Password criteria not met. Please enter password again.","is-danger")
-        return render_template('sign_up.html', form = form)
+        flash("Account signup failed. Please contact support", "is-danger")
+        return render_template('sign_up.html',form=form)
     
 
 @app.route('/confirm_email/<token>')
@@ -199,7 +195,7 @@ def confirm_email(token):
     form = SignUpForm()
    
     try:
-        email = s.loads(token, salt='email-confirm', max_age=2000)
+        email = s.loads(token, salt='email-confirm', max_age=2000) #get email from token
         results = userUtils.confirm_user(email)
         
         if (results[0] == userUtils.RetCodes.success.value):

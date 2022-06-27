@@ -286,7 +286,7 @@ def confirm_user(email):
         cursor = dbUtils.getNamedTupleCursor(db_con)
 
         sql = """UPDATE users SET status = %s WHERE email = %s"""
-        params = (1, email)
+        params = (Status.active.value, email)
 
         _logger.debug(sql)
         _logger.debug(cursor.mogrify(sql, params))
@@ -294,15 +294,15 @@ def confirm_user(email):
         cursor.execute(sql, params)
         updated_rows = cursor.rowcount
 
-        db_con.commit()
-
         if int(updated_rows) != 1:
-            return(RetCodes.del_ent_error.value, "CONFIRMED for User ID '{0}' failed. No. of rows updated was {1} instead of 1".format(email, updated_rows), updated_rows)
+            return(RetCodes.del_ent_error.value, "Confirmation for User ID '{0}' failed. No. of rows updated was {1} instead of 1".format(email, updated_rows), updated_rows)
         else:
-            return(RetCodes.success.value, "Confirmed for User ID '{0}' succeeded.".format(email), updated_rows)
+            db_con.commit()
+            return(RetCodes.success.value, "Confirmation for User ID '{0}' succeeded.".format(email), updated_rows)
 
     except Exception as e:
         _logger.error(e)
+        db_con.rollback()
         return(RetCodes.server_error.value, str(e), None)
 
     finally:
@@ -439,9 +439,10 @@ def do_SignIn(id, password):
 					(select tid from tenant_user_roles where uid = id),
 					(select rid from tenant_user_roles where uid = id) 
 					FROM users WHERE
-					email = %s and password = %s and is_deleted = %s and status=1"""
+					email = %s and password = %s and is_deleted = %s 
+                    and status=%s"""
 
-            data_tuple = (id, password, False)
+            data_tuple = (id, password, False,Status.active.value)
 
             _logger.debug(cursor.mogrify(query, data_tuple))
             cursor.execute(query, data_tuple)
