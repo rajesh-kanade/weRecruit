@@ -221,8 +221,9 @@ INSERT INTO public.resume_application_status_codes_sub_category(
 CREATE TABLE IF NOT EXISTS public.wr_clients
 (
     client_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
-    client_name character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    client_name text COLLATE pg_catalog."default" NOT NULL,
     tenant_id bigint,
+    CONSTRAINT wr_clients_pkey PRIMARY KEY (client_id),
     CONSTRAINT client_name_unique UNIQUE (client_name, tenant_id),
 
     CONSTRAINT tenant_id FOREIGN KEY (tenant_id)
