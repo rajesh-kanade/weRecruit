@@ -164,7 +164,7 @@ def save_user(tenantID, userID, name, email, password, roleID):
             # insert a record in user table
             sql = """insert into users ( email, name, password,is_deleted,status) 
 				values (%s,%s, %s,%s,%s) returning id """
-            params = (email, name, password, False, Status.pending_verification.value)
+            params = (email, name, password, False, Status.active.value)
             _logger.debug(cursor.mogrify(sql, params))
 
             cursor.execute(sql, params)
