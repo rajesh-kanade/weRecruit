@@ -56,12 +56,14 @@
             <div class ="field is-grouped" data-turbo="false">
               <span>
               <a title="undo shortlist"  href="/jd/unshortlist/?resume_id={{resume.id}}&job_id={{job_id}}">
-                <i class="fa fa fa-thin fa-bookmark"></i>
+                <figure class="image is-24x24">
+                  <img src="{{url_for('static', filename='images/undo_shortlist.png')}}" />
+                </figure>              
               </a>
-            </span>
+              </span>
               <span >
                 <a title="download" href="/resume/download/{{resume.id}}?src=jd-shortlist-page">
-                  <i class="fa fa-download"></i>
+                  <i class="fas fa-download"></i>
                 </a>
               </span>
               <span>
