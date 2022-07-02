@@ -717,15 +717,47 @@ def save_new_client(client_name, tenant_id):
             cursor.close()
         dbUtils.returnToPool(db_con)
 
+def get_candidate_journey(job_id,resume_id):
+
+    try:
+        db_con = dbUtils.getConnFromPool()
+        cursor = dbUtils.getNamedTupleCursor(db_con)
+
+        query = """select * , ( select description from application_status_codes where id = status) as status_desc
+                from wr_jd_resume_status_audit_log 
+                where jd_id = %s and resume_id =%s 
+                order by change_date desc
+                """
+
+        params = (job_id,resume_id)
+        _logger.debug(cursor.mogrify(query, params))
+        cursor.execute(query, params)
+
+        candidate_history = cursor.fetchall()
+
+        return(RetCodes.success.value, 
+                "Candidate history successfully fetched for job {0} , resume id {1}".format( job_id,resume_id), 
+                candidate_history)
+
+    except Exception as dbe:
+        _logger.error(dbe)
+        return (RetCodes.server_error, str(dbe), None)
+
+    finally:
+        cursor.close()
+        dbUtils.returnToPool(db_con)
+
 # main entry point
 if __name__ == "__main__":
 
     logging.basicConfig(level=logging.DEBUG)
 
-    (code, msg, resumeList) = get_resumes_not_associated_with_job(40, 'pune', 1)
+    (code, msg, results) = get_candidate_journey(16,7)
     _logger.debug(code)
     _logger.debug(msg)
-    _logger.debug('Total resumes found is %s', len(resumeList))
+    _logger.debug('Total records found is %s', len(results))
+    _logger.debug('Data is %s', results)
+    
     #_logger.debug( resumeList)
 
     # logging.basicConfig(level=logging.DEBUG)

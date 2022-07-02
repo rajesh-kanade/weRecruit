@@ -34,6 +34,7 @@ from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
 from datetime import timezone
 from datetime import timedelta
+from datetime import time
 
 from dotenv import load_dotenv, find_dotenv
 
@@ -1318,7 +1319,36 @@ def show_job_summary_page(job_id):
 
     return render_template("jd/show_status_summary_page.html", jd=jd, statusSummary=jobStatusSummary)
 
-# /reports/showClientWiseSummary
+@app.route('/jd/showCandidateJourney', methods=['GET'])
+@login_required
+def show_candidate_journey():
+
+    assert 'job_id' in request.args, "Query parameter {0} not found in request".format(
+        'job_id')
+    job_id = request.args.get('job_id')
+
+    assert 'resume_id' in request.args, "Query parameter {0} not found in request".format(
+        'resume_id')
+    resume_id = request.args.get('resume_id')
+
+
+    _logger.debug('inside show Job application update page for Job ID {0}, resume ID {1} '.format(
+        job_id, resume_id))
+
+    (retCode, msg, jd) = jdUtils.get(job_id)  # show JD summary on the page
+    assert retCode == jdUtils.RetCodes.success.value, "Failed to fetch job details for id {0}. Error code is {1}. Error message is {2}".format(
+        job_id, retCode, msg)
+
+    (retCode, msg, resume) = resumeUtils.get(resume_id)
+    assert retCode == resumeUtils.RetCodes.success.value, "Failed to fetch resume associated with resume  id {0}. Error code is {1}. Error message is {2}".format(
+        resume_id, retCode, msg)
+
+    (retCode, msg, candidateJourney) = jdUtils.get_candidate_journey(job_id,resume_id)
+    assert retCode == jdUtils.RetCodes.success.value, "Failed to get candidate summary. Error code is {0} & error message is {1}".format(
+        retCode, msg)
+
+    return render_template('/jd/show_candidate_journey.html', jd=jd, resume=resume,
+                           candidateJourney=candidateJourney)
 
 
 @app.route('/reports/showClientWiseSummary', methods=['GET'])

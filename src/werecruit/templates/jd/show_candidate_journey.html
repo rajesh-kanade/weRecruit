@@ -1,0 +1,66 @@
+<div class="status-div">
+    {%extends "app_header.html" %}
+    {%block content%}
+      {% include 'jd/header1.html'%}
+      <section class="container">
+    
+          {% include 'utils/show_modal_msg.html'%}
+          
+          <div class = "block has-text-left ml-3">
+              <span class="title is-size-4 has-text-info">Candidate Journey Page for {{ resume.name}} </span><br>
+              <span class="is-size-7">This page shows the journey of a candidate for a given job.</span>
+          </div>
+          <div class="container-status">
+          <div class="block ml-3">   
+              <div class="table has-text-centered">
+                <table class="table is-fullwidth">
+                  <tbody>
+                  {% for cj in candidateJourney %}
+                    {%if loop.first %}
+                      <thead>
+                        <tr class="{{theme_bg_color}}">
+                            <th class="has-text-centered {{theme_text_color}}">Date</th>
+                          <th class="has-text-centered {{theme_text_color}}">STATUS CODE</th>
+                          <th class="has-text-centered {{theme_text_color}}">STATUS</th>   
+                          <th class="has-text-centered {{theme_text_color}}">NOTES</th>   
+                      </tr>
+                      </thead>
+                    {% endif %}
+                    <tr class="{{theme_bg_color}}">
+                      <td class="has-text-centered {{theme_text_color}}">{{ cj.change_date }}</td>
+                      <td class="has-text-centered {{theme_text_color}}">{{ cj.status }}</td>
+                      <td class="has-text-centered {{theme_text_color}}">{{ cj.status_desc}}</td>
+                      <td class="has-text-centered {{theme_text_color}}">{{ cj.notes }}</td>
+                    </tr>
+                    
+                    {% else %}
+                    <div class="notification is-warning">
+                      No candidate journey found.
+                    </div>
+                  {% endfor %}
+                  
+    
+                </tbody>
+                </table>
+              </div>  
+          </div>
+    
+          <a class="button is-success is-squared ml-3" id="printpagebutton" onclick="printpage()"><span class="print-btn">Print<span></a>
+          <!--<a class="button is-success is-rounded" href="/">Email</a> -->
+        </div>
+      </section>
+    <script type="text/javascript">
+      function printpage() {
+          
+          var printButton = document.getElementById("printpagebutton");
+          
+          printButton.style.visibility = 'hidden';
+          
+          window.print()
+      
+          printButton.style.visibility = 'visible';
+      }
+    </script>
+    {% endblock %}
+    </div>
+    
