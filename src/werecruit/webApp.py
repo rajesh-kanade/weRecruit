@@ -25,6 +25,7 @@ import constants
 import resumeUtils
 import reports
 import emailUtils
+import commonUtils
 
 import functools
 import os
@@ -1275,6 +1276,15 @@ def update_job_application_status():
     # resume_id = form.resume_id.data #request.args.get('resume_id')
     # job_id = form.job_id.data #request.args.get('job_id')
     #new_status_code = form.new_status.data
+    change_date = form.change_date.data
+
+    change_date = datetime(change_date.year,change_date.month,change_date.day,hour=0,minute=0,second=0)
+    #print(change_date)
+
+    change_date =change_date+ commonUtils.getTimeDelta()
+    #print(change_date)
+    
+    form.change_date.data = change_date
 
     (retCode, msg, retData) = jdUtils.insert_job_application_status(form.job_id.data, form.resume_id.data,
                                                                     form.change_date.data, session.get(
