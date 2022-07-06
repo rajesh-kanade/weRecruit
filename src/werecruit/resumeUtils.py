@@ -345,8 +345,11 @@ def search_resumes(tenantID, ftSearch,orderBy=None, order=None):
 
         kwrdList = ftSearch.split()
         _logger.debug("Keyword list for free text is as under %s", kwrdList)
-        ft_cond = ' AND '.join(
+        ft_cond_json_resume = ' AND '.join(
             "to_tsvector('english',json_resume) @@ to_tsquery('{0}')".format(word) for word in kwrdList)
+
+        ft_cond_name = ' OR '.join(
+            "to_tsvector('english',name) @@ to_tsquery('{0}')".format(word) for word in kwrdList)
 
         '''ft_cond = ""
 		for word in kwrdList:
@@ -354,21 +357,19 @@ def search_resumes(tenantID, ftSearch,orderBy=None, order=None):
 			ft_cond += " AND "
 		'''
 
-        _logger.debug("Full text search is %s", ft_cond)
+        _logger.debug("Full text search is %s OR %s", ft_cond_json_resume, ft_cond_name)
 
-
+        query = """SELECT * FROM wr_resumes 
+				where is_deleted = %s and
+				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
+				AND ( """ + str(ft_cond_json_resume) + " ) " + " OR ( " + str(ft_cond_name) + " ) "
 
         if not orderBy:
-            query = """SELECT * FROM wr_resumes 
-				where is_deleted = %s and
-				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
-				and """ + str(ft_cond) + " order by id desc"
+            orderCond =  " order by id desc"
         if orderBy == 'client':
-            query = """SELECT * FROM wr_resumes 
-				where is_deleted = %s and
-				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
-				and """ + str(ft_cond) + " order by name ASC"
+            orderCond =  " order by name ASC"
 
+        query = query + orderCond
 
         params = (False, tenantID)
         _logger.debug(cursor.mogrify(query, params))
