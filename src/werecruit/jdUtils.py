@@ -489,7 +489,7 @@ def shortlist(resume_id, jd_id, application_date, status, recruiterid):
         insert_job_application_status(jd_id, resume_id,
                                       application_date, recruiterid, status, "")
 
-        return (RetCodes.success.value, "Resume creation successful.", None)
+        return (RetCodes.success.value, "Resume shortlisted successfully.", None)
 
     except Exception as e:
         _logger.error(e)
