@@ -1,15 +1,16 @@
 
+from multiprocessing.sharedctypes import Value
 import os
-from unittest import result
 import constants
 import smtplib
 
 from imap_tools import MailBox, AND
 import userUtils 
 import resumeUtils
+import jdUtils
+
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from email.mime.base import MIMEBase
 
 from jinja2 import Environment, FileSystemLoader
 from bs4 import BeautifulSoup
@@ -22,6 +23,10 @@ import requests
 import tempfile
 
 import logging
+
+from datetime import datetime
+from datetime import timezone
+
 #logging.propagate = False 
 from dotenv import load_dotenv , find_dotenv
 load_dotenv(find_dotenv())
@@ -103,24 +108,13 @@ def readEmails():
 				# Download links and save as attachment. This is how resumes are received from LinkedIN
 				# if exceptions occur , log & move forward 
 				try:
-					downloadResumeFromLink(msg.html, from_email_addr,user.id)
+					downloadResumeFromLink(msg.subject, msg.html, from_email_addr,user.id)
 				except Exception as drException1:
 					_logger.error(drException1)
 
 				#Now go thru attachment and for each attachment create a resume record in our system.
 				for att in msg.attachments:
 					try:
-						#_logger.debug(os.getcwd(),att.filename, att.content_type)
-
-						#cwd = os.getcwd() + "\\";
-						#_logger.debug("working dir is " + cwd)
-
-						#TODO check for supported file type and exit if unsupported
-
-						#save the attachment in temp file
-						#_logger.debug('app current working dir is {0}'.format(os.getcwd()))
-						#file_name = os.path.join(os.getcwd() + "/temp", att.filename)
-						#file_name = "/src/werecruit/temp/" + att.filename
 						file_name = constants.getUploadFolderPath() + att.filename
 
 						f = open(file_name,'wb' )
@@ -157,6 +151,11 @@ def readEmails():
 							sendMail(from_email_addr,'Resume upload failure notification',"Failed to save file {0} as resume".format(file_name),'plain')
 							continue
 						
+						# see if jobID is mentioned in subject and if yes auto shortlist
+						jobID = extractJobIdFromSubject( msg.subject)
+						shortlistDownloadedResumes(jobID,resumeId,user.id)
+
+
 						# Send success resume save email
 						file_loader = FileSystemLoader('./conf')
 						env = Environment(loader=file_loader)
@@ -229,7 +228,7 @@ def sendMail(ToEmailAddr, subject, body, contentType):
 
 	_logger.info("Mail sent successfully.")
 
-def downloadResumeFromLink(emailBody, from_email_addr,userID):
+def downloadResumeFromLink(subject, emailBody, from_email_addr,userID):
 	
 	try:
 		soup = BeautifulSoup(emailBody,"html.parser")
@@ -247,15 +246,6 @@ def downloadResumeFromLink(emailBody, from_email_addr,userID):
 
 					#print(link.get('href'))
 					r = requests.get(url, allow_redirects=True)
-					#temp_name = "./data/" +next(tempfile._get_candidate_names()) + ".unknown"
-					#f = tempfile.NamedTemporaryFile('wb')
-					#f = open(temp_name ,'wb' )
-					#f.write(r.content)
-					#temp_name = f.name
-
-					#f.close()
-					#r.close()
-					#temp_name = "./" +next(tempfile._get_candidate_names()) + ".unknown"
 					temp_name = constants.getUploadFolderPath() + next(tempfile._get_candidate_names()) + ".unknown"
 
 					f = open(temp_name ,'wb' )
@@ -283,6 +273,10 @@ def downloadResumeFromLink(emailBody, from_email_addr,userID):
 							"Failed to save file {0} as resume".format(temp_name),'plain')
 						continue
 					else:	
+						# see if jobID is mentioned in subject and if yes auto shortlist
+						jobID = extractJobIdFromSubject( subject)
+						shortlistDownloadedResumes(jobID,resumeId,userID)
+
 						# Send success resume save email
 						file_loader = FileSystemLoader('./conf')
 						env = Environment(loader=file_loader)
@@ -300,7 +294,30 @@ def downloadResumeFromLink(emailBody, from_email_addr,userID):
 		_logger.error("Exception occured while trying to download resumes shared as links.",exc_info=1)
 
 
-			
+def extractJobIdFromSubject( subject):
+	if subject.strip().isdigit():
+		return int(subject.strip())
+	else:
+		return None
+
+def shortlistDownloadedResumes(jobID,resumeID,userID):
+	if ( jobID != None):
+
+		resultTuple = jdUtils.shortlist(resumeID,jobID,
+							datetime.now(tz=timezone.utc),0,userID)
+
+
+		if resultTuple[0] == jdUtils.RetCodes.success.value :
+			_logger.info(f"Resume ID {resumeID} successfully shortlisted for Job id {jobID}")
+		else:
+			_logger.info(f"Failed to shortlist Resume ID {resumeID} for Job id {jobID}")
+		
+		return resultTuple
+
+	else:
+		_logger.debug(f"Job ID can not be {jobID} for shortlisting")
+		return (None,'Job ID can not be None', None )
+
 
 if __name__ == "__main__":
 
@@ -310,6 +327,8 @@ if __name__ == "__main__":
 	#while True:
 	logging.basicConfig(level=logging.DEBUG)
 	readEmails()
+	#print ( extractJobIdFromSubject(" rajesh ") )
+
 	exit(0)
 
 	#	time.sleep(60)
