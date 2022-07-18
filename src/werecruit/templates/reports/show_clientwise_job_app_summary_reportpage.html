@@ -1,7 +1,7 @@
 {%extends "app_header.html" %}
 {%block content%}
-<div class="summary">
-<section class="container-t is-fullheight">
+<div class="show-report">
+<section class="container is-fullheight">
 
     {% include 'utils/show_modal_msg.html'%}
     <div class = "block has-text-left">
@@ -11,8 +11,8 @@
     
     <div class="block">   
         <div class="table-container has-text-left">
-          <table class="table is-striped has-shadow">
-            <tbody class="has-shadow">
+          <!--<table class="table is-striped has-shadow">-->
+          <!--<tbody class="has-shadow">-->
             {% for cs in clientSummary%}
               {%if loop.first %}
 
@@ -135,9 +135,10 @@
         </div>
         </div>  
     </div>
-<div class="button-summary">
-</div>
+<div class="button-print">
+
 <a class="button is-success is-squared " id="printpagebutton" onclick="printpage()"><span class="print-btn">Print<span></a>
+</div>
   <!--<a class="button is-success is-rounded" href="/">Email</a> -->
 </div>
 </div>

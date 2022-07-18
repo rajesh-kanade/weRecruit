@@ -1,14 +1,15 @@
 {%extends "app_header.html" %}
 {%block content%}
-<div class="show-clientwise-summary">
+<div class="show-report">
 <section class="container is-fullheight">
 
     {% include 'utils/show_modal_msg.html'%}
+
     <div class = "block has-text-left">
-        <span class="title is-size-4 has-text-info">Summary Of Active Job Positions</span><br>
+        <span class="title is-size-3 has-text-info">Summary Of Active Job Positions</span><br>
+
         <span class="is-size-7 has-text-info">Active job positions for each client active job positions for each client</span>
     </div>
-    
     <div class="block">   
         <div class="table-container has-text-centered">
           <table class="table is-fullwidth">
@@ -67,7 +68,7 @@
         </div>  
         </div>  
 
-    <div class="button-revenue">
+    <div class="button-print">
       <a class="button is-success " onclick="window.print();">Print</a>
       <!--<a class="button is-success is-rounded" href="/">Email</a>-->
   </div>

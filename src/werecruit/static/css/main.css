@@ -764,7 +764,7 @@ th{
   max-width: 50%;
 }
 .revenue .container{
-  margin-left: 10% !important;
+  margin-left: 15% !important;
 
 }
 
@@ -1344,7 +1344,7 @@ td .fa {
 .add-user .columns:not(.is-desktop) {
   display: block;
 }
-.button-revenue{
+.button-print{
   margin-left: -10%;
   margin-bottom: 2%;
 }
@@ -1390,16 +1390,16 @@ margin-left: -10%;
 .is-text-gray{
   color: #f6f6f6;
 }
-.show-clientwise-summary{
+.show-report{
   overflow: none;
 }
-.show-clientwise-summary .container{
-  margin-left: 10%;
+.show-report .container{
+  margin-left: 15%;
 }
-.show-clientwise-summary .table.is-fullwidth{
+.show-report .table.is-fullwidth{
   width: 70%;
 } 
-.show-clientwise-summary .pagination{
+.show-report .pagination{
   padding-right: 15%;
   padding-bottom: 5%;
 }
@@ -1437,7 +1437,7 @@ margin-left: -10%;
 
 #navbar-logo{
   margin-left: -40%
-
+}
 
 .modal-card-head {
   background-color: #4ccd3d;

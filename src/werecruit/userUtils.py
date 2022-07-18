@@ -591,9 +591,13 @@ if __name__ == "__main__":
     load_dotenv(find_dotenv())
     logging.basicConfig(level=logging.DEBUG)
 
-    '''(retCode, msg, data ) = save_user(1,constants.NEW_ENTITY_ID,'c1_rec','c1_recruiter@gmail.com','rajesh',2)
+    '''(retCode, msg, data ) = save_user(1,constants.NEW_ENTITY_ID,'c1_rec','c1_bhavyam@codeelan.com','bhavya',2)
 	_logger.debug( retCode)
 	_logger.debug ( msg)'''
 
-    resultTuple = do_SignIn('c1_admin@gmail.com', 'rajesh')
-    print(resultTuple)
+    #resultTuple = do_SignIn('c1_admin@gmail.com', 'rajesh')
+    #print(resultTuple)
+
+    #resultTuple = do_SignIn('bhavyam@codeelan.com','bhavya')
+    #print(resultTuple)
+
