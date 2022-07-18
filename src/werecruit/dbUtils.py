@@ -11,7 +11,12 @@ def getConnFromPool():
     try:
         global __DBPOOL__
         if __DBPOOL__ == None:
-            _logger.debug(os.environ.get("DB_NAME"))
+            print(os.environ.get("DB_NAME"))
+            print(os.environ.get("DB_PASSWORD"))
+            print(os.environ.get("DB_HOST"))
+            print(os.environ.get("DB_PORT"))
+            print(os.environ.get("DB_USER"))
+
             __DBPOOL__ = psycopg2.pool.ThreadedConnectionPool(5, 20,user = os.environ.get("DB_USER"),
                                               password = os.environ.get("DB_PASSWORD"),
                                               host = os.environ.get("DB_HOST"),
