@@ -1,6 +1,14 @@
 {%extends "app_header.html" %}
 {%block content%}
 {% include 'jd/header1.html'%}
+
+<nav class="breadcrumb" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="/jd/showAllPage">Browser</a></li>
+    <li class="is-active"><a href="#" aria-current="page">Shortlist Candidates</a></li>
+  </ul>
+</nav>
+
 <div class="shortlist">
   <section class="container is-fullheight">
     {% include 'utils/show_timed_msg.html'%}
