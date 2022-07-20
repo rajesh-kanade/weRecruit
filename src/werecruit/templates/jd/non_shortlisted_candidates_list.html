@@ -27,6 +27,7 @@
           {% for resume in allresumeList %}
             {%if loop.first %}
               <thead>
+
                 <tr class="{{theme_bg_color}}">
                   <!-- <th class="has-text-left {{theme_text_color}}">RESUME ID</th> -->
                   <th class="has-text-left {{theme_text_color}}">Name</th>
@@ -36,6 +37,7 @@
                   <th class="has-text-left {{theme_text_color}}">Action</th>
                 </tr>
               </thead>
+
             {%endif %}
             <tr class="{{theme_bg_color}}">
               <!-- <td class="has-text-left {{theme_text_color}}">{{ resume.id }}</td> -->
@@ -53,6 +55,7 @@
                 </div>
               </td>       
             </tr>
+            
           {% else %}
             <div class="notification is-warning">
               No Resumes found !!!

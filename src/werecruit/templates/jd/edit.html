@@ -1,6 +1,16 @@
 {%extends "app_header.html" %}
 {%block content%}
 
+
+{% if form.id.data != -1 %}         
+<nav class="breadcrumb" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="/jd/showAllPage">Browser</a></li>
+    <li class="is-active"><a href="#" aria-current="page">Edit</a></li>
+  </ul>
+</nav>
+{% endif %}
+
 <div class="body-background">
   <div class="columns">
     <div class="column is-two-thirds">
