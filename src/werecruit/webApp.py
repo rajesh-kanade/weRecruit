@@ -773,7 +773,10 @@ def search_resume():
         get_per_page_parameter(), type=int, default=constants.PAGE_SIZE)
 
     offset = (page - 1) * per_page
-    total = len(resumeList)
+    if resumeList is not None:
+        total = len(resumeList) 
+    else:
+        total = 0
     from math import ceil
     totalPages = ceil(total/per_page)
 
