@@ -749,7 +749,10 @@ th{
   font-size: larger;
 }
 
-
+.breadcrumb {
+  padding-left: 135px;
+  padding-top: 20px;
+  }
 
 /* reset-password feature */
 .reset-head{
