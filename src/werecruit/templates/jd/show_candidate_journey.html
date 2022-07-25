@@ -2,6 +2,15 @@
     {%extends "app_header.html" %}
     {%block content%}
       {% include 'jd/header1.html'%}
+
+      <nav class="breadcrumb" id="candidatejourney" aria-label="breadcrumbs">
+        <ul>
+          <li><a href="/jd/showAllPage">Job Browser</a></li>
+          <li><a href="/jd/showShortlistPage/{{jd.id}}">Shortlisted Candidate</a></li>
+          <li class="is-active"><a href="#" aria-current="page">Candidate Journey</a></li>
+        </ul>
+      </nav>
+
       <section class="container">
     
           {% include 'utils/show_modal_msg.html'%}

@@ -2,6 +2,14 @@
 {%extends "app_header.html" %}
 {%block content%}
   {% include 'jd/header1.html'%}
+
+  <nav class="breadcrumb" id="statussumm" aria-label="breadcrumbs">
+    <ul>
+      <li><a href="/jd/showAllPage">Job Browser</a></li>
+      <li class="is-active"><a href="#" aria-current="page">Status Summary</a></li>
+    </ul>
+  </nav>
+  
   <section class="container">
 
       {% include 'utils/show_modal_msg.html'%}
