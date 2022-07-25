@@ -1,5 +1,15 @@
 {%extends "app_header.html" %}
 {%block content%}
+
+{% if form.id.data != -1 %}
+<nav class="breadcrumb" id="resumeedit"  aria-label="breadcrumbs">
+  <ul>
+    <li><a href="/resume/showBrowser">Resume Browser</a></li>
+    <li class="is-active"><a href="#" aria-current="page">Edit</a></li>
+  </ul>
+</nav>
+{%endif%}
+
 <div class="resume-upload">
 <section class="container is-fullheight">
   <script type="text/javascript">

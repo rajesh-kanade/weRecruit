@@ -754,6 +754,27 @@ th{
   padding-top: 20px;
   }
 
+#resumeedit{
+  padding-left: 45px;
+  padding-top: 30px;
+}
+
+#shortlistcand{
+  padding-left: 90px;
+}
+
+#candidatejourney{
+  padding-left: 90px;
+}
+
+#statussumm{
+  padding-left: 90px;
+}
+
+#adduser{
+  padding-left: 40px;
+}
+
 /* reset-password feature */
 .reset-head{
   padding-bottom: 2rem;
