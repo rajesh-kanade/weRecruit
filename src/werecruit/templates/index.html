@@ -1,67 +1,108 @@
 {%extends "header.html" %}
 {%block content%}
-{% set messages = get_flashed_messages(with_categories = true ) %}
 
-<section class="container is-fullheight has-text-centered">
-  <div class="block"><br/></div>
+<section id="mission" class="container is-size-4 has-text-centered">
 
-  <div class="block mt-5 is-size-4">
+  <div class="block">
     WeRecruit is on a mission to build the world's most sophisticated open source 
-    recruitment stack in collaboration with recruiters across the globe. </div>
-
-  <div class="block is-size-4">If you're a freelance recruiter,
-    a small/medium sized organization hiring for yourself or your client, 
-    we would like you to be part of this journey.</div>
-
-  <hr><br/>
-
-  <div id="features" class="block is-size-2 has-text-centered">Features designed to make recruitment a breeze</div>
-
-  <div class="tile is-ancestor">
-    <div class="tile">
-      <div class="box is-size-4">
-        Create unlimited job positions. </br>
-        Define the team of interview panels, Hiring manager & HR to collaborate seamlessly.</br>
-        Large library of job application status codes.</br>
-        Take unlimited notes as you update the job application status. </br>
-
-      </div>
-
-    </div>
+    recruitment stack in collaboration with recruiters across the globe.
   </div>
 
-  <div class="tile is-ancestor">
-
-    <div class="tile">
-      <div class="box is-size-4">
-          Upload resumes using web App or send them as email attachment.</br>
-          Auto detect key fields like candidate's name, phones or email from uploaded email.</br>
-          Directly add resumes sent via email to a Job position pipeline. </br>
-          Create your personal searchable resume bank. </br>
-          Standard email templates for notifications and reminders.</br>
-      </div>
-    </div>
+  <div class="block">
+    If you're a freelance recruiter,
+    a small/medium sized organization hiring for self or your clients, 
+    we would like you to be part of this journey.
   </div>
+  
+</section>
 
-  <div class="tile is-ancestor">
+<hr>
 
-    <div class="tile">
-      <div class="box is-size-4">
+<section id ="features" class="container has-text-centered">
+      <div class="block is-size-2 has-text-left">Features</div>
+
+      <div class="box">Create unlimited job positions.</div>
+      <div class="box">Define a team of interview panels, Hiring manager & HR to collaborate seamlessly per job position.</div> 
+      <div class="box">Large library of out of box job application status codes to track each application status.</div>  
+      <div class="box">Take unlimited notes as you update the job application status.</div> 
+
+      <div class="box">Upload resumes using web App or send them as email attachment.</div>
+      <div class="box">Auto detect key fields like candidate's name, phones or email from uploaded email.</div>
+      <div class="box">Directly add resumes sent via email to a Job position pipeline.</div>
+      <div class="box">Create your personal searchable resume bank.</div>
+      <div class="box">Standard email templates for notifications and reminders.</div>
+
+      <div class="box">
         Collection of summary and detailed reports to communicate effectively with your clients.
         Real time dashboards to help you focus on things that matter.
       </div>
-    </div>
+</section>
+
+<hr>
+
+<section id ="pricing" class="container has-text-centered">
+  
+  <div class="block is-size-2 has-text-left">Pricing</div>
+  <div class="box">
+    Get the source code of weRecruit & setup weRecruit in your private datacenter for <strong>free</strong>.
+    Please note the free edition is supported by weRecruit community on best effort basis.<br>
+    <a class = "button is-link" href="https://github.com/GreyNeurons/weRecruit">git hub repo</a></div>
+
   </div>
 
-  <br/>
-  <hr><br/>
+  <div class="box">
+    weRecruit.cloud is a hosted instance of weRecruit product.
+    It is <strong>free</strong> to use for lifetime. Please note the free edition is supported by weRecruit community on best effort basis.<br>
+    <a class = "button is-link" href="https://www.werecruit.cloud/user/showSignupPage">Sign up</a></div>
 
-  <div id="pricing" class="block is-size-2 has-text-centered">Flexible pricing for Startups, Resellers & Recruitment
-    agencies.</div>
-  <div id="pricing" class="block is-size-2 has-text-centered">Drop us an email at <strong>sales@werecruit.cloud</strong>
-    and we will get in touch with you.</div>
-  <br/>
+  </div>
+
+  <div class="box">
+    Looking for a premium weRecruit hosting with a standard 24 X 7 email & phone support , 
+    please contact us at <strong>sales@weRecruit.cloud</strong> & we will redirect to one of our partners.
+  </div>
+
+  <div class="box">
+    Looking for professional help to install/configure weRecruit on premise , 
+    please contact us at <strong>sales@weRecruit.cloud</strong>.
+  </div>
+
+</section>
+<hr>
+<section id="contribute" class="container has-text-centered" >
+  <div class="block is-size-2 has-text-left">CONTRIBUTE</div>
+  <div class="block">weRecruit is an open source project and we welcome help from all quarters. You can contribute to weRecruit in following ways. </div>
+  
+  <div class="box"> By using weRecruit & sharing feedback with us. <br>
+    <a class = "button is-link" href="https://www.werecruit.cloud/user/showSignupPage">Sign up</a></div>
+
+  <div class="box"> Do bug fixing & new feature development. <br>
+    <a class = "button is-link" href="https://github.com/GreyNeurons/weRecruit">git hub repo</a></div>
+
+  <div class="box"> Do functional , non functional testing of weRecruit & file defects. <br>
+    <a class = "button is-link" href="https://github.com/GreyNeurons/weRecruit/issues">Browse current issues</a>
+  </div>
+
+  <div class="box"> Enhance weRecruit.cloud website.
+  </div>
+  <div class="box"> Spread the word about weRecruit and help us build a strong community.</div>
+
+</section>
+<hr>
+<section id="sponsors" class="container has-text-centered" >
+  <div class="block is-size-2 has-text-left">SPONSORS</div>
+  <div class="block has-text-left">weRecruit thanks its sponsors for making the project viable.</div>
+  
+  <div class="box"> CodeElan Technologies - A one house solution for all software needs <br>
+    <a class = "button is-link" href="https://www.codeelan.com">website</a>
+  </div>
+
+  <div class="box"> Grey Neurons Consulting - Experience the wisdom <br>
+    <a class = "button is-link" href="https://www.greyneuronsconsulting.com">website</a>
+  </div>
 
 </section>
 
 {% endblock %}
+
+
