@@ -44,6 +44,8 @@ from logging.handlers import TimedRotatingFileHandler
 
 from flask_paginate import Pagination, get_page_parameter, get_per_page_parameter
 
+from constants import ENV_MODE
+
 load_dotenv(find_dotenv())
 logging.basicConfig(filename=constants.LOG_FILENAME_WEB, format=constants.LOG_FORMAT,
                     level=int(os.environ.get("LOG_LEVEL", 20)))
@@ -1752,4 +1754,9 @@ if __name__ == "__main__":
     # _logger.addHandler(get_file_handler())
     print("Effective logging level is :", _logger.getEffectiveLevel())
 
-    app.run(debug=True)
+    #print(os.environ.get("ENV_NAME", ''))
+
+    if(str.lower(os.environ.get("ENV_NAME", '')) == ENV_MODE): 
+        app.run(debug=True)
+    else:
+        app.run(debug=False)
