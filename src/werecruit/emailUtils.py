@@ -1,4 +1,5 @@
 
+
 from multiprocessing.sharedctypes import Value
 import os
 import constants
@@ -8,6 +9,7 @@ from imap_tools import MailBox, AND
 import userUtils 
 import resumeUtils
 import jdUtils
+import collections.abc
 
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -205,21 +207,25 @@ def sendMail_async(ToEmailAddr, subject, body, contentType):
 
 def sendMail(ToEmailAddr, subject, body, contentType):
 	if os.environ.get("ENV_NAME").upper() == "PROD":
-		ToEmailAddr = ToEmailAddr 
+		if not isinstance(ToEmailAddr, str) and isinstance(ToEmailAddr, collections.Sequence):
+			ToEmailAddrStr = ', '.join(ToEmailAddr)
+		else:
+			ToEmailAddrStr = ToEmailAddr
+
 	else:
 		_logger.debug('Non prod environment detected. So sending emails to rkanade@gmail.com instead of %s', ToEmailAddr)
-		ToEmailAddr = 'rkanade@gmail.com' #ToEmailAddr -> done purposefully to avoid sending emails to
-
-	_logger.info("Setting up SMTP server again")
-
+		ToEmailAddrStr = 'support@werecruit.cloud' #ToEmailAddr -> done purposefully to avoid sending emails to
+		
 	msg = MIMEMultipart()
 	msg['From'] = os.environ.get("SMTP_MAIL_USERNAME")
-	msg['To'] = ToEmailAddr
+	msg['To'] = ToEmailAddrStr
 	msg['Subject'] = str(subject)
 
 	msg.attach(MIMEText(body,contentType)) #'plain'
 
 	_logger.debug( msg.as_string() )
+
+	_logger.info("Setting up SMTP object")
 
 	with smtplib.SMTP(os.environ.get("SMTP_MAIL_SERVER"), os.environ.get("SMTP_MAIL_PORT")) as server:
 		server.login(os.environ.get("SMTP_MAIL_USERNAME"), os.environ.get("SMTP_MAIL_PASSWORD"))
@@ -319,14 +325,16 @@ def shortlistDownloadedResumes(jobID,resumeID,userID):
 		return (None,'Job ID can not be None', None )
 
 
-if __name__ == "__main__":
 
-	#sendMail('rrkanade22@yahoo.com', "test subject", "test body",'plain')
+if __name__ == "__main__":
+	logging.basicConfig(level=logging.DEBUG)
+	emailList = 'rkanade@gmail.com' #['rkanade@gmail.com', 'rrkanade@yahoo.com']
+	sendMail(emailList, "test subject", "test body",'plain')
 	#time.sleep(60)
 	
 	#while True:
-	logging.basicConfig(level=logging.DEBUG)
-	readEmails()
+	#logging.basicConfig(level=logging.DEBUG)
+	#readEmails()
 	#print ( extractJobIdFromSubject(" rajesh ") )
 
 	exit(0)
@@ -356,6 +364,6 @@ if __name__ == "__main__":
 		full application</a></td>
 		</tr>
 	"""
-	downloadResumeFromLink(email_body)
+	#downloadResumeFromLink(email_body)
 
 
