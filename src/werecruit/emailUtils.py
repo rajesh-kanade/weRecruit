@@ -213,7 +213,7 @@ def sendMail(ToEmailAddr, subject, body, contentType):
 			ToEmailAddrStr = ToEmailAddr
 
 	else:
-		_logger.debug('Non prod environment detected. So sending emails to rkanade@gmail.com instead of %s', ToEmailAddr)
+		_logger.debug('Non prod environment detected. So sending emails to support@werecruit.cloud instead of %s', ToEmailAddr)
 		ToEmailAddrStr = 'support@werecruit.cloud' #ToEmailAddr -> done purposefully to avoid sending emails to
 		
 	msg = MIMEMultipart()
