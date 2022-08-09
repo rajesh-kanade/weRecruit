@@ -105,8 +105,9 @@ def do_signin():
     if (retCode == userUtils.RetCodes.success.value):
         #flash (results[1],"is-info")
         #user = results[2]
-        session.permanent = True
-        app.permanent_session_lifetime = timedelta(minutes=15)
+        
+        #session.permanent = True
+        #app.permanent_session_lifetime = timedelta(minutes=15)
 
         # session.
         session["user_id"] = user.id  # form.email.data
