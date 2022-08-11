@@ -105,7 +105,7 @@ def do_signin():
     if (retCode == userUtils.RetCodes.success.value):
         #flash (results[1],"is-info")
         #user = results[2]
-        
+
         #session.permanent = True
         #app.permanent_session_lifetime = timedelta(minutes=15)
 
@@ -987,6 +987,26 @@ def jd_download(id):
         flash(str(e), "is-danger")
         return redirect(url_for("show_jd_all_page"))
 
+@app.route('/jd/delete/<int:id>', methods=['GET'])
+@login_required
+def jd_delete(id):
+
+    try:
+        (code, msg, result) = jdUtils.delete_job(id)
+        assert code == jdUtils.RetCodes.success.value, "Failed to delete job {0} ".format(
+            id)
+        
+        flash(msg, "is-success")
+        
+        #return redirect(request.referrer,301)
+        return redirect(url_for("show_jd_all_page"))
+        
+        #return render_template("jd/showAllPage")
+        #return render_template(url_for("show_jd_all_page"))
+
+    except Exception as e:
+        flash(str(e), "is-danger")
+        return redirect(url_for("show_jd_all_page"))
 
 '''
 @app.route('/resume/showshortlistpage', methods = ['GET'])
