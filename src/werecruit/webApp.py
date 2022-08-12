@@ -7,7 +7,8 @@ from flask import (
     render_template,
     request,
     session,
-    url_for
+    url_for,
+    current_app
 )
 from flask_session import Session
 from webForms import ResumeSearchForm, UserForm, ResetPasswordForm, ApplicationStatusUpdate, ResumeShortlistForm, ResumeForm, JDApply, JDForm, JDHeaderForm, SignUpForm, SignInForm, UserForm, NewClientForm
@@ -44,7 +45,7 @@ from logging.handlers import TimedRotatingFileHandler
 
 from flask_paginate import Pagination, get_page_parameter, get_per_page_parameter
 
-from constants import ENV_MODE
+#from constants import ENV_MODE
 
 load_dotenv(find_dotenv())
 logging.basicConfig(filename=constants.LOG_FILENAME_WEB, format=constants.LOG_FORMAT,
@@ -65,6 +66,8 @@ app.config["SESSION_TYPE"] = "filesystem"
 UPLOAD_FOLDER = '/temp'  # TODO win specific for now. Take care of path sep on linux
 ALLOWED_EXTENSIONS = {'doc', 'pdf', 'docx'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+#app.config['SERVER_NAME'] = 'werecruit.cloud'
 
 turbo = Turbo(app)
 Session(app)
@@ -183,7 +186,21 @@ def sign_up():
         
         token = s.dumps(email, salt='email-confirm')
         msg1 = 'Confirm weRecruit account creation'
-        link = url_for('confirm_email', token=token, _external=True)
+        
+        #current_app.config['SERVER_NAME'] = 'werecruit.cloud'
+        #with current_app.test_request_context():
+        #    link = url_for('confirm_email', token=token, _external=True)
+        
+        #link = request.url_root
+        
+        if os.environ.get("ENV_NAME", '') == constants.ENV_MODE_PROD:
+            link = "https://www.werecruit.cloud/confirm_email/" + token
+        else:
+            link = "http://localhost:5000/confirm_email/" + token
+
+        #print("New tenant activation link is ", link)
+        _logger.debug("New tenant activation link is : %s", link)
+
         msg1Body = "<p>Please click on the below link to activate your account. {}</p>".format(link)
         contentType = 'html'
         emailUtils.sendMail(email,subject=msg1,body=msg1Body,contentType=contentType)
@@ -1777,7 +1794,7 @@ if __name__ == "__main__":
 
     #print(os.environ.get("ENV_NAME", ''))
 
-    if(str.lower(os.environ.get("ENV_NAME", '')) == ENV_MODE): 
+    if(str.lower(os.environ.get("ENV_NAME", '')) == constants.ENV_MODE_DEV): 
         app.run(debug=True)
     else:
         app.run(debug=False)

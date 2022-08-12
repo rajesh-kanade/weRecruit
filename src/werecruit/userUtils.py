@@ -109,7 +109,7 @@ def do_signUp(user_attrs):
         assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
         result = cursor.fetchone()
         tid = result[0]
-        _logger.debug("Tenant id created is", tid)
+        _logger.debug("Tenant id created is %s", tid)
 
         # insert a record into tenant users table with isadmin field set to true
         sql = """insert into tenant_user_roles ( tid,uid,rid) 
