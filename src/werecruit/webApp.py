@@ -205,7 +205,7 @@ def sign_up():
         contentType = 'html'
         emailUtils.sendMail(email,subject=msg1,body=msg1Body,contentType=contentType)
 
-        return render_template('email/confirm_template.html')
+        return render_template('user/confirm_template.html')
 
     else:
         flash("Account signup failed. Please contact support", "is-danger")
