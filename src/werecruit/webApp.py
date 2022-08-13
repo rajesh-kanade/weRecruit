@@ -121,8 +121,7 @@ def do_signin():
         return redirect(url_for('show_home_page'))
 
     else:
-        flash(msg, "is-danger")
-        return redirect('/user/showSigninPage')
+        return redirect(url_for('show_signin_page',msg=msg,msgType="is-danger"))
 
 
 @app.route('/user/showSignupPage')
@@ -221,8 +220,8 @@ def confirm_email(token):
         results = userUtils.confirm_user(email)
         
         if (results[0] == userUtils.RetCodes.success.value):
-            flash("Account is activated .Signin to your account","is-info")
-            return redirect(url_for("show_signin_page"))
+            #flash("Account is activated .Signin to your account","is-info")
+            return redirect(url_for("show_signin_page",msg="Your account is activated. Signin to your account to get started.",msgType="is-success"))
         else:
             flash("Account activation failed.Please try again.", "is-danger")
             return render_template('sign_up.html',form=form)
@@ -234,9 +233,8 @@ def login_required(func):
     @functools.wraps(func)
     def secure_function(*args, **kwargs):
         if "user_id" not in session:
-            flash(
-                "Session expired . Please login to access this page.", "is-danger")
-            return redirect(url_for("show_signin_page"))
+
+            return redirect(url_for("show_signin_page", msg="Session expired. Please login to access this page.",msgType="is-danger"))
 
         return func(*args, **kwargs)
 
@@ -1579,9 +1577,8 @@ def do_reset_password():
             if (retCode == userUtils.RetCodes.success.value):
                 session.clear()
                     # do_signout()
-                flash(
-                        "Password reset successfully. Please sign-in again with your new password", "is-success")
-                return redirect(url_for("show_signin_page"))
+                return redirect(url_for("show_signin_page",
+                            msg="Password reset successfully. Please sign-in again with your new password.",msgType="is-success"))
                 
             elif(user != userUtils.RetCodes.success.value):
                 flash("Current password entered is wrong","is-danger")
@@ -1606,28 +1603,24 @@ def do_forgot_password():
     email = request.form.get('email')
     
     if not email.strip():
-        flash('Please enter valid email ID', "is-danger") 
-        return redirect(url_for('show_signin_page'))
+        return redirect(url_for('show_signin_page',msg="Please enter valid email ID.",msgType="is-danger"))
 
     user = userUtils.get_user_by_email(email)
     if not user[2]:
-        flash(
-            'This email is not registerd with us, try again with a different email', "is-danger")
-        return redirect(url_for('show_signin_page'))
+        return redirect(url_for('show_signin_page',msg="This email is not registerd with us, try again with a different email.",msgType="is-danger"))
     else:
         new_password = os.environ.get('TEMP_FORGOT_PASSWORD')
         userUtils.do_forgot_password(
             user[2].id, user[2].email, new_password)
-        emailSubject = 'Password Reset Successfully'
+        emailSubject = 'Password Reset Successfully.'
         emailBody = render_template('user/forgot_password.html')
         emailContentType = 'html'
         emailUtils.sendMail(user[2].email, subject=emailSubject,
                             body=emailBody, contentType=emailContentType)
         
-        #Handle if sendMail function failed...
+        #TODO : Handle if sendMail function failed...
 
-        flash("We've emailed the new password to you", "is-success")
-        return redirect(url_for('show_signin_page'))
+        return redirect(url_for('show_signin_page',msg="New password emailed to your registered email address. Please check your email & login with new password.",msgType="is-success"))
 
 
 @app.route('/user/showManageUsersPage', methods=['GET'])
