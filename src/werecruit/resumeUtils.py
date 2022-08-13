@@ -1,4 +1,5 @@
 from enum import Enum
+from multiprocessing.util import NOTSET
 import dbUtils
 import constants
 
@@ -168,7 +169,7 @@ def update_resume(id, resume_attr_list):
         dbUtils.returnToPool(db_con)
 
 
-def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, recruiterID):
+def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, recruiterID, notes=None):
     _logger.debug('inside save_resume function')
     db_con = dbUtils.getConnFromPool()
     cursor = db_con.cursor()
@@ -201,12 +202,12 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
         if (int(id) == constants.NEW_ENTITY_ID):
             # insert a record in user table
             sql = """insert into public.wr_resumes ( resume_filename, name, email, 
-					phone, recruiter_id,resume_content , json_resume) 
+					phone, recruiter_id, resume_content, json_resume, notes) 
 					values (%s,%s,%s,
-					%s,%s,%s,%s) returning id """
+					%s,%s,%s,%s,%s) returning id """
 
             params = (fileName, candidateName, candidateEmail,
-                      candidatePhone, int(recruiterID), file_data, json_resume)
+                      candidatePhone, int(recruiterID), file_data, json_resume, notes)
                     
 
             _logger.debug(cursor.mogrify(sql, params))
@@ -226,11 +227,11 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
             # Handle resume upload case seperately...
             # TODO rewrite this block in a better way
             sql = """update public.wr_resumes set  
-						name = %s,  email = %s, phone = %s,
-						recruiter_id = %s
+						name = %s, email = %s, phone = %s,
+						recruiter_id = %s, notes = %s
 					where id = %s"""
             params = (candidateName, candidateEmail, candidatePhone,
-                      recruiterID,
+                      recruiterID, notes,
                       int(id))
 
             _logger.debug(cursor.mogrify(sql, params))

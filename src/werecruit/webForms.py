@@ -172,6 +172,7 @@ class ResumeForm( FlaskForm):
     candidate_name = StringField('Candidate Name*',validators=[DataRequired(message='Candidate Name can not be blank.')])
     candidate_email = StringField('Candidate Email*',validators=[DataRequired(message='Candidate Email can not be blank.')])
     candidate_phone = StringField('Candidate Phone*',validators=[DataRequired(message='Candidate Phone can not be blank.')])
+    notes = TextAreaField('Notes')
 
     referrer = HiddenField('Resume ID')
 
