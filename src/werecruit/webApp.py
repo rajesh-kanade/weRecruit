@@ -728,6 +728,7 @@ def resume_save():
     _logger.debug('candidate name is {0}'.format(form.candidate_name.data))
     _logger.debug('candidate email is {0}'.format(form.candidate_email.data))
     _logger.debug('candidate phone is {0}'.format(form.candidate_phone.data))
+    _logger.debug('notes is {0}'.format(form.notes.data))
     _logger.debug('candidate resume file name is {0}'.format(
         form.candidate_resume.data))
 
@@ -743,7 +744,8 @@ def resume_save():
         filename = None
 
     (retCode, msg, data) = resumeUtils.save_resume(form.id.data, filename, form.candidate_name.data,
-                                                   form.candidate_email.data, form.candidate_phone.data, int(session.get('user_id')))
+                                                   form.candidate_email.data, form.candidate_phone.data, 
+                                                   int(session.get('user_id')), form.notes.data)
 
     if filename is not None and os.path.exists(filename):
         os.remove(filename)
@@ -939,6 +941,7 @@ def show_resume_edit_page(id):
         form.candidate_email.data = results[2].email
         form.candidate_phone.data = results[2].phone
         form.candidate_resume.data = results[2].resume_filename
+        form.notes.data = results[2].notes        
 
         return render_template('resume/edit.html', form=form)
     else:

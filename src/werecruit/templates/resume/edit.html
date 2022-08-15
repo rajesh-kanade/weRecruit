@@ -112,6 +112,15 @@
                 {% endfor %}
               </div>
             </div>
+            <div class="field">
+              <label class="label {{theme_text_color}} has-text-left">{{ form.notes.label }}</label>
+              <div class="control">
+                {{form.notes(class='textarea', placeholder="Notes(optional)")}}
+                {% for error in form.candidate_phone.errors %}
+                  <small class="has-text-danger">{{ error }}</small>  
+                {% endfor %}
+              </div>
+            </div>
 
             <div class="field">
               <p class="control">
