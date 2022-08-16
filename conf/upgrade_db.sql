@@ -282,10 +282,10 @@ SET description = 'Candidate Was A No Show'
 WHERE id=170;
 /* ******** end upgrade prod on 26/06/2022 for updated status sub categories **** */
 
-/* ***** start upgrade 13/08/2022 for issue 280  ****** */
+/* ***** start upgrade 16/08/2022 for issue 280  ****** */
 
 ALTER TABLE public.wr_resumes
     ADD COLUMN notes text COLLATE pg_catalog."default";
 
 
-/* ******** end upgrade prod on 14/08/2022 for issue 280 **** */
+/* ******** end upgrade prod on 16/08/2022 for issue 280 **** */
