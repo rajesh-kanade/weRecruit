@@ -785,7 +785,7 @@ def delete_job( job_id):
 		assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 		db_con.commit()
 		
-		return(RetCodes.success.value, "JD {0} successfully deleted.".format(job_id), cursor.rowcount)
+		return(RetCodes.success.value, "Job position {0} successfully deleted.".format(job_id), cursor.rowcount)
 
 	except Exception as dbe:
 		_logger.error(dbe)

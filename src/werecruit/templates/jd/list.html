@@ -1,5 +1,7 @@
 {%extends "app_header.html" %}
 {%block content%}
+
+
 <div class="body-background">
   <div class="job-position">
     <div class="container">
@@ -9,6 +11,12 @@
           Browse through existing postings to shortlist candidates or update status.
         </h2>
         <div id="jd_browser_messages">{% include '/utils/show_timed_msg.html'%}</div>
+        {% set msg = request.args.get('msg') %}
+        {% set msgType = request.args.get('msgType') %}
+        
+        {%  if msg %}
+          <div class="notification {{msgType}}">{{ msg }}</div>
+        {% endif %}
       </section>
     </div>
   </div>
@@ -76,9 +84,13 @@
                   <span>
                     <a href="/jd/download/{{jd.id}}" title="Download Client JD">
                       <i class="fa fa-download"></i></a></span>
-                  <span>
-                    <a href="/jd/delete/{{jd.id}}" title="Delete Job">
+                  
+                  <span>                    
+                    <a href = "/jd/showConfirmDeletePage/{{jd.id}}/{{jd.title}}"  title="Delete Job">
                       <i class="fa fa-trash"></i></a></span>
+
+
+                         
                 </td>
               </tr>
               {% else %}
