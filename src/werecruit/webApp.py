@@ -1005,6 +1005,18 @@ def jd_download(id):
         flash(str(e), "is-danger")
         return redirect(url_for("show_jd_all_page"))
 
+@app.route('/jd/showConfirmDeletePage/<int:id>/<title>', methods=['GET'])
+@login_required
+def jd_confirm_delete(id,title):
+
+    try:
+               
+        return render_template("jd/confirm_delete.html",jobID = id, jobTitle=title)
+
+    except Exception as e:
+        flash(str(e), "is-danger")
+        return redirect(url_for("show_jd_all_page"))
+
 @app.route('/jd/delete/<int:id>', methods=['GET'])
 @login_required
 def jd_delete(id):
@@ -1013,14 +1025,11 @@ def jd_delete(id):
         (code, msg, result) = jdUtils.delete_job(id)
         assert code == jdUtils.RetCodes.success.value, "Failed to delete job {0} ".format(
             id)
-        
-        flash(msg, "is-success")
-        
+              
         #return redirect(request.referrer,301)
-        return redirect(url_for("show_jd_all_page"))
+        return redirect(url_for("show_jd_all_page",msg=msg,msgType='is-success'))
         
-        #return render_template("jd/showAllPage")
-        #return render_template(url_for("show_jd_all_page"))
+
 
     except Exception as e:
         flash(str(e), "is-danger")

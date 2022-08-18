@@ -1,0 +1,23 @@
+{%extends "app_header.html" %}
+{%block content%}
+
+<div id= "modal-window" class="modal is-active">
+    
+    
+    <div class="modal-card">
+      <header class="modal-card-head is-danger">
+        <p class="modal-card-title">Confirm Delete  ?</p>
+      </header>
+      <section class="modal-card-body">
+        <!-- Content ... -->
+        <div class="notification">Are you sure you want to delete job '{{jobTitle}} ({{jobID}})' ? </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button" onclick="window.location.href='/jd/delete/{{jobID}}'">Yes</button>
+        <button class="button" onclick="history.back();">No</button>
+      </footer>
+    </div>
+  </div>
+
+
+{% endblock %}
