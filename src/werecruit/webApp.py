@@ -169,7 +169,7 @@ def sign_up():
     userAttrs['name'] = form.name.data
     userAttrs['status'] = userUtils.Status.pending_verification.value
     userAttrs['tname'] = form.company_name.data
-
+    userAttrs['creation_date'] = datetime.now(tz=timezone.utc)
 
     password = request.form["password"]
 
