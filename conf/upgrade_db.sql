@@ -289,3 +289,30 @@ ALTER TABLE public.wr_resumes
 
 
 /* ******** end upgrade prod on 16/08/2022 for issue 280 **** */
+
+
+/* ***** start upgrade ? for issue 281  ****** */
+
+ALTER TABLE tenants
+    ADD COLUMN creation_date timestamp with time zone;
+
+UPDATE tenants SET creation_date = '2022-01-01 00:00:00'; 
+
+ALTER TABLE tenants ALTER COLUMN creation_date SET NOT NULL;
+
+ALTER TABLE tenants
+    ADD COLUMN updation_date timestamp with time zone;
+
+
+
+ALTER TABLE users
+    ADD COLUMN creation_date timestamp with time zone;
+
+UPDATE users SET creation_date = '2022-01-01 00:00:00'; 
+
+ALTER TABLE users ALTER COLUMN creation_date SET NOT NULL;
+
+ALTER TABLE users
+    ADD COLUMN updation_date timestamp with time zone;
+
+/* ******** end upgrade prod on ? for issue 281 **** */

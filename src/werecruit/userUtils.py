@@ -9,6 +9,9 @@ from dotenv import load_dotenv, find_dotenv
 from enum import Enum
 import hashlib
 
+from datetime import datetime
+from datetime import timezone
+
 _logger = logging.getLogger()
 
 
@@ -65,12 +68,17 @@ def do_signUp(user_attrs):
         if 'tname' not in user_attrs.keys():
             return(RetCodes.missing_ent_attrs_error.value, "Company is missing.", None)
 
+        if 'creation_date' not in user_attrs.keys():
+            return(RetCodes.missing_ent_attrs_error.value, "Creation date is missing.", None)
+
         email = user_attrs['email'].strip()
         name = user_attrs['name'].strip()
         status = user_attrs['status']
         password = user_attrs['password'].strip()
 
         tname = user_attrs['tname'].strip()
+
+        creation_date = user_attrs['creation_date']
 
         if not email:
             return(RetCodes.empty_ent_attrs_error.value, "Email empty or null.", None)
@@ -83,13 +91,16 @@ def do_signUp(user_attrs):
 
         if not tname:
             return(RetCodes.empty_ent_attrs_error.value, "Company Name empty or null.", None)
+        
+        if not creation_date:
+            return(RetCodes.empty_ent_attrs_error.value, "Creation date empty or null.", None)
 
         password = hashit(password)
 
         # insert a record in user table
-        sql = """insert into users ( email, name, status, password,is_deleted) 
-				values (%s,%s, %s,%s,%s) returning id """
-        params = (email, name, status, password, False)
+        sql = """insert into users ( email, name, status, password,is_deleted,creation_date) 
+				values (%s,%s, %s,%s,%s,%s) returning id """
+        params = (email, name, status, password, False, creation_date)
         _logger.debug(cursor.mogrify(sql, params))
 
         cursor.execute(sql, params)
@@ -100,9 +111,9 @@ def do_signUp(user_attrs):
         _logger.debug("user id created is {0}".format(uid))
 
         # insert a record into tenant
-        sql = """insert into tenants ( name,status,is_deleted) 
-			values (%s,%s, %s) returning id """
-        params = (tname, 0, False)
+        sql = """insert into tenants ( name,status,is_deleted,creation_date) 
+			values (%s, %s, %s, %s) returning id """
+        params = (tname, 0, False, creation_date)
         _logger.debug(cursor.mogrify(sql, params))
 
         cursor.execute(sql, params)
@@ -162,9 +173,12 @@ def save_user(tenantID, userID, name, email, password, roleID):
 
         if int(userID) == constants.NEW_ENTITY_ID:
             # insert a record in user table
-            sql = """insert into users ( email, name, password,is_deleted,status) 
-				values (%s,%s, %s,%s,%s) returning id """
-            params = (email, name, password, False, Status.active.value)
+
+            creation_date = datetime.now(tz=timezone.utc);
+
+            sql = """insert into users ( email, name, password,is_deleted,status,creation_date) 
+				values (%s,%s, %s,%s,%s,%s) returning id """
+            params = (email, name, password, False, Status.active.value,creation_date)
             _logger.debug(cursor.mogrify(sql, params))
 
             cursor.execute(sql, params)
@@ -187,9 +201,12 @@ def save_user(tenantID, userID, name, email, password, roleID):
             return (RetCodes.success.value, "User {0} added successful.".format(userID), userID)
 
         else:
-            sql = """update users set name = %s, email =%s, password =%s
+
+            updation_date = datetime.now(tz=timezone.utc);
+
+            sql = """update users set name = %s, email =%s, password =%s, updation_date =%s
 					where id = %s"""
-            params = (name, email, password, userID)
+            params = (name, email, password, updation_date, userID)
             _logger.debug(cursor.mogrify(sql, params))
 
             cursor.execute(sql, params)
