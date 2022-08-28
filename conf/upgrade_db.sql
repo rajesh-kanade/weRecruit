@@ -316,3 +316,68 @@ ALTER TABLE users
     ADD COLUMN updation_date timestamp with time zone;
 
 /* ******** end upgrade prod on 22/Aug/2022 for issue 281 **** */
+
+/** start upgrade ? **/
+CREATE TABLE public.skillsets
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    skillset_name text COLLATE pg_catalog."default" NOT NULL,
+    relevancy smallint,
+    CONSTRAINT skillsets_pkey PRIMARY KEY (id),
+    CONSTRAINT skillset_name_unique UNIQUE (skillset_name)
+
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.skillsets
+    OWNER to werecruit;
+
+CREATE TABLE public.skills
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
+    skillset_id bigint NOT NULL,
+    skill_name text COLLATE pg_catalog."default" NOT NULL,
+    weight smallint NOT NULL,
+    CONSTRAINT skills_pkey PRIMARY KEY (id, skillset_id),
+    CONSTRAINT skill_name_unique UNIQUE (skill_name)
+,
+    CONSTRAINT skills_skillset_id_fkey FOREIGN KEY (skillset_id)
+        REFERENCES public.skillsets (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.skills
+    OWNER to werecruit;
+
+INSERT INTO public.skillsets(id,skillset_name,relevancy) 
+OVERRIDING SYSTEM VALUE 
+VALUES
+(1,'java-core',1),
+(2,'web-frontend', 1),
+ (3,'db-dev', 1),
+(4,'linux', 1),
+(5,'web-backend', 1),
+(6,'test-automation', 1),
+(7,'bi-tools', 1),
+(8,'etl', 1),
+(9,'dotnet-dev', 1),
+(10,'devops', 1),
+(11,'test-manual', 1);
+
+DELETE FROM public.skills where skillset_id=1;
+INSERT INTO public.skills(
+	skillset_id, skill_name,weight)
+	VALUES ( 1, 'java',3),(1,'jdbc',2),(1,'spring',2),(1,'spring-boot',2),( 1, 'hibernate',1),(1,'J2EE',1);
+	
+DELETE FROM public.skills where skillset_id=2;
+INSERT INTO public.skills(
+	skillset_id, skill_name,weight)
+	VALUES ( 2, 'html',3),(2,'css',1), ( 2, 'jquery',2),( 2, 'angular',3),( 2, 'reactjs',3),
+	( 2, 'react',3),( 2, 'javascript',2),(2,'bootstrap',2);
+    
+/** end upgrade ? ****/
