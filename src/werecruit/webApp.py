@@ -181,7 +181,21 @@ def sign_up():
 
     results = userUtils.do_signUp(userAttrs)
     if (results[0] == userUtils.RetCodes.success.value):
-        flash("")
+        # flash("")
+
+        # email notification to support@weRecruit.cloud
+
+        # file_loader = FileSystemLoader('./conf')
+        env = Environment(loader=FileSystemLoader('./conf'))
+        template = env.get_template('sign_up_notification.html')
+
+        body = template.render(tenantID=str(form.company_name.data), adminName=str(
+            form.name.data), adminEmail=str(form.email.data))
+        # send email
+        emailUtils.sendMail_async(
+            "support@weRecruit.cloud", 'New tenant added', body, 'html')
+
+        _logger.debug("Email sent successfully.")
         
         token = s.dumps(email, salt='email-confirm')
         msg1 = 'Confirm weRecruit account creation'
