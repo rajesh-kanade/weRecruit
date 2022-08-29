@@ -302,7 +302,7 @@ def list_resumes_by_tenant(tenantID, orderBy=None, order=None):
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
-		q1 = """SELECT * FROM wr_resumes
+		q1 = """SELECT * , json_resume->'top_skills'->>'skill_name' as topskills FROM wr_resumes
 				where is_deleted = %s and
 				recruiter_id in ( select uid from tenant_user_roles where tid = %s) order by """
 		q2 = """ """
@@ -364,7 +364,7 @@ def search_resumes(tenantID, ftSearch,orderBy=None, order=None):
 
 		_logger.debug("Full text search is %s OR %s", ft_cond_json_resume, ft_cond_name)
 
-		query = """SELECT * FROM wr_resumes 
+		query = """SELECT *,json_resume->'top_skills'->>'skill_name' as topskills  FROM wr_resumes 
 				where is_deleted = %s and
 				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
 				AND ( """ + str(ft_cond_json_resume) + " ) " + " OR ( " + str(ft_cond_name) + " ) "
