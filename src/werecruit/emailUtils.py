@@ -214,7 +214,8 @@ def sendMail(ToEmailAddr, subject, body, contentType):
 
 	else:
 		_logger.debug('Non prod environment detected. So sending emails to support@werecruit.cloud instead of %s', ToEmailAddr)
-		ToEmailAddrStr = 'support@werecruit.cloud' #ToEmailAddr -> done purposefully to avoid sending emails to
+		ToEmailAddrStr = "support@werecruit.cloud" #ToEmailAddr -> done purposefully to avoid sending emails to
+		ToEmailAddr = "support@werecruit.cloud"
 		
 	msg = MIMEMultipart()
 	msg['From'] = os.environ.get("SMTP_MAIL_USERNAME")
@@ -226,7 +227,11 @@ def sendMail(ToEmailAddr, subject, body, contentType):
 	_logger.debug( msg.as_string() )
 
 	_logger.info("Setting up SMTP object")
-
+	_logger.debug(os.environ.get("SMTP_MAIL_SERVER"))
+	_logger.debug(os.environ.get("SMTP_MAIL_PORT"))
+	_logger.debug(os.environ.get("SMTP_MAIL_USERNAME"))
+	_logger.debug(os.environ.get("SMTP_MAIL_PASSWORD"))
+		
 	with smtplib.SMTP(os.environ.get("SMTP_MAIL_SERVER"), os.environ.get("SMTP_MAIL_PORT")) as server:
 		server.login(os.environ.get("SMTP_MAIL_USERNAME"), os.environ.get("SMTP_MAIL_PASSWORD"))
 		server.sendmail(os.environ.get("SMTP_MAIL_USERNAME"), ToEmailAddr, msg.as_string())
