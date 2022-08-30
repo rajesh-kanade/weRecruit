@@ -1,4 +1,5 @@
 from enum import Enum
+from itertools import count
 from multiprocessing.util import NOTSET
 import dbUtils
 import constants
@@ -302,7 +303,11 @@ def list_resumes_by_tenant(tenantID, orderBy=None, order=None):
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
-		q1 = """SELECT * , json_resume->'top_skills'->>'skill_name' as topskills FROM wr_resumes
+		q1 = """SELECT * , 
+				(select skillset_name from skillsets where id = CAST(json_resume->'top_skills'->>0 AS INTEGER) ) as topskill1, 
+				(select skillset_name from skillsets where id = CAST(json_resume->'top_skills'->>1 AS INTEGER) ) as topskill2, 
+				(select skillset_name from skillsets where id = CAST(json_resume->'top_skills'->>2 AS INTEGER) ) as topskill3
+				FROM wr_resumes
 				where is_deleted = %s and
 				recruiter_id in ( select uid from tenant_user_roles where tid = %s) order by """
 		q2 = """ """
@@ -364,7 +369,11 @@ def search_resumes(tenantID, ftSearch,orderBy=None, order=None):
 
 		_logger.debug("Full text search is %s OR %s", ft_cond_json_resume, ft_cond_name)
 
-		query = """SELECT *,json_resume->'top_skills'->>'skill_name' as topskills  FROM wr_resumes 
+		query = """SELECT *,
+				(select skillset_name from skillsets where id = CAST(json_resume->'top_skills'->>0 AS INTEGER) ) as topskill1, 
+				(select skillset_name from skillsets where id = CAST(json_resume->'top_skills'->>1 AS INTEGER) ) as topskill2, 
+				(select skillset_name from skillsets where id = CAST(json_resume->'top_skills'->>2 AS INTEGER) ) as topskill3
+				FROM wr_resumes 
 				where is_deleted = %s and
 				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
 				AND ( """ + str(ft_cond_json_resume) + " ) " + " OR ( " + str(ft_cond_name) + " ) "
@@ -612,7 +621,7 @@ def extract_emails(text):
 		# get the unicode ID, i.e. 'COLOR'
 		rule_id = _nlp.vocab.strings[match_id]
 		span = doc[start: end]  # get the matched slice of the doc
-		_logger.debug("Email Found : ", span.text)
+		_logger.debug("Email Found : %s ", span.text)
 		#logger.info("EMail Found : %s " , span.text)
 		if span.text.lower() not in results:
 			results.append(span.text.lower())
@@ -717,7 +726,7 @@ def extract_full_name1(text):
 			if (ent.label_ == 'PERSON'):
 				results.append(ent.text)
 
-def extract_skills (resumeText):
+def extract_skills_old (resumeText):
 	
 	text = resumeText
 
@@ -799,6 +808,80 @@ def extract_skills (resumeText):
 	return df.groupby('skillset_name').count().sort_values(by='skill_name', ascending=False).head(3).to_dict()
 	#return df.groupby('skillset_name').count().sort_values(by=['skill_name','weight'], ascending=[False,False]).head(3).to_dict()
 
+def extract_skills(resumeText):
+	
+	text = resumeText
+
+	matcher = Matcher(_nlp.vocab, True)
+	pMatcher = PhraseMatcher( _nlp.vocab, attr="LOWER")
+
+	db_con = dbUtils.getConnFromPool()
+	cursor = dbUtils.getNamedTupleCursor(db_con)
+	results_dict = {}
+
+	sql = """
+		SELECT * from skillsets
+	"""
+	_logger.debug(cursor.mogrify(sql))
+	cursor.execute(sql)
+
+	skillsetsList = cursor.fetchall()
+	for skillset in skillsetsList:
+		results_dict[str(skillset.id)] = []				
+		_logger.debug("Fetching skills for skillset ID is %s", skillset.id)
+		sql = """
+			SELECT * from skills where skillset_id = %s
+		"""
+		params = (int(skillset.id),)
+		_logger.debug(cursor.mogrify(sql,params))
+		cursor.execute(sql,params)		
+
+		skillList = cursor.fetchall()
+		terms = []
+		for skill in skillList:
+			print(skill)
+			matcher.add(skillset.id,[[{"LOWER" : skill.skill_name},{"IS_PUNCT": True}]])
+			terms.append(skill.skill_name)
+
+		# #Add all skills into Phrase matcher as well
+		patterns = [_nlp.make_doc(text) for text in terms]
+		pMatcher.add(str(skillset.id), None, *patterns)
+
+
+	doc = _nlp(text)
+
+	print(results_dict)
+
+	matches = matcher(doc) #Token matcher
+	for match_id, start, end in matches:
+		rule_id = _nlp.vocab.strings[match_id]  
+		span = doc[start : end]  # get the matched slice of the doc
+		if str(rule_id) in results_dict.keys():
+			results_dict[str(rule_id)].append(span.text)
+
+	matches = pMatcher(doc)  #Phrase matcher
+	for match_id, start, end in matches:
+		rule_id = _nlp.vocab.strings[match_id]  
+		span = doc[start : end]  # get the matched slice of the doc
+		print("phrase matched : " , span.text)
+		#weight = skillsets_df[skillsets_df.skillset_name.eq(rule_id),skillsets_df.skill_name.eq(span.text)]
+		if str(rule_id) in results_dict.keys():
+			results_dict[str(rule_id)].append(span.text)
+
+	print( results_dict) 
+	temp1 = {}
+	for new_k, new_val in results_dict.items():
+		print(new_k, len([item for item in new_val if item]))
+		temp1.update({new_k: len([item for item in new_val if item])})
+	temp2 = sorted(temp1.items(), key = lambda ele : temp1[ele[0]],reverse=True)
+	
+	print("The sorted dictionary is  " , temp2) 
+
+	top_skills = [k[0] for k in temp2[:3] if k[1] > 0 ]
+	print(top_skills)
+
+	dbUtils.returnToPool(db_con)
+	return top_skills
 
 def populate_json_resumes():
 	try:
@@ -867,9 +950,11 @@ if __name__ == "__main__":
 	# shortlist(25,[17], datetime.now(tz=timezone.utc),
 	#	ApplicationStatusCodes.shortlisted.value,1)
 
-	#logging.basicConfig(level = logging.DEBUG)
+	logging.basicConfig(level = logging.DEBUG)
 
-	resultData = process_single_resume('C:\\Users\\rajesh\\Downloads\\Raja_Nayak.pdf')
+	resultData = process_single_resume('C:\\Users\\rajesh\\Downloads\\AK.pdf')
+	#resultData = process_single_resume('C:\\Users\\rajesh\\Downloads\\Raja_nayak.pdf')
+
 	#logging.basicConfig(level=logging.DEBUG)
 	#resultData = search_resumes(1,"Pune")
 	#resultData = populate_json_resumes()

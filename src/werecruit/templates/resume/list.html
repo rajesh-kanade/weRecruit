@@ -72,7 +72,10 @@
                   <td>{{resume.name}}</td>
                   <td>{{resume.email}}</td>
                   <td>{{resume.phone}}</td>
-                  <td>{{resume.topskills}}</td>
+                  <td>{{resume.topskill1 if resume.topskill1}}<br/>
+                    {{resume.topskill2 if resume.topskill2}}<br/>
+                    {{resume.topskill3 if resume.topskill3}}
+                  </td>
                   <td class="table-actions" data-turbo="false">
                     <a title="Edit" href="/resume/showEditPage/{{resume.id}}">
                       <i class="fa fa-pencil-square-o"></i>
