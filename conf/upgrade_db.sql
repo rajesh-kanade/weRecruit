@@ -379,5 +379,15 @@ INSERT INTO public.skills(
 	skillset_id, skill_name,weight)
 	VALUES ( 2, 'html',3),(2,'css',1), ( 2, 'jquery',2),( 2, 'angular',3),( 2, 'reactjs',3),
 	( 2, 'react',3),( 2, 'javascript',2),(2,'bootstrap',2);
-    
+
+ALTER TABLE wr_resumes
+    ADD COLUMN creation_date timestamp with time zone;
+
+UPDATE wr_resumes SET creation_date = '2022-01-01 00:00:00'; 
+
+ALTER TABLE wr_resumes ALTER COLUMN creation_date SET NOT NULL;
+
+ALTER TABLE wr_resumes
+    ADD COLUMN updation_date timestamp with time zone;
+
 /** end upgrade ? ****/

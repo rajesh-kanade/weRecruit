@@ -207,12 +207,14 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
 		if (int(id) == constants.NEW_ENTITY_ID):
 			# insert a record in user table
 			sql = """insert into public.wr_resumes ( resume_filename, name, email, 
-					phone, recruiter_id, resume_content, json_resume, notes) 
+					phone, recruiter_id, resume_content, json_resume,
+					notes, creation_date) 
 					values (%s,%s,%s,
-					%s,%s,%s,%s,%s) returning id """
+					%s,%s,%s,%s,%s,%s) returning id """
 
 			params = (fileName, candidateName, candidateEmail,
-					  candidatePhone, int(recruiterID), file_data, json_resume, notes)
+					  candidatePhone, int(recruiterID), file_data, json_resume, 
+					  notes, datetime.now(tz=timezone.utc))
 					
 
 			_logger.debug(cursor.mogrify(sql, params))
@@ -233,16 +235,16 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
 			# TODO rewrite this block in a better way
 			sql = """update public.wr_resumes set  
 						name = %s, email = %s, phone = %s,
-						recruiter_id = %s, notes = %s
+						recruiter_id = %s, notes = %s, updation_date = %s
 					where id = %s"""
 			params = (candidateName, candidateEmail, candidatePhone,
-					  recruiterID, notes,
+					  recruiterID, notes, datetime.now(tz=timezone.utc),
 					  int(id))
 
 			_logger.debug(cursor.mogrify(sql, params))
 
 			cursor.execute(sql, params)
-			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+			assert cursor.rowcount == 1, "assert failed : Row Effected is not equal to 1."
 
 			# TODO -> Think of better way to do this
 			# New resume file is uploaded then we will store the parsed json_resume again
@@ -253,7 +255,7 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
 			params1 = (fileName, file_data, json_resume,
 						   int(id))
 			cursor.execute(sql1, params1)
-			assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+			assert cursor.rowcount == 1, "assert failed : Row Effected is not equal to 1."
 
 			db_con.commit()
 			_logger.debug("Resume id {0} updated successfully.".format(id))
@@ -490,7 +492,7 @@ def get(id):
 		_logger.debug(cursor.mogrify(query, params))
 		cursor.execute(query, params)
 
-		assert cursor.rowcount == 1, "assertion failed : Effected row count is not equal to 1."
+		assert cursor.rowcount == 1, "assert failed : Effected row count is not equal to 1."
 
 		resume = cursor.fetchone()
 
@@ -879,8 +881,10 @@ def extract_skills(resumeText):
 
 	top_skills = [k[0] for k in temp2[:3] if k[1] > 0 ]
 	print(top_skills)
-
+	
+	cursor.close()
 	dbUtils.returnToPool(db_con)
+	
 	return top_skills
 
 def populate_json_resumes():
