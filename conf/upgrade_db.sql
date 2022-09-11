@@ -390,4 +390,7 @@ ALTER TABLE wr_resumes ALTER COLUMN creation_date SET NOT NULL;
 ALTER TABLE wr_resumes
     ADD COLUMN updation_date timestamp with time zone;
 
+ALTER TABLE wr_jds 
+    ADD COLUMN top_skills integer[];
+
 /** end upgrade ? ****/

@@ -89,6 +89,10 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 			else:
 				file_data = bytes(open(jd_file_name, "rb").read())
 
+		if primary_skills.strip():
+			top_skills_list = resumeUtils.extract_skills(primary_skills)
+			_logger.debug( "Top skills found in this JD are as : %s", top_skills_list)
+
 		if (int(id) == constants.NEW_ENTITY_ID):
 			# insert a record in user table
 			_logger.debug('creating new JD with id %s ', id)
@@ -102,7 +106,8 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 					city_id,min_yrs_of_exp,jd_file_name,
 					primary_skills, secondary_skills,
 					ctc_min,ctc_max,ctc_currency ,
-					fees_in_percent,warranty_period_in_months,client_jd,max_yrs_of_exp) 
+					fees_in_percent,warranty_period_in_months,client_jd,max_yrs_of_exp,
+					top_skills) 
 					values (%s,%s,%s,
 					%s,%s,%s,%s,
 					%s,%s,%s,
@@ -112,7 +117,7 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 					%s,%s,%s,
 					%s,%s,
 					%s,%s,%s,
-					%s,%s,%s,%s) returning id """
+					%s,%s,%s,%s,%s) returning id """
 
 			params = (title, details, client,
 					  recruiterID, int(positions), int(status), open_date,
@@ -124,7 +129,8 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 					  primary_skills, secondary_skills,
 					  ctc_min, ctc_max, ctc_currency,
 					  fees_percent, warranty_period_in_months,
-					  file_data, max_yrs_of_exp)
+					  file_data, max_yrs_of_exp,
+					  list(map(int, top_skills_list)))
 
 			_logger.debug(cursor.mogrify(sql, params))
 
@@ -150,7 +156,8 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 						city_id=%s,min_yrs_of_exp =%s,
 						primary_skills=%s,secondary_skills=%s,
 						ctc_min=%s,ctc_max=%s,ctc_currency=%s,
-						fees_in_percent=%s,warranty_period_in_months=%s,max_yrs_of_exp=%s
+						fees_in_percent=%s,warranty_period_in_months=%s,max_yrs_of_exp=%s,
+						top_skills =%s
 					where id = %s"""
 			params = (title, details, client,
 					  recruiterID, int(positions), int(status),
@@ -162,6 +169,7 @@ def save_jd(id, title, details, client, recruiterID, positions=JD_DEF_POSITIONS,
 					  primary_skills, secondary_skills,
 					  ctc_min, ctc_max, ctc_currency,
 					  fees_percent, warranty_period_in_months, max_yrs_of_exp,
+					  list(map(int, top_skills_list)),
 					  int(id))
 
 			_logger.debug(cursor.mogrify(sql, params))
@@ -798,6 +806,11 @@ def delete_job( job_id):
 		dbUtils.returnToPool(db_con)
 	
 
+
+def populate_top_skills(job_id):
+	#get primary skills for a job ID
+	#pass them on resumes. skills to extract 
+	pass
 
 # main entry point
 if __name__ == "__main__":

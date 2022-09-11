@@ -27,9 +27,6 @@ import json
 
 import unicodedata
 
-import pandas as pd
-from pandas.io.json import json_normalize
-
 import logging
 logging.getLogger("pdfminer").setLevel(logging.WARNING)
 
@@ -728,87 +725,6 @@ def extract_full_name1(text):
 			if (ent.label_ == 'PERSON'):
 				results.append(ent.text)
 
-def extract_skills_old (resumeText):
-	
-	text = resumeText
-
-	#text = text.lower()
-	#_nlp = spacy.load("en_core_web_lg")
-
-	#con = sqlite3.connect(constants.DB_NAME)
-	con = dbUtils.getConnFromPool()
-	sql = """
-		SELECT ss.*, s.skill_name,s.weight FROM skillsets ss, skills s where ss.id = s.skillset_id
-	"""
-	# Load the data into a DataFrame
-	#skillsets_df = pd.read_sql_query("SELECT * from skillsets", con)
-	skillsets_df = pd.read_sql_query(sql, con)
-
-	#skillsets_java_core = skillsets_df[skillsets_df.skillset_Name == 'java-core']
-	print("*** Printing Table skillsets *****")
-	print( skillsets_df )
-
-	unique_skillsets = skillsets_df.skillset_name.unique()
-	print("*** Printing unique skillsets ******")
-	print (unique_skillsets)
-	
-	matcher = Matcher(_nlp.vocab, True)
-	#pMatcher = PhraseMatcher( _nlp.vocab, True, attr="LOWER")
-	pMatcher = PhraseMatcher( _nlp.vocab, attr="LOWER")
-
-	for ind in unique_skillsets: 
-		ss_name = ind 
-		print(ss_name)
-
-		skill_list =[]
-		#find all skill keywords for a skillset name
-		allSkills = skillsets_df[skillsets_df.skillset_name.eq(ss_name)]
-		skills_dict = {}
-		
-		print("add rules")
-		for skill in list(allSkills['skill_name']):
-			print(skill)
-			matcher.add(ss_name,[[{"LOWER" : skill},{"IS_PUNCT": True}]])
-
-		# #Add all skills into Phrase matcher as well
-		terms = list(allSkills['skill_name'])
-		patterns = [_nlp.make_doc(text) for text in terms]
-		pMatcher.add(ss_name, None, *patterns)
-
-
-	doc = _nlp(text)
-
-	results = []  
-
-	matches = matcher(doc) #Token matcher
-	for match_id, start, end in matches:
-		rule_id = _nlp.vocab.strings[match_id]  
-		span = doc[start : end]  # get the matched slice of the doc
-		results.append((rule_id, span.text))      
-
-	matches = pMatcher(doc)  #Phrase matcher
-	for match_id, start, end in matches:
-		rule_id = _nlp.vocab.strings[match_id]  
-		span = doc[start : end]  # get the matched slice of the doc
-		print("phrase matched : " , span.text)
-		#weight = skillsets_df[skillsets_df.skillset_name.eq(rule_id),skillsets_df.skill_name.eq(span.text)]
-		results.append((rule_id, span.text)) 
-
-	df = pd.DataFrame(results, columns =['skillset_name', 'skill_name'])
-
-	_logger.debug ("keywords & phrases found \n") 
-	_logger.debug(df)
-	
-	_logger.info ("\n *********** Top skills categories ************** \n") 
-	_logger.info (df.groupby('skillset_name').count().sort_values(by='skill_name', ascending=False))
-	
-	#_summary_list.append({"TopSkills":top_skill_json })
-	#_summary_list.append({"TopSkills": df.groupby('category').count().sort_values(by='skill', ascending=False).head(3).to_dict() })
-	#_summary_list['TopSkills'] = df.groupby('category').count().sort_values(by='skill', ascending=False).head(3).to_dict()
-	dbUtils.returnToPool(con)
-	
-	return df.groupby('skillset_name').count().sort_values(by='skill_name', ascending=False).head(3).to_dict()
-	#return df.groupby('skillset_name').count().sort_values(by=['skill_name','weight'], ascending=[False,False]).head(3).to_dict()
 
 def extract_skills(resumeText):
 	
