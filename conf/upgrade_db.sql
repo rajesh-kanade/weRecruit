@@ -393,4 +393,17 @@ ALTER TABLE wr_resumes
 ALTER TABLE wr_jds 
     ADD COLUMN top_skills integer[];
 
+INSERT INTO public.resume_application_status_codes_category(
+	id, description)
+    OVERRIDING SYSTEM VALUE
+	VALUES (-1, 'Resume Auto Shortlisted');
+
+INSERT INTO public.resume_application_status_codes_sub_category(
+	id, description, category_id)
+    OVERRIDING SYSTEM VALUE
+	VALUES (-1, 'Auto Shortlisted', 1);
+
+insert into public.application_status_codes(id,description,is_deleted) 
+    values (-1,'Auto Shortlisted',false);
+
 /** end upgrade ? ****/

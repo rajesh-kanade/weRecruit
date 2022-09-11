@@ -27,6 +27,9 @@ import json
 
 import unicodedata
 
+import userUtils
+import jdUtils
+
 import logging
 logging.getLogger("pdfminer").setLevel(logging.WARNING)
 
@@ -54,7 +57,9 @@ class ResumeStatusCodes(Enum):
 
 
 class ApplicationStatusCodes(Enum):
+	auto_shortlisted = -1 
 	shortlisted = 0
+
 	initial_screen_scheduled = 1
 	initial_screen_cleared = 2
 	initial_screen_failed = 3
@@ -862,6 +867,80 @@ def populate_json_resumes():
 		dbUtils.returnToPool(db_con)
 
 
+
+def auto_shortlist_resumes():
+	#get resumes created or updated in last xx minutes
+	#get tenant ID from recruiter ID who uploaded the resume
+	#get JD list for tID
+	#auto shortlist if JD primary skill match with resume top skills
+	try:
+		db_con = dbUtils.getConnFromPool()
+		cursor = dbUtils.getNamedTupleCursor(db_con)
+		cursor1 = dbUtils.getNamedTupleCursor(db_con)
+
+		query = """
+		SELECT *,json_resume->'top_skills' as top_skills FROM wr_resumes 
+		WHERE creation_date >= NOW() - INTERVAL '1 year' AND is_deleted = %s	
+		"""
+
+		_logger.debug(cursor.mogrify(query))
+		params = (False,)
+		cursor.execute(query,params)
+
+		resumeList = cursor.fetchall()
+		for resume in resumeList:
+			try:
+				(retCode,retMsg,tenant) = userUtils.getTenantID(resume.recruiter_id)
+				_logger.debug(tenant.tid)
+
+				# (retCode1,retMsg1,jobList) = jdUtils.list_jds_by_tenant(tenant.tid)
+				# _logger.debug("Job List for tenant ID is %s ", jobList)
+
+				# for job in jobList:
+				#_logger.debug("trying to see if Job ID %s is a match for Resume ID %s", job.id, resume.id)
+				skills_list = resume.top_skills 
+				if skills_list is not None:
+					
+					q1 = """select * from wr_jds where 
+					recruiter_id in ( select uid from tenant_user_roles where tid = %s)
+					and status = %s and is_deleted = %s
+					and top_skills && %s"""
+
+					_logger.debug(cursor.mogrify(q1))
+					
+					params = (tenant.tid,jdUtils.JDStatusCodes.open.value,
+								False,list(map(int, skills_list)))
+					cursor1.execute(q1,params)
+					jobList = cursor1.fetchall()
+					print ( jobList)
+					for job in jobList:
+						try:
+							(retCode,retMsg,data) = jdUtils.shortlist(resume.id,job.id,
+								datetime.now(tz=timezone.utc), ApplicationStatusCodes.auto_shortlisted.value,
+								resume.recruiter_id
+							)
+							if (retCode != jdUtils.RetCodes.success.value):
+								_logger.error("Auto shortlisting failed for job ID %s, resume id %s. Error message is %s", job.id,resume.id, retMsg)
+
+						except Exception as se:
+							_logger.error("Auto shortlisting failed for job ID %s, resume id %s", job.id,resume.id)
+							_logger.error(se)
+
+			except Exception as dbe:
+				_logger.error("Auto shortlisting failed for  resume id %s",resume.id)
+				_logger.error(dbe)
+			
+
+	except Exception as dbe:
+		_logger.error(dbe)
+		return (RetCodes.server_error, str(dbe), None)
+
+	finally:
+		cursor.close()
+		cursor1.close()
+		dbUtils.returnToPool(db_con)
+	
+
 # main entry point
 if __name__ == "__main__":
 	#(retCode,msg,data) = save_resume(constants.NEW_ENTITY_ID,None,'rajesh','rkanade@gmail.com','9890303698',1)
@@ -872,10 +951,13 @@ if __name__ == "__main__":
 
 	logging.basicConfig(level = logging.DEBUG)
 
-	resultData = process_single_resume('C:\\Users\\rajesh\\Downloads\\AK.pdf')
+	#resultData = process_single_resume('C:\\Users\\rajesh\\Downloads\\AK.pdf')
+	#print(resultData)
+
+	auto_shortlist_resumes()
+
 	#resultData = process_single_resume('C:\\Users\\rajesh\\Downloads\\Raja_nayak.pdf')
 
 	#logging.basicConfig(level=logging.DEBUG)
 	#resultData = search_resumes(1,"Pune")
 	#resultData = populate_json_resumes()
-	print(resultData)

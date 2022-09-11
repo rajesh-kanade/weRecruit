@@ -602,6 +602,33 @@ def do_forgot_password(id, email, new_password):
         return (RetCodes.server_error, str(e))
 
 
+def getTenantID( userID):
+    try:
+        db_con = dbUtils.getConnFromPool()
+        cursor = dbUtils.getNamedTupleCursor(db_con)
+
+        query = """select tid from tenant_user_roles where uid = %s"""
+
+        params = (userID,)
+        _logger.debug(cursor.mogrify(query, params))
+        cursor.execute(query, params)
+
+        assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
+
+        tid = cursor.fetchone()
+        _logger.debug(tid)
+
+        return(RetCodes.success.value, "Tenant ID info for user {0} successfully fetched from db".format(userID), tid)
+
+    except Exception as dbe:
+        _logger.error(dbe)
+        return (RetCodes.server_error, str(dbe), None)
+
+    finally:
+        cursor.close()
+        dbUtils.returnToPool(db_con)
+
+
 # main entry point
 if __name__ == "__main__":
 
