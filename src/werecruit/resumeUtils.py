@@ -380,7 +380,7 @@ def search_resumes(tenantID, ftSearch,orderBy=None, order=None):
 				FROM wr_resumes 
 				where is_deleted = %s and
 				recruiter_id in ( select uid from tenant_user_roles where tid = %s) 
-				AND ( """ + str(ft_cond_json_resume) + " ) " + " OR ( " + str(ft_cond_name) + " ) "
+				AND ( """ + str(ft_cond_json_resume) + " OR ( " + str(ft_cond_name) + " )) "
 
 		if not orderBy:
 			orderCond =  " order by id desc"
