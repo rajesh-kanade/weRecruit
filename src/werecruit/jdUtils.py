@@ -404,7 +404,7 @@ def get_resumes_not_associated_with_job(job_id, ftsearch, tenant_id):
 				"Keyword list for free text is as under %s", kwrdList)
 			ft_cond = ' AND '.join(
 				"to_tsvector('english',json_resume) @@ to_tsquery('{0}')".format(word) for word in kwrdList)
-			query = query + " and " + ft_cond
+			query = query + " and ( " + ft_cond +")"
 
 		query = query + " order by id desc "
 
