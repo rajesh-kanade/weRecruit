@@ -29,6 +29,7 @@ import unicodedata
 
 import userUtils
 import jdUtils
+import Levenshtein
 
 import logging
 logging.getLogger("pdfminer").setLevel(logging.WARNING)
@@ -542,6 +543,10 @@ def process_single_resume(testResumeFileName):
 	email = extract_emails(resumeText)
 	top_skills = extract_skills(resumeText)
 
+	if len(name) >0 and len(email) >0 :
+		if replaceNamewithEmail(email[0],name[0]):
+			name[0]=email[0]
+
 	json_list = {}
 	# dt_string
 	json_list['processed-date'] = str(datetime.now(tz=timezone.utc))
@@ -939,7 +944,16 @@ def auto_shortlist_resumes():
 		cursor.close()
 		cursor1.close()
 		dbUtils.returnToPool(db_con)
-	
+
+def replaceNamewithEmail( email , name):
+	emailName = email.split('@')[0]
+	distance = Levenshtein.distance(emailName,name)
+	print("Email %s, Name %s, Score %s",email,name,distance)
+	if distance > 4 :
+		return True
+	else:
+		return False
+
 
 # main entry point
 if __name__ == "__main__":
@@ -951,10 +965,10 @@ if __name__ == "__main__":
 
 	logging.basicConfig(level = logging.DEBUG)
 
-	#resultData = process_single_resume('C:\\Users\\rajesh\\Downloads\\AK.pdf')
-	#print(resultData)
+	resultData = process_single_resume('C:/Users/rajesh/Downloads/Raja_Nayak.pdf')
+	print(resultData)
 
-	auto_shortlist_resumes()
+	#auto_shortlist_resumes()
 
 	#resultData = process_single_resume('C:\\Users\\rajesh\\Downloads\\Raja_nayak.pdf')
 
