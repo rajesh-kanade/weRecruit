@@ -946,12 +946,16 @@ def auto_shortlist_resumes():
 		dbUtils.returnToPool(db_con)
 
 def replaceNamewithEmail( email , name):
-	emailName = email.split('@')[0]
-	distance = Levenshtein.distance(emailName.lower(),name.lower())
-	print("Email %s, Name %s, Score %s",email,name,distance)
-	if distance > 4 :
+	emailName = email.split('@')[0].lower()
+	name1 = name.lower().replace(" ", "")
+	distance = Levenshtein.distance(emailName,name1)
+	if distance > 8 :
+		print(f"{email},{name}, {emailName}, {name1},{distance}, True")
+
 		return True
 	else:
+		print(f"{email},{name}, {emailName}, {name1},{distance}, False")
+
 		return False
 
 
@@ -965,7 +969,7 @@ if __name__ == "__main__":
 
 	logging.basicConfig(level = logging.DEBUG)
 
-	resultData = process_single_resume('C:/Users/rajesh/Download/shubhi_agarwal1.pdf')
+	resultData = process_single_resume('C:/Users/rajesh/Downloads/jagriti.k.pdf')
 	print(resultData)
 
 	#auto_shortlist_resumes()
