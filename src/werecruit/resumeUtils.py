@@ -949,7 +949,7 @@ def replaceNamewithEmail( email , name):
 	emailName = email.split('@')[0].lower()
 	name1 = name.lower().replace(" ", "")
 	distance = Levenshtein.distance(emailName,name1)
-	if distance > 8 :
+	if distance > 7 :
 		print(f"{email},{name}, {emailName}, {name1},{distance}, True")
 
 		return True
@@ -969,7 +969,7 @@ if __name__ == "__main__":
 
 	logging.basicConfig(level = logging.DEBUG)
 
-	resultData = process_single_resume('C:/Users/rajesh/Downloads/jagriti.k.pdf')
+	resultData = process_single_resume('C:/Users/rajesh/Downloads/Rakesh Resume.pdf')
 	print(resultData)
 
 	#auto_shortlist_resumes()
