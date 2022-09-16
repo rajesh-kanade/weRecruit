@@ -947,7 +947,7 @@ def auto_shortlist_resumes():
 
 def replaceNamewithEmail( email , name):
 	emailName = email.split('@')[0]
-	distance = Levenshtein.distance(emailName,name)
+	distance = Levenshtein.distance(emailName.lower(),name.lower())
 	print("Email %s, Name %s, Score %s",email,name,distance)
 	if distance > 4 :
 		return True
@@ -965,7 +965,7 @@ if __name__ == "__main__":
 
 	logging.basicConfig(level = logging.DEBUG)
 
-	resultData = process_single_resume('C:/Users/rajesh/Downloads/Raja_Nayak.pdf')
+	resultData = process_single_resume('C:/Users/rajesh/Download/shubhi_agarwal1.pdf')
 	print(resultData)
 
 	#auto_shortlist_resumes()
