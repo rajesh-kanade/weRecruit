@@ -2,7 +2,7 @@
 Old hardware becomes obsolete; old software goes into production every night. 
 
 ## Accessing prod
-- From main contabo machine do `docker exec -it werecruit_prod /bin/bash` to login to werecruit container.
+- From host server do `docker exec -it werecruit_prod /bin/bash` to login to werecruit container.
 
 ## First time installation checklist
 * get a docker image based on ubuntu 20 LTS
