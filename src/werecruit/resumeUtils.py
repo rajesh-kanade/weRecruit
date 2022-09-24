@@ -951,11 +951,13 @@ def replaceNamewithEmail( email , name):
 	distance = Levenshtein.distance(emailName,name1)
 	if distance > 7 :
 		print(f"{email},{name}, {emailName}, {name1},{distance}, True")
+		_logger.info(f"{email},{name}, {emailName}, {name1},{distance}, True")
 
 		return True
 	else:
 		print(f"{email},{name}, {emailName}, {name1},{distance}, False")
-
+		_logger.info(f"{email},{name}, {emailName}, {name1},{distance}, False")
+		
 		return False
 
 
