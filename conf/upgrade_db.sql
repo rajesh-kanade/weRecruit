@@ -317,7 +317,7 @@ ALTER TABLE users
 
 /* ******** end upgrade prod on 22/Aug/2022 for issue 281 **** */
 
-/** start upgrade ? **/
+/** start upgrade 13 Sept 2022 **/
 CREATE TABLE public.skillsets
 (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
@@ -340,8 +340,6 @@ CREATE TABLE public.skills
     skill_name text COLLATE pg_catalog."default" NOT NULL,
     weight smallint NOT NULL,
     CONSTRAINT skills_pkey PRIMARY KEY (id, skillset_id),
-    CONSTRAINT skill_name_unique UNIQUE (skill_name)
-,
     CONSTRAINT skills_skillset_id_fkey FOREIGN KEY (skillset_id)
         REFERENCES public.skillsets (id) MATCH SIMPLE
         ON UPDATE NO ACTION
@@ -406,4 +404,23 @@ INSERT INTO public.resume_application_status_codes_sub_category(
 insert into public.application_status_codes(id,description,is_deleted) 
     values (-1,'Auto Shortlisted',false);
 
-/** end upgrade ? ****/
+/** end upgrade 13 Sept 2022 ****/
+
+/* Add Tomcat support engineer 
+schema uprgaded on 1 Oct 2022 */
+
+INSERT INTO public.skillsets(id,skillset_name,relevancy) 
+OVERRIDING SYSTEM VALUE 
+VALUES
+(12,'Tomcat Support Engineer',1);
+
+DELETE FROM public.skills where skillset_id=12;
+
+INSERT INTO public.skills(
+	skillset_id, skill_name,weight)
+	VALUES 
+    ( 12, 'Tomcat',1),
+    ( 12, 'Linux',2),
+    ( 12, 'Shell Scripting',2);
+
+/* End tomcat support engineer */
