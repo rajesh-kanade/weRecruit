@@ -308,10 +308,11 @@ def list_resumes_by_tenant(tenantID, orderBy=None, order=None):
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
-		q1 = """SELECT * , 
+		q1 = """SELECT * ,  creation_date > NOW() - INTERVAL '1 DAY' as recently_added,
 				(select skillset_name from skillsets where id = CAST(json_resume->'top_skills'->>0 AS INTEGER) ) as topskill1, 
 				(select skillset_name from skillsets where id = CAST(json_resume->'top_skills'->>1 AS INTEGER) ) as topskill2, 
 				(select skillset_name from skillsets where id = CAST(json_resume->'top_skills'->>2 AS INTEGER) ) as topskill3
+				
 				FROM wr_resumes
 				where is_deleted = %s and
 				recruiter_id in ( select uid from tenant_user_roles where tid = %s) order by """
@@ -374,7 +375,7 @@ def search_resumes(tenantID, ftSearch,orderBy=None, order=None):
 
 		_logger.debug("Full text search is %s OR %s", ft_cond_json_resume, ft_cond_name)
 
-		query = """SELECT *,
+		query = """SELECT *, creation_date > NOW() - INTERVAL '1 DAY' as recently_added,
 				(select skillset_name from skillsets where id = CAST(json_resume->'top_skills'->>0 AS INTEGER) ) as topskill1, 
 				(select skillset_name from skillsets where id = CAST(json_resume->'top_skills'->>1 AS INTEGER) ) as topskill2, 
 				(select skillset_name from skillsets where id = CAST(json_resume->'top_skills'->>2 AS INTEGER) ) as topskill3

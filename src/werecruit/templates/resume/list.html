@@ -69,7 +69,12 @@
               {% endif %}
               <tbody>
                 <tr class="table-data">
-                  <td>{{resume.name}}</td>
+                  <td>{{resume.name}}
+                    {% if resume.recently_added %}
+                      <sup><span class="tag is-info is-size-7">New</span></sup>
+                    {% endif %}
+                  </td>
+                  
                   <td>{{resume.email}}</td>
                   <td>{{resume.phone}}</td>
                   <td>{{resume.topskill1 if resume.topskill1}}<br/>

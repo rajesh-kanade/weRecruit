@@ -349,7 +349,8 @@ def get_resumes_associated_with_job(job_id, cat_status_code=None,sub_cat_status_
 		# query = """select * from wr_resumes
 		#			where id in ( select resume_id from wr_jd_resumes where jd_id = %s)"""
 		query = """select wr_resumes.*,wr_jd_resumes.status ,
-					(select description from application_status_codes where id = status)
+					(select description from application_status_codes where id = status),
+					wr_resumes.creation_date > NOW() - INTERVAL '1 DAY' as recently_added
 					from wr_resumes ,wr_jd_resumes
 					where wr_resumes.id = wr_jd_resumes.resume_id
 					and wr_jd_resumes.jd_id = %s """
@@ -391,7 +392,7 @@ def get_resumes_not_associated_with_job(job_id, ftsearch, tenant_id):
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
-		query = """select *
+		query = """select *,creation_date > NOW() - INTERVAL '1 DAY' as recently_added
 					from wr_resumes where id not in 
 					( select resume_id from wr_jd_resumes where jd_id = %s)
 					and recruiter_id in 
