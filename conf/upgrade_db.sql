@@ -432,7 +432,7 @@ INSERT INTO public.skills(
     ( 9, 'DOT NET',3),
     ( 9, '.NET',3),
     ( 9, 'C#',3),
-    ( 9, 'ASP.NET Core',2)
+    ( 9, 'ASP.NET Core',2),
     ( 9, 'Web Form',1);
 
 /** End .NET Engineer skills **/
