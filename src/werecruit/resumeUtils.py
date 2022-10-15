@@ -251,16 +251,17 @@ def save_resume(id, fileName, candidateName, candidateEmail, candidatePhone, rec
 
 			# TODO -> Think of better way to do this
 			# New resume file is uploaded then we will store the parsed json_resume again
-			# if fileName != None:
-			sql1 = """update public.wr_resumes set  
-						resume_filename = %s,resume_content = %s,json_resume = %s
-					where id = %s"""
-			params1 = (fileName, file_data, json_resume,
-						   int(id))
-			cursor.execute(sql1, params1)
-			assert cursor.rowcount == 1, "assert failed : Row Effected is not equal to 1."
+			if fileName != None:
+				sql1 = """update public.wr_resumes set  
+							resume_filename = %s,resume_content = %s,json_resume = %s
+						where id = %s"""
+				params1 = (fileName, file_data, json_resume,
+							int(id))
+				cursor.execute(sql1, params1)
+				assert cursor.rowcount == 1, "assert failed : Row Effected is not equal to 1."
 
 			db_con.commit()
+			
 			_logger.debug("Resume id {0} updated successfully.".format(id))
 			return (RetCodes.success.value, "Resume id {0} updated successfully.".format(id), id)
 
@@ -886,7 +887,7 @@ def auto_shortlist_resumes():
 
 		query = """
 		SELECT *,json_resume->'top_skills' as top_skills FROM wr_resumes 
-		WHERE creation_date >= NOW() - INTERVAL '1 year' AND is_deleted = %s	
+		WHERE creation_date >= NOW() - INTERVAL '1 day' AND is_deleted = %s	
 		"""
 
 		_logger.debug(cursor.mogrify(query))
@@ -972,7 +973,10 @@ if __name__ == "__main__":
 
 	logging.basicConfig(level = logging.DEBUG)
 
-	resultData = process_single_resume('C:/Users/rajesh/Downloads/Rakesh Resume.pdf')
+	#resultData = process_single_resume('C:/Users/rajesh/Downloads/11_DattatrayBaluUdamale[5y_9m].pdf')
+	#print(resultData)
+
+	resultData = auto_shortlist_resumes()
 	print(resultData)
 
 	#auto_shortlist_resumes()

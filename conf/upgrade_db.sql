@@ -419,8 +419,22 @@ DELETE FROM public.skills where skillset_id=12;
 INSERT INTO public.skills(
 	skillset_id, skill_name,weight)
 	VALUES 
-    ( 12, 'Tomcat',1),
+    ( 12, 'Tomcat',3),
     ( 12, 'Linux',2),
     ( 12, 'Shell Scripting',2);
 
 /* End tomcat support engineer */
+
+/** Start .NET Engineer skills **/
+INSERT INTO public.skills(
+	skillset_id, skill_name,weight)
+	VALUES 
+    ( 9, 'DOT NET',3),
+    ( 9, '.NET',3),
+    ( 9, 'C#',3),
+    ( 9, 'ASP.NET Core',2)
+    ( 9, 'Web Form',1);
+
+/** End .NET Engineer skills **/
+
+
