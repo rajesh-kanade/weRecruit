@@ -87,9 +87,9 @@ def readEmails():
 
 		_logger.info("start reading emails")
 		
-		for msg in mailbox.fetch(AND( seen = False )):  #should be False in prod
-			msg.seen = True
-
+		for msg in mailbox.fetch(criteria = AND( seen = False ), mark_seen = True):  #should be False in prod
+			#msg.seen = True
+			#msg.flags.SEEN = True
 			try:	
 				_logger.debug(msg.subject)
 				_logger.debug(msg.text)
@@ -332,16 +332,15 @@ def shortlistDownloadedResumes(jobID,resumeID,userID):
 
 
 if __name__ == "__main__":
-	logging.basicConfig(level=logging.DEBUG)
-	emailList = 'rkanade@gmail.com' #['rkanade@gmail.com', 'rrkanade@yahoo.com']
-	sendMail(emailList, "test subject", "test body",'plain')
+	# logging.basicConfig(level=logging.DEBUG)
+	# emailList = 'rkanade@gmail.com' #['rkanade@gmail.com', 'rrkanade@yahoo.com']
+	# sendMail(emailList, "test subject", "test body",'plain')
 	#time.sleep(60)
 	
 	#while True:
-	#logging.basicConfig(level=logging.DEBUG)
-	#readEmails()
+	logging.basicConfig(level=logging.DEBUG)
+	readEmails()
 	#print ( extractJobIdFromSubject(" rajesh ") )
-
 	exit(0)
 
 	#	time.sleep(60)
