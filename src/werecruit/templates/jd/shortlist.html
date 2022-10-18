@@ -49,9 +49,8 @@
         <tr class="{{theme_bg_color}}">
           <!-- <td class="has-text-centered {{theme_text_color}}">{{ resume.id }}</td> -->
           <td class="has-text-left {{theme_text_color}}">{{ resume.name }}
-            {% if resume.recently_added %}
-              <sup><span class="tag is-info is-size-7">New</span></sup>
-            {% endif %}
+            {% include '/utils/show_new_resume_tag.html'%}
+
           </td>
           <td class="has-text-left {{theme_text_color}}">{{ resume.email }}</td> 
           <td class="has-text-left {{theme_text_color}}">{{ resume.phone }}</td>

@@ -18,9 +18,8 @@
             <tbody>
               <tr class="table-data">
                 <td>{{resume.name}}
-                  {% if resume.recently_added %}
-                    <sup><span class="tag is-info is-size-7">New</span></sup>
-                  {% endif %}
+                  {% include '/utils/show_new_resume_tag.html'%}
+
                 </td>
                 <td>{{resume.email}}</td>
                 <td>{{resume.phone}}</td>
