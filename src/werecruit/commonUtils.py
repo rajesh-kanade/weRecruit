@@ -8,12 +8,12 @@ def getFileExtension(fileName):
     return extension
 
 def getTimeDelta():
-    t1 = datetime.now()
+    t1 = datetime.now(tz=timezone.utc)
     f1 = t1.timestamp()
     #print(f1)
 
     #t2 = datetime(t1.year,t1.month,t1.day,hour=0,minute=0,second=0,tzinfo=timezone.utc)
-    t2 = datetime(t1.year,t1.month,t1.day,hour=0,minute=0,second=0)
+    t2 = datetime(t1.year,t1.month,t1.day,hour=0,minute=0,second=0,tzinfo=timezone.utc)
 
     f2= t2.timestamp()
     #print(f2)
@@ -27,7 +27,7 @@ def getTimeDelta():
     print ( t1-t2)
     return (t1-t2)
 
-#mytime = datetime(2022,7,1,hour=0,minute=0,second=0,tzinfo=timezone.utc)
+#mytime = datetime(2022,10,18,hour=0,minute=0,second=0,tzinfo=timezone.utc)
 #print(mytime)
 #mytime =mytime+getTimeDelta()
 #print(mytime)

@@ -16,7 +16,7 @@
           {% include 'utils/show_modal_msg.html'%}
           
           <div class = "block has-text-left ml-3">
-              <span class="title is-size-4 has-text-info">Candidate Journey Page for {{ resume.name}} </span><br>
+              <span class="title is-size-4 has-text-info">Candidate Journey for {{ resume.name}} </span><br>
               <span class="is-size-7">This page shows the journey of a candidate for a given job.</span>
           </div>
           <div class="container-status">
@@ -28,7 +28,7 @@
                     {%if loop.first %}
                       <thead>
                         <tr class="{{theme_bg_color}}">
-                            <th class="has-text-centered {{theme_text_color}}">Date</th>
+                            <th class="has-text-centered {{theme_text_color}}">DATE</th>
                           <th class="has-text-centered {{theme_text_color}}">STATUS CODE</th>
                           <th class="has-text-centered {{theme_text_color}}">STATUS</th>   
                           <th class="has-text-centered {{theme_text_color}}">NOTES</th>   

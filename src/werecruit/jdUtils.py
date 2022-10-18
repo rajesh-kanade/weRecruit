@@ -734,13 +734,15 @@ def get_candidate_journey(job_id,resume_id):
 		db_con = dbUtils.getConnFromPool()
 		cursor = dbUtils.getNamedTupleCursor(db_con)
 
+		#TODO status = -1 is temporary bcas auto start date time stamp ( inserted in background ) appears to be different then rest inserted via webApp
 		query = """select * , ( select description from application_status_codes where id = status) as status_desc
 				from wr_jd_resume_status_audit_log 
 				where jd_id = %s and resume_id =%s 
+				and status != %s
 				order by change_date desc
 				"""
 
-		params = (job_id,resume_id)
+		params = (job_id,resume_id, resumeUtils.ApplicationStatusCodes.auto_shortlisted.value)
 		_logger.debug(cursor.mogrify(query, params))
 		cursor.execute(query, params)
 
