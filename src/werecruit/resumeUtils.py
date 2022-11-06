@@ -34,9 +34,11 @@ import Levenshtein
 import logging
 logging.getLogger("pdfminer").setLevel(logging.WARNING)
 
-#from dotenv import load_dotenv , find_dotenv
+import os
+
+# from dotenv import load_dotenv , find_dotenv
 # load_dotenv(find_dotenv())
-#logging.basicConfig(format=constants.LOG_FORMAT, level=int(os.environ.get("LOG_LEVEL",20)))
+# logging.basicConfig(format=constants.LOG_FORMAT, level=int(os.environ.get("LOG_LEVEL",20)))
 
 _logger = logging.getLogger()
 _nlp = spacy.load("en_core_web_sm")
@@ -962,6 +964,18 @@ def replaceNamewithEmail( email , name):
 		
 		return False
 
+# Test function which accepts a folder path and calls process_single_resume function on all the
+# .pdf and .doc files in that folder
+def testResumeSet(folderName):
+	list_ = os.listdir(folderName)
+	print(list_)
+
+	for fileName in list_:
+		try:
+			process_single_resume(folderName + "//" + fileName)
+		except Exception as err:
+			_logger.error("Unsupported file format")
+			_logger.error(err)
 
 # main entry point
 if __name__ == "__main__":
@@ -969,6 +983,7 @@ if __name__ == "__main__":
 	# _logger.debug(retCode)
 	# _logger.debug(msg)
 	# shortlist(25,[17], datetime.now(tz=timezone.utc),
+
 	#	ApplicationStatusCodes.shortlisted.value,1)
 
 	logging.basicConfig(level = logging.DEBUG)
@@ -976,10 +991,12 @@ if __name__ == "__main__":
 	#resultData = process_single_resume('C:/Users/rajesh/Downloads/11_DattatrayBaluUdamale[5y_9m].pdf')
 	#print(resultData)
 
-	resultData = auto_shortlist_resumes()
-	print(resultData)
+	##resultData = auto_shortlist_resumes()
+	##print(resultData)
 
 	#auto_shortlist_resumes()
+
+	testResumeSet('C://weRecruit//weRecruit//test//resume-set-1')
 
 	#resultData = process_single_resume('C:\\Users\\rajesh\\Downloads\\Raja_nayak.pdf')
 
