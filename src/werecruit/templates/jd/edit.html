@@ -45,13 +45,6 @@
               {{form.id()}}
               <div class="form-group">
                 <div class="field">
-                  <label class="label">{{ form.title.label }}</label>
-                  <div class="control">
-                    {{form.title(class='input', title ="Enter short & meaning title for this job posting" ,
-                    placeholder='Enter Title', maxlength="50")}}
-                  </div>
-                </div>
-                <div class="field">
 
                   <label class="label">{{ form.client.label }}</label>
                     <div class="control" style="display: flex">
@@ -65,6 +58,15 @@
                     {% endif %}
                   </div>                  
                 </div>
+                
+                <div class="field">
+                  <label class="label">{{ form.title.label }}</label>
+                  <div class="control">
+                    {{form.title(class='input', title ="Enter short & meaning title for this job posting" ,
+                    placeholder='Enter Title', maxlength="50")}}
+                  </div>
+                </div>
+
                 <div class="field">
                   <label class="label has-text-left">{{ form.client_jd.label }}</label>
 
