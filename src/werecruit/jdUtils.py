@@ -361,13 +361,13 @@ def get_resumes_associated_with_job(job_id, cat_status_code=None,sub_cat_status_
 									ORDER BY id ASC
 								)"""
 		subCatstatusCodeQuery = """and wr_jd_resumes.status = %s"""
-		params = (False, int(job_id),)
+		params = (False, int(job_id))
 		if cat_status_code is not None:
 			query += catStatusCodeQuery
-			params = (int(job_id), cat_status_code)
+			params = (False,int(job_id), cat_status_code)
 		elif sub_cat_status_code is not None:
 			query += subCatstatusCodeQuery
-			params = (int(job_id), sub_cat_status_code)
+			params = (False, int(job_id), sub_cat_status_code)
 
 		_logger.debug(cursor.mogrify(query, params))
 		cursor.execute(query, params)
