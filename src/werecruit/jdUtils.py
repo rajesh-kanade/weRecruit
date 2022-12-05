@@ -361,7 +361,7 @@ def get_resumes_associated_with_job(job_id, cat_status_code=None,sub_cat_status_
 									ORDER BY id ASC
 								)"""
 		subCatstatusCodeQuery = """and wr_jd_resumes.status = %s"""
-		params = (False, int(job_id))
+		params = (False, int(job_id),)
 		if cat_status_code is not None:
 			query += catStatusCodeQuery
 			params = (False,int(job_id), cat_status_code)
@@ -378,7 +378,7 @@ def get_resumes_associated_with_job(job_id, cat_status_code=None,sub_cat_status_
 
 	except Exception as dbe:
 		_logger.error(dbe)
-		return (RetCodes.server_error, str(dbe), None)
+		return (RetCodes.server_error.value, str(dbe), None)
 
 	finally:
 		cursor.close()
@@ -822,21 +822,23 @@ if __name__ == "__main__":
 
 	#(code, msg, results) = get_candidate_journey(16,7)
 	#(code, msg, results) = email_all_candidates(1,1)
-	(code, msg, results) = delete_job(2)
+	#(code, msg, results) = delete_job(2)
 
-	_logger.debug(code)
-	_logger.debug(msg)
-	_logger.debug('Data is %s', results)
+	#_logger.debug(code)
+	#_logger.debug(msg)
+	#_logger.debug('Data is %s', results)
 	
 	#_logger.debug( resumeList)
 
 	# logging.basicConfig(level=logging.DEBUG)
 
-	'''dt = datetime.now(tz=timezone.utc)
-	(code,msg,result) = get_job_status_summary(18)
+	#dt = datetime.now(tz=timezone.utc)
+
+	#(code,msg,result) = get_job_status_summary(18)
+	(code,msg,result) = get_resumes_associated_with_job(18,None,None)
 	_logger.debug(code)
 	_logger.debug(msg)
-	_logger.debug(result)'''
+	_logger.debug(result)
 
 	# update_job_stats()
 	#(code,msg,resumeList) = save_jd(-1,"test for attachment",'','testclient')
