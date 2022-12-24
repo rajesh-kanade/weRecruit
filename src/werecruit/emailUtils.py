@@ -160,7 +160,7 @@ def readEmails():
 
 						# Send success resume save email
 						file_loader = FileSystemLoader('./conf')
-						env = Environment(loader=file_loader)
+						env = Environment(autoescape=True, loader=file_loader)
 						template = env.get_template('resume_upload_response.template')		
 						body = template.render(resumeID = resumeId )
 						sendMail(from_email_addr,'Resume upload notification',body,'plain')
@@ -290,7 +290,7 @@ def downloadResumeFromLink(subject, emailBody, from_email_addr,userID):
 
 						# Send success resume save email
 						file_loader = FileSystemLoader('./conf')
-						env = Environment(loader=file_loader)
+						env = Environment(autoescape=True, loader=file_loader)
 						template = env.get_template('resume_upload_response.template')		
 						body = template.render(resumeID = resumeId )
 						sendMail(from_email_addr,'Resume upload notification',body,'plain')

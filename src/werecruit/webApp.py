@@ -207,7 +207,7 @@ def sign_up():
         # email notification to support@weRecruit.cloud
 
         # file_loader = FileSystemLoader('./conf')
-        env = Environment(loader=FileSystemLoader('./conf'))
+        env = Environment(autoescape=True,loader=FileSystemLoader('./conf'))
         template = env.get_template('sign_up_notification.html')
 
         body = template.render(tenantID=str(form.company_name.data), adminName=str(
@@ -1362,7 +1362,7 @@ def update_job_application_status():
         flash("Status updated successfully.", "is-success")
 
         file_loader = FileSystemLoader('./conf')
-        env = Environment(loader=file_loader)
+        env = Environment(autoescape=True,loader=file_loader)
         template = env.get_template('job_appl_status_change.template')
 
         body = template.render(resumeID=str(form.resume_id.data), jobID=str(
