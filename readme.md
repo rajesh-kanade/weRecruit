@@ -34,7 +34,7 @@ Please note, if you are working on multiple issues, please create one branch per
 - nohup <command to be executed> &
 - grep ERROR wr_job.log
 
-
+## Frequently used Linux commands
 - `docker exec -it werecruit_prod /bin/bash` -> to get shell acess to werecruit_prod container.
     - To get out the container shell without stopping the container ,  please enter *ctrl+p followed by ctrl+q*
 - `docker ps -a`
@@ -57,18 +57,15 @@ Please note, if you are working on multiple issues, please create one branch per
 ## External resources
 
 https://www.kdnuggets.com/2022/06/14-essential-git-commands-data-scientists.html
-
-
-o figure out all open connections on pg, run following sql on db
-
-
 https://www.markdownguide.org/cheat-sheet/
-
 
 
 # Prod Notes : weRecruit on Ubuntu
 
 ## Accessing prod from host server
+On main contabo machine , switch to weRecruit folder and execute the shell script to get into docker machine.
+
+This can also be done manually in following fashion
 From main contabo machine do `docker exec -it werecruit_prod /bin/bash` to login to werecruit container.
 
 ## First time installation checklist
