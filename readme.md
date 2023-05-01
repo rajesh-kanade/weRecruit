@@ -17,7 +17,7 @@
 That's it.. Hopefully you are all set...
 
 
-# Contribution process overview
+## Contribution process overview
 * Create a branch for the issue you are working on. Branch creation can be done from the issue UI itself.
 * Work in the branch you created above. You can commit and push to your branch as frequently as possible.
 * It is good to pull frequently so your branch is as close to the master branch. We recommend you pull atleast once a day and resolve conflicts asap.
@@ -34,7 +34,7 @@ Please note, if you are working on multiple issues, please create one branch per
 - nohup <command to be executed> &
 - grep ERROR wr_job.log
 
-## Frequently used Linux commands
+## Frequently used Docker commands
 - `docker exec -it werecruit_prod /bin/bash` -> to get shell acess to werecruit_prod container.
     - To get out the container shell without stopping the container ,  please enter *ctrl+p followed by ctrl+q*
 - `docker ps -a`
@@ -44,7 +44,7 @@ Please note, if you are working on multiple issues, please create one branch per
 -  `docker images` 
 - `docker unpause werecruit_prod`
 
-
+## Frequently used git commands
 - `git pull`
 - `git status`
 - `git restore`
@@ -59,8 +59,6 @@ Please note, if you are working on multiple issues, please create one branch per
 https://www.kdnuggets.com/2022/06/14-essential-git-commands-data-scientists.html
 https://www.markdownguide.org/cheat-sheet/
 
-
-# Prod Notes : weRecruit on Ubuntu
 
 ## Accessing prod from host server
 On main contabo machine , switch to weRecruit folder and execute the shell script to get into docker machine.
