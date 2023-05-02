@@ -31,6 +31,3 @@ JSON
 - retMsg -> Additional message .
 - roleID -> Represents the role ID of the successful logged in user.
 - tenantID -> Represents the tenant ID of the successful logged in user.
-
-
-
