@@ -481,7 +481,7 @@ def do_SignIn(id, password):
 
         except Exception as dbe:
             _logger.error(dbe)
-            return (RetCodes.server_error, str(dbe), None)
+            return (RetCodes.server_error, str(dbe), dbe)
             # db_con.rollback()
             # raise
 
@@ -492,7 +492,7 @@ def do_SignIn(id, password):
     except Exception as e:
         _logger.error("In the exception block.")
         _logger.error(e)
-        return (RetCodes.server_error, str(e))
+        return (RetCodes.server_error, str(e),None)
 
 def check_cur_pass_and_newPass(id, email, cur_password, new_password):
 	try:
@@ -639,8 +639,8 @@ if __name__ == "__main__":
 	_logger.debug( retCode)
 	_logger.debug ( msg)'''
 
-    #resultTuple = do_SignIn('c1_admin@gmail.com', 'rajesh')
-    #print(resultTuple)
+    resultTuple = do_SignIn('c1_admin@gmail.com', '')
+    print(resultTuple)
 
     #resultTuple = do_SignIn('bhavyam@codeelan.com','bhavya')
     #print(resultTuple)

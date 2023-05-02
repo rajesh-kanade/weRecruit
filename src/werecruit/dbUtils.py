@@ -1,10 +1,12 @@
 import psycopg2
 import psycopg2.extras
+import psycopg2.pool
+
 import os
 import logging
 _logger = logging.getLogger()
 
-from psycopg2 import pool
+#from psycopg2 import pool
 __DBPOOL__ = None
 
 def getConnFromPool():
@@ -29,7 +31,7 @@ def getConnFromPool():
         return __DBPOOL__.getconn()
 
     except (Exception, psycopg2.DatabaseError) as error :
-        _logger.error ("Error while connecting to PostgreSQL", exc_info=1)
+        _logger.error ("Error while connecting to PostgreSQL - {0}".format(error), exc_info=1)
         return None
 
 def returnToPool(conn):
