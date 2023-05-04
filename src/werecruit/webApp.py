@@ -105,11 +105,25 @@ def show_release_history_page():
 @app.route("/api/v1/getAllClients", methods=["GET"])
 @jwt_required()
 def getAllClients():
-	# We can now access our sqlalchemy User object via `current_user`.
-	currentUserId = get_jwt_identity()
-	return jsonify(
-		id= currentUserId
-	)
+	try:
+		userID = get_jwt_identity()
+		_logger.debug("Logged in user ID is %s " ,userID)
+		
+		(retCode,msg,user) = userUtils.get(userID)	
+		_logger.debug("Tenant ID  is %s" ,user.tid)
+
+		(retCode,msg,clientList) = reports.get_clients_by_tenant_id(user.tid)
+		clientDict = []
+		for client in clientList:
+			clientDict.append(client._asdict())
+		
+		
+		return jsonify(
+			retCode = retCode, retMsg = msg, 
+					clientList = clientDict	)
+	except Exception as e:
+		_logger.error(e)
+		return jsonify(retCode="ERROR",msg=str(e))
 
 @app.route('/api/v1/signIn', methods = ['POST'])
 def do_api_signIn():

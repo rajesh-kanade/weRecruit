@@ -240,18 +240,19 @@ def get(id):
         cursor = dbUtils.getNamedTupleCursor(db_con)
 
         query = """SELECT *,
-				(select rid from tenant_user_roles where uid = %s )
+				(select rid from tenant_user_roles where uid = %s ) as rid,
+                (select tid from tenant_user_roles where uid = %s ) as tid
 				FROM users 
 				where id = %s"""
 
-        params = (id, id)
+        params = (id, id, id)
         _logger.debug(cursor.mogrify(query, params))
         cursor.execute(query, params)
 
         assert cursor.rowcount == 1, "assertion failed : Row Effected is not equal to 1."
 
         user = cursor.fetchone()
-        _logger.debug(user)
+        _logger.debug(user.tid)
 
         return(RetCodes.success.value, "User info for {0} successfully fetched from db".format(id), user)
 
@@ -639,8 +640,12 @@ if __name__ == "__main__":
 	_logger.debug( retCode)
 	_logger.debug ( msg)'''
 
-    resultTuple = do_SignIn('c1_admin@gmail.com', '')
-    print(resultTuple)
+    '''resultTuple = do_SignIn('c1_admin@gmail.com', '')
+    print(resultTuple)'''
+
+    (retCode,msg, data) = get(1)
+    print(data)
+    print(data.rid)
 
     #resultTuple = do_SignIn('bhavyam@codeelan.com','bhavya')
     #print(resultTuple)
