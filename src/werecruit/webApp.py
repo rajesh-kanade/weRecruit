@@ -105,6 +105,9 @@ def show_release_history_page():
 @app.route("/api/v1/getAllClients", methods=["GET"])
 @jwt_required()
 def getAllClients():
+	
+	assert request.method == "GET", "Unsupported request method. Only GET supported."
+
 	try:
 		userID = get_jwt_identity()
 		_logger.debug("Logged in user ID is %s " ,userID)
@@ -117,13 +120,18 @@ def getAllClients():
 		for client in clientList:
 			clientDict.append(client._asdict())
 		
-		
-		return jsonify(
-			retCode = retCode, retMsg = msg, 
-					clientList = clientDict	)
+		if retCode == reports.RetCodes.success.value :
+			return jsonify(status="Success",
+				retCode = retCode, retMsg = msg, 
+				clientList = clientDict	)
+		else:
+			return jsonify(status="Fail",
+				retCode = retCode, retMsg = msg, 
+				clientList = clientDict	)
+
 	except Exception as e:
 		_logger.error(e)
-		return jsonify(retCode="ERROR",msg=str(e))
+		return jsonify(status="Fail", retCode="Sys_Error",msg=str(e), clientList = None)
 
 @app.route('/api/v1/signIn', methods = ['POST'])
 def do_api_signIn():
@@ -132,10 +140,10 @@ def do_api_signIn():
 	print('**** Processing POST request **********')
 	
 	if ('Email'  not in request.json):
-		return jsonify({'retcode': 500},{'msg': 'Email not found in request json.'},{'data':None})
+		return jsonify(status ="Fail", retCode ='Missing_Field',retMsg='Email field not found in request json.')
 
 	if 'password'  not in request.json:
-		return jsonify({'retcode': 500},{'msg': 'Password not found in request json.'},{'data':None})
+		return jsonify(status ="Fail", retCode ='Missing_Field',retMsg='Password field not found in request json.')
 
 	print(request.json['Email'])
 	print(request.json['password'])
@@ -145,13 +153,13 @@ def do_api_signIn():
 
 	if (retCode == userUtils.RetCodes.success.value):
 		access_token = create_access_token(identity=user.id)
-		return jsonify(retCode = retCode, retMsg = msg,access_token = access_token, 
+		return jsonify(status="Success",retCode = retCode, retMsg = msg,access_token = access_token, 
 						tenantID=user.tid,roleID = user.rid)
 
 	else:
 		print('api login failed')
-		return jsonify({'retcode': str(retCode)},{'msg': str(msg)},{'data':None})
-
+		#return jsonify({'retcode': 'ERROR'},{'code',str(retCode)},{'msg': str(msg)},{'data':None})
+		return jsonify(status ="Fail", retCode=str(retCode),retMsg=str(msg))
 
 @app.route('/user/showSigninPage')
 def show_signin_page():
