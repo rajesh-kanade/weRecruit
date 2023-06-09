@@ -102,6 +102,42 @@ def home():
 def show_release_history_page():
 	return render_template('/website/release_history.html')
 
+@app.route("/api/v1/getAllJobs", methods=["GET"])
+@jwt_required()
+def getAllJobs():
+	
+	assert request.method == "GET", "Unsupported request method. Only GET supported."
+
+	try:
+		userID = get_jwt_identity()
+		_logger.debug("Logged in user ID is %s " ,userID)
+
+		(retCode,msg,user) = userUtils.get(userID)
+		_logger.debug("Tenant ID  is %s" ,user.tid)
+
+		(retCode,msg,jdList) = jdUtils.list_jds_by_tenant(user.tid)
+
+		# NamedTuple to Dict is required so it gets JSON serialized correctly
+		jdDict = []
+		for jd in jdList:
+			jd1 = jd._asdict()
+			del jd1['client_jd'] #remove this field as it can not be JSON serialized
+			jdDict.append(jd1)
+			
+
+		if retCode == jdUtils.RetCodes.success.value :
+			return jsonify(status="Success",
+				retCode = str(retCode), retMsg = str(msg), 
+				jdList = jdDict	)
+		else:
+			return jsonify(status="Fail",
+				retCode = str(retCode), retMsg = str(msg), 
+				jdList = jdDict	)
+
+	except Exception as e:
+		_logger.error(e)
+		return jsonify(status="Fail", retCode="Sys_Error",msg=str(e), jdList = None)
+
 @app.route("/api/v1/getAllClients", methods=["GET"])
 @jwt_required()
 def getAllClients():
