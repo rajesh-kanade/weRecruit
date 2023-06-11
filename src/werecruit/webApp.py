@@ -17,6 +17,7 @@ from turbo_flask import Turbo
 from werkzeug.utils import secure_filename
 from flask import send_file
 from flask_fontawesome import FontAwesome
+from prometheus_flask_exporter import PrometheusMetrics 
 
 #from flask_mail import Mail,Message
 from itsdangerous import URLSafeTimedSerializer,SignatureExpired
@@ -65,6 +66,8 @@ s = URLSafeTimedSerializer(key)
 app.secret_key = os.environ.get("FLASK_SESSION_API_KEY", '')
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+
+metrics = PrometheusMetrics(app)
 
 UPLOAD_FOLDER = '/temp'  # TODO win specific for now. Take care of path sep on linux
 ALLOWED_EXTENSIONS = {'doc', 'pdf', 'docx'}
