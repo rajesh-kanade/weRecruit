@@ -105,6 +105,60 @@ def home():
 def show_release_history_page():
 	return render_template('/website/release_history.html')
 
+@app.route("/api/v1/getAllNonShortlistedResumes", methods=["POST"])
+@jwt_required()
+def api_getAllNonshorlistedResumes():
+	
+	assert request.method == "POST", "Unsupported request method. Only POST supported."
+
+	try:
+		userID = get_jwt_identity()
+		_logger.debug("Logged in user ID is %s " ,userID)
+
+		(retCode,msg,user) = userUtils.get(userID)
+		_logger.debug("Tenant ID  is %s" ,user.tid)
+
+		#job_id = request.args.get('jid')
+		#search_criteria = request.args.get('criteria')
+		print (request.json)
+		print("Checking if parameters are available")
+		if ('jid'  not in request.json):
+			return jsonify(status ="Fail", retCode ='Missing_Field',retMsg='jid field not found in request json.')
+
+		if 'criteria'  not in request.json:
+			return jsonify(status ="Fail", retCode ='Missing_Field',retMsg='criteria field not found in request json.')
+
+		print("Done Checking if parameters are available")
+
+		print(request.json['jid'])
+		print(request.json['criteria'])
+
+
+		(retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(request.json['jid'],
+																			 request.json['criteria'], user.tid)
+
+		# NamedTuple to Dict is required so it gets JSON serialized correctly
+		resumeDict = []
+		for resume in resumeList:
+			resume1 = resume._asdict()
+			del resume1['resume_content'] #remove this field as it can not be JSON serialized
+			resumeDict.append(resume1)
+			
+
+		if retCode == jdUtils.RetCodes.success.value :
+			return jsonify(status="Success",
+				retCode = str(retCode), retMsg = str(msg), 
+				resumeList = resumeDict	)
+		else:
+			return jsonify(status="Fail",
+				retCode = str(retCode), retMsg = str(msg), 
+				resumeList = resumeDict	)
+
+	except Exception as e:
+		_logger.error(e)
+		return jsonify(status="Fail", retCode="Sys_Error",msg=str(e), resumeList = None)
+
+
 @app.route("/api/v1/getAllJobs", methods=["GET"])
 @jwt_required()
 def getAllJobs():
