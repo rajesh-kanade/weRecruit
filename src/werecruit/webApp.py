@@ -105,9 +105,9 @@ def home():
 def show_release_history_page():
 	return render_template('/website/release_history.html')
 
-@app.route("/api/v1/getAllNonShortlistedResumes", methods=["POST"])
+@app.route("/api/v1/getAllShortlistedResumes", methods=["POST"])
 @jwt_required()
-def api_getAllNonshorlistedResumes():
+def api_getAllShortlistedResumes():
 	
 	assert request.method == "POST", "Unsupported request method. Only POST supported."
 
@@ -120,18 +120,70 @@ def api_getAllNonshorlistedResumes():
 
 		#job_id = request.args.get('jid')
 		#search_criteria = request.args.get('criteria')
-		print (request.json)
-		print("Checking if parameters are available")
+
+		_logger.debug (request.json)
+		_logger.debug("Checking if parameters are available")
+		if ('jid'  not in request.json):
+			return jsonify(status ="Fail", retCode ='Missing_Field',retMsg='jid field not found in request json.')
+
+
+		_logger.debug("Done Checking if parameters are available")
+
+		_logger.debug(request.json['jid'])
+
+
+		(retCode, msg, resumeList) = jdUtils.get_resumes_associated_with_job(request.json['jid'])
+
+		# NamedTuple to Dict is required so it gets JSON serialized correctly
+		resumeDict = []
+		for resume in resumeList:
+			resume1 = resume._asdict()
+			del resume1['resume_content'] #remove this field as it can not be JSON serialized
+			resumeDict.append(resume1)
+			
+
+		if retCode == jdUtils.RetCodes.success.value :
+			return jsonify(status="Success",
+				retCode = str(retCode), retMsg = str(msg), 
+				resumeList = resumeDict	)
+		else:
+			return jsonify(status="Fail",
+				retCode = str(retCode), retMsg = str(msg), 
+				resumeList = resumeDict	)
+
+	except Exception as e:
+		_logger.error(e)
+		return jsonify(status="Fail", retCode="Sys_Error",msg=str(e), resumeList = None)
+
+
+
+@app.route("/api/v1/getAllNonShortlistedResumes", methods=["POST"])
+@jwt_required()
+def api_getAllNonShortlistedResumes():
+	
+	assert request.method == "POST", "Unsupported request method. Only POST supported."
+
+	try:
+		userID = get_jwt_identity()
+		_logger.debug("Logged in user ID is %s " ,userID)
+
+		(retCode,msg,user) = userUtils.get(userID)
+		_logger.debug("Tenant ID  is %s" ,user.tid)
+
+		#job_id = request.args.get('jid')
+		#search_criteria = request.args.get('criteria')
+		_logger.debug (request.json)
+		_logger.debug("Checking if parameters are available")
 		if ('jid'  not in request.json):
 			return jsonify(status ="Fail", retCode ='Missing_Field',retMsg='jid field not found in request json.')
 
 		if 'criteria'  not in request.json:
 			return jsonify(status ="Fail", retCode ='Missing_Field',retMsg='criteria field not found in request json.')
 
-		print("Done Checking if parameters are available")
+		_logger.debug("Done Checking if parameters are available")
 
-		print(request.json['jid'])
-		print(request.json['criteria'])
+		_logger.debug(request.json['jid'])
+		_logger.debug(request.json['criteria'])
 
 
 		(retCode, msg, resumeList) = jdUtils.get_resumes_not_associated_with_job(request.json['jid'],
@@ -227,10 +279,10 @@ def getAllClients():
 		return jsonify(status="Fail", retCode="Sys_Error",msg=str(e), clientList = None)
 
 @app.route('/api/v1/signIn', methods = ['POST'])
-def do_api_signIn():
+def api_do_signIn():
 	assert request.method == "POST", "Unsupported request method. Only POST supported."
 
-	print('**** Processing POST request **********')
+	_logger.debug('**** Processing POST request **********')
 	
 	if ('Email'  not in request.json):
 		return jsonify(status ="Fail", retCode ='Missing_Field',retMsg='Email field not found in request json.')
@@ -238,8 +290,7 @@ def do_api_signIn():
 	if 'password'  not in request.json:
 		return jsonify(status ="Fail", retCode ='Missing_Field',retMsg='Password field not found in request json.')
 
-	print(request.json['Email'])
-	print(request.json['password'])
+
 
 	(retCode, msg, user) = userUtils.do_SignIn(
 		str(request.json['Email']), str(request.json['password']))
@@ -250,7 +301,7 @@ def do_api_signIn():
 						tenantID=user.tid,roleID = user.rid)
 
 	else:
-		print('api login failed')
+		_logger.debug('api login failed')
 		#return jsonify({'retcode': 'ERROR'},{'code',str(retCode)},{'msg': str(msg)},{'data':None})
 		return jsonify(status ="Fail", retCode=str(retCode),retMsg=str(msg))
 
